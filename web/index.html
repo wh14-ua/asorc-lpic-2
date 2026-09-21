@@ -24,7 +24,7 @@
     </div>
     <div class="top-acts">
       <button type="button" id="btn-cloud" class="icon-btn" data-estado="solo-local">
-        <span>☁</span><span class="icon-btn-label" id="cloud-label">solo local</span>
+        <span id="cloud-icon">☁</span><span class="icon-btn-label" id="cloud-label">solo local</span>
       </button>
       <button type="button" id="btn-sound" class="icon-btn" aria-pressed="true">
         <span id="sound-icon">♪</span><span class="icon-btn-label">sonido</span>
@@ -128,10 +128,11 @@
   <section class="cloud-panel" id="cloud-panel" hidden>
     <p class="cloud-state" id="cloud-state"></p>
     <div class="cloud-acts">
-      <button type="button" id="cloud-sync" class="cta cta-sm">SINCRONIZAR AHORA</button>
+      <button type="button" id="cloud-sync" class="ghost ghost-sm">SINCRONIZAR AHORA</button>
     </div>
-    <p class="cloud-note">Un único progreso compartido por todos los navegadores, sin cuentas.
-      Se guarda siempre en este navegador, así que funciona también sin conexión.</p>
+    <p class="cloud-note">Se sincroniza sola después de cada respuesta; este botón solo sirve
+      para forzarlo. Un único progreso compartido por todos los navegadores, sin cuentas, y
+      guardado siempre aquí: sin conexión se estudia igual y se envía al volver.</p>
   </section>
 
   <div id="home-error" class="home-error" hidden></div>

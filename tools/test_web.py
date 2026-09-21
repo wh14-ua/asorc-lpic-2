@@ -722,12 +722,165 @@ def test_publicacion():
         shutil.rmtree(d, ignore_errors=True)
 
 
+NUBE_TEST = r"""
+const fs = require('fs');
+const path = require('path');
+const errs = [];
+const eq = (a, b, m) => { if (JSON.stringify(a) !== JSON.stringify(b)) errs.push(`${m}: ${JSON.stringify(a)} != ${JSON.stringify(b)}`); };
+const ok = (c, m) => { if (!c) errs.push(m); };
+
+const web = process.argv[2];
+
+// Un navegador de mentira: localStorage y nada más.
+const almacen = () => { const m = new Map(); return {
+  getItem: (k) => (m.has(k) ? m.get(k) : null),
+  setItem: (k, v) => m.set(k, String(v)),
+  removeItem: (k) => m.delete(k), _m: m }; };
+let ACTIVO = { ls: almacen() };
+Object.defineProperty(global, 'localStorage', { configurable: true, get() { return ACTIVO.ls; } });
+global.window = global;
+
+function carga() {
+  for (const f of ['store.js', 'cloud.js']) delete require.cache[require.resolve(path.join(web, f))];
+  const S = require(path.join(web, 'store.js'));
+  const C = require(path.join(web, 'cloud.js'));
+  return { S, store: S.Store, cloud: C };
+}
+function nuevo() { ACTIVO = { ls: almacen() }; return carga(); }
+const resp = (st, id, res) => st.registrar({ id, result: res, answer: 'x', answerMs: 900, reviewMs: 100, marked: false });
+
+// --- 1 · la cola: encolar, persistir, quitar -----------------------------
+(async () => {
+const a = nuevo();
+await a.store.init({ base: './', ns: 'asorc.v2' });
+
+eq(a.store.outbox.clave, 'asorc.v2.syncQueue', 'la cola vive donde dice la especificación');
+resp(a.store, 'Q1', 'correct');
+resp(a.store, 'Q2', 'wrong');
+eq(a.store.outbox.tamano(), 2, 'dos respuestas, dos eventos');
+const ev = a.store.outbox.lista()[0];
+ok(ev.id && ev.tipo === 'intento' && ev.creado > 0, 'cada evento tiene id, tipo y fecha');
+ok(ev.payload.event_id && ev.payload.question_id === 'Q1', 'y lo necesario para reconstruirlo');
+ok(a.store.outbox.lista()[0].id !== a.store.outbox.lista()[1].id, 'los ids no se repiten');
+
+// Está en localStorage de verdad, no solo en memoria.
+const crudo = JSON.parse(ACTIVO.ls.getItem('asorc.v2.syncQueue'));
+eq(crudo.length, 2, 'la cola está escrita en localStorage');
+
+// Quitar solo quita lo confirmado.
+a.store.outbox.quitar([ev.id]);
+eq(a.store.outbox.tamano(), 1, 'se quita lo confirmado y lo demás espera');
+
+// --- 2 · estados: solo el último importa ---------------------------------
+const b = nuevo();
+await b.store.init({ base: './', ns: 'asorc.v2' });
+b.store.marcar('Q1', true);
+b.store.marcar('Q1', false);
+b.store.marcar('Q2', true);
+eq(b.store.outbox.lista().filter((e) => e.tipo === 'marca').length, 2,
+   'marcar y desmarcar la misma pregunta deja un solo evento');
+eq(b.store.outbox.lista().find((e) => e.payload.question_id === 'Q1').payload.marked, false,
+   'y es el último');
+for (let i = 0; i < 5; i++) b.store.guardarSesion({ uid: 's', i });
+eq(b.store.outbox.lista().filter((e) => e.tipo === 'pendiente').length, 1,
+   'la ronda a medias no se acumula: solo la última');
+// Los hechos, en cambio, se acumulan todos.
+resp(b.store, 'Q9', 'correct'); resp(b.store, 'Q9', 'correct');
+eq(b.store.outbox.lista().filter((e) => e.tipo === 'intento').length, 2,
+   'responder dos veces la misma pregunta son dos hechos, no uno');
+
+// --- 3 · sobrevive a cerrar el navegador ---------------------------------
+const guardado = ACTIVO.ls;
+const c = carga();                       // módulos nuevos, mismo localStorage
+await c.store.init({ base: './', ns: 'asorc.v2' });
+eq(c.store.outbox.tamano(), b.store.outbox.tamano(), 'al reabrir la cola sigue entera');
+
+// --- 4 · el histórico de fuera se mide contra la nube, no contra una cuenta
+const d = nuevo();
+await d.store.init({ base: './', ns: 'asorc.v2' });
+d.store.importar({ preguntas: {
+  Q1: { veces_vista: 3, aciertos: 2, fallos: 1, blancos: 0, parciales: 0,
+        ultima_respuesta: 'x', ultimo_resultado: 'correct' },
+  Q5: { veces_vista: 1, aciertos: 1, fallos: 0, blancos: 0, parciales: 0,
+        ultima_respuesta: '', ultimo_resultado: 'correct' },
+}, configuracion: {} }, null);
+
+// La nube no sabe nada: hay que subirlo entero.
+const vacio = { progress: { preguntas: {} }, stats: { preguntas: {} } };
+let filas = d.cloud._diferencia(d.store, vacio);
+eq(filas.length, 4, 'si la nube está vacía se suben los cuatro intentos');
+eq(filas.map((f) => f.event_id).sort(),
+   ['local:Q1:correct:1', 'local:Q1:correct:2', 'local:Q1:wrong:1', 'local:Q5:correct:1'],
+   'con identificador reproducible');
+
+// La nube ya lo tiene todo: no se sube nada. Aquí estaba el fallo de contar
+// dos veces lo mismo, y por eso la diferencia se mide contra la nube.
+const lleno = { progress: { preguntas: {
+  Q1: { aciertos: 2, fallos: 1, blancos: 0, parciales: 0 },
+  Q5: { aciertos: 1, fallos: 0, blancos: 0, parciales: 0 },
+} }, stats: { preguntas: {} } };
+eq(d.cloud._diferencia(d.store, lleno).length, 0, 'si la nube ya lo tiene, no se sube nada');
+
+// Y si la nube va por detrás, solo la diferencia.
+const medio = { progress: { preguntas: {
+  Q1: { aciertos: 1, fallos: 1, blancos: 0, parciales: 0 },
+} }, stats: { preguntas: {} } };
+filas = d.cloud._diferencia(d.store, medio);
+eq(filas.map((f) => f.event_id).sort(), ['local:Q1:correct:2', 'local:Q5:correct:1'],
+   'solo lo que falta, y sin chocar con lo que ya hay');
+
+// --- 5 · desmarcar viaja: gana el reloj ----------------------------------
+const S = d.S;
+const viejo = { preguntas: { Q1: { marcada: true, marcada_ts: 1790000000000 } }, sesiones: [] };
+const nuevoE = { preguntas: { Q1: { marcada: false, marcada_ts: 1790000009999 } }, sesiones: [] };
+eq(S.fusionaStats(viejo, nuevoE).preguntas.Q1.marcada, false, 'desmarcar después gana');
+eq(S.fusionaStats(nuevoE, viejo).preguntas.Q1.marcada, false, 'da igual el orden de la fusión');
+// Una fecha en milisegundos no cabe en 32 bits: si alguien vuelve a poner
+// «| 0» aquí, esto lo caza.
+eq(S.fusionaStats(viejo, nuevoE).preguntas.Q1.marcada_ts, 1790000009999, 'la fecha no se trunca');
+const sinReloj = { preguntas: { Q1: { marcada: true } }, sesiones: [] };
+eq(S.fusionaStats(sinReloj, { preguntas: { Q1: {} }, sesiones: [] }).preguntas.Q1.marcada, true,
+   'con datos viejos sin reloj, marcar sigue mandando');
+
+// --- 6 · sin nube no se rompe nada ---------------------------------------
+const e = nuevo();
+await e.store.init({ base: './', ns: 'asorc.v2' });
+resp(e.store, 'Q1', 'correct');
+const r = await e.cloud.flush();          // sin configurar: no hay cliente
+ok(!r.ok, 'sin nube, enviar no puede salir bien');
+eq(e.store.outbox.tamano(), 1, 'pero la respuesta no se pierde');
+eq(e.store.progress.preguntas.Q1.aciertos, 1, 'y el progreso local está intacto');
+
+// --- 7 · la regla: no bajar mientras quede algo por subir ----------------
+const f = nuevo();
+await f.store.init({ base: './', ns: 'asorc.v2' });
+resp(f.store, 'Q1', 'correct');
+let bajadas = 0;
+f.cloud.store = f.store;
+f.cloud.sb = {};                          // hay «cliente», pero todo falla
+f.cloud.estado = 'sincronizado';
+f.cloud.sembrar = async () => ({ ok: true, filas: 0 });
+f.cloud._flush = async () => ({ ok: false, motivo: 'la red' });
+f.cloud.traer = async () => { bajadas++; return null; };
+const s2 = await f.cloud.sincronizar(f.store);
+ok(!s2.ok, 'si la subida falla, sincronizar falla');
+eq(bajadas, 0, 'y no se baja nada: fusionar ahora dejaría cuentas cortas');
+
+console.log(JSON.stringify({ n: errs.length, errs: errs.slice(0, 10) }));
+})();
+"""
+
+
 def test_nube():
-    """La nube es un progreso único y compartido: sin cuentas, sin login y sin
-    ningún concepto de usuario. Es una decisión deliberada, así que se vigila
-    que no vuelva a colarse autenticación por el camino."""
-    print("\n[11] Nube sin cuentas: un progreso compartido")
+    """Sincronización: sin cuentas, en segundo plano y sin perder nada.
+
+    Lo de fondo (Supabase de verdad, PostgREST de verdad, RLS de verdad) está
+    en tools/test_sync.py, que necesita docker. Aquí va lo que se puede
+    comprobar siempre: la cola, la fusión y que no ha vuelto la autenticación.
+    """
+    print("\n[11] Nube sin cuentas: cola, fusión y sincronización automática")
     cloud = open(os.path.join(PROJ, "web", "js", "cloud.js"), encoding="utf-8").read()
+    store = open(os.path.join(PROJ, "web", "js", "store.js"), encoding="utf-8").read()
     html = open(os.path.join(PROJ, "web", "index.html"), encoding="utf-8").read()
     app = open(os.path.join(PROJ, "web", "js", "app.js"), encoding="utf-8").read()
     sql = open(os.path.join(PROJ, "supabase", "schema.sql"), encoding="utf-8").read()
@@ -739,26 +892,72 @@ def test_nube():
         check(f"cloud.js no usa «{p_}»", p_ not in cloud)
     check("cloud.js no guarda sesión de auth", "persistSession: false" in cloud)
     check("ni detecta sesiones en la URL", "detectSessionInUrl: false" in cloud)
-    for p_ in ("type=\"email\"", "cloud-email", "ENVIAR ENLACE", "CERRAR SESIÓN"):
+    for p_ in ('type="email"', "cloud-email", "ENVIAR ENLACE", "CERRAR SESIÓN"):
         check(f"la interfaz no tiene «{p_}»", p_ not in html)
     check("app.js no llama a entrar/salir",
           "CL.entrar" not in app and "CL.salir" not in app)
 
-    # --- el indicador es solo eso: un indicador ---
-    check("indicador sincronizado / solo local",
-          "sincronizado" in app and "solo local" in app)
+    # --- el indicador cabe en un botón y sabe decir lo que pasa ---
+    for estado in ("sincronizado", "sincronizando", "sin conexión", "pendientes", "solo local"):
+        check(f"el indicador sabe decir «{estado}»", estado in app)
 
-    # --- esquema: cuatro tablas, sin user_id, con políticas para anon ---
-    check("el esquema no tiene user_id", "user_id" not in sql)
+    # --- responder no espera a la red (§2, §11) ---
+    m = re.search(r"function advance\(\)\s*\{(.*?)\n\}", app, re.S)
+    check("existe advance()", bool(m))
+    if m:
+        cuerpo = re.sub(r"//.*", "", m.group(1))       # sin comentarios: dicen «await»
+        check("advance() no hace await de la nube", "await" not in cuerpo)
+        # El orden importa: registrar (local) → pintar → red.
+        pos = {k: cuerpo.find(k) for k in
+               ("ST.registrar", "completeCard()", "nextQuestion()", "flushNube()")}
+        check("advance() guarda en local antes de pintar",
+              0 <= pos["ST.registrar"] < pos["completeCard()"], str(pos))
+        check("y manda a la nube después de pintar",
+              pos["nextQuestion()"] < pos["flushNube()"], str(pos))
+    check("marcar para repasar también se envía solo",
+          re.search(r"ST\.marcar\(.*\);\s*\n\s*flushNube\(\);", app) is not None)
+    check("cerrar una ronda también",
+          re.search(r"cerrarRonda\(.*\);\s*\n\s*flushNube\(\);", app) is not None)
+    principal = app[app.index("(async function main()"):]
+    check("el panel no espera a Supabase para pintarse",
+          principal.index("renderHome();") < principal.index("CL.init(ST)"))
+
+    # --- reintentos con espera creciente y vuelta de la red ---
+    check("hay reintentos con espera creciente",
+          "ESPERAS" in cloud and cloud.count("_programar") >= 2)
+    check("y se reintenta al volver la conexión", "'online'" in cloud)
+    check("y al volver a mirar la pestaña", "visibilitychange" in cloud)
+    check("el botón de sincronizar ya es solo un reintento",
+          "reintento a mano" in app or "reintento" in app)
+
+    # --- se pagina al bajar: PostgREST sirve mil filas por petición ---
+    check("al bajar se pagina", ".range(" in cloud and "PAGINA" in cloud)
+
+    # --- esquema: perfil único, sin usuarios, RLS y permisos mínimos ---
+    # user_id solo puede aparecer para quitarlo, o en un comentario que cuenta
+    # por qué se quita. En ninguna tabla, en ninguna política.
+    check("el esquema no tiene user_id",
+          all(l.lstrip().startswith("--") or "drop column if exists user_id" in l
+              for l in sql.splitlines() if "user_id" in l))
     for t in ("asorc_attempts", "asorc_marks", "asorc_sessions", "asorc_pending"):
-        check(f"crea {t}", f"create table public.{t}" in sql)
-    check("attempts se identifica por uid", "uid         text primary key" in sql)
-    check("marks se identifica por question_id", "question_id text primary key" in sql)
-    check("pending es una única fila", "id         text primary key" in sql and "'main'" in sql)
-    check("RLS activada en las cuatro",
-          sql.count("enable row level security") == 4)
-    check("políticas abiertas al rol anon",
-          "to anon" in sql and "using (true)" in sql and "with check (true)" in sql)
+        check(f"crea {t}", f"create table if not exists public.{t}" in sql)
+    check("el histórico se identifica por evento", "event_id    text        primary key" in sql)
+    check("con la comprobación de resultado", "asorc_attempts_result_ck" in sql)
+    check("las marcas, por pregunta dentro del perfil",
+          "primary key (profile_id, question_id)" in sql)
+    check("la ronda a medias es una sola fila", "'main'" in sql)
+    check("todo cuelga de un perfil fijo", sql.count("profile_id = 'default'") >= 8)
+    check("RLS activada en las cuatro", sql.count("enable row level security") == 4)
+    check("y nunca desactivada", "disable row level security" not in sql)
+    check("políticas explícitas para anon", sql.count("to anon") >= 10)
+    check("el histórico no se puede modificar ni borrar",
+          "grant select, insert         on public.asorc_attempts to anon;" in sql)
+    check("se parte de cero antes de conceder", sql.count("revoke all on") == 4)
+    check("ninguna tabla concede delete", "delete" not in
+          "\n".join(l for l in sql.splitlines() if l.startswith("grant")))
+    check("es idempotente: nada de drop table", "drop table" not in sql)
+    check("y se puede repetir", sql.count("if not exists") >= 8)
+    check("el esquema no usa service_role", "service_role" in sql and "NUNCA" in sql)
 
     # --- la clave que viaja al navegador sigue siendo la pública ---
     cfg = open(os.path.join(PROJ, "web", "config.js"), encoding="utf-8").read()
@@ -769,11 +968,36 @@ def test_nube():
     check("cloud.js rechaza una clave secreta",
           "sb_secret_" in cloud and "publishable" in cloud)
 
-    # --- idempotencia: el uid del histórico local es determinista ---
-    check("el histórico local sube con uid determinista",
+    # --- idempotencia: identificador propio en cada evento ---
+    check("cada intento lleva su identificador", "u.uid = u.uid || uid()" in store)
+    check("el histórico de fuera sube con identificador reproducible",
           "`local:${id}:${res}:${i}`" in cloud)
-    check("y los intentos nuevos con su propio uid",
-          "ignoreDuplicates: true" in cloud)
+    check("y al subir no se pisa lo que ya está", "ignoreDuplicates: true" in cloud)
+    # Lo que no puede volver: medir el histórico contra una cuenta guardada
+    # aquí, que se desincroniza y acaba contando dos veces lo mismo.
+    check("la diferencia se mide contra la nube, no contra una cuenta local",
+          "_diferencia(store, remoto)" in cloud and "semilla" not in store)
+    check("y se baja antes de calcularla",
+          cloud.index("const remoto = await this.traer()") <
+          cloud.index("this._diferencia(store, remoto)"))
+
+    # --- y ahora la lógica, ejecutada de verdad ---
+    if not shutil.which("node"):
+        check("node disponible", False)
+        return
+    with tempfile.NamedTemporaryFile("w", suffix=".js", delete=False) as f:
+        f.write(NUBE_TEST)
+        script = f.name
+    try:
+        out = subprocess.run(["node", script, os.path.join(PROJ, "web", "js")],
+                             capture_output=True, text=True, timeout=120)
+        if out.returncode != 0:
+            check("ejecución node", False, out.stderr.strip()[:400])
+            return
+        res = json.loads(out.stdout.strip().splitlines()[-1])
+        check("cola, diferencia y fusión se comportan", res["n"] == 0, "; ".join(res["errs"]))
+    finally:
+        os.unlink(script)
 
 
 def test_feed():

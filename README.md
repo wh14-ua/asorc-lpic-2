@@ -318,28 +318,103 @@ funciona todo una vez cargada la página.
 
 ## Sincronizar entre dispositivos
 
-**Sin cuentas.** Hay **un solo progreso** y lo comparten todos los navegadores que abran la
-web: portátil, móvil, incógnito. Se abre la URL y se estudia; la sincronización va sola.
+**Sin cuentas.** Hay **un solo progreso** —el del perfil `default`— y lo comparten todos los
+navegadores que abran la web: portátil, móvil, incógnito. Se abre la URL y se estudia.
 
 Para activarla:
 
 1. Pega `supabase/schema.sql` en el editor SQL de tu proyecto de Supabase.
 2. Pon la **URL** y la **publishable key** en `web/config.js` (versionado a propósito).
 
-El indicador de la cabecera dice **☁ sincronizado** o **☁ solo local**, y no hay nada más
-que tocar. Sin conexión se sigue estudiando: `localStorage` es la fuente local y la nube es
-un espejo que se funde al abrir y después de cada respuesta.
+No hay ningún tercer paso. **No hace falta pulsar «SINCRONIZAR AHORA»**: se puede estudiar
+una ronda entera sin tocarlo. Ese botón es el reintento a mano y el diagnóstico.
 
-**Decisión deliberada sobre seguridad.** El navegador entra con el rol `anon` y las políticas
-RLS son públicas (`using (true)`), así que **quien descubra la URL puede leer o cambiar el
-progreso**. Es un riesgo asumido: lo que se guarda es cuántas preguntas de LPIC-2 llevas
-acertadas, no una cuenta bancaria. A cambio no hay login, ni correos, ni sesiones que
-caduquen. La clave que viaja al navegador es la **publishable**; una `sb_secret_` saltaría
-RLS y `cloud.js` la rechaza.
+### Cómo va
 
-Los intentos son eventos con **uid generado en el cliente**, así que sincronizar dos veces
-no duplica nada. El progreso no se guarda: se reconstruye sumando los intentos. Las marcas
-van por `question_id` y la ronda a medias es una única fila con `id = 'main'`.
+Primero lo local, siempre. Responder escribe en `localStorage` y la pantalla avanza; lo que
+hay que mandar se apunta en una cola y sale por detrás. Nada de lo que haces espera a la red:
+
+```
+respondo
+  └─ localStorage          inmediato
+  └─ pantalla, XP, feed    inmediato
+  └─ cola de envío         inmediato
+       └─ Supabase         cuando se pueda
+```
+
+La cola vive en `localStorage` bajo `asorc.v2.syncQueue` y sobrevive a quedarse sin red, a
+cerrar el navegador y a recargar. **Un evento solo se borra cuando Supabase confirma que lo
+tiene.** Si falla, se reintenta: a los 2 s, 5 s, 15 s, 1 min y 5 min, y además en cuanto
+vuelve la conexión, al volver a mirar la pestaña, al abrir la web o al pulsar el botón.
+
+Se sincroniza sola después de cada respuesta, al marcar o desmarcar para repasar, al dejar
+una en blanco, al salir de una ronda y al terminarla.
+
+El indicador de la cabecera dice en qué punto está, y ocupa lo que ocupa un botón:
+
+| | |
+|---|---|
+| ☁ sincronizado | todo enviado |
+| ☁ sincronizando… | mandando ahora mismo |
+| ☁ 3 cambios pendientes | esperando; se reintenta solo |
+| ⚠ sin conexión | se guarda aquí y se envía al volver |
+| ☁ solo local | no hay nube configurada, o falta ejecutar el esquema |
+
+### Por qué no se duplica nada
+
+El histórico son **eventos, no sumas**: `asorc_attempts` es un registro de intentos y los
+contadores del panel se derivan sumándolo. Cada intento lleva un `event_id` generado en el
+cliente y la clave primaria está en ese campo, así que reenviar el mismo evento —porque la
+red falló a mitad y hubo reintento— no puede contar dos veces.
+
+El progreso que ya existía antes de la cola (el de `progress.json` de la terminal, o un
+archivo importado) no son eventos, así que se convierten en intentos con identificador
+reproducible, `local:<pregunta>:<resultado>:<n>`. Para no contar dos veces lo que ya viaja
+como evento, el navegador lleva la cuenta de qué parte del histórico está arriba y solo manda
+la diferencia.
+
+Y la regla de la que depende toda la fusión: **no se baja nada mientras quede algo por
+subir.** Si se bajara antes, la fusión —que se queda con el contador más alto— podría dar por
+buena una cuenta que aún no incluye lo de este navegador.
+
+Lo que no es un contador sino un estado que se puede quitar —la marca de repaso, la ronda a
+medias— se resuelve por marca de tiempo: gana el cambio más reciente, y quien llega tarde se
+descarta en la base de datos con un disparador, no en el cliente, así que da igual quién
+sincronice primero. Por eso **desmarcar** viaja igual de bien que marcar.
+
+### Decisión deliberada sobre seguridad
+
+El navegador entra con el rol `anon` y **no hay autenticación**, así que **quien descubra la
+URL puede leer o cambiar el progreso compartido**. Es un riesgo asumido a conciencia: lo que
+se guarda es cuántas preguntas de LPIC-2 llevas acertadas, no una cuenta bancaria. A cambio
+no hay login, ni correos, ni sesiones que caduquen, ni un progreso distinto por navegador.
+
+Aun así los permisos son los mínimos que la web necesita, y eso sí acota el daño:
+
+- RLS **activada** en las cuatro tablas, nunca desactivada como atajo.
+- Políticas explícitas por operación, atadas al perfil fijo `profile_id = 'default'`.
+- El histórico es de **solo añadir**: con la clave pública no se puede modificar ni borrar un
+  intento ya registrado.
+- **Ninguna tabla concede `DELETE`.**
+- `GRANT` mínimos: se revoca todo y se concede solo `select`/`insert` (y `update` donde hace
+  falta pisar un estado).
+
+La clave que viaja al navegador es la **publishable**. Una `sb_secret_` o una `service_role`
+saltarían RLS y tendrían permisos de administrador sobre toda la base de datos: nunca deben
+estar en una web, y `cloud.js` las rechaza si las detecta.
+
+### El esquema
+
+`supabase/schema.sql` es **idempotente**: se puede volver a ejecutar entero desde el editor
+SQL sin romper lo que ya hay. No borra tablas ni datos, y si encuentra el esquema anterior
+—el que llevaba `user_id`— lo migra conservando las filas.
+
+| Tabla | Qué es | Clave |
+|---|---|---|
+| `asorc_attempts` | el histórico, un intento por fila | `event_id` del cliente |
+| `asorc_marks` | marcas de repaso | `(profile_id, question_id)` |
+| `asorc_sessions` | rondas terminadas | `uid` del cliente |
+| `asorc_pending` | la ronda a medias, una sola fila | `id = 'main'` |
 
 ## Importar progreso anterior
 
@@ -523,6 +598,24 @@ tarjeta no use `id` (habría uno por pregunta viva), que cada `$('…')` de `app
 contra la plantilla o contra un `id` real, y que sigan en pie las dos reglas de las que
 depende el desplazamiento —el feed sin anclaje automático y las tarjetas completadas sin
 transición de tamaño.
+
+```bash
+python3 tools/test_sync.py
+```
+
+La sincronización, de punta a punta y contra una base de datos de verdad. Levanta
+PostgreSQL, le aplica `supabase/schema.sql` (dos veces, para comprobar que es idempotente),
+pone delante PostgREST con el rol `anon` y una pasarela que se puede desenchufar a mitad, y
+sobre eso corre `web/js/store.js` y `web/js/cloud.js` sin tocarlos, con el cliente oficial de
+Supabase. Comprueba lo que no se puede comprobar de otra forma: que una respuesta llega sola,
+que responder cinco seguidas no espera a la red, que sin red no se pierde nada y la cola
+crece, que al volver la red se vacía sola, que reenviar un evento no duplica, que un segundo
+navegador limpio recibe el progreso sin login, que lo de uno llega al otro, que desmarcar
+viaja, y que con la clave pública no se puede reescribir ni borrar el histórico.
+
+Necesita `initdb`, `docker`, `node` y el cliente: `cd tools && npm install @supabase/supabase-js`.
+Si falta algo se salta y lo dice. **Nunca toca el Supabase real ni tu progreso**: todo vive en
+un directorio temporal que se borra al terminar.
 
 ```bash
 python3 tools/test_simple.py

@@ -208,9 +208,21 @@ code {
 .cloud-panel[hidden] { display: none; }
 .cloud-state { margin: 0; font-size: 15px; color: var(--dim); }
 .cloud-acts { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
-/* El indicador: o el progreso viaja, o se queda aquí. Nada más que decir. */
+/* El indicador dice en qué punto está el progreso y nada más. Ocupa lo que
+ * ocupa un botón: si la nube se cae, el panel no tiene que parecer roto. */
 .icon-btn[data-estado="sincronizado"] { border-color: var(--ok); color: var(--ok); }
-.icon-btn[data-estado="error"] { border-color: var(--line); }
+.icon-btn[data-estado="sincronizando"] { border-color: var(--teal); color: var(--teal); }
+.icon-btn[data-estado="pendiente"] { border-color: var(--gold); color: var(--warn); }
+.icon-btn[data-estado="sin-conexion"] { border-color: var(--gold); color: var(--warn); }
+.icon-btn[data-estado="error"],
+.icon-btn[data-estado="solo-local"] { border-color: var(--line); }
+
+/* Mientras manda, el icono respira. Discreto: no es una barra de carga. */
+.icon-btn[data-estado="sincronizando"] #cloud-icon { animation: nube-late 1.1s ease-in-out infinite; }
+@keyframes nube-late { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
+@media (prefers-reduced-motion: reduce) {
+  .icon-btn[data-estado="sincronizando"] #cloud-icon { animation: none; }
+}
 .cloud-note { margin: 12px 0 0; font-size: 13px; color: var(--dim); opacity: .85; }
 .pref-note { margin: 10px 0 0; font-size: 13.5px; color: var(--dim); max-width: 46ch; }
 .pref-note[hidden] { display: none; }

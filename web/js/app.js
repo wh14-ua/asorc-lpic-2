@@ -319,7 +319,6 @@ function guardarSesion() {
   if (!S.run || !S.queue.length) return;
   if (S.i >= S.queue.length) {
     ST.descartarSesion();
-    if (CL && CL.sb && CL.estado !== 'error') CL.guardarPendiente(null);
     return;
   }
   ST.guardarSesion({
@@ -333,18 +332,17 @@ function guardarSesion() {
     music: S.music,
     run: serializaRun(S.run),
   });
-  if (CL && CL.sb && CL.estado !== 'error') CL.guardarPendiente(ST.session);
 }
 
 function salir() {
   stopTick();
-  refrescaNube();
   if (player) { player.stop(); player = null; }
-  guardarSesion();
+  guardarSesion();          // deja apuntado dónde estaba, aquí y en la cola
   ST.sincronizar(null);
   S.q = null;
   renderHome();
   showScreen('home');
+  refrescaNube();           // ya en el panel: subir lo que quede y mirar si hay más
 }
 
 function reanudar() {
@@ -1005,18 +1003,25 @@ function advance() {
     marked: S.q.marked,
   });
   if (S.q.marked) S.run.marked.add(S.q.view.q.id);
-  ST.sincronizar(null);  // guardar por pregunta: el destino es local
 
+  // El orden es deliberado: ya está guardado en localStorage (lo hizo
+  // ST.registrar), así que la pantalla puede avanzar sin esperar a nadie.
   completeCard();
   S.i++;
   guardarSesion();
   nextQuestion();
+
+  // Y ahora, con todo pintado, lo que sale del navegador. Sin await: pulsar
+  // SIGUIENTE no espera a Supabase, ni siquiera a que exista.
+  ST.sincronizar(null);          // puente con la terminal, solo en local
+  flushNube();                   // cola hacia la nube, en segundo plano
 }
 
 function toggleMark() {
   if (!S.q) return;
   S.q.marked = !S.q.marked;
   ST.marcar(S.q.view.q.id, S.q.marked);
+  flushNube();
   const b = $('btn-mark');
   if (b && !$('learn').hidden) {
     b.classList.toggle('is-on', S.q.marked);
@@ -1067,6 +1072,7 @@ async function finishRun() {
   const prevSession = G.lastSession(ST.stats.sesiones, r.music);
   const finals = G.finalMilestones(r, ST.stats.sesiones);
   await ST.cerrarRonda(G.sessionRecord(r));
+  flushNube();                    // la ronda cerrada también viaja sola
 
   const pct = r.answered ? (r.ok / r.answered) * 100 : 0;
   const sec = r.answered ? r.answerMs / r.answered / 1000 : 0;
@@ -1281,24 +1287,63 @@ function setSound(on) {
 const CL = root.Cloud;
 
 /* Sin cuentas: o hay nube y el progreso es el mismo en todas partes, o no la
- * hay y se estudia igual con lo guardado en este navegador. */
+ * hay y se estudia igual con lo guardado en este navegador.
+ *
+ * El indicador es solo eso, un indicador: cabe en un botón y no interrumpe.
+ * Si la nube está caída, aquí pone qué pasa y el resto del panel sigue
+ * funcionando como si nada, porque de hecho sigue funcionando. */
+const NUBE = {
+  'sincronizado':  ['☁', 'sincronizado'],
+  'sincronizando': ['☁', 'sincronizando…'],
+  'sin-conexion':  ['⚠', 'sin conexión'],
+  'solo-local':    ['☁', 'solo local'],
+  'error':         ['☁', 'solo local'],
+};
+
 function pintaNube() {
   const est = CL ? CL.estado : 'solo-local';
-  const sinc = est === 'sincronizado';
-  $('cloud-label').textContent = sinc ? 'sincronizado' : 'solo local';
+  const n = CL ? CL.pendientes() : 0;
+  let icono = '☁', texto = 'solo local';
+  if (est === 'pendiente') texto = n === 1 ? '1 cambio pendiente' : n + ' cambios pendientes';
+  else [icono, texto] = NUBE[est] || NUBE['solo-local'];
+
+  $('cloud-icon').textContent = icono;
+  $('cloud-label').textContent = texto;
   $('btn-cloud').dataset.estado = est;
-  $('cloud-state').textContent = sinc
-    ? ('Progreso compartido con la nube.' + (CL.ultima
-        ? ' Última vez: ' + new Date(CL.ultima).toLocaleTimeString() + '.' : ''))
-    : ('Solo local. ' + ((CL && CL.error) || 'No hay nube configurada.'));
-  ST.nube = (CL && CL.sb && est !== 'error') ? CL : null;
+  $('cloud-state').textContent = detalleNube(est, n);
 }
 
-// Al volver al panel se mira si otro dispositivo ha avanzado, sin insistir.
+function detalleNube(est, n) {
+  const err = (CL && CL.error) || '';
+  if (est === 'sincronizando') return 'Enviando cambios…';
+  if (est === 'sincronizado') {
+    return 'Todo enviado. Progreso compartido con los demás navegadores.' +
+      (CL.ultima ? ' Última vez: ' + new Date(CL.ultima).toLocaleTimeString() + '.' : '');
+  }
+  if (est === 'sin-conexion') {
+    return 'Sin conexión. ' + (n ? n + ' cambio(s) guardados aquí; se envían al volver.'
+                                : 'Lo que respondas se guarda aquí y se envía al volver.');
+  }
+  if (est === 'pendiente') {
+    return n + ' cambio(s) esperando. Se reintenta solo.' + (err ? ' (' + err + ')' : '');
+  }
+  return 'Solo en este navegador. ' + (err || 'No hay nube configurada.');
+}
+
+// Manda lo que haya en la cola y repinta. No se espera: quien llama sigue.
+function flushNube() {
+  if (!CL) return;
+  pintaNube();                       // el contador de pendientes, ya
+  if (!CL.viva()) return;
+  CL.flush().then(pintaNube, pintaNube);
+}
+
+// Al volver al panel se sube lo que falte y se mira si otro dispositivo ha
+// avanzado. Sin insistir: como mucho una vez cada quince segundos.
 let ultimoTraer = 0;
 async function refrescaNube() {
-  if (!CL || !CL.sb || CL.estado === 'error') return;
-  if (Date.now() - ultimoTraer < 15000) return;
+  if (!CL || !CL.viva()) { pintaNube(); return; }
+  if (Date.now() - ultimoTraer < 15000) { flushNube(); return; }
   ultimoTraer = Date.now();
   const r = await CL.sincronizar(ST);
   pintaNube();
@@ -1343,9 +1388,12 @@ function wire() {
     p.hidden = !p.hidden;
     if (!p.hidden) pintaNube();
   });
+  // Ya no hace falta para estudiar: es el reintento a mano y el diagnóstico.
   $('cloud-sync').addEventListener('click', async () => {
+    if (!CL) return;
     $('cloud-state').textContent = 'Sincronizando…';
     ultimoTraer = Date.now();
+    if (!CL.sb) await CL.init(ST);          // por si al abrir no había red
     const r = await CL.sincronizar(ST);
     renderHome();
     pintaNube();
@@ -1412,16 +1460,6 @@ function wire() {
     c.classList.toggle('is-on', c.dataset.blank === S.blankWhen));
   try {
     await loadAll();
-    if (CL) {
-      await CL.init();
-      CL.alCambiar = () => pintaNube();
-      pintaNube();
-      // Nada más abrir se funde con la nube, sin pedir nada a nadie.
-      if (CL.estado === 'sincronizado') {
-        ultimoTraer = Date.now();
-        CL.sincronizar(ST).then(() => { renderHome(); pintaNube(); });
-      }
-    }
     if (root.Dash) {
       root.Dash.init({
         bank: S.bank, store: ST,
@@ -1431,7 +1469,20 @@ function wire() {
         discard: () => ST.descartarSesion(),
       });
     }
+    // El panel sale con lo que hay en este navegador y sale YA. La nube se
+    // resuelve por detrás; si trae algo nuevo, se repinta entonces.
     renderHome();
+    if (CL) {
+      CL.alCambiar = () => pintaNube();
+      pintaNube();
+      CL.init(ST).then(() => {
+        CL.escuchar();
+        pintaNube();
+        if (!CL.viva()) return null;
+        ultimoTraer = Date.now();
+        return CL.sincronizar(ST).then((r) => { if (r.ok) renderHome(); pintaNube(); });
+      }).catch(() => pintaNube());
+    }
   } catch (e) {
     const box = $('home-error');
     box.textContent = 'No se pudo cargar el banco: ' + e.message +

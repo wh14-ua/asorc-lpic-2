@@ -19,3 +19,7 @@ asorc
 *.tmp
 .playwright-mcp/
 _site/
+
+# Dependencias de pruebas (se instalan con: cd tools && npm install @supabase/supabase-js)
+tools/node_modules/
+tools/package*.json

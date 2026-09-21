@@ -5,11 +5,15 @@
  *   BrowserStore        localStorage. Siempre funciona, también en GitHub Pages.
  *   LocalServerStore    el servidor de ./asorc-web. Es el puente con
  *                       progress.json y, por tanto, con la app de terminal.
- *   SupabaseStore       sincronización opcional entre dispositivos.
+ *   Cloud (cloud.js)    sincronización entre navegadores, en segundo plano.
  *
  * El esquema de «progreso» es el MISMO que usa la aplicación de terminal, para
  * que los dos sigan leyéndose. Lo que la terminal no conoce (tiempos, marcas,
  * sesiones) vive aparte, en «stats».
+ *
+ * PRIMERO LO LOCAL. Responder una pregunta escribe en localStorage y sigue. La
+ * nube nunca está en el camino: lo que hay que mandarle se apunta en una cola
+ * (Outbox) y se manda cuando se pueda. Si la red falla, la cola espera.
  *
  * Regla de fusión: nunca se pisa un dato más completo con uno más pobre.
  */
@@ -28,12 +32,18 @@
   });
   const filaStats = () => ({
     respuestas: 0, ms_respuesta_total: 0, ms_explicacion_total: 0,
-    ms_ultimo: 0, ms_mejor: 0, marcada: false, ultimo_resultado: '', ultima_vez: 0,
+    ms_ultimo: 0, ms_mejor: 0, marcada: false, marcada_ts: 0,
+    ultimo_resultado: '', ultima_vez: 0,
   });
 
   /* ---------------------------------------------------------------- fusión
-   * Se queda con lo más alto de cada contador y con el resultado más reciente.
-   * Así da igual el orden en que lleguen navegador, servidor local y nube.
+   * Los contadores son históricos: se queda con lo más alto. Eso es correcto
+   * porque la nube guarda INTENTOS, no sumas: antes de bajar nada se sube todo
+   * lo de aquí, así que lo remoto siempre contiene a lo local (cloud.js se
+   * ocupa de no invertir ese orden).
+   *
+   * La marca de repaso no es un contador sino un estado que se puede quitar,
+   * así que se decide por su marca de tiempo: gana el último que la tocó.
    */
   function fusionaProgreso(a, b) {
     const out = VACIO_PROG();
@@ -70,7 +80,16 @@
       r.ultimo_resultado = nuevo.ultimo_resultado || '';
       const mejores = [x.ms_mejor, y.ms_mejor].filter((v) => v > 0);
       r.ms_mejor = mejores.length ? Math.min.apply(null, mejores) : 0;
-      r.marcada = !!(x.marcada || y.marcada);
+      // Desmarcar tiene que poder viajar: manda el reloj, no el «sí» de nadie.
+      // Ojo con «| 0» aquí: una fecha en milisegundos no cabe en 32 bits.
+      const tx = Number(x.marcada_ts) || 0, ty = Number(y.marcada_ts) || 0;
+      if (tx || ty) {
+        r.marcada = !!(ty >= tx ? y : x).marcada;
+        r.marcada_ts = Math.max(tx, ty);
+      } else {
+        r.marcada = !!(x.marcada || y.marcada);   // datos viejos, sin reloj
+        r.marcada_ts = 0;
+      }
       out.preguntas[id] = r;
     });
     // Las sesiones son eventos con id propio: se unen sin duplicar.
@@ -97,6 +116,7 @@
     };
     return {
       nombre: 'navegador',
+      leer, escribir,
       async cargar() {
         return {
           progress: leer('progress', VACIO_PROG()),
@@ -113,7 +133,7 @@
         else { try { localStorage.removeItem(k('session')); } catch (e) {} }
       },
       async borrarTodo() {
-        ['progress', 'stats', 'session', 'prefs'].forEach((x) => {
+        ['progress', 'stats', 'session', 'prefs', 'syncQueue', 'seed'].forEach((x) => {
           try { localStorage.removeItem(k(x)); } catch (e) {}
         });
       },
@@ -157,6 +177,67 @@
     };
   }
 
+  /* --------------------------------------------------- C · cola de salida
+   * Lo que la nube todavía no ha confirmado. Vive en localStorage, así que
+   * sobrevive a cerrar el navegador, a quedarse sin red y a recargar.
+   *
+   * Un evento solo se borra de aquí cuando Supabase confirma que lo tiene.
+   * Como cada uno lleva su propio identificador, mandarlo dos veces no
+   * duplica nada (lo garantiza la clave primaria del otro lado).
+   *
+   * Hay dos clases de evento:
+   *   intento, ronda      son hechos, se acumulan: van todos.
+   *   marca, pendiente    son estados, solo importa el último: se funden.
+   */
+  function Outbox(ns) {
+    const clave = ns + '.syncQueue';
+    const TOPE = 5000;
+
+    const leer = () => {
+      try {
+        const v = JSON.parse(localStorage.getItem(clave) || '[]');
+        return Array.isArray(v) ? v : [];
+      } catch (e) { return []; }
+    };
+    const escribir = (v) => {
+      try { localStorage.setItem(clave, JSON.stringify(v)); } catch (e) {}
+    };
+
+    // Clave de fusión: dos eventos con la misma clave son el mismo estado.
+    const fusionable = (e) => {
+      if (e.tipo === 'marca') return 'marca:' + e.payload.question_id;
+      if (e.tipo === 'pendiente') return 'pendiente';
+      return null;                       // los hechos no se funden
+    };
+
+    const funde = (lista) => {
+      const ultimo = new Map();
+      lista.forEach((e, i) => { const k = fusionable(e); if (k) ultimo.set(k, i); });
+      const out = lista.filter((e, i) => {
+        const k = fusionable(e);
+        return !k || ultimo.get(k) === i;
+      });
+      return out.length > TOPE ? out.slice(out.length - TOPE) : out;
+    };
+
+    return {
+      clave,
+      // Se relee siempre de localStorage: puede haber otra pestaña abierta.
+      lista() { return leer(); },
+      tamano() { return leer().length; },
+      anadir(tipo, payload) {
+        const ev = { id: uid(), tipo, payload, creado: Date.now() };
+        escribir(funde(leer().concat([ev])));
+        return ev;
+      },
+      quitar(ids) {
+        const fuera = new Set(ids);
+        escribir(leer().filter((e) => !fuera.has(e.id)));
+      },
+      vaciar() { escribir([]); },
+    };
+  }
+
   /* ---------------------------------------------------------------- fachada */
   const Store = {
     ns: 'asorc.v2',
@@ -166,13 +247,14 @@
     prefs: {},
     local: null,            // LocalServerStore si lo hay
     browser: null,
-    nube: null,             // SupabaseStore si está configurado
-    pendientes: { updates: [], marks: {} },
+    outbox: null,           // cola hacia la nube, la vacía cloud.js
+    pendientes: { updates: [], marks: {} },   // cola hacia el servidor local
 
     async init(opts) {
       const o = opts || {};
       this.ns = o.ns || this.ns;
       this.browser = BrowserStore(this.ns);
+      this.outbox = Outbox(this.ns);
       const base = o.base || './';
 
       const b = await this.browser.cargar();
@@ -207,8 +289,8 @@
     },
 
     /* --------------------------------------------------------- escrituras */
-    // Una respuesta. Se aplica ya en memoria para que el panel no espere a
-    // la red, y se encola para el servidor local y la nube.
+    // Una respuesta. Se aplica ya en memoria y en localStorage para que nada
+    // espere a la red, y se encola para el servidor local y para la nube.
     registrar(u) {
       const p = Object.assign(filaProg(), this.progress.preguntas[u.id] || {});
       p.veces_vista = (p.veces_vista | 0) + 1;
@@ -228,20 +310,37 @@
       if (u.answerMs > 0 && (!s.ms_mejor || u.answerMs < s.ms_mejor)) s.ms_mejor = u.answerMs | 0;
       s.ultimo_resultado = u.result || '';
       s.ultima_vez = Math.floor(Date.now() / 1000);
-      if (u.marked != null) s.marcada = !!u.marked;
+      if (u.marked != null && !!u.marked !== !!s.marcada) {
+        s.marcada = !!u.marked;
+        s.marcada_ts = Date.now();
+      }
       this.stats.preguntas[u.id] = s;
 
-      // Identificador propio del intento: sincronizar dos veces no duplica.
+      // Identificador propio del intento: mandarlo dos veces no duplica.
       u.uid = u.uid || uid();
       this.pendientes.updates.push(u);
+      this.encolar('intento', {
+        event_id: u.uid,
+        question_id: u.id,
+        result: u.result || '',
+        answer: u.answer || '',
+        answer_ms: u.answerMs | 0,
+        review_ms: u.reviewMs | 0,
+        marked: !!u.marked,
+        answered_at: new Date().toISOString(),
+      });
       this.guardarLocal();
     },
 
     marcar(id, on) {
       const s = Object.assign(filaStats(), this.stats.preguntas[id] || {});
       s.marcada = !!on;
+      s.marcada_ts = Date.now();
       this.stats.preguntas[id] = s;
       this.pendientes.marks[id] = !!on;
+      this.encolar('marca', {
+        question_id: id, marked: !!on, updated_at: new Date(s.marcada_ts).toISOString(),
+      });
       this.guardarLocal();
     },
 
@@ -249,18 +348,36 @@
       if (registro) {
         registro.uid = registro.uid || uid();
         this.stats.sesiones.push(registro);
+        this.encolar('ronda', { uid: registro.uid, payload: registro });
       }
       this.session = null;
+      this.encolar('pendiente', { payload: null, updated_at: new Date().toISOString() });
       this.guardarLocal();
       return this.sincronizar(registro || null);
     },
 
-    guardarSesion(s) { this.session = s; this.guardarLocal(); },
-    descartarSesion() { this.session = null; this.guardarLocal(); },
+    guardarSesion(s) {
+      this.session = s;
+      this.encolar('pendiente', { payload: s, updated_at: new Date().toISOString() });
+      this.guardarLocal();
+    },
+
+    descartarSesion() {
+      this.session = null;
+      this.encolar('pendiente', { payload: null, updated_at: new Date().toISOString() });
+      this.guardarLocal();
+    },
+
+    encolar(tipo, payload) {
+      if (this.outbox) this.outbox.anadir(tipo, payload);
+    },
+
+    pendientesNube() { return this.outbox ? this.outbox.tamano() : 0; },
 
     guardarLocal() { if (this.browser) this.browser.guardar(this); },
 
-    // Empuja lo pendiente al servidor local (y, si existe, a la nube).
+    // Empuja lo pendiente al servidor local (el puente con la terminal). La
+    // nube no pasa por aquí: tiene su propia cola, que no se pierde si falla.
     async sincronizar(sesion) {
       const cambios = {
         updates: this.pendientes.updates,
@@ -270,13 +387,12 @@
       const hay = cambios.updates.length || Object.keys(cambios.marks).length || sesion;
       if (!hay) return false;
       this.pendientes = { updates: [], marks: {} };
-      let ok = false;
-      if (this.local) ok = await this.local.empujar(cambios);
-      if (this.nube) { try { await this.nube.empujar(cambios); } catch (e) {} }
-      return ok;
+      if (!this.local) return false;
+      return await this.local.empujar(cambios);
     },
 
-    // Para el cierre de pestaña: sin await y sin perder nada.
+    // Para el cierre de pestaña: sin await y sin perder nada. La cola de la
+    // nube no necesita nada aquí, ya está escrita en localStorage.
     volcarAlSalir(base) {
       const c = this.pendientes;
       if (!this.local || (!c.updates.length && !Object.keys(c.marks).length)) return;
@@ -300,10 +416,11 @@
     exportar() {
       return { progress: this.progress, stats: this.stats, prefs: this.prefs };
     },
+
   };
 
   // Identificador de evento generado en cliente: sincronizar dos veces no
-  // puede duplicar nada (§26).
+  // puede duplicar nada.
   function uid() {
     const c = root.crypto;
     if (c && c.randomUUID) return c.randomUUID();
@@ -313,7 +430,7 @@
   root.Store = Store;
   root.StoreInternals = {
     VACIO_PROG, VACIO_STATS, filaProg, filaStats,
-    fusionaProgreso, fusionaStats, BrowserStore, LocalServerStore, uid,
+    fusionaProgreso, fusionaStats, BrowserStore, LocalServerStore, Outbox, uid,
   };
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = { Store, ...root.StoreInternals };
