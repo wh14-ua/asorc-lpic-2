@@ -75,6 +75,10 @@
       if (c === '42501') {
         return 'RLS no deja al rol anon. Vuelve a ejecutar supabase/schema.sql.';
       }
+      if (c === '22P02' || c === '23502' || c === 'PGRST204') {
+        // Columnas del esquema anterior (uid como uuid, propietario obligatorio).
+        return 'Las tablas son del esquema anterior. Pega supabase/schema.sql en el editor SQL de Supabase.';
+      }
       return (c ? c + ': ' : '') + (err.message || 'error desconocido');
     },
 
