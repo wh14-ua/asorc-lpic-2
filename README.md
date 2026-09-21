@@ -316,24 +316,30 @@ lo comprueba.
 `asorc.v2.progress`, `asorc.v2.stats`, `asorc.v2.session` y `asorc.v2.prefs`. Offline
 funciona todo una vez cargada la página.
 
-## Sincronizar entre dispositivos (opcional)
+## Sincronizar entre dispositivos
 
-Sin configurar, la web dice discretamente *«Sincronización en la nube desactivada»* y no
-molesta más. Para activarla:
+**Sin cuentas.** Hay **un solo progreso** y lo comparten todos los navegadores que abran la
+web: portátil, móvil, incógnito. Se abre la URL y se estudia; la sincronización va sola.
 
-1. Crea un proyecto en Supabase y ejecuta `supabase/schema.sql` en su editor SQL.
-2. Pon la **URL** y la **anon/publishable key** en `web/config.js` (está versionado a
-   propósito: esos dos valores son públicos). `web/config.example.js` queda como plantilla.
-3. En la web: **☁ sincronizar** → tu correo → enlace mágico.
+Para activarla:
 
-**Qué es público y qué no.** La URL y la anon key viajan en el JavaScript: son públicas por
-diseño y no protegen nada. Quien protege los datos es **Supabase Auth + RLS**: cada tabla
-tiene políticas `auth.uid() = user_id` para `select`, `insert`, `update` y `delete`, nada de
-`using (true)`. **Nunca** pongas una `service_role` ahí; el código la rechaza si la detecta.
+1. Pega `supabase/schema.sql` en el editor SQL de tu proyecto de Supabase.
+2. Pon la **URL** y la **publishable key** en `web/config.js` (versionado a propósito).
 
-Los intentos se guardan como eventos con un **uid generado en el cliente**, así que
-sincronizar dos veces no duplica nada. El progreso no se guarda: se reconstruye de los
-intentos.
+El indicador de la cabecera dice **☁ sincronizado** o **☁ solo local**, y no hay nada más
+que tocar. Sin conexión se sigue estudiando: `localStorage` es la fuente local y la nube es
+un espejo que se funde al abrir y después de cada respuesta.
+
+**Decisión deliberada sobre seguridad.** El navegador entra con el rol `anon` y las políticas
+RLS son públicas (`using (true)`), así que **quien descubra la URL puede leer o cambiar el
+progreso**. Es un riesgo asumido: lo que se guarda es cuántas preguntas de LPIC-2 llevas
+acertadas, no una cuenta bancaria. A cambio no hay login, ni correos, ni sesiones que
+caduquen. La clave que viaja al navegador es la **publishable**; una `sb_secret_` saltaría
+RLS y `cloud.js` la rechaza.
+
+Los intentos son eventos con **uid generado en el cliente**, así que sincronizar dos veces
+no duplica nada. El progreso no se guarda: se reconstruye sumando los intentos. Las marcas
+van por `question_id` y la ronda a medias es una única fila con `id = 'main'`.
 
 ## Importar progreso anterior
 

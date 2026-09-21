@@ -1,15 +1,28 @@
--- ASORC · esquema mínimo para sincronizar entre dispositivos.
+-- ASORC · progreso ÚNICO y COMPARTIDO, sin cuentas.
 --
--- Idea: los INTENTOS son eventos con identificador generado en el cliente.
--- Sincronizar dos veces no duplica nada porque el uid ya existe. El progreso
--- y las estadísticas NO se guardan: se reconstruyen a partir de los intentos.
+-- Decisión deliberada: no hay Auth, no hay usuarios ni columna de propietario. Cualquiera
+-- que abra la web comparte el mismo progreso. Lo que se guarda aquí es
+-- «he acertado 67 de 380 preguntas de LPIC-2», y el riesgo asumido es que
+-- alguien que descubra la URL pueda leerlo o cambiarlo.
 --
--- Ejecútalo en el editor SQL de Supabase.
+-- El navegador entra con el rol anon usando la publishable key. Las políticas
+-- son públicas a propósito: using (true) / with check (true).
+-- NUNCA uses aquí una sb_secret_ ni una service_role: saltan RLS y no pintan
+-- nada en una web.
+--
+-- Pégalo entero en el editor SQL de Supabase. Es idempotente: se puede
+-- ejecutar las veces que haga falta.
 
--- ---------------------------------------------------------------- intentos
-create table if not exists public.asorc_attempts (
-  uid         uuid primary key,                       -- lo genera el cliente
-  user_id     uuid not null references auth.users(id) on delete cascade,
+-- Fuera el esquema anterior, que llevaba columna de usuario y no tiene datos que salvar.
+drop table if exists public.asorc_attempts cascade;
+drop table if exists public.asorc_marks    cascade;
+drop table if exists public.asorc_sessions cascade;
+drop table if exists public.asorc_pending  cascade;
+
+-- ------------------------------------------------- intentos (log de eventos)
+-- El uid lo genera el cliente, así que sincronizar dos veces no duplica nada.
+create table public.asorc_attempts (
+  uid         text primary key,
   question_id text not null,
   result      text not null check (result in ('correct','wrong','blank','partial')),
   answer      text not null default '',
@@ -18,36 +31,32 @@ create table if not exists public.asorc_attempts (
   marked      boolean not null default false,
   created_at  timestamptz not null default now()
 );
-create index if not exists asorc_attempts_user_q
-  on public.asorc_attempts (user_id, question_id);
+create index asorc_attempts_q on public.asorc_attempts (question_id);
 
 -- ------------------------------------------------------------------ marcas
-create table if not exists public.asorc_marks (
-  user_id     uuid not null references auth.users(id) on delete cascade,
-  question_id text not null,
+-- Una fila por pregunta: la marca es global, como todo lo demás.
+create table public.asorc_marks (
+  question_id text primary key,
   marked      boolean not null default true,
-  updated_at  timestamptz not null default now(),
-  primary key (user_id, question_id)
+  updated_at  timestamptz not null default now()
 );
 
 -- --------------------------------------------------------- rondas cerradas
-create table if not exists public.asorc_sessions (
-  uid        text primary key,                        -- también del cliente
-  user_id    uuid not null references auth.users(id) on delete cascade,
+create table public.asorc_sessions (
+  uid        text primary key,
   payload    jsonb not null,
   created_at timestamptz not null default now()
 );
 
--- ------------------------------------------------------- ronda a medias
-create table if not exists public.asorc_pending (
-  user_id    uuid primary key references auth.users(id) on delete cascade,
+-- ------------------------------------- ronda a medias: una sola, id = 'main'
+create table public.asorc_pending (
+  id         text primary key,
   payload    jsonb,
   updated_at timestamptz not null default now()
 );
 
 -- =========================================================================
--- RLS: cada usuario, y solo cada usuario, toca sus filas.
--- Nada de using (true): el sitio es público.
+-- RLS abierta al rol anon, a propósito.
 -- =========================================================================
 alter table public.asorc_attempts enable row level security;
 alter table public.asorc_marks    enable row level security;
@@ -59,19 +68,15 @@ declare t text;
 begin
   foreach t in array array['asorc_attempts','asorc_marks','asorc_sessions','asorc_pending']
   loop
-    execute format('drop policy if exists "solo lo mio select" on public.%I', t);
-    execute format('drop policy if exists "solo lo mio insert" on public.%I', t);
-    execute format('drop policy if exists "solo lo mio update" on public.%I', t);
-    execute format('drop policy if exists "solo lo mio delete" on public.%I', t);
-
-    execute format('create policy "solo lo mio select" on public.%I
-                    for select using (auth.uid() = user_id)', t);
-    execute format('create policy "solo lo mio insert" on public.%I
-                    for insert with check (auth.uid() = user_id)', t);
-    execute format('create policy "solo lo mio update" on public.%I
-                    for update using (auth.uid() = user_id)
-                    with check (auth.uid() = user_id)', t);
-    execute format('create policy "solo lo mio delete" on public.%I
-                    for delete using (auth.uid() = user_id)', t);
+    execute format('drop policy if exists "acceso publico" on public.%I', t);
+    execute format('create policy "acceso publico" on public.%I
+                    as permissive for all to anon, authenticated
+                    using (true) with check (true)', t);
   end loop;
 end $$;
+
+-- Comprobación rápida: debe devolver cuatro filas con rowsecurity = true.
+select tablename, rowsecurity
+from pg_tables
+where schemaname = 'public' and tablename like 'asorc_%'
+order by tablename;

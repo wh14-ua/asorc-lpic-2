@@ -317,7 +317,11 @@ function deserializaRun(o) {
 
 function guardarSesion() {
   if (!S.run || !S.queue.length) return;
-  if (S.i >= S.queue.length) { ST.descartarSesion(); return; }
+  if (S.i >= S.queue.length) {
+    ST.descartarSesion();
+    if (CL && CL.sb && CL.estado !== 'error') CL.guardarPendiente(null);
+    return;
+  }
   ST.guardarSesion({
     uid: S.sessionUid || (S.sessionUid = 's' + Date.now().toString(36)),
     ts: Date.now(),
@@ -329,10 +333,12 @@ function guardarSesion() {
     music: S.music,
     run: serializaRun(S.run),
   });
+  if (CL && CL.sb && CL.estado !== 'error') CL.guardarPendiente(ST.session);
 }
 
 function salir() {
   stopTick();
+  refrescaNube();
   if (player) { player.stop(); player = null; }
   guardarSesion();
   ST.sincronizar(null);
@@ -1274,20 +1280,29 @@ function setSound(on) {
 /* ------------------------- nube (opcional) ------------------------- */
 const CL = root.Cloud;
 
+/* Sin cuentas: o hay nube y el progreso es el mismo en todas partes, o no la
+ * hay y se estudia igual con lo guardado en este navegador. */
 function pintaNube() {
-  const est = CL ? CL.estado : 'desactivada';
-  const lbl = $('cloud-label'), txt = $('cloud-state');
-  const textos = {
-    desactivada: 'Sincronización en la nube desactivada. Copia web/config.example.js a web/config.js para activarla.',
-    desconectado: 'Entra con tu correo y tu progreso se sincronizará entre dispositivos.',
-    conectado: 'Conectado' + (CL && CL.user ? ' como ' + CL.user.email : '') + '.',
-    error: (CL && CL.error) || 'No se pudo activar la sincronización.',
-  };
-  txt.textContent = textos[est] || textos.desactivada;
-  lbl.textContent = est === 'conectado' ? 'sincronizado' : 'sincronizar';
-  $('cloud-form').hidden = est !== 'desconectado';
-  $('cloud-acts').hidden = est !== 'conectado';
-  if (est === 'conectado') ST.nube = CL; else ST.nube = null;
+  const est = CL ? CL.estado : 'solo-local';
+  const sinc = est === 'sincronizado';
+  $('cloud-label').textContent = sinc ? 'sincronizado' : 'solo local';
+  $('btn-cloud').dataset.estado = est;
+  $('cloud-state').textContent = sinc
+    ? ('Progreso compartido con la nube.' + (CL.ultima
+        ? ' Última vez: ' + new Date(CL.ultima).toLocaleTimeString() + '.' : ''))
+    : ('Solo local. ' + ((CL && CL.error) || 'No hay nube configurada.'));
+  ST.nube = (CL && CL.sb && est !== 'error') ? CL : null;
+}
+
+// Al volver al panel se mira si otro dispositivo ha avanzado, sin insistir.
+let ultimoTraer = 0;
+async function refrescaNube() {
+  if (!CL || !CL.sb || CL.estado === 'error') return;
+  if (Date.now() - ultimoTraer < 15000) return;
+  ultimoTraer = Date.now();
+  const r = await CL.sincronizar(ST);
+  pintaNube();
+  if (r.ok) renderHome();
 }
 
 /* ------------------------- importar / exportar ------------------------- */
@@ -1328,20 +1343,13 @@ function wire() {
     p.hidden = !p.hidden;
     if (!p.hidden) pintaNube();
   });
-  $('cloud-send').addEventListener('click', async () => {
-    const em = $('cloud-email').value.trim();
-    if (!em) return;
-    try { await CL.entrar(em); $('cloud-state').textContent = 'Te hemos enviado un enlace a ' + em + '.'; }
-    catch (e) { $('cloud-state').textContent = 'No se pudo enviar: ' + e.message; }
-  });
-  $('cloud-out').addEventListener('click', async () => { await CL.salir(); pintaNube(); });
   $('cloud-sync').addEventListener('click', async () => {
     $('cloud-state').textContent = 'Sincronizando…';
-    try {
-      const r = await CL.sincronizarTodo(ST);
-      renderHome();
-      $('cloud-state').textContent = r.ok ? 'Sincronizado.' : 'No se pudo: ' + r.motivo;
-    } catch (e) { $('cloud-state').textContent = 'Error al sincronizar: ' + e.message; }
+    ultimoTraer = Date.now();
+    const r = await CL.sincronizar(ST);
+    renderHome();
+    pintaNube();
+    if (!r.ok) $('cloud-state').textContent = 'No se pudo: ' + r.motivo;
   });
   $('btn-import').addEventListener('click', () => $('file-import').click());
   $('file-import').addEventListener('change', (e) => {
@@ -1353,7 +1361,7 @@ function wire() {
   $('btn-exit').addEventListener('click', salir);
   addEventListener('resize', () => { hudHeight(); padFeed(); });
   hudHeight();
-  $('btn-home').addEventListener('click', () => { renderHome(); showScreen('home'); });
+  $('btn-home').addEventListener('click', () => { renderHome(); showScreen('home'); refrescaNube(); });
   $('btn-again').addEventListener('click', () => {
     if (S.lastMode) startRun(S.lastMode.mode, S.lastMode.topic);
   });
@@ -1404,7 +1412,16 @@ function wire() {
     c.classList.toggle('is-on', c.dataset.blank === S.blankWhen));
   try {
     await loadAll();
-    if (CL) { await CL.init(); CL.alCambiar = () => { pintaNube(); renderHome(); }; pintaNube(); }
+    if (CL) {
+      await CL.init();
+      CL.alCambiar = () => pintaNube();
+      pintaNube();
+      // Nada más abrir se funde con la nube, sin pedir nada a nadie.
+      if (CL.estado === 'sincronizado') {
+        ultimoTraer = Date.now();
+        CL.sincronizar(ST).then(() => { renderHome(); pintaNube(); });
+      }
+    }
     if (root.Dash) {
       root.Dash.init({
         bank: S.bank, store: ST,

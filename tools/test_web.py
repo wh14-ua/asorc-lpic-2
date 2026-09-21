@@ -722,6 +722,60 @@ def test_publicacion():
         shutil.rmtree(d, ignore_errors=True)
 
 
+def test_nube():
+    """La nube es un progreso único y compartido: sin cuentas, sin login y sin
+    ningún concepto de usuario. Es una decisión deliberada, así que se vigila
+    que no vuelva a colarse autenticación por el camino."""
+    print("\n[11] Nube sin cuentas: un progreso compartido")
+    cloud = open(os.path.join(PROJ, "web", "js", "cloud.js"), encoding="utf-8").read()
+    html = open(os.path.join(PROJ, "web", "index.html"), encoding="utf-8").read()
+    app = open(os.path.join(PROJ, "web", "js", "app.js"), encoding="utf-8").read()
+    sql = open(os.path.join(PROJ, "supabase", "schema.sql"), encoding="utf-8").read()
+
+    # --- nada de autenticación, ni en el código ni en la interfaz ---
+    prohibido = ["signInWithOtp", "signInWith", "signOut", "auth.uid()",
+                 "magiclink", "magic link", "emailRedirectTo", "user_id"]
+    for p_ in prohibido:
+        check(f"cloud.js no usa «{p_}»", p_ not in cloud)
+    check("cloud.js no guarda sesión de auth", "persistSession: false" in cloud)
+    check("ni detecta sesiones en la URL", "detectSessionInUrl: false" in cloud)
+    for p_ in ("type=\"email\"", "cloud-email", "ENVIAR ENLACE", "CERRAR SESIÓN"):
+        check(f"la interfaz no tiene «{p_}»", p_ not in html)
+    check("app.js no llama a entrar/salir",
+          "CL.entrar" not in app and "CL.salir" not in app)
+
+    # --- el indicador es solo eso: un indicador ---
+    check("indicador sincronizado / solo local",
+          "sincronizado" in app and "solo local" in app)
+
+    # --- esquema: cuatro tablas, sin user_id, con políticas para anon ---
+    check("el esquema no tiene user_id", "user_id" not in sql)
+    for t in ("asorc_attempts", "asorc_marks", "asorc_sessions", "asorc_pending"):
+        check(f"crea {t}", f"create table public.{t}" in sql)
+    check("attempts se identifica por uid", "uid         text primary key" in sql)
+    check("marks se identifica por question_id", "question_id text primary key" in sql)
+    check("pending es una única fila", "id         text primary key" in sql and "'main'" in sql)
+    check("RLS activada en las cuatro",
+          sql.count("enable row level security") == 4)
+    check("políticas abiertas al rol anon",
+          "to anon" in sql and "using (true)" in sql and "with check (true)" in sql)
+
+    # --- la clave que viaja al navegador sigue siendo la pública ---
+    cfg = open(os.path.join(PROJ, "web", "config.js"), encoding="utf-8").read()
+    check("config.js usa la publishable",
+          re.search(r"supabaseAnonKey:\s*'(sb_publishable_|eyJ)", cfg) is not None)
+    check("config.js sin clave secreta",
+          re.search(r"sb_secret_[A-Za-z0-9_\-]{12,}", cfg) is None)
+    check("cloud.js rechaza una clave secreta",
+          "sb_secret_" in cloud and "publishable" in cloud)
+
+    # --- idempotencia: el uid del histórico local es determinista ---
+    check("el histórico local sube con uid determinista",
+          "`local:${id}:${res}:${i}`" in cloud)
+    check("y los intentos nuevos con su propio uid",
+          "ignoreDuplicates: true" in cloud)
+
+
 def test_feed():
     """El feed reutiliza la lógica de siempre, pero los elementos de una
     pregunta ya no llevan id: hay muchas tarjetas vivas a la vez. Aquí se
@@ -798,6 +852,7 @@ def main():
     test_highlight()
     test_panel()
     test_publicacion()
+    test_nube()
 
     tmp = tempfile.mkdtemp(prefix="asorc-web-test-")
     srv = None

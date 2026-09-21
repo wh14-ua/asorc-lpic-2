@@ -207,13 +207,10 @@ code {
 }
 .cloud-panel[hidden] { display: none; }
 .cloud-state { margin: 0; font-size: 15px; color: var(--dim); }
-.cloud-form, .cloud-acts { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
-.cloud-form[hidden], .cloud-acts[hidden] { display: none; }
-.cloud-form input {
-  flex: 1; min-width: 220px; padding: 10px 14px; font: inherit; font-size: 15px;
-  background: var(--paper); border: 1px solid var(--line);
-  border-radius: var(--r-sm); color: var(--ink);
-}
+.cloud-acts { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+/* El indicador: o el progreso viaja, o se queda aquí. Nada más que decir. */
+.icon-btn[data-estado="sincronizado"] { border-color: var(--ok); color: var(--ok); }
+.icon-btn[data-estado="error"] { border-color: var(--line); }
 .cloud-note { margin: 12px 0 0; font-size: 13px; color: var(--dim); opacity: .85; }
 .pref-note { margin: 10px 0 0; font-size: 13.5px; color: var(--dim); max-width: 46ch; }
 .pref-note[hidden] { display: none; }

@@ -23,8 +23,8 @@
       <span class="brand-sub">LPIC-2</span>
     </div>
     <div class="top-acts">
-      <button type="button" id="btn-cloud" class="icon-btn">
-        <span>☁</span><span class="icon-btn-label" id="cloud-label">sincronizar</span>
+      <button type="button" id="btn-cloud" class="icon-btn" data-estado="solo-local">
+        <span>☁</span><span class="icon-btn-label" id="cloud-label">solo local</span>
       </button>
       <button type="button" id="btn-sound" class="icon-btn" aria-pressed="true">
         <span id="sound-icon">♪</span><span class="icon-btn-label">sonido</span>
@@ -127,15 +127,11 @@
 
   <section class="cloud-panel" id="cloud-panel" hidden>
     <p class="cloud-state" id="cloud-state"></p>
-    <div class="cloud-form" id="cloud-form" hidden>
-      <input type="email" id="cloud-email" placeholder="tu@correo.com" autocomplete="email">
-      <button type="button" id="cloud-send" class="cta cta-sm">ENVIAR ENLACE</button>
-    </div>
-    <div class="cloud-acts" id="cloud-acts" hidden>
+    <div class="cloud-acts">
       <button type="button" id="cloud-sync" class="cta cta-sm">SINCRONIZAR AHORA</button>
-      <button type="button" id="cloud-out" class="ghost ghost-sm">CERRAR SESIÓN</button>
     </div>
-    <p class="cloud-note">Tus datos siguen guardándose en este navegador aunque no sincronices.</p>
+    <p class="cloud-note">Un único progreso compartido por todos los navegadores, sin cuentas.
+      Se guarda siempre en este navegador, así que funciona también sin conexión.</p>
   </section>
 
   <div id="home-error" class="home-error" hidden></div>
