@@ -1,0 +1,89 @@
+### SYBEX-CH01-RQ01  [multiple_choice]
+Q: What program does the workstation firmware start at boot time?
+A: A bootloader
+B: The init program
+C: The Windows OS
+D: The mount command
+E: The telinit program
+X: The workstation firmware looks for the bootloader program to load an operating system. The init and telinit programs (options B and E) are used to change the runlevel of a running Linux system, so they aren’t useful until after the Linux system has started. The Windows operating system only starts after a Windows bootloader program runs, so option C is incorrect. The mount program is a Linux tool for attaching a partition to the virtual directory, which isn’t available until after the Linux system starts, so option D is also incorrect.
+
+### SYBEX-CH01-RQ02  [multiple_choice]
+Q: Where does the firmware first look for a Linux bootloader program?
+A: The /boot/grub folder
+B: The Master Boot Record (MBR)
+C: The /var/log folder
+D: A boot partition
+E: The /etc folder
+X: The workstation firmware looks at the first sector of the first hard drive to load the bootloader program. This is called the Master Boot Record, so option B is correct. The bootloader program itself can use the chainloader feature to look for another bootloader in a boot partition, but the firmware can’t do that, so option D is incorrect. Option A specifies the configuration folder used to store the GRUB configuration file and the kernel image file, but the actual GRUB bootloader program can’t be stored there. Option C specifies the common log file folder, but that doesn’t contain the GRUB bootloader program. Option E also specifies a common Linux configuration file directory, but it’s not used to store the GRUB bootloader program that the firmware can access.
+
+### SYBEX-CH01-RQ03  [multiple_choice]
+Q: What Linux command lets you examine the most recent boot messages?
+A: fsck
+B: init
+C: mount
+D: dmesg
+E: chkconfig
+X: The kernel ring buffer, which you can view by typing dmesg, contains boot messages from the kernel; thus option D is correct. The fsck program (option A) fixes corrupt partitions, and the mount program (option C) is used to attach partitions to the virtual directory, so neither of those is correct. Option B, the init program, is used to start programs from the kernel, not display boot messages, so it also is incorrect. Option E, the chkconfig program, is used to display the runlevels assigned to individual programs in the startup scripts and is not related to the boot messages, so it too is incorrect.
+
+### SYBEX-CH01-RQ04  [multiple_choice]
+Q: What folder do most Linux distributions use to store boot logs?
+A: /etc
+B: /var/messages
+C: /var/log
+D: /boot
+E: /proc
+X: Most Linux distributions store boot log files in the /var/log folder. The /etc folder is most often used for storing system and application configuration files, not boot logs, so option A is incorrect. Some Unix systems use the /var/messages folder for storing log files, but Linux has not adopted this standard, so option B is also incorrect. The /boot folder contains the GRUB configuration files along with the image files necessary to boot the system, but it’s not where Linux stores boot logs and is thus incorrect. The /proc folder is unique in that the Linux kernel dynamically stores information about the system there, but it doesn’t store boot log information there.
+
+### SYBEX-CH01-RQ05  [multiple_response]
+Q: Where does the workstation BIOS attempt to find a bootloader program? (Select all that apply.)
+A: An internal hard drive
+B: An external hard drive
+C: A DVD drive
+D: A USB memory stick
+E: A network server
+X: The BIOS firmware can look in multiple locations for a bootloader program. Normally, it looks at the internal hard drive installed on the system; however, if none is found, it can search other places. Most workstations allow you to boot from an external hard drive or from a DVD drive. Modern workstations now also provide the option to boot from a USB memory stick inserted into a USB port on the workstation. Finally, many workstations provide the PXE boot option, which allows the workstation to boot remotely from a network server.
+
+### SYBEX-CH01-RQ06  [multiple_choice]
+Q: Where is the Master Boot Record located?
+A: The first sector of the first hard drive on the system
+B: The boot partition of any hard drive on the system
+C: The last sector of the first hard drive on the system
+D: Any sector on any hard drive on the system
+E: The first sector of the second hard drive on the system
+X: The Master Boot Record (MBR) is located in only one place—on the first sector of the first hard drive on the workstation. Thus option A is the only correct answer. The boot partition in any hard drive may contain a bootloader, but it is not the MBR, which is run first by the firmware; thus option B is incorrect. The other locations are not valid for the MBR, so options C, D, and E are all incorrect.
+
+### SYBEX-CH01-RQ07  [multiple_choice]
+Q: Where is the EFI System Partition (ESP) stored on Linux systems?
+A: /boot
+B: /etc
+C: /var
+D: /boot/efi
+E: /boot/grub
+X: The ESP is stored in the /boot/efi directory on Linux systems. The UEFI firmware always looks for the /boot/efi directory for bootloader programs, so option D is correct. The /etc directory is used to store application and system configuration files, not bootloader programs, so option B is incorrect. The /var folder is used to store variable files such as log files, not bootable files, so option C is incorrect. Option E, the /boot/grub file, is used in GRUB Legacy and GRUB2 to store the bootloader configuration files, as well as the kernel image files. However, it is not used to store the bootloader files themselves, so option E is incorrect.
+
+### SYBEX-CH01-RQ08  [multiple_choice]
+Q: What file extension do UEFI bootloader files use?
+A: .cfg
+B: .uefi
+C: .lst
+D: .conf
+E: .efi
+X: The UEFI specification doesn’t require a specific extension for UEFI bootloader files; however, it has become somewhat common in Linux to use the .efi file extension to identify them; thus option E is correct. Option A and option D specify file extensions used to identify GRUB2 (option A) and GRUB Legacy (option D) configuration files, not UEFI bootloader files, so they are both incorrect. Option C specifies the .lst file extension, which is also used for GRUB Legacy configuration files, so it too is incorrect. The .uefi file extension is not used in Linux, so option B is incorrect.
+
+### SYBEX-CH01-RQ09  [multiple_choice]
+Q: Which was the first bootloader program used in Linux?
+A: GRUB Legacy
+B: LILO
+C: GRUB2
+D: SYSLINUX
+E: ISOLINUX
+X: The Linux Loader (LILO) bootloader program was the first bootloader used in Linux, so option B is correct. The GRUB Legacy bootloader, despite its name, wasn’t the first bootloader but the second bootloader commonly used in Linux. The GRUB2 bootloader was a later improvement over the GRUB Legacy bootloader, so options A and C are incorrect. Option D, the SYSLINUX bootloader, provided features for use with Microsoft FAT partitions so that you can boot Linux from a USB memory stick, but it was a later creation and not the first Linux bootloader. Option E, ISOLINUX, was also a later bootloader, which lets you boot Linux from a CD or DVD drive.
+
+### SYBEX-CH01-RQ10  [multiple_choice]
+Q: Where are the GRUB Legacy configuration files stored?
+A: /boot/grub
+B: /boot/efi
+C: /etc
+D: /var
+E: /proc
+X: The GRUB Legacy configuration files are stored in the /boot/grub directory, so option A is correct. Option B, the /boot/efi directory, is used to store UEFI bootloader programs, not GRUB configuration files, so it is incorrect. Option C, the /etc directory, stores many application and system configuration files but not the GRUB Legacy configuration files. The /var directory stores variable files, such as log files, but not configuration files, so option D is incorrect. Likewise, Linux uses the /proc directory to provide dynamic kernel runtime data and not configuration files.

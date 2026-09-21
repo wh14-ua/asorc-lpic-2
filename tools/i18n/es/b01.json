@@ -1,0 +1,57 @@
+[
+{"id":"SYBEX-AT-01",
+ "q":"¿Cuáles de los siguientes comandos muestran información de procesos? (Elija todas las que correspondan.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"La opción A es correcta, porque lsof muestra los archivos abiertos y las conexiones de red por proceso. El comando pstree muestra los procesos actuales en formato de árbol, así que también es una elección correcta. Aunque se centra principalmente en información de red y de encaminamiento, con la utilidad netstat se puede determinar qué proceso (a través de su PID) está escuchando en un puerto concreto. Por tanto, la opción D también es una respuesta correcta. La opción E es correcta, porque el comando pmap muestra el mapa de un proceso para el PID indicado. La utilidad iostat muestra un resumen de la carga de E/S desglosada por dispositivo, así que la opción B es la única elección incorrecta."},
+
+{"id":"SYBEX-AT-02",
+ "q":"Los programadores desarrollaron el concepto de ______ del kernel para poder insertar código de controladores de dispositivo en un kernel en ejecución sin tener que recompilarlo. (Rellene con la mejor respuesta.)",
+ "o":{},
+ "fill":"modules (módulos)",
+ "e":"modules. Los programadores desarrollaron el concepto de módulos del kernel (kernel modules) para poder insertar código de controladores de dispositivo en un kernel en ejecución sin tener que recompilarlo. Un módulo es un archivo de biblioteca de controlador autónomo que puede enlazarse y desenlazarse dinámicamente con el kernel. Esto significa que un módulo del kernel puede retirarse del kernel cuando se termina de usar el dispositivo, algo que no puede hacerse con los controladores compilados dentro del kernel."},
+
+{"id":"SYBEX-AT-03",
+ "q":"¿Cuál es el archivo de configuración del kernel de Linux? (Elija la mejor respuesta.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"La opción E es correcta, porque la configuración del kernel de Linux se guarda en el archivo /usr/src/linux/.config. La opción A es un directorio que contiene el binario final del kernel, bzImage, tras el proceso de compilación, así que es una elección incorrecta. La opción B es un nombre de archivo inventado, así que es errónea. El archivo /boot/grub/grub.conf es un archivo de configuración de GRUB Legacy, así que la opción C es una elección incorrecta. El archivo /etc/modules.conf de la opción D es un archivo de configuración para los módulos del kernel, así que también es una elección errónea."},
+
+{"id":"SYBEX-AT-04",
+ "q":"¿Cuál de los siguientes contiene un archivo, o es un archivo, que puede consultar para ver información de la versión del kernel de Linux? (Elija la mejor respuesta.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"/proc/sys/kernel es un directorio que contiene el archivo version. Ese archivo contiene información de la versión del kernel de Linux, así que la opción B es la elección correcta. La opción A está inventada, así que es una elección incorrecta. El archivo /proc/ioports de la opción C contiene información de los puertos de E/S del hardware, así que también es una elección incorrecta. El archivo /proc/dma contiene información de los canales de Acceso Directo a Memoria (DMA), así que la opción C es una elección errónea. Por último, /etc/sysctl.d es un directorio que contiene varios archivos de ajuste de parámetros del kernel, así que también es una elección incorrecta."},
+
+{"id":"SYBEX-AT-05",
+ "q":"¿Qué comando(s) pueden considerarse equivalentes a chkconfig? (Elija todas las que correspondan.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"Solo hay una respuesta correcta y es la opción C. El comando update-rc.d es equivalente al comando chkconfig. Sin embargo, suele estar disponible en distribuciones basadas en Debian, mientras que chkconfig lo está en las basadas en Red Hat. El inittab (/etc/inittab) de la opción A sí define qué aplicaciones arrancan en cada nivel de ejecución; sin embargo, es un archivo y no un comando, así que es una elección errónea. El rc de la opción B es un script (/etc/rc.d/rc) que ejecuta todos los scripts de un nivel de ejecución determinado, así que es una elección incorrecta. Los comandos init (opción D) y telinit (opción E) son esencialmente equivalentes pero entre sí (con cualquiera de los dos se puede cambiar el nivel de ejecución actual del sistema Linux), así que son elecciones incorrectas."},
+
+{"id":"SYBEX-AT-06",
+ "q":"¿Cuáles de las siguientes afirmaciones sobre GRUB Legacy son ciertas? (Elija todas las que correspondan.)",
+ "o":{"A":"GRUB Legacy se escribió para sustituir a LILO debido a UEFI.",
+      "B":"GRUB Legacy utiliza una interfaz de menú.",
+      "C":"GRUB Legacy utiliza un intérprete de comandos interactivo.",
+      "D":"GRUB Legacy utiliza el comando initrd.",
+      "E":"GRUB Legacy utiliza el archivo de configuración /boot/grub/grub.cfg."},
+ "e":"GRUB Legacy utiliza tanto una interfaz de menú como un intérprete de comandos interactivo (el shell de grub), así que las opciones B y C son correctas. La opción D también es correcta, porque dentro del archivo de configuración de GRUB Legacy se emplea el comando initrd para definir un archivo que el kernel monta como disco RAM en el arranque. La opción A es incorrecta: aunque LILO no funciona con sistemas UEFI, GRUB Legacy se creó en 1999 para ofrecer un cargador de arranque más robusto y configurable que LILO, no por UEFI. Además, la opción E es incorrecta, porque /boot/grub/grub.cfg es un archivo de configuración de GRUB2, no de GRUB Legacy."},
+
+{"id":"SYBEX-AT-07",
+ "q":"¿Cuáles de los siguientes son cargadores de arranque de Linux? (Elija todas las que correspondan.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"Las opciones A, B, C y D son todas cargadores de arranque alternativos de Linux, así que son respuestas correctas. La opción E es el Trivial File Transfer Protocol (TFTP), que el cargador de arranque PXELINUX emplea para transferir por red el archivo de imagen de arranque a la estación de trabajo. Sin embargo, TFTP no es un cargador de arranque, así que la opción E es incorrecta."},
+
+{"id":"SYBEX-AT-08",
+ "q":"Cuando se usa sin opciones ni parámetros, ¿de qué archivo obtiene los datos el comando mount? (Elija todas las que correspondan.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"Solo hay una elección correcta. Cuando se usa sin opciones ni parámetros, el comando mount obtiene los datos del archivo /etc/mtab, que contiene la lista de todos los sistemas de archivos montados en ese momento, y la muestra. Por tanto, la opción B es correcta. La opción A es incorrecta, porque /etc/fstab es la tabla de sistemas de archivos (Filesystem Table) y contiene un registro por cada sistema de archivos que debe montarse al arrancar el sistema o al ejecutar el comando mount -a. Aunque los datos de /etc/mtab y /proc/mounts son casi idénticos, el comando mount no obtiene sus datos del archivo /proc/mounts, así que la opción C es errónea. El archivo /proc/filesystems de la opción D es incorrecto, porque ese archivo contiene los sistemas de archivos soportados por el kernel de Linux del sistema. La opción E también es errónea, porque blkid no es un archivo sino un comando, que muestra los distintos dispositivos de bloques y sus atributos."},
+
+{"id":"SYBEX-AT-09",
+ "q":"El demonio smartd se configura mediante su archivo de configuración, que se llama ______. (Rellene solo el nombre del archivo, sin referencias a directorios.)",
+ "o":{},
+ "fill":"smartd.conf",
+ "e":"smartd.conf. El archivo de configuración del demonio smartd es /etc/smartd.conf o /etc/smartmontools/smartd.conf (según la distribución)."},
+
+{"id":"SYBEX-AT-10",
+ "q":"¿Cuáles de las siguientes opciones permiten comprobar un array RAID controlado por software, /dev/md1, en un sistema Linux? (Elija todas las que correspondan.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"Las opciones A y B son el mismo comando (no hace falta incluir la opción --misc) y ambas muestran los detalles del array RAID indicado, así que esas opciones son correctas. La opción D también es correcta, porque el archivo /proc/mdstat contiene el estado actual de cualquier array RAID en funcionamiento. La opción C es una elección incorrecta, porque /etc/mdadm.conf es el archivo de configuración de mdadm (aunque puede estar en /etc/mdadm/, según la distribución). La opción E es una elección errónea, porque el comando mdadm no tiene una opción –show."}
+]

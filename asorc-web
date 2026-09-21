@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Arranca la interfaz web de ASORC y abre el navegador.
+#
+#   ./asorc-web                 normal
+#   ./asorc-web --no-browser    sin abrir el navegador
+set -euo pipefail
+cd "$(dirname "${BASH_SOURCE[0]}")"
+
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "Falta python3." >&2
+  exit 1
+fi
+if [ ! -f questions.json ]; then
+  echo "Falta questions.json en $(pwd). Genéralo con ./tools/extract.sh" >&2
+  exit 1
+fi
+
+exec python3 web/server.py "$@"

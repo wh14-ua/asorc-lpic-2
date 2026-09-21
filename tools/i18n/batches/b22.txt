@@ -1,0 +1,89 @@
+### SYBEX-CH10-RQ01  [multiple_choice]
+Q: In which of the following directories would you typically find Samba log files? (Choose the best answer.)
+A: /etc/smb/
+B: /etc/samba/
+C: /var/log/samba/
+D: /var/lib/samba/
+E: /etc/samba.d/
+X: Option C is correct, because the /var/log/samba/ directory is where you would typically find Samba log files. The /etc/smb/ directory (option A), /etc/samba/ directory (option B), and /etc/samba.d/ directory (option E) are all incorrect, because these are (or were) directories for storing Samba configuration files. Option D is also incorrect, because the /var/lib/samba/ directory is used for storing things such as Samba user databases, not log files.
+
+### SYBEX-CH10-RQ02  [multiple_response]
+Q: Which of the following Linux daemons may be used in providing Samba services? (Choose all that apply.)
+A: smbd
+B: cupsd
+C: winbind
+D: nmbd
+E: cifsd
+X: Option A is correct, because it is the daemon used on a Samba server to implement the SMB protocol. Option B is a tricky one, but it is also correct. The CUPS daemon, cupsd, can be used with the Samba server daemon to provide Samba print shares. Option D is also correct, because if you have legacy Windows systems within your network and need Samba services, NetBIOS over TCP via the nmbd daemon must be used. Option C is also a tricky one, because the actual daemon name for the Name Service Switch daemon is winbindd and not winbind, so option C is wrong. Option E is a made-up daemon name and therefore is incorrect.
+
+### SYBEX-CH10-RQ03  [multiple_choice]
+Q: To set up a Samba share, you need to modify the main Samba configuration file. Which of the following is this file? (Choose the best answer.)
+A: smb.conf
+B: samba.conf
+C: mount.cifs
+D: /etc/samba.d
+E: smbcontrol
+X: Option A is correct, because the smb.conf is the main Samba configuration file. Option B is made-up and is therefore a wrong choice. Option C, mount.cifs, is a command that allows you to mount a Samba share on a client system and is an incorrect choice. Option D is also incorrect, because /etc/samba.d is a directory (typically not used anymore) for storing Samba configuration files. Option E’s smbcontrol is a command for managing the Samba smbd daemon and is also an incorrect answer.
+
+### SYBEX-CH10-RQ04  [multiple_choice]
+Q: Once you have modified the main Samba configuration file, what should you do next? (Choose the best answer.)
+A: Reload the configuration file into the Samba server daemon on the Samba server.
+B: Reboot the Samba server.
+C: Test the Samba configuration syntax with smbstatus.
+D: Test the Samba configuration syntax with testparm.
+E: Create a directory or set up a printer queue to share.
+X: Option D is correct, because after modifying the main Samba configuration file, you should next check the file’s syntax, and the testparm command will do that. You should not reload the configuration file into a Samba server daemon until you have checked the configuration file’s syntax, and therefore option A is wrong. Option B is wrong, because there is no need to reboot the Samba server daemon. The smbstatus command displays current Samba server connections but does not check the Samba configuration file’s syntax, so option C is wrong. Option E is also incorrect, because creating a directory or setting up a printer queue to share is not the next needed step.
+
+### SYBEX-CH10-RQ05  [multiple_choice]
+Q: For setting up Samba in a mixed environment of Windows and Linux systems, it is essential to set the __________ directive to the Windows workgroup or domain name and not an FQDN. (Choose the best answer.)
+A: domain name
+B: adgroup
+C: windows group
+D: workgroup name
+E: workgroup
+X: Option E is correct, because the correct directive is workgroup and it needs to be set to the Windows group or domain name for setting up Samba in a mixed Windows and Linux environment. The other options are wrong because they are incorrect or made-up directive names.
+
+### SYBEX-CH10-RQ06  [multiple_response]
+Q: For the Samba passdb backend directive, which of the following are legal settings? (Choose all that apply.)
+A: tdbsam
+B: ads
+C: smbpasswd
+D: ldapsam
+E: domain
+X: Options A, C, and D are correct, because they are legal settings for the passdb backend directive, and they are the various Samba user account information databases typically located in the /var/lib/samba/ directory. Options B and E are incorrect, because they are legal settings for the Samba security directive and not the passdb backend directive.
+
+### SYBEX-CH10-RQ07  [multiple_choice]
+Q: Which section in the smb.conf file might you find a file share defined? (Choose the best answer.)
+A: [global]
+B: [netlogins]
+C: [myshare]
+D: [printers]
+E: [profiles]
+X: Option C is the best answer, because file shares are typically found under a share name, such as [myshare]. Option A is incorrect, because the [global] section is for globally applied directives that determine how the Samba server will conduct networking, logging, name resolution, and so on. The [netlogins] section, option B, is incorrect, because this section is for providing directives needed for when the Samba server is acting as a domain controller. Option D’s [printers] is incorrect, because this section is for defining printer shares. Option E is also wrong, because the [profiles] section holds directives needed for roaming user profiles.
+
+### SYBEX-CH10-RQ08  [multiple_choice]
+Q: Which of the following Samba directives can be used to set whether passwords are required to access this file share service? (Choose the best answer.)
+A: public
+B: browseable
+C: guest only
+D: writable
+E: read only
+X: Option A is correct, because the public directive can be set to no (passwords required) or yes (passwords not required). The browseable directive (option B) is incorrect, because it determines whether a share is seen in an available shares list. Option C is a wrong choice, because the guest only directive sets whether only guest connections are allowed for this service. The writable directive in option D is an antonym for the read only directive in option E, and they are both incorrect choices because they determine whether write access is granted to a share.
+
+### SYBEX-CH10-RQ09  [multiple_choice]
+Q: Assuming appropriate access is granted, the __________ command allows FTP-style access to a Samba share. (Choose the best answer.)
+A: pdbedit
+B: smbclient
+C: smbpasswd
+D: rpcclient
+E: ftp
+X: Option B is correct, because the smbclient allows FTP-style access to a Samba share (as long as the appropriate access is granted). The pdbedit command (option A) is incorrect, because it does not provide access to a Samba share but instead manages any of the Samba user databases. Option C is wrong, because the smbpasswd command manages either the Samba smbpasswd or tdbsam database but provides no share access. The rpcclient command in option D is incorrect, because this command executes Samba client Microsoft RPC functions. Option E is an incorrect choice, because the ftp command is an older command that provides access to FTP servers, not Samba shares.
+
+### SYBEX-CH10-RQ10  [multiple_response]
+Q: Which of the following items might assist you in troubleshooting a problem with a Samba client accessing a Samba share? (Choose all that apply.)
+A: Turn on logging by setting the log level directive in the smb.conf file to a number higher than 0 but lower than 10.
+B: See what shares are being offered via the smbclient -L command (with the -U option and appropriate parameter if needed) on the Samba server.
+C: Perform a few basic network diagnostics between the Samba server and client systems.
+D: Test the Samba configuration syntax with testparm.
+E: Determine if the needed Server daemons are running on the Samba server.
+X: All the answers are correct, because they are all potential troubleshooting items if a Samba client is unable to access a Samba share. Of course, you may find and fix the root problem cause before needing to complete all the various items.

@@ -1,0 +1,51 @@
+[
+{"id":"SYBEX-CH12-RQ01",
+ "q":"¿Cómo se llama una vulnerabilidad que permite a un atacante obtener acceso a un sistema?",
+ "o":{"A":"Vector de ataque","B":"Puerto abierto","C":"Aplicación abierta","D":"Comunicación no segura"},
+ "e":"Un vector de ataque es cualquier vía que permite a un atacante obtener acceso a un sistema. Como una vulnerabilidad permite el acceso a un sistema, es un vector de ataque; por tanto, la opción A es correcta. Las otras tres opciones solo describen otros tipos de vulnerabilidades, así que las opciones B, C y D son incorrectas."},
+
+{"id":"SYBEX-CH12-RQ02",
+ "q":"¿Qué archivo contiene una lista de los puertos estándar de las aplicaciones?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"El archivo /etc/services contiene una correspondencia entre números de puerto y aplicaciones, así que la opción C es correcta. El archivo /etc/ssh/sshd_conf es la configuración del servidor OpenSSH, la carpeta /etc/openvpn contiene archivos de configuración de la aplicación OpenVPN y la carpeta /proc/sys/net/ipv4 contiene ajustes de la pila IPv4 del kernel, así que las opciones A, B y D son todas incorrectas."},
+
+{"id":"SYBEX-CH12-RQ03",
+ "q":"¿Cómo se puede usar el comando telnet para detectar un puerto abierto?",
+ "o":{"A":"telnet puerto dirección","B":"telnet dirección puerto","C":"telnet dirección:puerto","D":"El comando telnet solo se conecta al puerto 23."},
+ "e":"El segundo parámetro del comando telnet especifica el puerto TCP al que conectarse, así que la opción B es correcta. Las opciones A y C muestran formatos incorrectos para el comando telnet, así que son incorrectas. La opción D es incorrecta, porque puede indicarse cualquier número de puerto TCP como segundo parámetro."},
+
+{"id":"SYBEX-CH12-RQ04",
+ "q":"¿Qué comando puede mostrar una lista de los puertos TCP que están escuchando conexiones entrantes en un servidor local?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"El comando netstat puede mostrar todos los puertos abiertos que están escuchando conexiones de red entrantes, así que la opción D es correcta. El comando telnet solo puede conectarse a un puerto cada vez, así que la opción A es incorrecta. El comando iptables trabaja con las funciones de procesamiento de paquetes del kernel y no con puertos de red, así que la opción B es incorrecta. El comando ssh solo puede conectarse al puerto 22, así que la opción C es incorrecta."},
+
+{"id":"SYBEX-CH12-RQ05",
+ "q":"¿Qué opción del comando netcat le permite escanear varios puertos?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"La opción –z indica una lista de puertos o un rango de puertos que el comando netcat debe escanear en busca de puertos a la escucha, así que la opción B es correcta. La opción –v ofrece una salida más detallada, así que la opción A es incorrecta. La opción –l indica a netcat que escuche conexiones entrantes, así que la opción C es incorrecta. La opción -6 indica a netcat que use direcciones IPv6, así que la opción D también es incorrecta."},
+
+{"id":"SYBEX-CH12-RQ06",
+ "q":"¿Qué opción de nmap indica que debe determinar la huella (fingerprint) del sistema remoto?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"La opción –A indica a nmap que realice un análisis de huella del sistema remoto, así que la opción A es correcta. La opción –sT escanea todos los puertos TCP, mientras que la opción –sU escanea todos los puertos UDP, así que las opciones B y C son incorrectas. La opción –p indica un rango de puertos a escanear, así que la opción D también es incorrecta."},
+
+{"id":"SYBEX-CH12-RQ07",
+ "q":"¿Qué función de OpenVAS le permite simular distintos ataques de vulnerabilidad sobre el sistema que analiza?",
+ "o":{"A":"La National Vulnerability Database (NVD)","B":"El repositorio de software","C":"Los Network Vulnerability Tests (NVT)","D":"La interfaz web"},
+ "e":"Los Network Vulnerability Tests (NVT) simulan ataques conocidos contra los sistemas y se descargan como parte de OpenVAS, así que la opción C es correcta. La National Vulnerability Database (NVD) la mantiene US-CERT para definir vulnerabilidades, pero no para simularlas, así que la opción A es incorrecta. El repositorio de software de la distribución no almacena vulnerabilidades, así que la opción B es incorrecta. La interfaz web permite interactuar con OpenVAS, pero no simula vulnerabilidades, así que la opción D es incorrecta."},
+
+{"id":"SYBEX-CH12-RQ08",
+ "q":"¿Qué tipo de software puede avisarle de un ataque activo contra su sistema?",
+ "o":{"A":"Escáner de puertos","B":"Network Vulnerability Test (NVT)","C":"Red privada virtual (VPN)","D":"Sistema de detección de intrusiones (IDS)"},
+ "e":"Un sistema de detección de intrusiones (IDS) puede vigilar los eventos del sistema y de la red en busca de indicios de que se está produciendo un ataque activo, así que la opción D es correcta. Los escáneres de puertos pueden informar de vectores de ataque abiertos, pero no de cuándo se está produciendo un ataque, así que la opción A es incorrecta. El Network Vulnerability Test (NVT) simula ataques, pero no avisa de ataques en curso, así que la opción B es incorrecta. La VPN permite establecer una conexión segura entre dos hosts remotos, pero no avisa de un ataque, así que la opción C es incorrecta."},
+
+{"id":"SYBEX-CH12-RQ09",
+ "q":"¿Qué archivo contiene las reglas de fail2ban?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"El archivo jail.conf, situado en la carpeta /etc/fail2ban, contiene las definiciones de reglas que determinan qué eventos debe vigilar fail2ban."},
+
+{"id":"SYBEX-CH12-RQ10",
+ "q":"¿Qué aplicación es un sistema de detección de intrusiones en red (NIDS)?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"La aplicación Snort vigila la red en busca de ataques activos, así que la opción A es correcta. El paquete OpenVPN proporciona un túnel cifrado entre dos redes públicas para ofrecer un entorno seguro, pero no actúa como NIDS, así que la opción B es incorrecta. La aplicación OpenSSH proporciona un canal seguro entre un cliente y un servidor, pero no vigila los paquetes de la red, así que la opción C es incorrecta. La aplicación OpenVAS es una herramienta de vulnerabilidades, pero por sí sola no vigila los paquetes de la red, así que la opción D es incorrecta."}
+]

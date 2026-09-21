@@ -1,0 +1,146 @@
+{
+"SYBEX-CH11-RQ01": {
+  "idea": ["DHCPd se configura en el archivo /etc/dhcp/dhcpd.conf."],
+  "otras": {"A": "/etc/dhcpd.d/ sería una carpeta, y DHCPd no usa carpeta.",
+            "C": "isc-dhcp-server es el nombre del paquete en Debian.",
+            "D": "/etc/services lista puertos TCP y UDP."},
+  "memorizar": "un solo archivo: /etc/dhcp/dhcpd.conf."
+},
+"SYBEX-CH11-RQ02": {
+  "idea": ["El router predeterminado se reparte con la opción router."],
+  "otras": {"A": "smtp-server reparte el servidor de correo.",
+            "B": "broadcast-address es la dirección de difusión.",
+            "D": "range es el conjunto de direcciones a repartir."},
+  "memorizar": "cada opción se llama como lo que reparte."
+},
+"SYBEX-CH11-RQ03": {
+  "idea": ["El conjunto de direcciones que se reparten es range."],
+  "otras": {"A": "smtp-server es el servidor de correo.",
+            "B": "broadcast-address es la dirección de difusión.",
+            "C": "router es la salida predeterminada."},
+  "memorizar": "range = de aquí a aquí."
+},
+"SYBEX-CH11-RQ04": {
+  "idea": ["Las concesiones en curso están en /var/lib/dhcp/dhcpd.leases."],
+  "analogia": "En /etc está lo que decides tú; en /var, lo que el servicio va anotando.",
+  "otras": {"B": "/etc/dhcp/dhcpd.conf es la configuración.",
+            "C": "dhcpd.leases no vive en /etc/dhcp.",
+            "D": "dhcpd.conf no guarda concesiones."},
+  "memorizar": "conf en /etc; leases en /var."
+},
+"SYBEX-CH11-RQ05": {
+  "idea": ["La dirección MAC del cliente se declara con hardware."],
+  "otras": {"A": "range es el conjunto de direcciones repartidas.",
+            "B": "fixed-address es la IP fija que le das, no su MAC.",
+            "C": "host-name es el nombre que le asignas."},
+  "memorizar": "hardware = MAC; fixed-address = IP."
+},
+"SYBEX-CH11-RQ06": {
+  "idea": ["Los ajustes de un cliente concreto se agrupan en host."],
+  "otras": {"B": "group agrupa varios hosts a la vez.",
+            "C": "range reparte direcciones a todos.",
+            "D": "fixed-address es un ajuste suelto, no un grupo."},
+  "memorizar": "host = uno; group = varios."
+},
+"SYBEX-CH11-RQ07": {
+  "idea": ["La máscara de subred es la opción 1."],
+  "otras": {"B": "la 3 es el router predeterminado.",
+            "C": "la 5 es el servidor de nombres.",
+            "D": "la 6 es el servidor de dominio."},
+  "memorizar": "1 máscara, 3 router, 5 nombres, 6 dominio."
+},
+"SYBEX-CH11-RQ08": {
+  "idea": ["Los archivos locales los usa pam_unix.so."],
+  "otras": {"A": "pam_ldap.so usa un directorio LDAP de red.",
+            "B": "pam_userdb.so usa una base de datos.",
+            "D": "pam_sss.so usa el SSSD para directorios remotos."},
+  "memorizar": "unix = /etc/passwd y /etc/shadow, en local."
+},
+"SYBEX-CH11-RQ09": {
+  "idea": ["Para autenticar contra un directorio de red: pam_ldap.so."],
+  "otras": {"A": "pam_unix.so usa el archivo local /etc/passwd.",
+            "C": "pam_userdb.so usa una base de datos local.",
+            "D": "pam_access.so da inicios de sesión anónimos para FTP."},
+  "memorizar": "directorio de red = LDAP."
+},
+"SYBEX-CH11-RQ10": {
+  "idea": ["pam_cracklib.so comprueba si las contraseñas son débiles."],
+  "otras": {"A": "pam_limits.so limita recursos, como archivos abiertos o tiempo de CPU.",
+            "B": "pam_unix.so solo hace la autenticación estándar.",
+            "D": "pam_userdb.so autentica contra una base de datos local."},
+  "memorizar": "crack en el nombre: intenta romper tu contraseña."
+},
+"SYBEX-CH11-RQ11": {
+  "idea": ["Con un solo archivo, PAM usa /etc/pam.conf."],
+  "otras": {"A": "/etc/pam.d es una carpeta, no un archivo.",
+            "C": "/etc/pam.d/pam.conf mezcla los dos métodos y no existe.",
+            "D": "/etc/pamd.conf no existe."},
+  "memorizar": "archivo único pam.conf; carpeta pam.d."
+},
+"SYBEX-CH11-RQ12": {
+  "idea": ["Un archivo por aplicación: la carpeta /etc/pam.d."],
+  "otras": {"B": "/etc/pam.conf es el método del archivo único.",
+            "C": "/etc/pam.d/pam.conf no existe.",
+            "D": "/etc/pamd.conf tampoco."},
+  "memorizar": "la d de pam.d es de directorio."
+},
+"SYBEX-CH11-RQ13": {
+  "idea": ["El que corta en seco al fallar es requisite.",
+           "Si falla, no se mira ninguna entrada más."],
+  "analogia": "required suspende pero deja acabar el examen; requisite te echa del aula.",
+  "otras": {"A": "sufficient da por buena la autenticación si acierta, pero no corta si falla.",
+            "B": "required marca el fallo y sigue comprobando.",
+            "D": "optional ni siquiera bloquea lo siguiente."},
+  "memorizar": "requisite corta al fallar; required apunta y sigue."
+},
+"SYBEX-CH11-RQ14": {
+  "idea": ["Quien registra los intentos es el tipo session."],
+  "otras": {"A": "account solo verifica la cuenta.",
+            "C": "password gestiona contraseñas.",
+            "D": "auth autentica, pero no anota."},
+  "memorizar": "session abre y cierra sesión, y lo apunta."
+},
+"SYBEX-CH11-RQ15": {
+  "idea": ["La plantilla de atributos es la clase de objeto."],
+  "otras": {"A": "el ID de objeto identifica, pero no es plantilla.",
+            "B": "el esquema define la estructura de la base de datos.",
+            "C": "el árbol LDAP contiene los objetos reales."},
+  "memorizar": "clase = plantilla; atributos = contenido."
+},
+"SYBEX-CH11-RQ16": {
+  "idea": ["Los datos guardados de un objeto son sus atributos."],
+  "otras": {"B": "la clase de objeto es la plantilla, no los valores.",
+            "C": "el ID de objeto es un número único.",
+            "D": "el esquema define objetos y sus relaciones."},
+  "memorizar": "los atributos son los valores de verdad."
+},
+"SYBEX-CH11-RQ17": {
+  "idea": ["El nombre único de cada objeto es el nombre distinguido.",
+           "Lleva a la vez su nombre y su sitio en el árbol."],
+  "otras": {"A": "el ID de objeto es único, pero no es un nombre.",
+            "B": "los atributos no son únicos.",
+            "C": "la clase de objeto la comparten muchos objetos."},
+  "memorizar": "nombre distinguido = nombre más ruta."
+},
+"SYBEX-CH11-RQ18": {
+  "idea": ["El servidor de OpenLDAP es slapd."],
+  "otras": {"A": "slurpd solo interviene al replicar servidores.",
+            "C": "slapadd añade objetos.",
+            "D": "slapindex reindexa."},
+  "memorizar": "la d final: slapd es el demonio."
+},
+"SYBEX-CH11-RQ19": {
+  "idea": ["Desde el servidor se añaden objetos con slapadd."],
+  "otras": {"A": "ldapadd es un cliente.",
+            "B": "slapindex solo reindexa lo que ya existe.",
+            "D": "ldapmodify también es un cliente."},
+  "memorizar": "slap… servidor; ldap… cliente."
+},
+"SYBEX-CH11-RQ20": {
+  "idea": ["Desde el cliente se añaden objetos con ldapadd."],
+  "otras": {"A": "slapadd añade, pero desde el servidor, tocando los archivos.",
+            "C": "ldapmodify es cliente, pero solo modifica lo existente.",
+            "D": "slapindex reindexa desde el servidor."},
+  "memorizar": "ldapadd desde fuera; slapadd desde dentro."
+}
+}

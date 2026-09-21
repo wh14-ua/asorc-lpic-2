@@ -1,0 +1,89 @@
+### SYBEX-CH02-RQ11  [multiple_response]
+Q: Which of the following indicates a tape device that automatically rewinds? (Choose all that apply.)
+A: /dev/st0
+B: /dev/nst0
+C: /dev/ht1
+D: /dev/nht1
+E: /dev/nht0
+X: The /dev/st0 (SCSI) and /dev/ht1 (PATA) tape device files are for automatically rewinding tape devices. Options B, D, and E all point to non-rewinding tape devices as indicated by the leading n in their device filename, /dev/n*.
+
+### SYBEX-CH02-RQ12  [multiple_choice]
+Q: To control a magnetic tape for backups, use the _______ program.
+A: tar
+B: star
+C: mt
+D: rsync
+E: dd
+X: The mt program allows you to control a tape and determine its current status. The tar (option A) and star (option B) utilities can use tapes as a storage medium but do not control them. The rsync (option D) utility is a backup program, but it cannot be used with magnetic tapes, much less control them. Option E, the dd command, can also be used as a backup utility, but it does not control tapes.
+
+### SYBEX-CH02-RQ13  [multiple_choice]
+Q: Which of the following rsync commands is the proper way to send a backup over the network to the remote host, ServerA, while having the transfer encrypted using OpenSSH?
+A: rsync -av Project /run/media/ServerA
+B: rsync -av Project ServerA
+C: rsync -av ServerA Project
+D: rsync -av Project ServerA:∼/
+E: rsync -av Project rsync://ServerA:/
+X: Option D uses the proper rsync syntax for sending a backup over to the remote ServerA host using encryption via OpenSSH. Option A is simply using rsync to send a backup to a removable media device, indicated by /run/media/ServerA. In option B, the Project file is simply copied to another file, called ServerA. In option C, the filenames are flipped-flopped, so that the ServerA file is copied to a new file, Project. In option E, the file is copied to a remote host, ServerA. However, OpenSSH is not used. The rsync daemon is used instead, and therefore the transfer is not encrypted.
+
+### SYBEX-CH02-RQ14  [multiple_response]
+Q: Which of the following are true about the dd command? (Choose all that apply.)
+A: The dd command can be used to create a low-level copy of a hard drive.
+B: The dd command is popular for daily incremental backups.
+C: The dd command can be safely used to back up a disk mounted at /.
+D: The dd command can be used for managing tapes.
+E: The dd command can be used to zero-out a hard disk.
+X: The dd command can be used for creating a low-level copy of a hard drive. It can also be used to zero-out a drive by employing the /dev/zero file. The dd command is not popular for daily incremental backups (option B), because it can easily corrupt a mounted drive. Therefore, option C is also incorrect. The dd command is not used for managing tapes (option D).
+
+### SYBEX-CH02-RQ15  [multiple_response]
+Q: When installing a program from source code, which of the following installation files typically can provide you with additional installation information? (Choose all that apply.)
+A: README
+B: INSTALL
+C: COPYING
+D: RELEASE-NOTES
+E: NEWS
+X: The README and INSTALL files typically can provide you with additional installation instructions, including items such as what other packages are needed to complete the installation successfully. The COPYING file (option C) often holds software license information. The RELEASE-NOTES (option D) and NEWS (option E) typically contain features and bug fixes that have been included in the latest program version.
+
+### SYBEX-CH02-RQ16  [multiple_choice]
+Q: During the process of installing a program from source, which of the following creates or updates the Makefile with the Makefile.in file’s contents and what it finds on your system?
+A: INSTALL
+B: configure
+C: make
+D: make install
+E: cp
+X: The configure utility is really a script that checks your system for various program dependencies and a compiler. It also creates or updates the Makefile with the Makefile.in file’s contents and what it finds on your system. Option C, the make command, takes the information in the Makefile and uses it to compile the source code into binary. Option D, the make install command, moves the program files to their necessary locations in the directory structure. The cp command (option E) just copies files. You may use it to copy the program installation file’s tarball from one place to another. Option A, the INSTALL file, typically can provide additional installation instructions.
+
+### SYBEX-CH02-RQ17  [multiple_response]
+Q: Which of the following monitoring commands allow you to view system memory information? (Choose all that apply.)
+A: free
+B: mpstat
+C: mtr
+D: top
+E: vmstat
+X: The free (option A) and vmstat (option E) commands provide information primarily about system memory usage. The top (option D) command, while providing other resource statistics, also provides memory usage data. The mpstat (option B) command provides network statistic information, while the mtr (option C) command provides a dynamic display of network routing data.
+
+### SYBEX-CH02-RQ18  [multiple_choice]
+Q: Which of the following will show CPU usage information 20 times in 2-second intervals?
+A: uptime 20 2
+B: uptime 2 20
+C: sar 20 2
+D: sar 2 20
+E: None of the above
+X: The sar 2 20 command will display CPU usage information 20 times and space it 2 seconds apart. The uptime command (options A and B) does not accept parameters, and therefore it would display CPU data only one time. In option C, the sar command parameters are backward. In this case, it would display CPU information 2 times and space it 20 seconds apart.
+
+### SYBEX-CH02-RQ19  [multiple_response]
+Q: Which of the following are considered to be system resource-monitoring solutions? (Choose all that apply.)
+A: collectd
+B: Duplicity
+C: MRTG
+D: Nagios
+E: All of the above
+X: MRTG, collectd, and Nagios are all resource-monitoring solutions that can be employed on your Linux system. Duplicity (option B) can also be employed on your Linux system, but it is used for backing up data, not monitoring resource usage.
+
+### SYBEX-CH02-RQ20  [multiple_response]
+Q: Which of the following are true about Linux system memory? (Choose all that apply.)
+A: Memory is divided into sheets.
+B: Memory for an idle process can be swapped out to swap space.
+C: Swap can also be called virtual memory.
+D: Swapping is the memory management scheme, where idle processes swap memory.
+E: Memory-swapping statistics can be viewed using the psmap utility.
+X: Memory for idle processes can be swapped out from RAM to a special partition called swap space, swap, or virtual memory. Therefore, options B and C are correct. Memory is divided up into chunks called pages (option A), not sheets. Swapping is the memory management technique where idle processes’ memory is swapped out to swap. The processes do not trade memory (option D). Finally, the psmap tool is primarily for mapping processes (option E). The best tools for viewing memory statistics are tools like free, sar, and vmstat.

@@ -1,0 +1,51 @@
+[
+{"id":"SYBEX-CH11-RQ11",
+ "q":"Cuando se usa un único archivo de configuración para PAM, ¿dónde se encuentra?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"La aplicación PAM usa el archivo de configuración pam.conf, guardado en la carpeta /etc/, así que la opción B es correcta. La opción A, /etc/pam.d, es una carpeta, no un único archivo de configuración, así que la opción A es incorrecta. La ubicación /etc/pam.d/pam.conf mezcla el método de archivo único con el de varios archivos y no existe en la configuración de PAM, así que la opción C es incorrecta. El archivo /etc/pamd.conf no existe en la configuración de PAM, así que la opción D es incorrecta."},
+
+{"id":"SYBEX-CH11-RQ12",
+ "q":"¿Qué carpeta usa PAM para guardar varios archivos de configuración de aplicaciones?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"La aplicación PAM usa la carpeta /etc/pam.d para guardar archivos de configuración individuales por aplicación, así que la opción A es correcta. Cuando se usan archivos de configuración separados por aplicación, PAM no usa el archivo pam.conf, así que las opciones B y C son incorrectas. El archivo pamd.conf no existe en la configuración de PAM, así que la opción D es incorrecta."},
+
+{"id":"SYBEX-CH11-RQ13",
+ "q":"¿Qué entrada de control de PAM finaliza la aplicación si falla la autenticación?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"La entrada de control requisite finaliza el proceso de autenticación si esta falla. No se comprueba ninguna otra entrada de la configuración. Así pues, la opción C es correcta. La entrada sufficient da por válida la autenticación si la comprobación tiene éxito, pero no la finaliza si falla, así que la opción A es incorrecta. La entrada required solo indica un estado de fallo si la autenticación falla, pero permite que el proceso siga comprobando otras entradas, así que la opción B es incorrecta. La entrada optional no bloquea las entradas siguientes si falla, así que la opción D también es incorrecta."},
+
+{"id":"SYBEX-CH11-RQ14",
+ "q":"¿Qué tipo de funcionalidad de PAM registra los intentos de autenticación en un archivo de registro?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"El tipo de funcionalidad session permite definir un archivo de registro en el que PAM anotará los intentos de autenticación, así que la opción B es correcta. El tipo account solo verifica la cuenta; no registra la transacción, así que la opción A es incorrecta. Del mismo modo, el tipo auth solo proporciona servicios de autenticación; no los registra, así que la opción D también es incorrecta. El tipo password proporciona funciones de gestión de contraseñas, pero tampoco registra las transacciones, así que la opción C es incorrecta."},
+
+{"id":"SYBEX-CH11-RQ15",
+ "q":"¿Qué parte de la base de datos LDAP define una plantilla con un conjunto de atributos que pueden asignarse a un objeto?",
+ "o":{"A":"El ID de objeto","B":"El esquema","C":"El árbol LDAP","D":"La clase de objeto"},
+ "e":"La clase de objeto define una plantilla que proporciona un conjunto de atributos asignados a un objeto de la base de datos LDAP, así que la opción D es correcta. El ID de objeto identifica de forma única cada objeto, pero no proporciona una plantilla de atributos, así que la opción A es incorrecta. El esquema define la estructura de la base de datos, pero no se usa como plantilla para objetos, así que la opción B es incorrecta. El árbol LDAP engloba los objetos reales contenidos en la base de datos LDAP, no solo una plantilla para objetos nuevos, así que la opción C es incorrecta."},
+
+{"id":"SYBEX-CH11-RQ16",
+ "q":"¿Qué parte de la base de datos LDAP define la información almacenada de un objeto?",
+ "o":{"A":"Los atributos","B":"La clase de objeto","C":"El ID de objeto","D":"El esquema"},
+ "e":"Los atributos definen los valores de datos asociados a un objeto de la base de datos LDAP, así que la opción A es correcta. La clase de objeto define una plantilla de atributos que se aplica a un objeto, pero no los valores reales de esos atributos, así que la opción B es incorrecta. El ID de objeto es un valor único asignado a cada objeto, pero no incluye información sobre el objeto, así que la opción C es incorrecta. El esquema define los objetos de la base de datos y cómo se relacionan entre sí, pero no la información concreta de cada objeto, así que la opción D es incorrecta."},
+
+{"id":"SYBEX-CH11-RQ17",
+ "q":"¿Cómo se llama el nombre único asignado a cada objeto de la base de datos LDAP?",
+ "o":{"A":"ID de objeto","B":"Atributo","C":"Clase de objeto","D":"Nombre distinguido (distinguished name)"},
+ "e":"Cada objeto debe tener un nombre distinguido único que haga referencia tanto a la ubicación del objeto en el árbol LDAP como a su nombre; por tanto, la opción D es correcta. El valor del ID de objeto es único para cada objeto, pero no es un nombre al que se pueda hacer referencia, así que la opción A es incorrecta. Los atributos de los objetos no son únicos, así que la opción B es incorrecta. La clase de objeto define una plantilla que se aplica a todos los objetos similares del árbol LDAP, así que tampoco es única y la opción C es incorrecta."},
+
+{"id":"SYBEX-CH11-RQ18",
+ "q":"¿Qué programa de OpenLDAP se ejecuta como servidor LDAP principal, escuchando las peticiones de los clientes LDAP?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"El programa principal del servidor OpenLDAP es slapd, así que la opción B es correcta. El programa slurpd solo se usa al replicar servidores LDAP, así que la opción A es incorrecta. El programa slapadd se usa para añadir objetos nuevos a la base de datos LDAP; no es el programa principal del servidor, así que la opción C es incorrecta. El programa slapindex permite reindexar la base de datos LDAP, pero tampoco es el programa principal del servidor, así que la opción D es incorrecta."},
+
+{"id":"SYBEX-CH11-RQ19",
+ "q":"¿Qué programa del servidor LDAP permite añadir objetos nuevos a la base de datos LDAP?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"El programa de línea de comandos slapadd permite actualizar la base de datos LDAP con objetos nuevos, así que la opción C es correcta. Los programas ldapadd y ldapmodify son aplicaciones cliente y no de servidor, así que las opciones A y D son incorrectas. El programa slapindex solo reindexa los objetos existentes en la base de datos LDAP; no puede añadir objetos nuevos, así que la opción B es incorrecta."},
+
+{"id":"SYBEX-CH11-RQ20",
+ "q":"¿Qué aplicación cliente de LDAP permite añadir objetos nuevos a la base de datos LDAP?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"El programa ldapadd permite añadir objetos nuevos a la base de datos LDAP desde un cliente, así que la opción B es correcta. El programa slapadd también permite añadir objetos nuevos, pero solo desde el servidor, ya que interactúa directamente con los archivos de LDAP, así que la opción A es incorrecta. El programa ldapmodify es un programa cliente, pero solo puede modificar objetos LDAP existentes, no añadir nuevos, así que la opción C es incorrecta. El programa slapindex es un programa de servidor que reindexa los objetos existentes en la base de datos LDAP, así que la opción D es incorrecta."}
+]

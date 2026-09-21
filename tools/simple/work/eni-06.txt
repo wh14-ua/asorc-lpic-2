@@ -1,0 +1,39 @@
+### ENI-CH06-Q01  [open]  tema: DNS
+P: ¿Por qué existen varios tipos de registros DNS?
+LIBRO: Para almacenar información de distinto tipo. De este modo, un cliente puede solicitar a su servidor DNS información precisa. Por ejemplo: ¿Cuál es el servidor maestro para esta zona? ¿Cuáles son los servidores DNS disponibles para esta zona?
+
+### ENI-CH06-Q02  [open]  tema: DNS
+P: ¿Qué relación existe entre la mensajería y la resolución DNS?
+LIBRO: Los registros MX hacen referencia a los servicios de mensajería en un dominio DNS. Un servidor de mensajería que esté funcionando puede que no reciba ningún mensaje del exterior si a su registro MX no se le hace referencia correctamente.
+
+### ENI-CH06-Q03  [open]  tema: DNS
+P: ¿En qué aspecto un servidor de caché mejora el funcionamiento global de una red?
+LIBRO: Conservando en memoria las resoluciones ya realizadas, el servidor responde mucho más rápidamente en las siguientes peticiones. En la medida en que en una red normal la mayoría de las peticiones se realizan sobre los mismos registros comunes (google, hotmail, ebay, etc.), todos los clientes obtienen una respuesta inmediata sin que el servidor tenga que volver a realizar una resolución pública.
+
+### ENI-CH06-Q04  [open]  tema: DNS
+P: ¿Cómo se instala el componente resolver DNS en un sistema Linux estándar?
+LIBRO: El resolver forma parte de la pila IP en todas las distribuciones Linux y, por lo tanto, no hay que instalarlo.
+
+### ENI-CH06-Q05  [open]  tema: DNS
+P: ¿Se puede prescindir de la directiva include en el archivo named.conf?
+LIBRO: Por supuesto. Esta directiva permite llamar a archivos que contengan elementos de configuración anexa e integrarlos en la configuración del servidor. Sin embargo, si se decide ubicar todos los elementos de configuración en un solo archivo named.conf, aunque no genere problemas, se obtendrá un archivo de configuración un poco largo.
+
+### ENI-CH06-Q06  [open]  tema: DNS
+P: ¿Cómo un servidor DNS local dentro de una empresa puede aprovechar la caché de un servidor más solicitado como el de su proveedor de servicios de Internet por ejemplo?
+LIBRO: Declarando una redirección hacia él (directiva forwarders). El servidor resolverá entonces todos los registros que pertenezcan a zonas locales y se dirigirá al servidor de su proveedor de servicios de Internet para cualquier otra resolución.
+
+### ENI-CH06-Q07  [open]  tema: DNS
+P: ¿Qué se puede hacer para que un servidor DNS actualice su configuración teniendo en cuenta nuevos elementos, como por ejemplo nuevos registros, sin tener que recurrir a un reinicio total del servicio?
+LIBRO: Gracias al comando de control rndc, que permite precisamente tener en cuenta los cambios en la configuración o en los datos albergados en una sola zona evitanto, por tanto, la recarga completa del servicio que requeriría muchos más recursos.
+
+### ENI-CH06-Q08  [open]  tema: DNS
+P: De entre todos los comandos de comprobación de resolución DNS, ¿cuál proporciona los resultados más precisos y detallados?
+LIBRO: El comando dig, considerado el buque insignia de las herramientas de diagnóstico DNS. Mientras que algunas distribuciones tienen a dig como la herramienta universal destinada a reemplazar con ciertas ventajas a las demás, la mayoría de los usuarios siguen prefiriendo hoy en día el comando nslookup.
+
+### ENI-CH06-Q09  [open]  tema: DNS
+P: ¿Cómo se puede proteger de una vulnerabilidad de código ejecutable DNS cuando se teme que se produzca una intrusión o un daño mediante el uso de esta vulnerabilidad?
+LIBRO: Mediante dos técnicas que se usan a menudo conjuntamente. Para empezar, enjaulando el proceso named en un entorno de ejecución impermeable. Se dice que se mete el proceso en prisión (in jail) mediante un cambio de raíz (chroot). La prisión en cuestión es una estructura de directorios que contiene una copia de todos los elementos que necesitará el proceso para funcionar, por ejemplo librerías o archivos de configuración. Además, se ejecuta el proceso con una cuenta de servicio con privilegios limitados, por lo que el uso de una posible vulnerabilidad no daría al atacante más permisos que los de la cuenta en cuestión.
+
+### ENI-CH06-Q10  [open]  tema: DNS
+P: En el contexto de una delegación, ¿por qué es indispensable tener disponibilidad de comunicación entre el servidor que delega y el servidor delegado?
+LIBRO: El principio de una delegación es externalizar la administración de una zona hija usando otro servidor. Todas las peticiones que se hagan al servidor padre para la zona hija se dirigirán dinámicamente al servidor de la zona hija. Si no hay comunicación, esta redirección es simplemente imposible.

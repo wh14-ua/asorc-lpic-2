@@ -1,0 +1,79 @@
+### SYBEX-CH12-RQ01  [multiple_choice]
+Q: What do you call a vulnerability that allows an attacker to gain access to a system?
+A: Attack vector
+B: Open port
+C: Open application
+D: Unsecure communication
+X: An attack vector is any path that allows an attacker to gain access to a system. Since a vulnerability allows access to a system, it’s an attack vector; thus option A is correct. The other three options just describe other types of vulnerabilities, so options B, C, and D are incorrect.
+
+### SYBEX-CH12-RQ02  [multiple_choice]
+Q: What file contains a list of standard application ports?
+A: /etc/ssh/sshd_conf
+B: /etc/openvpn
+C: /etc/services
+D: /proc/sys/net/ipv4
+X: The /etc/services file contains a mapping of port numbers to applications, so option C is correct. The /etc/ssh/sshd_conf file is the configuration for the OpenSSH server, the /etc/openvpn folder contains configuration files for the OpenVPN application, and the /proc/sys/net/ipv4 folder contains settings for the IPv4 stack in the kernel, so options A, B, and D are all incorrect.
+
+### SYBEX-CH12-RQ03  [multiple_choice]
+Q: How can you use the telnet command to detect an open port?
+A: telnet port address
+B: telnet address port
+C: telnet address:port
+D: The telnet command only connects to port 23.
+X: The second parameter of the telnet command specifies the TCP port to connect to, so option B is correct. Options A and C show incorrect formats for the telnet command, so they are incorrect. Option D is incorrect, because you can specify any TCP port number for the second parameter.
+
+### SYBEX-CH12-RQ04  [multiple_choice]
+Q: Which command can display a list of TCP ports that are listening for incoming connections on a local server?
+A: telnet
+B: iptables
+C: ssh
+D: netstat
+X: The netstat command can display all of the ports that are open, listening for incoming network connections, so option D is correct. The telnet command can connect to only one port at a time, so option A is incorrect. The iptables command works with the kernel packet processing features and not network ports, so option B is incorrect. The ssh command can connect only to port 22, so option C is incorrect.
+
+### SYBEX-CH12-RQ05  [multiple_choice]
+Q: Which option of the netcat command allows it to scan multiple ports?
+A: -v
+B: -z
+C: -l
+D: -6
+X: The –z option specifies a list of ports or a port range that the netcat command should scan looking for listening ports, so option B is correct. The –v option provides more verbose output, so option A is incorrect. The –l option tells netcat to listen for incoming connections, so option C is incorrect. The -6 option tells netcat to use IPv6 addresses, so option D is also incorrect.
+
+### SYBEX-CH12-RQ06  [multiple_choice]
+Q: Which nmap option specifies that it should determine the fingerprint of the remote system?
+A: -A
+B: -sT
+C: -sU
+D: -p
+X: The –A option tells nmap to perform a fingerprint analysis of the remote system, so option A is correct. The –sT option scans all TCP ports, while the –sU option scans all UDP ports, so options B and C are incorrect. The –p option specifies a port range to scan, so option D is also incorrect.
+
+### SYBEX-CH12-RQ07  [multiple_choice]
+Q: What OpenVAS feature allows it to simulate different vulnerability attacks on the system it scans?
+A: National Vulnerability Database (NVD)
+B: Software Repository
+C: Network Vulnerability Tests (NVT)
+D: Web interface
+X: The Network Vulnerability Tests (NVT) simulate known attacks against systems, and they are downloaded as part of OpenVAS, so option C is correct. The National Vulnerability Database (NVD) is maintained by US-CERT to define vulnerabilities but not use them to simulate the vulnerabilities, so option A is incorrect. The distribution Software Repository doesn’t store vulnerabilities, so option B is incorrect. The web interface allows you to interact with OpenVAS, but it doesn’t simulate vulnerabilities, so option D is incorrect.
+
+### SYBEX-CH12-RQ08  [multiple_choice]
+Q: What type of software can warn you of an active attack on your system?
+A: Port scanner
+B: Network Vulnerability Test (NVT)
+C: Virtual private network (VPN)
+D: Intrusion detection system (IDS)
+X: An intrusion detection system (IDS) can monitor system and network events, looking for triggers that indicate an active attack is occurring, so option D is correct. Port scanners can tell you of open attack vectors, but they can’t tell you when an attack is happening, so option A is incorrect. The Network Vulnerability Test (NVT) simulates attacks, but it doesn’t warn you of current attacks, so option B is incorrect. The VPN allows you to establish a secure connection between two remote hosts, but it doesn’t warn you of an attack, so option C is incorrect.
+
+### SYBEX-CH12-RQ09  [multiple_choice]
+Q: What file contains the fail2ban rules?
+A: fail2ban.conf
+B: jail.conf
+C: pwdfail
+D: error.log
+X: The jail.conf file, located in the /etc/fail2ban folder, contains the rule definitions that determine what events fail2ban should monitor.
+
+### SYBEX-CH12-RQ10  [multiple_choice]
+Q: Which application is a network intrusion detection system (NIDS)?
+A: Snort
+B: OpenVPN
+C: OpenSSH
+D: OpenVAS
+X: The Snort application monitors the network looking for active attacks, so option A is correct. The OpenVPN package provides an encrypted tunnel between two public networks to provide a secure environment, but it doesn’t act as an NIDS, so option B is incorrect. The OpenSSH application provides a secure channel between a client and server, but it doesn’t monitor packets on the network, so option C is incorrect. The OpenVAS application is a vulnerability tool, but it doesn’t monitor network packets by itself, so option D is incorrect.

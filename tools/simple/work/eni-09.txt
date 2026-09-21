@@ -1,0 +1,39 @@
+### ENI-CH09-Q01  [open]  tema: Seguridad de red
+P: ¿Un servidor Linux es capaz de enrutar paquetes IP de forma natural?
+LIBRO: Sí, pero esta función siempre está desactivada por defecto. Se puede activar modificando el contenido del archivo /proc/sys/net/ipv4/ip_forward (con el valor 1).
+
+### ENI-CH09-Q02  [open]  tema: Seguridad de red
+P: El comando sysctl permite modificar el contenido de ciertos archivos del pseudosistema de archivos /proc. ¿Cómo se construye el parámetro que se le proporciona?
+LIBRO: Especificando el archivo que se desea modificar dentro de la estructura de carpetas albergada en /proc/sys. En su ruta hay que reemplazar el separador jerárquico de directorios (la barra) por un punto. El archivo /etc/sysctl.conf se relee en cada arranque mediante el comando sysctl para tener una aplicación permanente de estos parámetros.
+
+### ENI-CH09-Q03  [open]  tema: Seguridad de red
+P: ¿Dispone de tabla de enrutamiento un sistema que sólo tiene una tarjeta de red?
+LIBRO: Sí, por supuesto. Cualquier sistema IP dispone de su tabla de enrutamiento. Aunque el sistema no sea claramente un router (no está conectado a varias redes), tiene que ser capaz de enrutar paquetes a sus redes de destino. Como mínimo, la tabla de enrutamiento contiene una referencia a la red local y la definición de la ruta por defecto (pasarela por defecto).
+
+### ENI-CH09-Q04  [open]  tema: Seguridad de red
+P: Si se consulta a iptables con el comando iptables -L, ¿qué tabla de iptables se muestra?
+LIBRO: La tabla filter que, además de estar muy bien, es lo que con mayor frecuencia se desea ver. Sin embargo, este comportamiento puede dar pie a engaños en el aspecto de que muchos administradores incluso ignoran la existencia de la tabla nat que puede consultarse con el comando iptables -t nat -L.
+
+### ENI-CH09-Q05  [open]  tema: Seguridad de red
+P: Con iptables, ¿cómo se puede aplicar una configuración particular al tráfico con destino el propio sistema distinta de la configuración aplicada al tráfico enrutado por el sistema?
+LIBRO: Para ello, hay que gestionar reglas distintas según la cadena que se desea configurar. La cadena INPUT hace referencia al tráfico con destino el propio sistema, mientras que la cadena FORWARD se aplica al tráfico enrutado a través del sistema.
+
+### ENI-CH09-Q06  [open]  tema: Seguridad de red
+P: En el contexto de uso de iptables, ¿qué sucede si ninguna de las reglas configuradas para una cadena se satisface?
+LIBRO: Se aplica la regla por defecto. Las reglas por defecto se describen en las políticas de iptables (policies), definidas con el parámetro -P. Hay una policy por cadena.
+
+### ENI-CH09-Q07  [open]  tema: Seguridad de red
+P: ¿En qué aspecto se dice que NAT aporta una protección rudimentaria de las redes privadas?
+LIBRO: En el marco de funcionamiento de NAT, las direcciones de las máquinas privadas en la red no van más allá del router NAT (se reemplazan automáticamente por su dirección pública), lo que proporciona una cierta discreción de la red privada. Además, un atacante que quiera penetrar en la red privada desde el exterior no sabrá encontrar la ruta a la red, las direcciones privadas no se pueden enrutar en Internet.
+
+### ENI-CH09-Q08  [open]  tema: Seguridad de red
+P: La creación manual de reglas en iptables es muy pesada y no siempre se puede predecir qué se desea filtrar. ¿Cómo se puede automatizar la creación de reglas para bloquear el tráfico molesto?
+LIBRO: El programa fail2ban tiene como objetivo la creación de reglas dinámicamente, como por ejemplo una regla que prohíba el tráfico proveniente de un usuario remoto que ha hecho tres intentos sin éxito de apertura de sesión SSH.
+
+### ENI-CH09-Q09  [open]  tema: Seguridad de red
+P: ¿Qué son Bugtraq y CERT?
+LIBRO: Organismos de investigación y de vigilancia de la seguridad. Publican los anuncios y los datos técnicos de las vulnerabilidades descubiertas.
+
+### ENI-CH09-Q10  [open]  tema: Seguridad de red
+P: ¿En qué aspecto OpenVAS está bien adaptado para la protección de parques informáticos?
+LIBRO: Su arquitectura cliente/servidor permite centralizar su configuración y su administración en un servidor; mientras que los componentes cliente se instalan en todas las máquinas del parque que hay que proteger.

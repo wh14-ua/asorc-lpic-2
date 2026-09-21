@@ -1,0 +1,39 @@
+### ENI-CH07-Q01  [open]  tema: Servidor web
+P: ¿Cuál es el interés del funcionamiento modular de Apache?
+LIBRO: Más allá de la simple visualización de páginas web, el servidor web Apache soporta decenas de funciones, algunas comunes y otras específicas. La naturaleza modular de Apache permite cargar solamente los módulos necesarios para su funcionamiento y, por tanto, tener un código ejecutable cargado más ligero.
+
+### ENI-CH07-Q02  [open]  tema: Servidor web
+P: ¿Cómo se puede validar la sintaxis de un archivo de configuración Apache sin tener que iniciar el servicio?
+LIBRO: Ejecutando el comando apache con la opción -t.
+
+### ENI-CH07-Q03  [open]  tema: Servidor web
+P: ¿Qué fuente de información es casi imprescindible para el uso correcto de módulos Apache y de directivas de configuración de estos módulos?
+LIBRO: Es difícil configurar correctamente un servidor Apache complejo sin la ayuda del sitio web de documentación oficial de Apache. En primer lugar porque hay una gran cantidad de directivas: más de 400 en la versión 2.2 y más de un centenar de módulos; y también porque Apache es un software vivo y sus módulos están evolucionando continuamente.
+
+### ENI-CH07-Q04  [open]  tema: Servidor web
+P: En la mayoría de las situaciones comunes de un servidor con hosts virtuales, ¿cómo sabe el servidor a qué host virtual se está consultando de entre todos los disponibles?
+LIBRO: El servidor consulta la url solicitada por el cliente y averigua qué nombre se ha usado para la solicitud. Es el método más común, utilizado normalmente por los servicios de alojamiento web y por los proveedores de servicio de Internet que pueden albergar en un solo servidor físico varias decenas de sitios web bajo la forma de hosts virtuales.
+
+### ENI-CH07-Q05  [open]  tema: Servidor web
+P: En el contexto de una autentificación sencilla gestionada de manera local por un servidor Apache, ¿qué comando permite crear cuentas de usuario en la base de datos local?
+LIBRO: El comando es htpasswd, que permite crear, modificar y eliminar cuentas de usuario. Observe que este comando es útil cuando se trata de una autentificación local sencilla, que se usa en los casos más simples, pero que este método representa solamente una de las posibles formas de autentificación disponibles en Apache.
+
+### ENI-CH07-Q06  [open]  tema: Servidor web
+P: ¿Qué se puede poner en un archivo .htaccess?
+LIBRO: Las mismas directivas que se habrían podido poner en un contexto Directory. La configuración se encuentra entonces en un archivo localizado más cerca de los datos que en el archivo de configuración de Apache.
+
+### ENI-CH07-Q07  [open]  tema: Servidor web
+P: ¿En qué aspecto los archivos .htaccess dependen de la directiva AllowOverride?
+LIBRO: No hay, en principio, ningún motivo para que el servidor Apache busque en cada uno de sus directorios un posible archivo de configuración adicional. Por consiguiente, la directiva AllowOverride es necesaria para indicar que se acepta la existencia de una configuración complementaria y que conviene buscar este archivo de forma automática.
+
+### ENI-CH07-Q08  [open]  tema: Servidor web
+P: En general, ¿para qué sirve un certificado digital X509?
+LIBRO: Se le puede dar muchos usos, pero en esencia un certificado digital asocia una identidad a una clave pública. Esta identidad puede ser una referencia a un usuario, un nombre, una dirección IP, etc. Esta asociación está garantizada, ya que está firmada por una autoridad de certificación a la que todo el mundo le ha otorgado su confianza. Si tuviéramos que encontrar una analogía en la vida cotidiana, se podría hablar de una identidad que asocia un nombre a una foto (clave pública), estando firmada por una autoridad (la jefatura de policía).
+
+### ENI-CH07-Q09  [open]  tema: Servidor web
+P: ¿Por qué se dice que un servidor proxy tradicional funciona rompiendo el tráfico?
+LIBRO: Trabajando con un servidor proxy (intermediario), el cliente se dirige al servidor proxy indicándole el servidor web objetivo. El servidor proxy captura la petición y, a su vez, envía una petición al servidor objetivo, pero en nombre del cliente. Por tanto, se tiene un flujo de datos del cliente al proxy y otro flujo de datos del proxy al servidor objetivo. El proxy aprovecha la operación para realizar operaciones de filtrado, estadísticas, poner información en caché, etc.
+
+### ENI-CH07-Q10  [open]  tema: Servidor web
+P: En un servidor proxy squid, ¿se pueden poner acls squid en archivos de definición anexos?
+LIBRO: Sí, la directiva acl usada en el archivo de configuración squid puede hacer referencia directamente a un parámetro de red o designar un archivo que contenga este mismo parámetro.

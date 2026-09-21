@@ -1,0 +1,88 @@
+### SYBEX-CH06-RQ01  [multiple_choice]
+Q: Which network layer uses the Wi-Fi Protected Access (WPA) encryption?
+A: Network
+B: Physical
+C: Transport
+D: Application
+X: The Wi-Fi Protected Access encryption protocol protects access to wireless access points. The wireless network operates at the physical network layer, so option B is correct. The network layer uses addressing protocols, such as IP, to send data between systems on the network, but it doesn’t interact with the wireless signal, so answer A is incorrect. The transport layer uses ports to direct network traffic to specific applications running at the application layer so options C and D are both incorrect.
+
+### SYBEX-CH06-RQ02  [multiple_choice]
+Q: What network layer feature defines the network to which the system is connected?
+A: IP address
+B: Default router
+C: Hostname
+D: Netmask
+E: DNS server
+X: The netmask value determines the network portion of the IP address, which identifies to which network the system is connected. Thus, option D is correct. The default router is another IP address on the network, but it doesn’t indicate the network portion of the address, so it can’t be used to determine the network address, and option B is incorrect. The IP address by itself doesn’t define the network address without the netmask, so option A is incorrect. The hostname doesn’t indicate the network address, so option C is incorrect. The DNS server maps hostnames to IP addresses, but if you only know the IP address, you still won’t know the network portion of the address, so option E is incorrect.
+
+### SYBEX-CH06-RQ03  [multiple_choice]
+Q: Which of the following is a correct netmask value?
+A: 255.255.255.0
+B: 255.255.0.255
+C: 192.168.1.0
+D: 192.168.0.1
+E: 0.255.255.255
+X: The netmask value sets the network portion of the IP address to 1s and the host portion of the IP address to 0s. Thus, the netmask value must have consecutive 1s in the address at the start of the value. Option A, 255.255.255.0, indicates that the first 24 bits of the address are 1s, so it represents a proper netmask value, and it is the correct option. In option B, the 1s values aren’t consecutive, so it is not a proper netmask value and is thus incorrect. Option C shows a network address but not the netmask address, while option D shows a host address but not the netmask address, so those are both incorrect. Option E shows an address that uses consecutive 1s values, but they are at the end of the address and not at the beginning, so it is incorrect.
+
+### SYBEX-CH06-RQ04  [multiple_choice]
+Q: What two parts make up an IP address?
+A: Host address and router
+B: Netmask and host address
+C: Netmask and router
+D: Host address and hostname
+E: Network address and host address
+X: An IP address consists of the network address and a unique host address, so option E is correct. The host address and router address won’t indicate the network address, so option A is incorrect. Using the netmask and host address won’t reveal the network address, so option B is incorrect. Likewise, the netmask and router addresses determine the network address, but not the host address of the system, so option C is incorrect. The hostname is not part of the IP address, so option D is also incorrect.
+
+### SYBEX-CH06-RQ05  [multiple_choice]
+Q: How many bits are used in an IPv6 address?
+A: 32
+B: 64
+C: 128
+D: 256
+E: 8
+X: IP version 6 uses 128 bits separated into eight groups of four hexadecimal values, so option C is correct. The original IP version 4 addresses use 32 bits, but not IPv6, so option A is incorrect. Many IPv6 networks use a 64-bit network address and a 64-bit host address, but the full IPv6 address is 128 bits, so option B is incorrect. Currently, there isn’t an IP version that uses either 256 or 8 bits, so options D and E are incorrect.
+
+### SYBEX-CH06-RQ06  [multiple_choice]
+Q: What network setting defines the network device that routes packets intended for hosts on remote networks?
+A: Default router
+B: Netmask
+C: Hostname
+D: IP address
+E: DNS server
+X: The default router is used to send packets from the local network to remote networks, so to communicate with a remote host you need to define the default router address, making option A correct. The netmask only defines the local network; it doesn’t define what to do with packets for remote hosts, so option B is incorrect. The hostname and IP address only define features of the local host, so options C and D are incorrect, while the DNS server defines how to retrieve the IP address of a host based on its domain name, so option E is incorrect.
+
+### SYBEX-CH06-RQ07  [multiple_choice]
+Q: What device setting defines a host that maps a hostname to an IP address?
+A: Default router
+B: Netmask
+C: Hostname
+D: IP address
+E: DNS server
+X: The DNS server maps the hostname to an IP address, so you must have a DNS server defined in your network configuration to be able to use hostnames in your applications. Thus, option E is correct. The default router only defines how to send packets to remote hosts; it doesn’t map the hostname to the IP address, so option A is incorrect. The netmask value defines the local network but not how to map hostnames to IP addresses, so option B is incorrect. The hostname and IP address define features of the local host, so options C and D are incorrect.
+
+### SYBEX-CH06-RQ08  [multiple_choice]
+Q: What is used to assign an IP address automatically to a client?
+A: Default router
+B: DHCP
+C: ARP table
+D: Netmask
+E: ifconfig
+X: The Dynamic Host Configuration Protocol (DHCP) is used to assign dynamic IP addresses to client workstations on a network, so option B is correct. The default router can’t assign addresses to devices, so option A is incorrect. The ARP table maps the hardware address of the network card to IP addresses, but it doesn’t assign the IP addresses, so option C is incorrect. The netmask value determines the network address but not the IP address of the host, so option D is incorrect. The ifconfig command can set the static IP address of the host, but it doesn’t automatically assign the IP address, so option E is incorrect.
+
+### SYBEX-CH06-RQ09  [multiple_choice]
+Q: What type of address is used so that local applications can use network protocols to communicate with each other?
+A: Dynamic address
+B: Loopback address
+C: Static address
+D: Hostname
+E: MAC address
+X: The loopback address is a special address assigned to the loopback interface, which allows local applications to communicate with each other, making option B the correct answer. Dynamic and static IP addresses are assigned to network interfaces, which interact with remote systems, not local applications, so options A and C are incorrect. The hostname identifies the local host for remote connections, not for local applications, so option D is incorrect. The MAC address identifies the network card hardware address, but it isn’t used by local applications, so option E is incorrect.
+
+### SYBEX-CH06-RQ10  [multiple_choice]
+Q: Which transport layer protocol guarantees packet delivery?
+A: TCP
+B: UDP
+C: ICMP
+D: DNS
+E: DHCP
+X: TCP guarantees packet delivery between applications, so option A is correct. UDP is faster, but it doesn’t guarantee packet delivery, so option B is incorrect. ICMP is used to send control messages between applications, but they are not guaranteed, so option C is incorrect. DNS and DHCP are not transport layer protocols, so options D and E are incorrect.

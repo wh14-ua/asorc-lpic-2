@@ -1,0 +1,88 @@
+### SYBEX-CH07-RQ11  [multiple_choice]
+Q: What files does the email administrator use to store recipes to apply to all incoming email messages?
+A: /etc/postfix
+B: /etc/procmailrc
+C: $HOME/.procmailrc
+D: /etc/aliases
+E: /users/.procmailrc
+X: Procmail applies the recipes defined in the /etc/procmailrc file to all incoming email messages, so option B is correct. Procmail applies the $HOME/.procmailrc file only to incoming messages for the specific user account, so option C is incorrect. Options A, D, and E are not valid locations for procmail recipes.
+
+### SYBEX-CH07-RQ12  [multiple_choice]
+Q: What does the following procmail recipe do to incoming email messages? :0 c messages
+A: The system rejects all incoming email messages.
+B: The system forwards all email messages to an alias account.
+C: The system copies all incoming email messages to the messages directory.
+D: The system moves all incoming email messages to the messages directory.
+E: The system deletes all incoming email messages.
+X: The :0 c recipe matches against all incoming email messages, and the c option copies the messages to the specified directory, so option C is correct.
+
+### SYBEX-CH07-RQ13  [multiple_choice]
+Q: What MDA program is commonly used to forward email messages to local mailboxes?
+A: Sendmail
+B: Procmail
+C: Postfix
+D: Courier
+E: Dovecot
+X: The procmail program is the only one listed that is an MDA program used for processing incoming email messages, so option B is the only correct answer.
+
+### SYBEX-CH07-RQ14  [multiple_choice]
+Q: What configuration setting in Postfix must you change to forward all incoming email messages to procmail?
+A: mailbox_command
+B: mydestination
+C: myhost
+D: relayhost
+X: The mailbox_command setting defines a program to which Postfix sends all incoming local email messages, so option A is correct. The mydestination setting defines addresses for which Postfix will accept incoming email messages, so option B is incorrect. The myhost setting defines the hostname of the local server, so option C is incorrect. The relayhost setting defines a host to which to send all outbound email messages, so option D is incorrect.
+
+### SYBEX-CH07-RQ15  [multiple_choice]
+Q: Which mailbox style stores all messages for a user in a single file?
+A: Sendmail
+B: Courier
+C: Maildir
+D: Mbox
+E: Exim
+X: The mbox mailbox style stores all messages for a user in a single file, either in the /var/ spool/mail directory or the user’s $HOME directory, so option D is correct. Sendmail, Courier, and exim are application names and not mailbox styles, so options A, B, and E are incorrect. The maildir style of mailboxes uses a directory to store email messages, so option C is incorrect.
+
+### SYBEX-CH07-RQ16  [multiple_choice]
+Q: Which mailbox style uses separate files to store each message for each user?
+A: Sendmail
+B: Courier
+C: Maildir
+D: Mbox
+E: Exim
+X: The maildir mailbox style creates separate files for each email message stored in a common folder, so option C is correct. Sendmail, Courier, and exim are application names and not mailbox styles, so options A, B, and E are incorrect. The mbox mailbox style uses a single file to store all messages for a user, so option D is incorrect.
+
+### SYBEX-CH07-RQ17  [multiple_choice]
+Q: Where are the Courier configuration files located?
+A: /var/spool/mail
+B: /var/spool/postfix
+C: /etc/courier
+D: /etc/mail
+E: /var/log
+X: The Courier program uses the /etc/courier folder to store the configuration files that define how it operates, so option C is correct. The /var/spool/mail and /var/spool/ postfix folders store mail messages, not configuration files, so options A and B are incorrect. The /var/log directory stores log files and not configuration files, so option E is incorrect. Courier doesn’t use the /etc/mail directory, so option D is incorrect.
+
+### SYBEX-CH07-RQ18  [multiple_choice]
+Q: What Courier configuration setting determines how many remote clients can connect at the same time?
+A: MAXDAEMONS
+B: MAILDIRPATH
+C: ADDRESS
+D: MAXPERIP
+E: PORT
+X: The MAXDAEMONS setting determines how many copies of the Courier program can run at the same time, which controls how many clients can connect, so option A is correct. The MAILDIRPATH setting defines the location of the mailbox directory, so option B is incorrect. The ADDRESS setting defines the interface(s) to listen for incoming connections, so option C is incorrect. The MAXPERIP setting defines the number of connections from a single client but not the total number of clients that can connect, so option D is incorrect. The PORT setting defines the TCP port to listen to for incoming connections, so option E is incorrect.
+
+### SYBEX-CH07-RQ19  [multiple_response]
+Q: Where does Dovecot store its configuration settings? (Select two.)
+A: /etc/dovecot
+B: /etc/postfix
+C: /var/spool/mail
+D: dovecot.conf
+E: /var/spool/postfix
+X: Some Linux distributions store the Dovecot configuration settings in the dovecot .conf configuration file, while some create multiple files under the /etc/dovecot directory, so options A and D are both correct. Dovecot doesn’t use any of the Postfix files or folders, so options B, C, and E are all incorrect.
+
+### SYBEX-CH07-RQ20  [multiple_choice]
+Q: What Dovecot setting specifies the authentication methods that the server supports?
+A: mail_location
+B: mechanisms
+C: listen
+D: login_max_connections
+E: protocols
+X: The mechanisms setting lists the authentication methods that the server supports, so option B is correct. The mail_location setting defines the mailbox location, so option A is incorrect. The listen setting defines the TCP port Dovecot listens to for incoming client connections, so option C is incorrect. The login_max_connections settings define how many users can connect at the same time, so option D is incorrect. The protocols setting defines what email protocols the server supports, so option E is incorrect.

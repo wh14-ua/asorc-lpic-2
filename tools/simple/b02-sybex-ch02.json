@@ -1,0 +1,236 @@
+{
+ "SYBEX-CH02-RQ01": {
+  "idea": [
+   "write manda un mensaje a una terminal y wall a todas.",
+   "Los dos escriben en terminales tty que lo tengan permitido."
+  ],
+  "otras": {
+   "A": "mesg no manda nada: consulta o cambia si te dejan escribir en tu terminal.",
+   "C": "echo escribe en tu propia salida estándar.",
+   "D": "mail envía correo, no mensajes de terminal."
+  },
+  "memorizar": "write = a uno; wall = a todos."
+ },
+ "SYBEX-CH02-RQ02": {
+  "idea": [
+   "--no-wall apaga sin avisar a nadie.",
+   "Solo recibe mensaje el superusuario que lanza el comando."
+  ],
+  "otras": {
+   "A": "-c cancela un apagado.",
+   "B": "-k no apaga: bloquea los inicios de sesión y manda el aviso.",
+   "D": "--wall está inventada."
+  },
+  "memorizar": "apagar en silencio → shutdown --no-wall."
+ },
+ "SYBEX-CH02-RQ03": {
+  "idea": [
+   "El aviso legal va en /etc/issue, que se ve antes de entrar.",
+   "Conviene ponerlo también en /etc/issue.net para los que entran por red."
+  ],
+  "otras": {
+   "B": "/etc/motd se muestra ya dentro, cuando el aviso ya no sirve.",
+   "C": "notify-send manda un aviso único y solo a los de entorno gráfico.",
+   "D": "~./bashrc es un script de entorno de inicio de sesión."
+  },
+  "memorizar": "issue = antes de entrar; motd = después."
+ },
+ "SYBEX-CH02-RQ04": {
+  "idea": [
+   "Si el dinero da igual, el soporte más rápido es el SSD."
+  ],
+  "otras": {
+   "A": "las cintas magnéticas son de lo más lento.",
+   "B": "los discos ópticos tienen poca capacidad y son más lentos.",
+   "C": "los HDD superan a la cinta, pero no al SSD.",
+   "E": "con NAS no sabes qué soporte hay detrás."
+  },
+  "memorizar": "el más rápido para copias = SSD."
+ },
+ "SYBEX-CH02-RQ05": {
+  "idea": [
+   "Puede ser incremental o diferencial.",
+   "Incremental: lo cambiado desde la última copia, sea del tipo que sea.",
+   "Diferencial: lo cambiado desde la última completa."
+  ],
+  "analogia": "La incremental es un diario que sigue donde lo dejaste; la diferencial siempre mide desde la última completa.",
+  "otras": {
+   "A": "una copia completa lo copia todo, no solo lo cambiado."
+  },
+  "memorizar": "incremental: desde la última; diferencial: desde la completa."
+ },
+ "SYBEX-CH02-RQ06": {
+  "idea": [
+   "Para restaurar el sistema entero hacen falta /bin/ y /home/.",
+   "/bin/ trae los programas y /home/ los archivos de los usuarios."
+  ],
+  "otras": {
+   "C": "/run/ son datos temporales.",
+   "D": "/tmp/ también."
+  },
+  "memorizar": "copia lo que no se puede regenerar; lo temporal, no."
+ },
+ "SYBEX-CH02-RQ07": {
+  "idea": [
+   "Amanda, Duplicity y Bacula hacen copias de seguridad."
+  ],
+  "otras": {
+   "C": "Nagios monitoriza recursos.",
+   "E": "connectd también monitoriza recursos."
+  },
+  "memorizar": "copias: Amanda, Duplicity, Bacula."
+ },
+ "SYBEX-CH02-RQ08": {
+  "idea": [
+   "gzip en tar se pide de tres formas: --gzip, -z y z.",
+   "Son la larga, la corta y la antigua del mismo interruptor."
+  ],
+  "otras": {
+   "A": "-g es para copias incrementales.",
+   "D": "g también es para incrementales."
+  },
+  "memorizar": "z comprime con gzip; g es de incremental."
+ },
+ "SYBEX-CH02-RQ09": {
+  "idea": [
+   "El archivo de instantánea de tar lleva extensión .snar.",
+   "El nombre y la ruta son libres; la extensión es lo que lo identifica."
+  ],
+  "otras": {
+   "A": ".tar es un archivador sin comprimir.",
+   "B": ".tgz es un tarball comprimido con gzip.",
+   "C": ".tar.snap está inventada.",
+   "D": ".snap también."
+  },
+  "memorizar": "instantánea de tar → .snar."
+ },
+ "SYBEX-CH02-RQ10": {
+  "idea": [
+   "--compare, --diff y -d son la misma cosa.",
+   "Comparan lo que hay dentro del archivador con los archivos de fuera y listan las diferencias.",
+   "-W verifica el archivador nada más crearlo, pero solo si no está comprimido."
+  ],
+  "otras": {
+   "E": "-J no verifica: hace que tar comprima con xz."
+  },
+  "memorizar": "comparar: -d; verificar al crear: -W."
+ },
+ "SYBEX-CH02-RQ11": {
+  "idea": [
+   "Rebobinan /dev/st0 (SCSI) y /dev/ht1 (PATA).",
+   "La n al principio del nombre significa que no rebobina."
+  ],
+  "otras": {
+   "B": "/dev/nst0 no rebobina.",
+   "D": "/dev/nht1 tampoco.",
+   "E": "/dev/nht0 tampoco."
+  },
+  "memorizar": "n de no rebobina."
+ },
+ "SYBEX-CH02-RQ12": {
+  "idea": [
+   "Quien manda sobre la cinta es mt.",
+   "Los demás la usan como almacén, pero no la controlan."
+  ],
+  "otras": {
+   "A": "tar guarda en la cinta, pero no la maneja.",
+   "B": "star igual.",
+   "D": "rsync hace copias, pero no trabaja con cintas.",
+   "E": "dd hace copias, pero tampoco controla cintas."
+  },
+  "memorizar": "controlar la cinta → mt."
+ },
+ "SYBEX-CH02-RQ13": {
+  "idea": [
+   "La forma correcta es rsync -av Project ServerA:~/.",
+   "Los dos puntos son los que convierten ServerA en un host remoto, y ahí entra OpenSSH."
+  ],
+  "otras": {
+   "A": "/run/media/ServerA es un medio extraíble local.",
+   "B": "sin dos puntos, ServerA es solo otro nombre de archivo.",
+   "C": "aquí los nombres están al revés.",
+   "E": "rsync:// usa el demonio rsync y va sin cifrar."
+  },
+  "memorizar": "los dos puntos hacen remoto el destino."
+ },
+ "SYBEX-CH02-RQ14": {
+  "idea": [
+   "dd copia a bajo nivel: sirve para clonar un disco entero.",
+   "Y con /dev/zero también sirve para dejarlo a ceros."
+  ],
+  "otras": {
+   "B": "para incrementales diarias no se usa.",
+   "C": "sobre una unidad montada puede corromperla.",
+   "D": "no gestiona cintas."
+  },
+  "memorizar": "dd = copia bruta, disco entero."
+ },
+ "SYBEX-CH02-RQ15": {
+  "idea": [
+   "Las instrucciones de instalación están en README e INSTALL.",
+   "Ahí es donde se dice qué otros paquetes hacen falta."
+  ],
+  "otras": {
+   "C": "COPYING es la licencia.",
+   "D": "RELEASE-NOTES son las novedades de la versión.",
+   "E": "NEWS también."
+  },
+  "memorizar": "instalar: README e INSTALL."
+ },
+ "SYBEX-CH02-RQ16": {
+  "idea": [
+   "configure mira tu sistema y escribe el Makefile a partir de Makefile.in.",
+   "Es el paso que comprueba dependencias y compilador."
+  ],
+  "otras": {
+   "A": "INSTALL es un archivo de instrucciones.",
+   "C": "make compila usando el Makefile que ya existe.",
+   "D": "make install coloca los archivos en su sitio.",
+   "E": "cp solo copia archivos."
+  },
+  "memorizar": "configure → make → make install."
+ },
+ "SYBEX-CH02-RQ17": {
+  "idea": [
+   "De memoria hablan free, vmstat y top.",
+   "free y vmstat van a lo suyo; top la da entre otras estadísticas."
+  ],
+  "otras": {
+   "B": "mpstat da información estadística de red.",
+   "C": "mtr da una vista dinámica del encaminamiento."
+  },
+  "memorizar": "memoria: free, vmstat y top."
+ },
+ "SYBEX-CH02-RQ18": {
+  "idea": [
+   "sar 2 20: primero el intervalo, después las veces."
+  ],
+  "otras": {
+   "A": "uptime no acepta parámetros.",
+   "B": "uptime tampoco aquí.",
+   "C": "sar 20 2 sería 2 veces cada 20 segundos."
+  },
+  "memorizar": "sar intervalo veces, en ese orden."
+ },
+ "SYBEX-CH02-RQ19": {
+  "idea": [
+   "Monitorizan recursos collectd, MRTG y Nagios."
+  ],
+  "otras": {
+   "B": "Duplicity hace copias de seguridad, no monitoriza."
+  },
+  "memorizar": "monitorizar: collectd, MRTG, Nagios."
+ },
+ "SYBEX-CH02-RQ20": {
+  "idea": [
+   "La memoria de un proceso parado se puede volcar al swap.",
+   "Y a ese swap también se le llama memoria virtual."
+  ],
+  "otras": {
+   "A": "la memoria se divide en páginas, no en hojas.",
+   "D": "los procesos no intercambian memoria entre sí: se vuelca de RAM al swap.",
+   "E": "psmap mapea procesos; para memoria están free, sar y vmstat."
+  },
+  "memorizar": "swap = memoria virtual; la unidad es la página."
+ }
+}

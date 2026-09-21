@@ -1,0 +1,242 @@
+{
+ "SYBEX-CH07-RQ01": {
+  "idea": [
+   "La configuración de Postfix está en /etc/postfix."
+  ],
+  "analogia": "Regla general: /etc es configuración y /var es lo que se mueve o crece.",
+  "otras": {
+   "A": "/var/spool/postfix son los mensajes en proceso.",
+   "C": "/var/spool/mail son los buzones locales.",
+   "D": "/var/log son registros.",
+   "E": "/etc/mail no es de Postfix."
+  },
+  "memorizar": "configuración en /etc; correo en /var."
+ },
+ "SYBEX-CH07-RQ02": {
+  "idea": [
+   "El que manda es master.",
+   "Decide qué programas de Postfix se arrancan."
+  ],
+  "otras": {
+   "A": "qmgr trabaja con los mensajes en cola.",
+   "B": "pickup también.",
+   "D": "cleanup también.",
+   "E": "smtp también."
+  },
+  "memorizar": "master dirige; los demás trabajan."
+ },
+ "SYBEX-CH07-RQ03": {
+  "idea": [
+   "Cuándo arrancan y paran los procesos: master.cf."
+  ],
+  "otras": {
+   "B": "main.cf dice cómo se tratan los mensajes.",
+   "C": "install.cf dice qué funciones se instalan.",
+   "D": "/var/spool/postfix guarda mensajes en proceso.",
+   "E": "/var/log/maillog es el registro."
+  },
+  "memorizar": "master.cf = procesos; main.cf = mensajes."
+ },
+ "SYBEX-CH07-RQ04": {
+  "idea": [
+   "Cómo se procesa el correo lo decide main.cf."
+  ],
+  "otras": {
+   "A": "master.cf gestiona los procesos.",
+   "B": "/etc/sendmail.cf es de sendmail.",
+   "C": "/etc/aliases son alias, no proceso.",
+   "E": "/var/log/maillog es el registro."
+  },
+  "memorizar": "main.cf = cómo se trata el correo."
+ },
+ "SYBEX-CH07-RQ05": {
+  "idea": [
+   "Mientras los procesa, Postfix guarda los mensajes en /var/spool/postfix."
+  ],
+  "otras": {
+   "A": "/var/spool/mail es el buzón, ya entregado.",
+   "C": "/etc/postfix es configuración.",
+   "D": "/etc/mail no lo usa Postfix."
+  },
+  "memorizar": "en tránsito: spool/postfix; entregado: spool/mail."
+ },
+ "SYBEX-CH07-RQ06": {
+  "idea": [
+   "Ver la cola de salida: mailq."
+  ],
+  "otras": {
+   "A": "newaliases construye la base de datos de alias.",
+   "B": "master es parte interna de Postfix.",
+   "C": "pickup también.",
+   "D": "smtp también."
+  },
+  "memorizar": "mailq = mail queue, la cola."
+ },
+ "SYBEX-CH07-RQ07": {
+  "idea": [
+   "Pasar los alias de texto a base de datos: newaliases."
+  ],
+  "otras": {
+   "B": "master es parte interna de Postfix.",
+   "C": "pickup también.",
+   "D": "smtp también.",
+   "E": "mailq enseña la cola."
+  },
+  "memorizar": "newaliases pasa los alias de texto a base de datos."
+ },
+ "SYBEX-CH07-RQ08": {
+  "idea": [
+   "El texto de partida está en /etc/aliases.",
+   "Ahí se dice qué alias apunta a qué cuenta local."
+  ],
+  "otras": {
+   "B": "master.cf es configuración de procesos.",
+   "C": "main.cf es configuración de mensajes.",
+   "D": "install.cf es configuración de instalación."
+  },
+  "memorizar": "/etc/aliases → newaliases → base de datos."
+ },
+ "SYBEX-CH07-RQ09": {
+  "idea": [
+   "Postfix escribe su registro en /var/log/maillog."
+  ],
+  "otras": {
+   "A": "/var/spool/mail guarda el correo en formato mbox.",
+   "C": "/var/spool/postfix guarda mensajes en proceso.",
+   "D": "/var/log/messages es del sistema, y Postfix no lo usa."
+  },
+  "memorizar": "registro de correo → /var/log/maillog."
+ },
+ "SYBEX-CH07-RQ10": {
+  "idea": [
+   "Cada usuario pone sus recetas en $HOME/.procmailrc."
+  ],
+  "otras": {
+   "A": "/etc/postfix no es de procmail.",
+   "B": "/etc/procmailrc aplica a todo el mundo.",
+   "D": "/etc/aliases son alias de cuentas.",
+   "E": "/users no es el directorio de nadie."
+  },
+  "memorizar": "con punto y en $HOME = solo tuyo."
+ },
+ "SYBEX-CH07-RQ11": {
+  "idea": [
+   "Las recetas para todo el correo entrante van en /etc/procmailrc."
+  ],
+  "otras": {
+   "A": "/etc/postfix no vale para recetas.",
+   "C": "$HOME/.procmailrc solo afecta a ese usuario.",
+   "D": "/etc/aliases tampoco vale.",
+   "E": "/users/.procmailrc tampoco."
+  },
+  "memorizar": "en /etc para todos; en $HOME para uno."
+ },
+ "SYBEX-CH07-RQ12": {
+  "idea": [
+   ":0 c coge todos los mensajes y los copia al directorio messages.",
+   "La c es de copia: el original sigue su camino."
+  ],
+  "otras": {
+   "A": "no rechaza nada.",
+   "B": "no reenvía a ningún alias.",
+   "D": "no los mueve: los copia.",
+   "E": "no borra nada."
+  },
+  "memorizar": "c de copia: se queda con una y sigue."
+ },
+ "SYBEX-CH07-RQ13": {
+  "idea": [
+   "El MDA de la lista es Procmail."
+  ],
+  "otras": {
+   "A": "Sendmail no es un MDA.",
+   "C": "Postfix tampoco.",
+   "D": "Courier tampoco.",
+   "E": "Dovecot tampoco."
+  },
+  "memorizar": "el que entrega al buzón local es procmail."
+ },
+ "SYBEX-CH07-RQ14": {
+  "idea": [
+   "El ajuste que entrega a otro programa es mailbox_command."
+  ],
+  "otras": {
+   "B": "mydestination dice para qué direcciones acepta correo.",
+   "C": "myhost es el nombre del servidor.",
+   "D": "relayhost es a dónde se manda todo lo que sale."
+  },
+  "memorizar": "mailbox_command = quién recibe el correo local."
+ },
+ "SYBEX-CH07-RQ15": {
+  "idea": [
+   "Todo en un archivo es mbox."
+  ],
+  "otras": {
+   "A": "Sendmail es una aplicación.",
+   "B": "Courier también.",
+   "C": "maildir usa un directorio con un archivo por mensaje.",
+   "E": "exim también es una aplicación."
+  },
+  "memorizar": "mbox = una caja; maildir = un directorio."
+ },
+ "SYBEX-CH07-RQ16": {
+  "idea": [
+   "Un archivo por mensaje es maildir."
+  ],
+  "otras": {
+   "A": "Sendmail es una aplicación.",
+   "B": "Courier también.",
+   "D": "mbox mete todo en un solo archivo.",
+   "E": "exim también es una aplicación."
+  },
+  "memorizar": "dir en el nombre: un directorio lleno de mensajes."
+ },
+ "SYBEX-CH07-RQ17": {
+  "idea": [
+   "La configuración de Courier está en /etc/courier."
+  ],
+  "otras": {
+   "A": "/var/spool/mail guarda correo.",
+   "B": "/var/spool/postfix también.",
+   "D": "/etc/mail no lo usa Courier.",
+   "E": "/var/log son registros."
+  },
+  "memorizar": "cada programa, su carpeta en /etc."
+ },
+ "SYBEX-CH07-RQ18": {
+  "idea": [
+   "Cuántos clientes a la vez lo marca MAXDAEMONS.",
+   "Es cuántas copias del programa pueden correr a la vez."
+  ],
+  "otras": {
+   "B": "MAILDIRPATH es dónde están los buzones.",
+   "C": "ADDRESS es en qué interfaz escuchar.",
+   "D": "MAXPERIP limita por cliente, no el total.",
+   "E": "PORT es el puerto TCP."
+  },
+  "memorizar": "MAXDAEMONS = total; MAXPERIP = por cliente."
+ },
+ "SYBEX-CH07-RQ19": {
+  "idea": [
+   "Según la distribución: el archivo dovecot.conf o varios en /etc/dovecot."
+  ],
+  "otras": {
+   "B": "/etc/postfix es de Postfix.",
+   "C": "/var/spool/mail guarda correo.",
+   "E": "/var/spool/postfix también."
+  },
+  "memorizar": "Dovecot: dovecot.conf o /etc/dovecot."
+ },
+ "SYBEX-CH07-RQ20": {
+  "idea": [
+   "Los métodos de autenticación se listan en mechanisms."
+  ],
+  "otras": {
+   "A": "mail_location es dónde está el buzón.",
+   "C": "listen es el puerto TCP de escucha.",
+   "D": "login_max_connections limita usuarios a la vez.",
+   "E": "protocols dice qué protocolos de correo se soportan."
+  },
+  "memorizar": "mechanisms = cómo te autenticas; protocols = por dónde."
+ }
+}

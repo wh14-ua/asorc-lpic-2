@@ -1,0 +1,85 @@
+### SYBEX-AT-21  [multiple_choice]
+Q: Which of the following commands can display all current NFS exports and also reads the NFS export table when the NFS service starts? (Choose the best answer.)
+A: rpcinfo
+B: nfsstat
+C: showmount
+D: exportfs
+E: mountstats
+X: Option D is the correct choice, because when used with no options, the exportfs command displays all of the current exports, and when the NFS service starts, it reads the /etc/exports file (the NFS export table) and performs the needed share exporting. Option A is an incorrect choice, because the rpcinfo command displays various RPC service data (including what ports are involved, if you add the -p option). The nfsstat utility displays NFS client and server activity statistics from the /proc/net/rpc/nfsd, /proc/net/rpc/ nfs, and /proc/mounts files, so option B is an incorrect choice. Option C’s showmount command displays NFS server information, such as its state and NFS clients mounting its provided exports, but it does not read the NFS export table when the service is started, so it is a wrong choice as well. The mountstats utility displays NFS client per-mount statistics from the /proc/self/mountstats file, so option E is an incorrect answer.
+
+### SYBEX-AT-22  [multiple_response]
+Q: Where does DHCPd typically log DHCP events? (Choose all that apply.)
+A: pump log file
+B: messages log file
+C: BOOTP journal
+D: dhcpd.log file
+E: systemd journal
+X: DHCPd logs all DHCP events to the standard log file for your Linux system. For distributions that still use the syslog facility that’s typically the /var/log/messages file (option B). However, some current distributions use the systemd journal instead (option E). Option A’s pump log file is not a log file. Instead, pump is a Linux DHCP client package and thus is an incorrect choice. Option C’s BOOTP journal is an incorrect choice, because it is a protocol, Bootstrap Protocol (BOOTP), and not a journal. BOOTP allows a diskless workstation to send out a broadcast message on the network looking for a server to send it the operating system file to use to boot the workstation. The dhcpd.log file (option D) is also a wrong choice. This file does not exist. However, there is the dhcpd.conf configuration file as well as the dhcpd.leases file (for logging server-leased IP addresses) used in association with DHCP.
+
+### SYBEX-AT-23  [multiple_choice]
+Q: Which PAM authentication module uses the Security Services Daemon for authenticating users? (Choose the best answer.)
+A: pam_sss.so
+B: pam_unix.so
+C: pam_nis.so
+D: pam_krb5.so
+E: pam_ldap.so
+X: The pam_sss.so module uses the Security Services Daemon for authenticating users, and thus option A is the correct answer. The pam_unix.so module (option B) uses the standard /etc/passwd and /etc/shadow files, so it is an incorrect choice. Option C’s pam_nis.so module is a wrong answer, because it uses an NIS server for authentication. The pam_krb5.so module (option D) is an incorrect choice, because this PAM module uses the Kerberos 5 authentication system. Option E’s pam_ldap.so is also a wrong answer, because it uses a LDAP server for authentication and not the Security Services Daemon.
+
+### SYBEX-AT-24  [multiple_response]
+Q: Which of the following OpenLDAP client utilities will allow you to add objects, such as user objects, to an LDAP database? (Choose all that apply.)
+A: ldappasswd
+B: ldapmodify
+C: ldapadd
+D: ldapsearch
+E: ldapobject
+X: The ldapmodify (option B) utility allows you to add objects, such as user objects, to an LDAP database, and it also allows you to modify those objects, so it is a correct answer. The ldapadd utility (option C) is a link to the ldapmodify utility, and its primary purpose is to add objects defined in an LDIF file to the LDAP database. Therefore, option C is also a correct answer. Option A’s ldappasswd utility allows you to generate an encrypted value from a text value in order to change the password assigned to the LDAP account you logged in with, and therefore it is a wrong choice. The ldapsearch utility (option D) is also an incorrect answer, because this utility allows you to create and customize queries in order to search an LDAP database. Option E’s ldapobject is a made-up utility name and is therefore an incorrect choice.
+
+### SYBEX-AT-25  [multiple_choice]
+Q: Which methods, supported by OpenLDAP, will allow you to configure an LDAP environment, using a single text configuration file? (Choose all that apply.)
+A: /etc/ldap.conf
+B: slapd-conf
+C: LDIF
+D: slapd.conf
+E: /etc/ldap
+X: This is a bit of a trick question, because there is only one correct answer, the slapd .conf method (option D), which uses a single text configuration file to configure an LDAP environment. The /etc/ldap.conf file (option A) is the single text configuration file, so therefore it is an incorrect answer. The slapd-conf method (option B) uses LDIF (option C) files to define the base LDAP directory tree, so those two choices are wrong. Option E’s /etc/ldap is a directory used in the slapd-conf method, so it also is an incorrect choice.
+
+### SYBEX-AT-26  [multiple_response]
+Q: When using Postfix as your email server, which of the following sendmail emulation commands are available? (Choose all that apply.)
+A: sendmail
+B: procmail
+C: mailq
+D: mbox
+E: newaliases
+X: Postfix provides similar commands that emulate common sendmail features: sendmail (option A) mimics the sendmail executable program and command options but redirects to the Postfix program, mailq (option C) lists the messages in the outgoing mail queue, and newaliases (option E) initializes the aliases database. Therefore, options A, C, and E are all correct choices. Option B’s procmail is not a sendmail command but instead a popular email program that allows user-configured recipes that let each individual user direct how their email is received and processed. Therefore, it is an incorrect choice. Option D’s mbox is also a wrong answer, because it is an email mailbox type that uses a single file for each user account and is usually stored in the /var/spool/mail directory or the individual user directories.
+
+### SYBEX-AT-27  [multiple_choice]
+Q: Which of the following directories contains pseudo-files, which control router functions? (Choose the best answer.)
+A: /proc/sys/vm/
+B: /proc/sys/net/
+C: /proc/sys/dev/
+D: /srv/
+E: /proc/sys/iptables/
+X: The /proc/sys/net/ directory (option B) contains pseudo-files with control router functions, especially in the ipv4 and ipv6 subdirectories, so it is the correct choice. The /proc/ sys/vm/ directory (option A) contains pseudo-files, but they relate to the Linux kernel’s virtual memory (VM) subsystem configuration, so it is a wrong choice. The /proc/sys/dev/ directory (option C) also contains pseudo-files. However, these files provide device parameters for certain system devices, so it is an incorrect choice. Not only does the /srv/ directory not contain pseudo-files, but it typically contains data served by the system, such as Samba shares and web pages. Therefore, option D is a wrong answer as well. The /proc/sys/iptables/ directory (option E) is a made-up directory and an incorrect choice.
+
+### SYBEX-AT-28  [open]
+Q: The Very Secure FTP package’s primary configuration file is the ______ file. (Fill in the filename only with no directory references.)
+FILL: vsftpd.conf
+X: vsftpd.conf. The primary configuration file is the vsftpd.conf, and it is located in the /etc/ directory or the /etc/vsftpd/ directory (depending on your distribution). It is internally documented, and there is also a vsftpd.conf man page.
+
+### SYBEX-AT-29  [multiple_choice]
+Q: Which of the following OpenSSH configuration options sets the supported level? (Choose the best answer.)
+A: PermitRootLogin
+B: PubKeyAuthentication
+C: AllowUsers
+D: PasswordAuthentication
+E: Protocol
+X: The Protocol option (option E) sets the support level (more specifically called the protocol level) supported by the OpenSSH configuration, and thus it is the correct choice. Option A’s PermitRootLogin option enables/disables direct logins by the root user, so it is a wrong answer. The PubKeyAuthentication option (option B) enables/disables public key authentication, so it is an incorrect choice. Option C’s AllowUsers configuration option sets an allowed user list, which permits users on this list to log into the system using OpenSSH. Therefore, option C is also a wrong answer. Option D is an incorrect choice, because the PasswordAuthentication option enables/disables authentication via passwords.
+
+### SYBEX-AT-30  [multiple_choice]
+Q: Which of the following utilities, by default, will update firewall rules when it perceives a threat? (Choose all that apply.)
+A: fail2ban
+B: Snort
+C: Bugtraq
+D: nmap
+E: nc
+X: This is a tricky question. Option A is the only correct choice. The fail2ban utility peruses certain log files for login attempts, and if it sees a particular IP address with multiple login failures, it updates firewall rules to reject (ban) the offending IP address. While Snort (option B), which is a powerful network sniffer, can be configured to kick off shell scripts (which could update firewall rules), by default it only sends alerts for suspected malicious activity, so it is an incorrect choice. Option C’s Bugtraq is not a utility but instead a computer security mailing list, so it is a wrong answer. Option D’s nmap utility can be used to audit network ports to determine what services are seen listening on particular ports (inside and outside a firewall), but it does no firewall modification, so it is also a wrong answer. Finally, option E’s nc (or netcat) is a utility that is also useful for auditing your network’s security, but it does not modify firewalls on the fly, so it is an incorrect choice.

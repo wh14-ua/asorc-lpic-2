@@ -1,0 +1,154 @@
+{
+ "ENI-CH01-Q01": {
+  "idea": [
+   "Sin sistema de archivos, el disco es una tira de bytes sin sentido.",
+   "Él es quien organiza: lleva los nombres y sabe dónde está cada cosa."
+  ],
+  "analogia": "Una cinta magnética es el ejemplo contrario: todo seguido y sin poder cambiar un archivo; hay que borrar y reescribir.",
+  "memorizar": "el sistema de archivos pone nombres y orden."
+ },
+ "ENI-CH01-Q02": {
+  "idea": [
+   "Ninguno.",
+   "No existen físicamente: viven en memoria y se montan sobre un directorio del sistema de archivos real."
+  ],
+  "memorizar": "pseudosistema de archivos = memoria, no disco."
+ },
+ "ENI-CH01-Q03": {
+  "idea": [
+   "El azar.",
+   "Se asignan solos al crear el sistema de archivos, y su única garantía son 128 bits aleatorios."
+  ],
+  "memorizar": "el UUID es único por probabilidad, no por registro."
+ },
+ "ENI-CH01-Q04": {
+  "idea": [
+   "Con escritura asíncrona.",
+   "Los datos pasan primero por memoria y luego bajan al disco.",
+   "Es lo normal en un montaje, pero si se corta la corriente se pierde lo que quedara en memoria."
+  ],
+  "memorizar": "asíncrono va rápido, pero arriesga lo pendiente."
+ },
+ "ENI-CH01-Q05": {
+  "idea": [
+   "Porque comprobar exige desmontar, y la raíz no se deja.",
+   "Tiene programas en ejecución, a menudo hasta los propios comandos de comprobación.",
+   "La salida es forzarla en el reinicio: con e2fsck o con shutdown y su opción -F."
+  ],
+  "memorizar": "la raíz se comprueba al arrancar, no en caliente."
+ },
+ "ENI-CH01-Q06": {
+  "idea": [
+   "lsdev no sabe nada por sí mismo.",
+   "Lee lo que necesita de /proc/interrupts, /proc/ioports y /proc/dma."
+  ],
+  "memorizar": "muchos comandos solo leen los pseudosistemas de archivos."
+ },
+ "ENI-CH01-Q07": {
+  "idea": [
+   "Porque comprimido, una pérdida parcial estropea mucho más.",
+   "En cinta, sin comprimir solo se pierden los archivos de la zona dañada."
+  ],
+  "memorizar": "comprimir concentra el daño."
+ },
+ "ENI-CH01-Q08": {
+  "idea": [
+   "No hace falta montarlo.",
+   "dd copia bloques y trata con el hardware, no con archivos.",
+   "Montar solo hace falta si quieres copiar archivos concretos."
+  ],
+  "memorizar": "dd copia bloques; montar es para archivos."
+ },
+ "ENI-CH01-Q09": {
+  "idea": [
+   "Tres como mínimo.",
+   "Dos para datos y uno para la paridad.",
+   "Si añades un disco de recambio, cuatro."
+  ],
+  "memorizar": "RAID 5: tres discos; con recambio, cuatro."
+ },
+ "ENI-CH01-Q10": {
+  "idea": [
+   "En el uso diario, ninguna diferencia.",
+   "Los dos llevan sistema de archivos y se montan en un directorio.",
+   "La diferencia es que el volumen lógico se agranda con lvextend.",
+   "Y luego hay que estirar el sistema de archivos aparte, con resize2fs."
+  ],
+  "memorizar": "el volumen lógico crece; la partición, no."
+ },
+ "ENI-CH02-Q01": {
+  "idea": [
+   "Daemon y servicio son la misma cosa, en dos idiomas.",
+   "Es un programa residente esperando eventos del sistema.",
+   "Un nivel de ejecución describe qué servicios deben estar en marcha o parados."
+  ],
+  "memorizar": "daemon = servicio; el nivel dice cuáles corren."
+ },
+ "ENI-CH02-Q02": {
+  "idea": [
+   "reload gasta menos.",
+   "restart equivale a un stop seguido de un start: mata los procesos y los levanta.",
+   "reload los deja vivos y les hace releer su configuración, normalmente con un signal 1 (hup)."
+  ],
+  "memorizar": "reload relee; restart mata y revive."
+ },
+ "ENI-CH02-Q03": {
+  "idea": [
+   "El script rc.local.",
+   "Se ejecuta en el arranque después de todos los del nivel de ejecución actual."
+  ],
+  "memorizar": "rc.local va siempre el último."
+ },
+ "ENI-CH02-Q04": {
+  "idea": [
+   "Todos los mensajes que el kernel lleva generando desde que arrancó.",
+   "Al principio no tiene ni terminal ni archivo, así que los guarda en el kernel ring buffer.",
+   "dmesg vuelca ese contenido por la salida estándar."
+  ],
+  "memorizar": "dmesg es la memoria de mensajes del kernel."
+ },
+ "ENI-CH02-Q05": {
+  "idea": [
+   "Con un enlace simbólico.",
+   "El enlace duro no vale: no puede apuntar fuera de su propio sistema de archivos.",
+   "Y esos dos archivos no siempre están en el mismo."
+  ],
+  "memorizar": "para cruzar sistemas de archivos, enlace simbólico."
+ },
+ "ENI-CH02-Q06": {
+  "idea": [
+   "En el Master Boot Record.",
+   "Está antes de la tabla de particiones y es lo primero que lee la BIOS."
+  ],
+  "memorizar": "el gestor de arranque va en el MBR."
+ },
+ "ENI-CH02-Q07": {
+  "idea": [
+   "Para poder diagnosticar sin estropear más.",
+   "Si esa partición tiene problemas, en sólo lectura las herramientas no dañan lo que tocan."
+  ],
+  "memorizar": "ro protege mientras se diagnostica."
+ },
+ "ENI-CH02-Q08": {
+  "idea": [
+   "El parámetro init=.",
+   "Dice qué ejecutable arranca justo después de cargar el kernel.",
+   "Si ahí pones un shell, entras sin ningún servicio; también sirve si has perdido la contraseña."
+  ],
+  "memorizar": "init= elige el primer programa del sistema."
+ },
+ "ENI-CH02-Q09": {
+  "idea": [
+   "Hay que tocar el archivo inittab.",
+   "Tiene una línea con la palabra clave initdefault."
+  ],
+  "memorizar": "initdefault fija el nivel de arranque."
+ },
+ "ENI-CH02-Q10": {
+  "idea": [
+   "Porque el gestor de arranque no está dentro de ninguna partición.",
+   "Vive fuera, así que las herramientas de archivos no lo copian."
+  ],
+  "memorizar": "copiar archivos no copia el gestor de arranque."
+ }
+}

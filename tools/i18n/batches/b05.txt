@@ -1,0 +1,89 @@
+### SYBEX-CH01-RQ11  [multiple_response]
+Q: Where are GRUB2 configuration files stored? (Select all that apply.)
+A: /proc
+B: /etc/grub.d
+C: /boot/grub
+D: /boot/efi
+E: /var
+X: The GRUB2 bootloader stores configuration files in both the /boot/grub directory and the /etc/grub.d directory, so options B and C are correct. Linux uses the /proc directory to provide dynamic kernel runtime data and not configuration files, so option A is incorrect. Option D, /boot/efi, stores UEFI bootloader program files, not GRUB2 configuration files, so it is also incorrect. Option E, /var, is used to store variable files, such as log files, and not configuration files, so it is incorrect.
+
+### SYBEX-CH01-RQ12  [multiple_choice]
+Q: What command must you run to generate the GRUB2 grub.cfg configuration file?
+A: chkconfig
+B: update-rc.d
+C: grub-mkconfig
+D: grub-install
+E: init
+X: The grub-mkconfig command combines the configurations defined in the /etc/ default/grub file and all of the files in the /etc/grub.d folder into a single grub.cfg configuration file. The chkconfig command (option A) is used to check and change runlevels for programs, so it is incorrect. Likewise, the update-rc.d command (option B) is also used to change runlevels for programs on Debian systems, so it too is incorrect. The grub-install program is used by the GRUB Legacy bootloader to install the bootloader in the MBR or a boot partition, but it isn’t used to generate the GRUB2 configuration files and is thus incorrect. Option E is the init program, which starts background programs from init scripts on the Linux system and is an incorrect answer for this question.
+
+### SYBEX-CH01-RQ13  [multiple_choice]
+Q: What program does the kernel use to start other programs?
+A: GRUB2
+B: systemctl
+C: telinit
+D: init
+E: BIOS
+X: The kernel starts the init program, which in turn uses the init scripts to start and stop other programs based on the default system runlevel, so option D is correct. The GRUB2 program is a bootloader, which is started by the workstation firmware, not the kernel, so option A is incorrect. Option B, the systemctl program, is used to control programs in the systemd startup method, but it isn’t started by the kernel, so it is incorrect. Option C, the telinit program, can be used to change the current runlevel, but it isn’t used by the kernel to start programs, so it too is incorrect. Option E, the BIOS, is the workstation firmware that begins the startup process, so it can’t be started by the kernel.
+
+### SYBEX-CH01-RQ14  [multiple_choice]
+Q: Which configuration file contains the SysV default runlevel?
+A: /etc/init.d
+B: /etc/inittab
+C: /etc/grub.d
+D: /etc/rc.d
+E: /boot/grub.cfg
+X: The /etc/inittab file contains the initdefault setting, which defines the default runlevel for the Linux system. The /etc/init.d and /etc/rc.d folders contain the startup scripts used by the init program to start and stop programs, but they don’t define the default runlevel, so options A and D are incorrect. Option C, the /etc/grub.d directory, and option E, the /boot/grub.cfg file, both contain the configuration settings for the GRUB2 bootloader, but they don’t control the default runlevel.
+
+### SYBEX-CH01-RQ15  [multiple_choice]
+Q: What runlevel is the default for Debian-based systems?
+A: 0
+B: 1
+C: 6
+D: 5
+E: 2
+X: Debian-based systems use runlevel 2 to start all of the applications necessary for multiuser activity on the system, so option E is correct. Option A, runlevel 0, shuts the system down, and option C, runlevel 6, reboots the system, so neither of these can support running applications. Option B, runlevel 1, indicates single-user mode, and it is not typically used in desktop and server environments but rather in troubleshooting and maintenance modes. Option D, runlevel 5, is used by Red Hat–based Linux distributions as the default runlevel for graphical workstations, but it is not used by Debian-based systems.
+
+### SYBEX-CH01-RQ16  [multiple_response]
+Q: What command would you use to change the current runlevel? (Select all that apply.)
+A: telinit
+B: chkconfig
+C: update-rc.d
+D: init
+E: dmesg
+X: Both the init and telinit commands are used to change the current runlevel on a Linux system, so both options A and D are correct. The chkconfig command is used to change the start and stop runlevels of an individual program but not for the running system, so option B is incorrect. Likewise, the update-rc.d command is used in Debian-based systems to change the start and stop runlevels for an individual program but not the running system. Option E, the dmesg command, displays the boot messages and does not influence the runlevel for the system, so it is incorrect.
+
+### SYBEX-CH01-RQ17  [multiple_choice]
+Q: What command displays the runlevels in which a program will be started?
+A: chkconfig
+B: init
+C: dmesg
+D: update-rc.d
+E: telinit
+X: The chkconfig command displays the status of the program at the seven different runlevels, so it is the correct answer. The update-rc.d command in option D is used to control the runlevels in which a program starts and stops, but it doesn’t display the status of the runlevels and is thus incorrect. The init (option B) and telinit (option E) commands can change the runlevel of the entire system, but they don’t display the runlevels associated with an individual program, so they are incorrect. Option C, the dmesg command, isn’t related to runlevels; rather it just shows the most recent boot messages for the system.
+
+### SYBEX-CH01-RQ18  [multiple_choice]
+Q: What command do Debian systems use to set the runlevels for programs?
+A: chkconfig
+B: update-rc.d
+C: init
+D: telinit
+E: dmesg
+X: Debian-based systems use the update-rc.d command to change the runlevels assigned to individual programs. They generally don’t use the chkconfig program, although that is used by Red Hat–based systems, so option A is incorrect. The init (option C) and telinit (option D) programs are used to alter the runlevel of the entire system, but they can’t be used to change the runlevels for individual programs. The dmesg program (option E) is incorrect because it only displays the boot messages and can’t alter runlevels.
+
+### SYBEX-CH01-RQ19  [multiple_choice]
+Q: What program allows you to fix corrupt hard drive partitions?
+A: mount
+B: umount
+C: fsck
+D: init
+E: telinit
+X: The fsck program can perform a filesystem check and repair multiple types of filesystems on partitions. You should use it on any partition that can’t be mounted due to errors. The mount program (option A) is used to append a partition to a virtual directory; it can’t correct a partition that contains errors (and will usually refuse to mount them). The umount command (option B) is also incorrect. It is used to remove a mounted partition from the virtual directory. Options D (the init command) and E (the telinit command) are used to change the current runlevel of the Linux system and not for fixing corrupted disk drives.
+
+### SYBEX-CH01-RQ20  [multiple_choice]
+Q: Which command allows you to append a partition to the virtual directory on a running Linux system?
+A: mount
+B: umount
+C: fsck
+D: dmesg
+E: init
+X: The mount command lets you specify both the partition and the location in the virtual directory where you want to append the partition files and folders. The files and folders contained in the partition then appear at that location in the virtual directory. The umount command (option B) is used to remove a mounted partition. Option C, the fsck command, is used to fix a hard drive that is corrupted and can’t be mounted; it doesn’t actually mount the drive itself. The dmesg command in option D is used to view boot messages for the system, which may tell you where a hard drive is appended to the virtual directory, but it doesn’t actually do the appending. Option E, the init command, controls the runlevel of the Linux system and doesn’t directly handle mounting hard drives to the virtual directory.

@@ -1,0 +1,107 @@
+{
+"ENI-CH07-Q01": {
+  "idea": ["Cargar solo los módulos que hacen falta.",
+           "Apache soporta decenas de funciones y así el ejecutable queda más ligero."],
+  "memorizar": "modular = cargas solo lo que usas."
+},
+"ENI-CH07-Q02": {
+  "idea": ["Con el comando apache y la opción -t."],
+  "memorizar": "-t de test: revisa sin arrancar."
+},
+"ENI-CH07-Q03": {
+  "idea": ["El sitio de documentación oficial de Apache.",
+           "Hay más de 400 directivas y más de cien módulos, y todo eso cambia sin parar."],
+  "memorizar": "con Apache, la documentación oficial no es opcional."
+},
+"ENI-CH07-Q04": {
+  "idea": ["Mira el nombre que el cliente ha usado en la url.",
+           "Es lo habitual en alojamientos que meten decenas de sitios en un solo servidor."],
+  "memorizar": "el host virtual se elige por el nombre pedido."
+},
+"ENI-CH07-Q05": {
+  "idea": ["El comando htpasswd.",
+           "Crea, modifica y elimina cuentas para la autentificación local sencilla.",
+           "Es solo una de las formas de autentificación que admite Apache."],
+  "memorizar": "cuentas locales de Apache → htpasswd."
+},
+"ENI-CH07-Q06": {
+  "idea": ["Las mismas directivas que irían en un contexto Directory.",
+           "La diferencia es que quedan junto a los datos y no en el archivo de configuración."],
+  "memorizar": ".htaccess = un Directory que vive con los archivos."
+},
+"ENI-CH07-Q07": {
+  "idea": ["Porque sin AllowOverride, Apache no va buscando archivos sueltos por cada directorio.",
+           "Esa directiva es la que le dice que acepte configuración adicional y la busque."],
+  "memorizar": "sin AllowOverride, .htaccess ni se mira."
+},
+"ENI-CH07-Q08": {
+  "idea": ["Asocia una identidad con una clave pública.",
+           "Esa asociación la firma una autoridad de certificación en la que todos confían."],
+  "analogia": "Es un carné: une un nombre con una foto, y lo firma la jefatura de policía.",
+  "memorizar": "certificado = identidad + clave pública, con firma de confianza."
+},
+"ENI-CH07-Q09": {
+  "idea": ["Porque no hay un solo flujo, sino dos.",
+           "Uno del cliente al proxy y otro del proxy al servidor, en nombre del cliente.",
+           "Ese corte es lo que le permite filtrar, hacer estadísticas o guardar en caché."],
+  "memorizar": "el proxy corta el tráfico en dos y aprovecha el corte."
+},
+"ENI-CH07-Q10": {
+  "idea": ["Sí.",
+           "La directiva acl puede llevar el parámetro directamente o señalar un archivo que lo contenga."],
+  "memorizar": "una acl puede apuntar a un archivo."
+},
+"ENI-CH08-Q01": {
+  "idea": ["Asociar una identidad con una cuenta que ya existe.",
+           "Así el webmaster no tiene que mirar dos buzones: lo que llegue al alias cae en su cuenta."],
+  "memorizar": "alias = otro nombre para el mismo buzón."
+},
+"ENI-CH08-Q02": {
+  "idea": ["Cuando tu dirección IP pública está en una blacklist.",
+           "Si los MTA de destino la rechazan, sale mejor que envíe tu proveedor por ti.",
+           "Es la alternativa a pelearte para salir de esas listas."],
+  "memorizar": "relayhost = que envíe otro por ti."
+},
+"ENI-CH08-Q03": {
+  "idea": ["Sí, con la directiva myorigin.",
+           "Es lo típico cuando una empresa cambia de nombre."],
+  "memorizar": "myorigin = el nombre con el que sales al exterior."
+},
+"ENI-CH08-Q04": {
+  "idea": ["Compara el dominio del destinatario con lo que haya en mydestination.",
+           "Es lo que va detrás de la arroba.",
+           "Si coincide, el mensaje es suyo; si no, lo reenvía."],
+  "memorizar": "mydestination = los dominios que son míos."
+},
+"ENI-CH08-Q05": {
+  "idea": ["Sí, con postfix check.",
+           "Y con postconf -n ves los parámetros que están de verdad en uso."],
+  "memorizar": "check revisa; postconf -n enseña lo que hay."
+},
+"ENI-CH08-Q06": {
+  "idea": ["Con una línea que tenga solo un punto.",
+           "El punto tiene que ir solo en la línea y validarse con un retorno de carro."],
+  "memorizar": "un punto solo en su línea cierra el mensaje."
+},
+"ENI-CH08-Q07": {
+  "idea": ["Llamando a procmail.",
+           "Hay que referenciarlo en la configuración de postfix y tener su archivo de reglas."],
+  "memorizar": "procmail procesa lo que entra, según sus reglas."
+},
+"ENI-CH08-Q08": {
+  "idea": ["Sí, el comando wall.",
+           "Manda el mensaje a todos los usuarios conectados.",
+           "Se usa mucho antes de reiniciar o de parar un servicio."],
+  "memorizar": "aviso urgente a todos → wall."
+},
+"ENI-CH08-Q09": {
+  "idea": ["/etc/issue se ve antes de abrir sesión y /etc/motd después.",
+           "Por eso el primero lo ve todo el mundo y el segundo solo quien entra."],
+  "memorizar": "issue antes de entrar; motd una vez dentro."
+},
+"ENI-CH08-Q10": {
+  "idea": ["Sí, con el comando authtest.",
+           "No garantiza que todo funcione en producción, pero confirma que las librerías de autentificación están puestas y bien configuradas."],
+  "memorizar": "authtest prueba la autentificación de courier."
+}
+}

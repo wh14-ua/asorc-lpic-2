@@ -1,0 +1,59 @@
+[
+{"id":"SYBEX-CH10-RQ01",
+ "q":"¿En cuál de los siguientes directorios encontraría normalmente los archivos de registro de Samba? (Elija la mejor respuesta.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"La opción C es correcta, porque el directorio /var/log/samba/ es donde normalmente se encuentran los archivos de registro de Samba. El directorio /etc/smb/ (opción A), el directorio /etc/samba/ (opción B) y el directorio /etc/samba.d/ (opción E) son todos incorrectos, porque son (o fueron) directorios para guardar archivos de configuración de Samba. La opción D también es incorrecta, porque el directorio /var/lib/samba/ se usa para guardar cosas como las bases de datos de usuarios de Samba, no archivos de registro."},
+
+{"id":"SYBEX-CH10-RQ02",
+ "q":"¿Cuáles de los siguientes demonios de Linux pueden usarse para prestar servicios Samba? (Elija todas las que correspondan.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"La opción A es correcta, porque es el demonio que se usa en un servidor Samba para implementar el protocolo SMB. La opción B tiene algo de truco, pero también es correcta: el demonio de CUPS, cupsd, puede usarse junto con el demonio del servidor Samba para ofrecer recursos compartidos de impresión. La opción D también es correcta, porque si hay sistemas Windows antiguos en la red y se necesitan servicios Samba, hay que usar NetBIOS sobre TCP mediante el demonio nmbd. La opción C también tiene truco, porque el nombre real del demonio Name Service Switch es winbindd y no winbind, así que la opción C es errónea. La opción E es un nombre de demonio inventado y, por tanto, es incorrecta."},
+
+{"id":"SYBEX-CH10-RQ03",
+ "q":"Para configurar un recurso compartido de Samba hay que modificar el archivo de configuración principal de Samba. ¿Cuál de los siguientes es ese archivo? (Elija la mejor respuesta.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"La opción A es correcta, porque smb.conf es el archivo de configuración principal de Samba. La opción B está inventada y, por tanto, es una elección errónea. La opción C, mount.cifs, es un comando que permite montar un recurso compartido de Samba en un sistema cliente y es una elección incorrecta. La opción D también es incorrecta, porque /etc/samba.d es un directorio (normalmente ya en desuso) para guardar archivos de configuración de Samba. El smbcontrol de la opción E es un comando para gestionar el demonio smbd de Samba y también es una respuesta incorrecta."},
+
+{"id":"SYBEX-CH10-RQ04",
+ "q":"Una vez modificado el archivo de configuración principal de Samba, ¿qué debería hacer a continuación? (Elija la mejor respuesta.)",
+ "o":{"A":"Recargar el archivo de configuración en el demonio del servidor Samba.",
+      "B":"Reiniciar el servidor Samba.",
+      "C":"Comprobar la sintaxis de la configuración de Samba con smbstatus.",
+      "D":"Comprobar la sintaxis de la configuración de Samba con testparm.",
+      "E":"Crear un directorio o configurar una cola de impresión para compartir."},
+ "e":"La opción D es correcta, porque después de modificar el archivo de configuración principal de Samba lo siguiente es comprobar su sintaxis, y el comando testparm hace justamente eso. No se debe recargar el archivo de configuración en el demonio del servidor Samba hasta haber comprobado la sintaxis y, por tanto, la opción A es errónea. La opción B es errónea, porque no hace falta reiniciar el demonio del servidor Samba. El comando smbstatus muestra las conexiones actuales del servidor Samba, pero no comprueba la sintaxis del archivo de configuración, así que la opción C es errónea. La opción E también es incorrecta, porque crear un directorio o configurar una cola de impresión para compartir no es el paso siguiente necesario."},
+
+{"id":"SYBEX-CH10-RQ05",
+ "q":"Para configurar Samba en un entorno mixto de sistemas Windows y Linux, es esencial establecer la directiva __________ con el nombre de grupo de trabajo o de dominio de Windows, y no con un FQDN. (Elija la mejor respuesta.)",
+ "o":{"A":"nombre de dominio","B":"=","C":"grupo de windows","D":"nombre de grupo de trabajo","E":"="},
+ "e":"La opción E es correcta, porque la directiva adecuada es workgroup y hay que asignarle el nombre del grupo o dominio de Windows para configurar Samba en un entorno mixto Windows-Linux. Las demás opciones son erróneas porque son nombres de directiva incorrectos o inventados."},
+
+{"id":"SYBEX-CH10-RQ06",
+ "q":"Para la directiva passdb backend de Samba, ¿cuáles de los siguientes son valores válidos? (Elija todas las que correspondan.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"Las opciones A, C y D son correctas, porque son valores válidos para la directiva passdb backend y corresponden a las distintas bases de datos de información de cuentas de usuario de Samba, situadas normalmente en el directorio /var/lib/samba/. Las opciones B y E son incorrectas, porque son valores válidos para la directiva security de Samba y no para la directiva passdb backend."},
+
+{"id":"SYBEX-CH10-RQ07",
+ "q":"¿En qué sección del archivo smb.conf podría encontrar definido un recurso compartido de archivos? (Elija la mejor respuesta.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"La opción C es la mejor respuesta, porque los recursos compartidos de archivos suelen aparecer bajo un nombre de recurso compartido, como [myshare]. La opción A es incorrecta, porque la sección [global] es para directivas de aplicación global que determinan cómo gestionará el servidor Samba la red, el registro, la resolución de nombres, etc. La sección [netlogins], opción B, es incorrecta, porque esa sección aporta las directivas necesarias cuando el servidor Samba actúa como controlador de dominio. El [printers] de la opción D es incorrecto, porque esa sección sirve para definir recursos compartidos de impresión. La opción E también es errónea, porque la sección [profiles] contiene las directivas necesarias para los perfiles de usuario móviles."},
+
+{"id":"SYBEX-CH10-RQ08",
+ "q":"¿Cuál de las siguientes directivas de Samba puede usarse para establecer si se requieren contraseñas para acceder a este recurso compartido de archivos? (Elija la mejor respuesta.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"La opción A es correcta, porque la directiva public puede fijarse a no (se requieren contraseñas) o a yes (no se requieren contraseñas). La directiva browseable (opción B) es incorrecta, porque determina si un recurso compartido aparece en la lista de recursos disponibles. La opción C es una elección errónea, porque la directiva guest only establece si solo se permiten conexiones de invitado para este servicio. La directiva writable de la opción D es el antónimo de la directiva read only de la opción E, y ambas son elecciones incorrectas porque determinan si se concede acceso de escritura al recurso compartido."},
+
+{"id":"SYBEX-CH10-RQ09",
+ "q":"Suponiendo que se conceden los permisos adecuados, el comando __________ permite acceder a un recurso compartido de Samba al estilo FTP. (Elija la mejor respuesta.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"La opción B es correcta, porque smbclient permite acceder a un recurso compartido de Samba al estilo FTP (siempre que se concedan los permisos adecuados). El comando pdbedit (opción A) es incorrecto, porque no da acceso a un recurso compartido de Samba, sino que gestiona cualquiera de las bases de datos de usuarios de Samba. La opción C es errónea, porque el comando smbpasswd gestiona las bases de datos smbpasswd o tdbsam de Samba, pero no da acceso a recursos compartidos. El comando rpcclient de la opción D es incorrecto, porque ejecuta funciones RPC de Microsoft desde un cliente Samba. La opción E es una elección incorrecta, porque el comando ftp es un comando antiguo que da acceso a servidores FTP, no a recursos compartidos de Samba."},
+
+{"id":"SYBEX-CH10-RQ10",
+ "q":"¿Cuáles de los siguientes elementos podrían ayudarle a diagnosticar un problema de acceso de un cliente Samba a un recurso compartido? (Elija todas las que correspondan.)",
+ "o":{"A":"Activar el registro fijando la directiva log level del archivo smb.conf a un número mayor que 0 pero menor que 10.",
+      "B":"Ver qué recursos se están ofreciendo mediante el comando smbclient -L (con la opción -U y el parámetro adecuado si hace falta) en el servidor Samba.",
+      "C":"Realizar algunos diagnósticos básicos de red entre el servidor Samba y los sistemas cliente.",
+      "D":"Comprobar la sintaxis de la configuración de Samba con testparm.",
+      "E":"Determinar si los demonios de servidor necesarios están en ejecución en el servidor Samba."},
+ "e":"Todas las respuestas son correctas, porque todas son posibles elementos de diagnóstico si un cliente Samba no puede acceder a un recurso compartido. Naturalmente, es posible encontrar y corregir la causa raíz antes de tener que completar todos los pasos."}
+]

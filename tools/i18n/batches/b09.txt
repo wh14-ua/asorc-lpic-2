@@ -1,0 +1,79 @@
+### SYBEX-CH03-RQ11  [multiple_choice]
+Q: Which command should you use to list all of the installed modules?
+A: modinfo
+B: insmod
+C: rmmod
+D: lsmod
+X: To list all of the installed modules in the running kernel, you use the lsmod command, so answer D is correct. The modinfo command only lists module information for a single module—it doesn’t list all of the installed modules, so answer A is incorrect. The insmod and rmmod commands are used to insert and remove modules, respectively, so answers B and C are incorrect.
+
+### SYBEX-CH03-RQ12  [multiple_choice]
+Q: Which command should you use to install a module if you don’t know its filename?
+A: insmod
+B: rmmod
+C: modprobe
+D: lsmod
+X: The insmod command allows you to insert a module, but you must know the module filename, so answer A is incorrect. The modprobe command allows you to insert a module based on the module name, so answer C is correct. You use the rmmod command to remove a module and the lsmod command to list all modules, so answers B and D are incorrect.
+
+### SYBEX-CH03-RQ13  [multiple_choice]
+Q: Which command should you use to display information about USB devices installed on the system?
+A: lsusb
+B: lspci
+C: lsmod
+D: lsdev
+X: The lsusb command lists all of the USB devices connected to the Linux system, so answer A is correct. The lspci command lists PCI cards but not USB devices, so answer B is incorrect. The lsmod command lists modules loaded, which may show some of the USB devices installed, but if any USB device drivers were compiled into the kernel, it won’t list all of the USB devices, so answer C is incorrect. The lsdev command displays information about hardware device I/O ports and interrupts but for all devices, not just the USB devices, so answer D is incorrect.
+
+### SYBEX-CH03-RQ14  [multiple_choice]
+Q: Which option in the lsusb command displays detailed information about the USB devices?
+A: –d
+B: –s
+C: –t
+D: –v
+X: The verbose option of the lsusb command displays detailed information about the USB devices, so answer D, –v, is correct. The –d option only displays USB devices with a specific vendor ID, so answer A is incorrect. The –s option only displays USB devices connected to a specific bus, so answer B is incorrect. The –t option displays information in a tree format, so you can see device dependencies but not detailed information about the devices, so answer C is incorrect.
+
+### SYBEX-CH03-RQ15  [multiple_choice]
+Q: Which type of hardware devices can you connect to the Linux system as it’s running?
+A: Coldplug
+B: Hotplug
+C: PCI
+D: PCIe
+X: Hotplug devices, such as USB devices, allow you to connect the device while the system is running, so answer B is correct. Coldplug devices can be connected only while the system is powered off, so answer A is incorrect. Both PCI and PCIe boards can be inserted only while the system is powered off, so answers C and D are both incorrect.
+
+### SYBEX-CH03-RQ16  [multiple_choice]
+Q: What program does Linux use to detect hotplug devices and load the appropriate modules?
+A: lsusb
+B: udevd
+C: modprobe
+D: insmod
+X: The udev device manager system uses the udevd program to listen to kernel event messages and load the appropriate modules for inserted hardware based on rules, so answer B is correct. The lsusb command only lists installed modules, so answer A is incorrect. The modprobe and insmod commands can only install modules manually; they can’t automatically detect new devices, so answers C and D are incorrect.
+
+### SYBEX-CH03-RQ17  [multiple_choice]
+Q: Where are the udevd configuration settings stored?
+A: /lib/modules
+B: /boot
+C: /etc/udev/rules.d
+D: /etc/udev/udev.conf
+X: The /etc/udev/udev.conf configuration file defines settings that control how the udevd program operates, thus answer D is correct. The /lib/modules folder is used to store module files, not configuration files, so answer A is incorrect. The /boot folder is used to store the kernel binary file but not the udevd configurations, so answer B is incorrect. The /etc/udev/rules.d folder stores udevd rules but not the configuration settings, so answer C is incorrect.
+
+### SYBEX-CH03-RQ18  [multiple_choice]
+Q: Where are the udevd rules stored?
+A: /etc/udev/udevd.conf
+B: /etc/udev/rules.d
+C: /boot
+D: /lib/modules
+X: Rules for the udevd program are stored in the /etc/udev/rules.d folder, so answer B is correct. The /etc/udev/udevd.conf file contains configuration settings for controlling the udevd program, not rules, so answer A is incorrect. The /boot folder is used to store the kernel binary file, not udevd rules, so answer C is incorrect. The /lib/modules folder is used to store kernel module files, not configuration files, so answer D is incorrect.
+
+### SYBEX-CH03-RQ19  [multiple_choice]
+Q: Where is the dynamic pseudo-directory the kernel creates to peek at kernel settings and performance statistics located?
+A: /etc/kernel
+B: /boot/kernel
+C: /proc
+D: /usr/src/linux
+X: The /proc filesystem is created by the kernel automatically to allow you to read and write kernel settings and view kernel performance statistics, so answer C is correct. The /usr/src/ linux folder is used to store the kernel source code files, so answer D is incorrect. Answers A and B are folders that aren’t valid in the Linux system, so they are both incorrect.
+
+### SYBEX-CH03-RQ20  [multiple_choice]
+Q: What command allows you to change kernel settings during runtime?
+A: sysctl
+B: lsmod
+C: modprobe
+D: lsdev
+X: The sysctl command allows you to change kernel settings at any time, so answer A is correct. The lsmod and lsdev commands allow you to view the kernel modules and device information, respectively, so answers B and D are incorrect. The modprobe command allows you to insert and remove modules but not change any of the module settings, so answer C is incorrect.

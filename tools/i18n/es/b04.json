@@ -1,0 +1,55 @@
+[
+{"id":"SYBEX-CH01-RQ01",
+ "q":"¿Qué programa arranca el firmware de la estación de trabajo en el momento del arranque?",
+ "o":{"A":"Un cargador de arranque","B":"El programa init","C":"El sistema operativo Windows","D":"El comando mount","E":"El programa telinit"},
+ "e":"El firmware de la estación de trabajo busca el cargador de arranque para cargar un sistema operativo. Los programas init y telinit (opciones B y E) sirven para cambiar el nivel de ejecución de un sistema Linux ya en marcha, así que no son útiles hasta que el sistema Linux ha arrancado. El sistema operativo Windows solo arranca después de que se ejecute un cargador de arranque de Windows, así que la opción C es incorrecta. El programa mount es una herramienta de Linux para acoplar una partición al directorio virtual, y no está disponible hasta que el sistema Linux arranca, así que la opción D también es incorrecta."},
+
+{"id":"SYBEX-CH01-RQ02",
+ "q":"¿Dónde busca primero el firmware un cargador de arranque de Linux?",
+ "o":{"A":"En la carpeta /boot/grub","B":"En el Master Boot Record (MBR)","C":"En la carpeta /var/log","D":"En una partición de arranque","E":"En la carpeta /etc"},
+ "e":"El firmware de la estación de trabajo mira el primer sector del primer disco duro para cargar el cargador de arranque. Eso se llama Master Boot Record, así que la opción B es correcta. El propio cargador de arranque puede usar la función chainloader para buscar otro cargador en una partición de arranque, pero el firmware no puede hacerlo, así que la opción D es incorrecta. La opción A indica la carpeta de configuración donde se guardan el archivo de configuración de GRUB y la imagen del kernel, pero el programa cargador GRUB en sí no puede almacenarse ahí. La opción C indica la carpeta habitual de archivos de registro, que no contiene el cargador GRUB. La opción E indica también un directorio habitual de archivos de configuración de Linux, pero no se usa para guardar el cargador GRUB al que puede acceder el firmware."},
+
+{"id":"SYBEX-CH01-RQ03",
+ "q":"¿Qué comando de Linux permite examinar los mensajes de arranque más recientes?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"El búfer circular del kernel (kernel ring buffer), que puede verse escribiendo dmesg, contiene los mensajes de arranque del kernel; por tanto, la opción D es correcta. El programa fsck (opción A) repara particiones dañadas y el programa mount (opción C) sirve para acoplar particiones al directorio virtual, así que ninguno de los dos es correcto. La opción B, el programa init, se usa para arrancar programas desde el kernel, no para mostrar mensajes de arranque, así que también es incorrecta. La opción E, el programa chkconfig, sirve para mostrar los niveles de ejecución asignados a programas concretos en los scripts de arranque y no tiene relación con los mensajes de arranque, así que también es incorrecta."},
+
+{"id":"SYBEX-CH01-RQ04",
+ "q":"¿Qué carpeta usan la mayoría de las distribuciones de Linux para guardar los registros de arranque?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"La mayoría de las distribuciones de Linux guardan los archivos de registro de arranque en la carpeta /var/log. La carpeta /etc se usa casi siempre para guardar archivos de configuración del sistema y de las aplicaciones, no registros de arranque, así que la opción A es incorrecta. Algunos sistemas Unix usan la carpeta /var/messages para guardar archivos de registro, pero Linux no ha adoptado ese estándar, así que la opción B también es incorrecta. La carpeta /boot contiene los archivos de configuración de GRUB junto con los archivos de imagen necesarios para arrancar el sistema, pero no es donde Linux guarda los registros de arranque y, por tanto, es incorrecta. La carpeta /proc es peculiar porque el kernel de Linux almacena ahí información del sistema de forma dinámica, pero no guarda ahí información de registro del arranque."},
+
+{"id":"SYBEX-CH01-RQ05",
+ "q":"¿Dónde intenta encontrar la BIOS de la estación de trabajo un cargador de arranque? (Elija todas las que correspondan.)",
+ "o":{"A":"Un disco duro interno","B":"Un disco duro externo","C":"Una unidad de DVD","D":"Una memoria USB","E":"Un servidor de red"},
+ "e":"El firmware BIOS puede buscar el cargador de arranque en varios sitios. Normalmente mira el disco duro interno instalado en el sistema; sin embargo, si no encuentra ninguno, puede buscar en otros lugares. La mayoría de las estaciones de trabajo permiten arrancar desde un disco duro externo o desde una unidad de DVD. Las estaciones de trabajo modernas ofrecen además la opción de arrancar desde una memoria USB insertada en un puerto USB. Por último, muchas estaciones de trabajo ofrecen la opción de arranque PXE, que permite arrancar de forma remota desde un servidor de red."},
+
+{"id":"SYBEX-CH01-RQ06",
+ "q":"¿Dónde se encuentra el Master Boot Record?",
+ "o":{"A":"En el primer sector del primer disco duro del sistema",
+      "B":"En la partición de arranque de cualquier disco duro del sistema",
+      "C":"En el último sector del primer disco duro del sistema",
+      "D":"En cualquier sector de cualquier disco duro del sistema",
+      "E":"En el primer sector del segundo disco duro del sistema"},
+ "e":"El Master Boot Record (MBR) está en un único sitio: en el primer sector del primer disco duro de la estación de trabajo. Por tanto, la opción A es la única respuesta correcta. La partición de arranque de cualquier disco duro puede contener un cargador de arranque, pero no es el MBR, que es lo primero que ejecuta el firmware; por eso la opción B es incorrecta. Las demás ubicaciones no son válidas para el MBR, así que las opciones C, D y E son todas incorrectas."},
+
+{"id":"SYBEX-CH01-RQ07",
+ "q":"¿Dónde se almacena la partición del sistema EFI (ESP) en los sistemas Linux?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"La ESP se almacena en el directorio /boot/efi en los sistemas Linux. El firmware UEFI siempre busca los cargadores de arranque en el directorio /boot/efi, así que la opción D es correcta. El directorio /etc se usa para guardar archivos de configuración de aplicaciones y del sistema, no cargadores de arranque, así que la opción B es incorrecta. La carpeta /var se usa para guardar archivos variables, como archivos de registro, no archivos arrancables, así que la opción C es incorrecta. La opción E, /boot/grub, se usa en GRUB Legacy y GRUB2 para guardar los archivos de configuración del cargador de arranque, así como las imágenes del kernel. Sin embargo, no se usa para guardar los propios archivos del cargador de arranque, así que la opción E es incorrecta."},
+
+{"id":"SYBEX-CH01-RQ08",
+ "q":"¿Qué extensión de archivo usan los archivos del cargador de arranque UEFI?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"La especificación UEFI no exige una extensión concreta para los archivos del cargador de arranque UEFI; sin embargo, en Linux se ha vuelto bastante habitual usar la extensión .efi para identificarlos; por tanto, la opción E es correcta. Las opciones A y D indican extensiones usadas para identificar archivos de configuración de GRUB2 (opción A) y de GRUB Legacy (opción D), no archivos del cargador UEFI, así que ambas son incorrectas. La opción C indica la extensión .lst, que también se usa para archivos de configuración de GRUB Legacy, así que también es incorrecta. La extensión .uefi no se usa en Linux, así que la opción B es incorrecta."},
+
+{"id":"SYBEX-CH01-RQ09",
+ "q":"¿Cuál fue el primer cargador de arranque que se usó en Linux?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"El cargador de arranque Linux Loader (LILO) fue el primero que se usó en Linux, así que la opción B es correcta. El cargador GRUB Legacy, pese a su nombre, no fue el primero, sino el segundo cargador de uso común en Linux. El cargador GRUB2 fue una mejora posterior sobre GRUB Legacy, así que las opciones A y C son incorrectas. La opción D, el cargador SYSLINUX, aportaba funciones para trabajar con particiones FAT de Microsoft y poder arrancar Linux desde una memoria USB, pero es una creación posterior y no el primer cargador de Linux. La opción E, ISOLINUX, también es un cargador posterior, que permite arrancar Linux desde una unidad de CD o DVD."},
+
+{"id":"SYBEX-CH01-RQ10",
+ "q":"¿Dónde se guardan los archivos de configuración de GRUB Legacy?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"Los archivos de configuración de GRUB Legacy se guardan en el directorio /boot/grub, así que la opción A es correcta. La opción B, el directorio /boot/efi, se usa para guardar cargadores de arranque UEFI, no archivos de configuración de GRUB, así que es incorrecta. La opción C, el directorio /etc, guarda muchos archivos de configuración de aplicaciones y del sistema, pero no los archivos de configuración de GRUB Legacy. El directorio /var guarda archivos variables, como los de registro, pero no archivos de configuración, así que la opción D es incorrecta. Del mismo modo, Linux usa el directorio /proc para ofrecer datos dinámicos de ejecución del kernel, no archivos de configuración."}
+]

@@ -1,0 +1,159 @@
+### SYBEX-CH11-RQ01  [multiple_choice]  tema: Clientes de red y autenticación
+P: ¿Qué usa la aplicación DHCPd como archivo de configuración?
+   A. /etc/dhcpd.d/
+  *B. /etc/dhcp/dhcpd.conf
+   C. isc-dhcp-server
+   D. /etc/services
+LIBRO: La aplicación DHCPd guarda su configuración en el archivo de texto /etc/dhcp/dhcpd.conf, así que la opción B es correcta. Algunas aplicaciones usan una carpeta para guardar varios archivos de configuración, pero DHCPd no lo hace, así que la opción A es incorrecta. isc-dhcp-server es el nombre del paquete de software en Debian, no el archivo de configuración, así que la opción C es incorrecta. El archivo /etc/services contiene una lista de puertos TCP y UDP válidos definidos para el servidor, no el archivo de configuración de DHCPd, así que la opción D es incorrecta.
+
+### SYBEX-CH11-RQ02  [multiple_choice]  tema: Clientes de red y autenticación
+P: ¿Qué ajuste de opción de DHCPd se usa para definir el router predeterminado de los clientes de la red?
+   A. smtp-server
+   B. broadcast-address
+  *C. router
+   D. range
+LIBRO: La opción router define el router predeterminado asignado a los clientes de la red, así que la opción C es correcta. La opción smtp-server define un servidor de correo predeterminado para los clientes, así que la opción A es incorrecta. La opción broadcast-address define la dirección usada para enviar difusiones en la red, así que es incorrecta. La opción range define el conjunto de direcciones IP asignadas a los clientes de la red, así que también es incorrecta.
+
+### SYBEX-CH11-RQ03  [multiple_choice]  tema: Clientes de red y autenticación
+P: ¿Qué ajuste de opción de configuración de DHCPd se usa para definir el conjunto de direcciones IP que se asignarán a los clientes de la red?
+   A. smtp-server
+   B. broadcast-address
+   C. router
+  *D. range
+LIBRO: El ajuste range define un rango de direcciones IP desde el que el servidor DHCP puede asignar una dirección IP a los clientes de la red; por tanto, la opción D es correcta. La opción smtp-server define un servidor de correo predeterminado, así que la opción A es incorrecta. La opción broadcast-address define la dirección usada para enviar mensajes de difusión local en la red, así que la opción B es incorrecta. La opción router se usa para definir un router predeterminado para la red, así que la opción C es incorrecta.
+
+### SYBEX-CH11-RQ04  [multiple_choice]  tema: Clientes de red y autenticación
+P: ¿Qué archivo se usa para llevar el control de las direcciones IP asignadas en ese momento por DHCPd?
+  *A. /var/lib/dhcp/dhcpd.leases
+   B. /etc/dhcp/dhcpd.conf
+   C. /etc/dhcp/dhcpd.leases
+   D. /var/lib/dhcp/dhcpd.conf
+LIBRO: Las direcciones IP asignadas a los clientes de la red se llaman concesiones (leases), y el archivo que registra las direcciones IP concedidas en ese momento es dhcpd.leases, guardado en la carpeta /var/lib/dhcp; por tanto, la opción A es correcta. El archivo /etc/dhcp/dhcpd.conf es el archivo de configuración estándar de DHCPd, pero no guarda la información de las concesiones actuales, así que la opción B es incorrecta. El archivo dhcpd.leases no se guarda en la carpeta /etc/dhcp, así que la opción C es incorrecta. Las concesiones de direcciones IP no se guardan en el archivo de configuración dhcpd.conf, así que la opción D también es incorrecta.
+
+### SYBEX-CH11-RQ05  [multiple_choice]  tema: Clientes de red y autenticación
+P: ¿Qué ajuste de configuración de DHCPd define la dirección MAC de un dispositivo para poder asignarle una dirección IP estática?
+   A. range
+   B. fixed-address
+   C. host-name
+  *D. hardware
+LIBRO: El ajuste hardware define la dirección Ethernet (MAC) de un cliente para asignarle una dirección IP estática, así que la opción D es correcta. El ajuste range define un conjunto de direcciones IP para asignar a los clientes de la red, no una dirección IP estática, así que la opción A es incorrecta. El ajuste fixed-address define una dirección IP fija para asignar a un cliente, pero no define su dirección MAC, así que la opción B es incorrecta. La opción host-name define el nombre de host local que se asigna al cliente, pero no la dirección MAC, así que la opción C es incorrecta.
+
+### SYBEX-CH11-RQ06  [multiple_choice]  tema: Clientes de red y autenticación
+P: ¿Qué elemento de configuración de DHCP agrupa los ajustes asignados a un cliente concreto?
+  *A. host
+   B. group
+   C. range
+   D. fixed-address
+LIBRO: El elemento host permite agrupar varios ajustes y opciones de configuración para asignarlos a un dispositivo concreto de la red, así que la opción A es correcta. El elemento group es similar, pero agrupa opciones y ajustes para varios hosts de la red, así que la opción B es incorrecta. El ajuste range define un conjunto de direcciones IP asignadas a todos los clientes, no a uno concreto, así que la opción C es incorrecta. El ajuste fixed-address define una dirección IP fija para asignar a un cliente concreto, pero no agrupa varios ajustes y opciones de configuración para ese cliente, así que la opción D es incorrecta.
+
+### SYBEX-CH11-RQ07  [multiple_choice]  tema: Clientes de red y autenticación
+P: ¿Qué número de opción de DHCP define la máscara de subred asignada a un cliente?
+  *A. 1
+   B. 3
+   C. 5
+   D. 6
+LIBRO: La opción 1 de DHCP define la máscara de subred asignada al cliente de la red, así que la opción A es correcta. La opción 3 de DHCP define el router predeterminado, así que la opción B es incorrecta. La opción 5 de DHCP define el servidor de nombres de la red, así que la opción C es incorrecta, y la opción 6 de DHCP define el servidor de dominio de la red, así que la opción D es incorrecta.
+
+### SYBEX-CH11-RQ08  [multiple_choice]  tema: Clientes de red y autenticación
+P: ¿Qué módulo PAM permite usar los archivos estándar /etc/passwd y /etc/shadow para la autenticación?
+   A. pam_ldap.so
+   B. pam_userdb.so
+  *C. pam_unix.so
+   D. pam_sss.so
+LIBRO: El módulo pam_unix.so usa los archivos estándar de Linux /etc/passwd y /etc/shadow para autenticar usuarios, así que la opción C es correcta. El módulo pam_ldap.so usa un directorio de red LDAP para autenticar usuarios, así que la opción A es incorrecta. El módulo pam_userdb.so usa una base de datos para autenticar cuentas de usuario, así que la opción B es incorrecta, y el módulo pam_sss.so usa el método System Security Services Daemon (SSSD) para autenticar usuarios en directorios remotos, no los archivos locales /etc/passwd y /etc/shadow, así que la opción D es incorrecta.
+
+### SYBEX-CH11-RQ09  [multiple_choice]  tema: Clientes de red y autenticación
+P: ¿Qué módulo PAM permite usar un directorio de red para autenticar usuarios?
+   A. pam_unix.so
+  *B. pam_ldap.so
+   C. pam_userdb.so
+   D. pam_access.so
+LIBRO: El módulo pam_ldap.so usa un servidor LDAP para autenticar usuarios mediante un directorio de red, así que la opción B es correcta. El módulo pam_unix.so autentica usuarios con el archivo estándar /etc/passwd, así que la opción A es incorrecta. El módulo pam_userdb.so autentica usuarios con un archivo de base de datos local, así que la opción C es incorrecta. El módulo pam_access.so proporciona inicios de sesión anónimos para servidores FTP; no autentica usuarios con un directorio de red, así que la opción D es incorrecta.
+
+### SYBEX-CH11-RQ10  [multiple_choice]  tema: Clientes de red y autenticación
+P: ¿Qué módulo PAM impone restricciones a las contraseñas de los usuarios?
+   A. pam_limits.so
+   B. pam_unix.so
+  *C. pam_cracklib.so
+   D. pam_userdb.so
+LIBRO: El módulo pam_cracklib.so comprueba si las contraseñas son débiles, así que la opción C es correcta. El módulo pam_limits.so impone límites de recursos, como el número de archivos abiertos o el tiempo de CPU, pero no restringe las contraseñas, así que la opción A es incorrecta. El módulo pam_unix.so solo realiza la autenticación estándar con el archivo /etc/passwd; no supervisa las contraseñas de los usuarios, así que la opción B es incorrecta. El módulo pam_userdb.so autentica usuarios contra una base de datos local, pero tampoco impone restricciones de contraseña, así que la opción D es incorrecta.
+
+### SYBEX-CH11-RQ11  [multiple_choice]  tema: Clientes de red y autenticación
+P: Cuando se usa un único archivo de configuración para PAM, ¿dónde se encuentra?
+   A. /etc/pam.d
+  *B. /etc/pam.conf
+   C. /etc/pam.d/pam.conf
+   D. /etc/pamd.conf
+LIBRO: La aplicación PAM usa el archivo de configuración pam.conf, guardado en la carpeta /etc/, así que la opción B es correcta. La opción A, /etc/pam.d, es una carpeta, no un único archivo de configuración, así que la opción A es incorrecta. La ubicación /etc/pam.d/pam.conf mezcla el método de archivo único con el de varios archivos y no existe en la configuración de PAM, así que la opción C es incorrecta. El archivo /etc/pamd.conf no existe en la configuración de PAM, así que la opción D es incorrecta.
+
+### SYBEX-CH11-RQ12  [multiple_choice]  tema: Clientes de red y autenticación
+P: ¿Qué carpeta usa PAM para guardar varios archivos de configuración de aplicaciones?
+  *A. /etc/pam.d
+   B. /etc/pam.conf
+   C. /etc/pam.d/pam.conf
+   D. /etc/pamd.conf
+LIBRO: La aplicación PAM usa la carpeta /etc/pam.d para guardar archivos de configuración individuales por aplicación, así que la opción A es correcta. Cuando se usan archivos de configuración separados por aplicación, PAM no usa el archivo pam.conf, así que las opciones B y C son incorrectas. El archivo pamd.conf no existe en la configuración de PAM, así que la opción D es incorrecta.
+
+### SYBEX-CH11-RQ13  [multiple_choice]  tema: Clientes de red y autenticación
+P: ¿Qué entrada de control de PAM finaliza la aplicación si falla la autenticación?
+   A. sufficient
+   B. required
+  *C. requisite
+   D. optional
+LIBRO: La entrada de control requisite finaliza el proceso de autenticación si esta falla. No se comprueba ninguna otra entrada de la configuración. Así pues, la opción C es correcta. La entrada sufficient da por válida la autenticación si la comprobación tiene éxito, pero no la finaliza si falla, así que la opción A es incorrecta. La entrada required solo indica un estado de fallo si la autenticación falla, pero permite que el proceso siga comprobando otras entradas, así que la opción B es incorrecta. La entrada optional no bloquea las entradas siguientes si falla, así que la opción D también es incorrecta.
+
+### SYBEX-CH11-RQ14  [multiple_choice]  tema: Clientes de red y autenticación
+P: ¿Qué tipo de funcionalidad de PAM registra los intentos de autenticación en un archivo de registro?
+   A. account
+  *B. session
+   C. password
+   D. auth
+LIBRO: El tipo de funcionalidad session permite definir un archivo de registro en el que PAM anotará los intentos de autenticación, así que la opción B es correcta. El tipo account solo verifica la cuenta; no registra la transacción, así que la opción A es incorrecta. Del mismo modo, el tipo auth solo proporciona servicios de autenticación; no los registra, así que la opción D también es incorrecta. El tipo password proporciona funciones de gestión de contraseñas, pero tampoco registra las transacciones, así que la opción C es incorrecta.
+
+### SYBEX-CH11-RQ15  [multiple_choice]  tema: Clientes de red y autenticación
+P: ¿Qué parte de la base de datos LDAP define una plantilla con un conjunto de atributos que pueden asignarse a un objeto?
+   A. El ID de objeto
+   B. El esquema
+   C. El árbol LDAP
+  *D. La clase de objeto
+LIBRO: La clase de objeto define una plantilla que proporciona un conjunto de atributos asignados a un objeto de la base de datos LDAP, así que la opción D es correcta. El ID de objeto identifica de forma única cada objeto, pero no proporciona una plantilla de atributos, así que la opción A es incorrecta. El esquema define la estructura de la base de datos, pero no se usa como plantilla para objetos, así que la opción B es incorrecta. El árbol LDAP engloba los objetos reales contenidos en la base de datos LDAP, no solo una plantilla para objetos nuevos, así que la opción C es incorrecta.
+
+### SYBEX-CH11-RQ16  [multiple_choice]  tema: Clientes de red y autenticación
+P: ¿Qué parte de la base de datos LDAP define la información almacenada de un objeto?
+  *A. Los atributos
+   B. La clase de objeto
+   C. El ID de objeto
+   D. El esquema
+LIBRO: Los atributos definen los valores de datos asociados a un objeto de la base de datos LDAP, así que la opción A es correcta. La clase de objeto define una plantilla de atributos que se aplica a un objeto, pero no los valores reales de esos atributos, así que la opción B es incorrecta. El ID de objeto es un valor único asignado a cada objeto, pero no incluye información sobre el objeto, así que la opción C es incorrecta. El esquema define los objetos de la base de datos y cómo se relacionan entre sí, pero no la información concreta de cada objeto, así que la opción D es incorrecta.
+
+### SYBEX-CH11-RQ17  [multiple_choice]  tema: Clientes de red y autenticación
+P: ¿Cómo se llama el nombre único asignado a cada objeto de la base de datos LDAP?
+   A. ID de objeto
+   B. Atributo
+   C. Clase de objeto
+  *D. Nombre distinguido (distinguished name)
+LIBRO: Cada objeto debe tener un nombre distinguido único que haga referencia tanto a la ubicación del objeto en el árbol LDAP como a su nombre; por tanto, la opción D es correcta. El valor del ID de objeto es único para cada objeto, pero no es un nombre al que se pueda hacer referencia, así que la opción A es incorrecta. Los atributos de los objetos no son únicos, así que la opción B es incorrecta. La clase de objeto define una plantilla que se aplica a todos los objetos similares del árbol LDAP, así que tampoco es única y la opción C es incorrecta.
+
+### SYBEX-CH11-RQ18  [multiple_choice]  tema: Clientes de red y autenticación
+P: ¿Qué programa de OpenLDAP se ejecuta como servidor LDAP principal, escuchando las peticiones de los clientes LDAP?
+   A. slurpd
+  *B. slapd
+   C. slapadd
+   D. slapindex
+LIBRO: El programa principal del servidor OpenLDAP es slapd, así que la opción B es correcta. El programa slurpd solo se usa al replicar servidores LDAP, así que la opción A es incorrecta. El programa slapadd se usa para añadir objetos nuevos a la base de datos LDAP; no es el programa principal del servidor, así que la opción C es incorrecta. El programa slapindex permite reindexar la base de datos LDAP, pero tampoco es el programa principal del servidor, así que la opción D es incorrecta.
+
+### SYBEX-CH11-RQ19  [multiple_choice]  tema: Clientes de red y autenticación
+P: ¿Qué programa del servidor LDAP permite añadir objetos nuevos a la base de datos LDAP?
+   A. ldapadd
+   B. slapindex
+  *C. slapadd
+   D. ldapmodify
+LIBRO: El programa de línea de comandos slapadd permite actualizar la base de datos LDAP con objetos nuevos, así que la opción C es correcta. Los programas ldapadd y ldapmodify son aplicaciones cliente y no de servidor, así que las opciones A y D son incorrectas. El programa slapindex solo reindexa los objetos existentes en la base de datos LDAP; no puede añadir objetos nuevos, así que la opción B es incorrecta.
+
+### SYBEX-CH11-RQ20  [multiple_choice]  tema: Clientes de red y autenticación
+P: ¿Qué aplicación cliente de LDAP permite añadir objetos nuevos a la base de datos LDAP?
+   A. slapadd
+  *B. ldapadd
+   C. ldapmodify
+   D. slapindex
+LIBRO: El programa ldapadd permite añadir objetos nuevos a la base de datos LDAP desde un cliente, así que la opción B es correcta. El programa slapadd también permite añadir objetos nuevos, pero solo desde el servidor, ya que interactúa directamente con los archivos de LDAP, así que la opción A es incorrecta. El programa ldapmodify es un programa cliente, pero solo puede modificar objetos LDAP existentes, no añadir nuevos, así que la opción C es incorrecta. El programa slapindex es un programa de servidor que reindexa los objetos existentes en la base de datos LDAP, así que la opción D es incorrecta.

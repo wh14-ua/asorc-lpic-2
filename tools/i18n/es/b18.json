@@ -1,0 +1,63 @@
+[
+{"id":"SYBEX-CH08-RQ01",
+ "q":"El dominio .edu se considera ¿de qué tipo de dominio? (Elija la mejor respuesta.)",
+ "o":{"A":"Dominio raíz","B":"=","C":"Dominio de primer nivel","D":"=","E":"Dominio de segundo nivel"},
+ "e":"La opción B es correcta, porque el dominio .edu es un dominio de nivel superior (TLD), como .gov o .us. El dominio raíz, opción A, se representa con un solo punto (.) y, en la estructura de árbol de la base de datos DNS, está un nivel por debajo de los TLD. Por tanto, la opción A es incorrecta. Un dominio de primer nivel es un subdominio de un TLD, así que la opción C es errónea. ICANN, opción D, es incorrecta, porque ICANN es la organización responsable de seleccionar a los gestores de los TLD. La opción E también es errónea, porque un dominio de segundo nivel estaría dos niveles por encima de un TLD en la estructura de árbol de la base de datos DNS."},
+
+{"id":"SYBEX-CH08-RQ02",
+ "q":"El espacio de nombres de dominio se divide en distintas zonas. ¿Cuál de las siguientes podría ser una de esas zonas? (Elija todas las que correspondan.)",
+ "o":{"A":"La zona de pistas (hint zone)",
+      "B":"Un dominio de primer nivel y todos sus subdominios",
+      "C":"Un dominio de primer nivel y una parte de sus subdominios",
+      "D":"Un servidor raíz",
+      "E":"La zona raíz"},
+ "e":"Un servidor raíz es un servidor que ayuda a gestionar la zona raíz, así que la opción D es errónea. Las opciones B y C son correctas, porque una zona puede ser un dominio de primer nivel con todos sus subdominios, o un dominio de primer nivel con una parte de sus subdominios. Una zona puede ser la zona raíz, que es una zona especial gestionada por los servidores raíz y que abarca el dominio raíz, así que la opción E es correcta. La opción A también es correcta, porque la zona de pistas (hint zone) es otro nombre para la zona raíz."},
+
+{"id":"SYBEX-CH08-RQ03",
+ "q":"¿Cuáles de las siguientes combinaciones de servidores podrían ser los dos servidores de nombres mínimos exigidos para una zona? (Elija todas las que correspondan.)",
+ "o":{"A":"Servidor primario y servidor secundario",
+      "B":"Servidor secundario y servidor de reenvío",
+      "C":"Servidor primario y servidor de reenvío",
+      "D":"Servidor secundario y servidor de caché",
+      "E":"Servidor primario y servidor de caché"},
+ "e":"Las opciones A, C y E cumplen el requisito de dos servidores por zona, porque uno de ellos debe ser un servidor primario (maestro) y el otro uno de los siguientes: servidor secundario, servidor de caché o servidor de reenvío. Las opciones B y D son tipos de servidor reales, pero les falta el servidor primario en su configuración, así que son incorrectas."},
+
+{"id":"SYBEX-CH08-RQ04",
+ "q":"¿Cómo se llama el programa o rutina de biblioteca que crea una consulta DNS, busca la respuesta en su propia caché y, si no la encuentra allí, envía la consulta a otro servidor de nombres? (Elija la mejor respuesta.)",
+ "o":{"A":"Servidor de nombres","B":"Caché","C":"Resolución de nombres","D":"Resolutor (resolver)","E":"Zona"},
+ "e":"La opción D es la elección correcta, porque un resolutor (resolver) es un programa o rutina de biblioteca que crea una consulta DNS, busca la respuesta en su propia caché y, si no la encuentra allí, envía la consulta a otro servidor de nombres. La opción A es incorrecta, porque un servidor de nombres no es un programa ni una biblioteca, sino un servidor que o bien tiene los datos de resolución para responder a una consulta DNS, o bien contiene un resolutor para obtener la respuesta. La caché es una ubicación que normalmente se consulta para obtener la respuesta a una consulta DNS, y no es un programa ni una rutina de biblioteca, así que la opción B es errónea. La opción C es incorrecta, porque la resolución de nombres es el proceso de traducir un FQDN a una dirección IP (consulta y respuesta DNS). Por último, la opción E también es incorrecta, porque una zona es una porción del espacio de nombres de dominio y no un programa ni una rutina de biblioteca."},
+
+{"id":"SYBEX-CH08-RQ05",
+ "q":"¿Cuál de los siguientes programas proporciona una implementación total o parcial del protocolo DNS? (Elija todas las que correspondan.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"Las opciones A, B, C, D y E se consideran todas software que proporciona una implementación total o parcial del protocolo DNS. La opción D es la más engañosa, porque originalmente se llamaba BIND 10 y ha pasado a llamarse Bundy, mantenido por el Bundy-Project en lugar de por ICANN."},
+
+{"id":"SYBEX-CH08-RQ06",
+ "q":"El demonio BIND es ¿cuál de los programas del directorio /usr/sbin/? (Elija la mejor respuesta.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"La opción C es correcta, porque /usr/sbin/named es el demonio BIND. La opción A es incorrecta, aunque bind9 es el nombre del paquete BIND en las distribuciones Ubuntu. La opción B es errónea, aunque bind es el nombre del paquete BIND en las distribuciones CentOS. El archivo named.conf es un archivo de configuración de BIND, no el demonio, así que la opción D es errónea. La opción E es incorrecta, porque bindutils es el nombre del paquete de utilidades de BIND en las distribuciones CentOS, no el demonio BIND."},
+
+{"id":"SYBEX-CH08-RQ07",
+ "q":"¿Cuáles de las siguientes son agrupaciones (cláusulas) legítimas del archivo de configuración principal de BIND, named.conf? (Elija todas las que correspondan.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"Las opciones A, B, C y E son todas agrupaciones (cláusulas) legítimas del archivo de configuración principal de BIND, named.conf. La opción D es una utilidad que permite comprobar la sintaxis del archivo named.conf, y es la única elección incorrecta."},
+
+{"id":"SYBEX-CH08-RQ08",
+ "q":"Al configurar un servidor DNS local de solo caché, ¿qué directivas deberían establecerse o modificarse en el archivo named.conf? (Elija todas las que correspondan.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"Las opciones A, B, D y E deben establecerse o modificarse al configurar un servidor DNS local de solo caché. La directiva acl de la opción A permite crear una lista de control de acceso con los hosts autorizados a usar este servidor de solo caché. El allow-query de la opción B puede usar la acl definida para permitir que el host designado consulte este servidor de solo caché. La directiva listen-on de la opción D establece el puerto de escucha, así como la acl desde la que atender las consultas DNS de los hosts permitidos. El recursion yes de la opción E se modifica, si hace falta, para que los hosts permitidos puedan usar este servidor de solo caché. La opción C es incorrecta, porque no es obligatorio tener configurado el registro (logging) de BIND para usar un servidor DNS de solo caché (aunque sería buena idea establecer también esa directiva)."},
+
+{"id":"SYBEX-CH08-RQ09",
+ "q":"Ignorando las diferencias entre distribuciones y suponiendo que tiene los privilegios adecuados, ¿cuáles de los siguientes comandos detendrán el servicio BIND? (Elija todas las que correspondan.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"Las opciones B, C, D y E son todas métodos para detener el servicio BIND. Naturalmente, los métodos que funcionarán en un servidor concreto dependen de la distribución que tenga instalada. La opción A es incorrecta, porque rndc flush vacía todas las cachés del servidor pero no detiene el servicio BIND."},
+
+{"id":"SYBEX-CH08-RQ10",
+ "q":"¿Qué determina una directiva category de logging? (Elija la mejor respuesta.)",
+ "o":{"A":"Dónde se registran los mensajes DNS",
+      "B":"Los tipos de mensaje DNS que se registran",
+      "C":"Cómo reiniciar BIND para cargar el registro",
+      "D":"Cómo se filtran los mensajes DNS",
+      "E":"Los tamaños de los registros de canal DNS"},
+ "e":"La opción B es correcta, porque una directiva category define los tipos de mensaje DNS que se van a registrar. La directiva channel define dónde se registran los mensajes DNS (opción A) y cómo se filtran (opción D), así que las opciones A y D son incorrectas. El «cómo reiniciar BIND para cargar el registro» de la opción C no tiene nada que ver con la directiva category, así que es una respuesta errónea. Además, los tamaños de los registros de canal DNS no los fija la directiva category, así que la opción E también es incorrecta."}
+]

@@ -1,0 +1,179 @@
+### SYBEX-CH05-RQ01  [multiple_response]  tema: Almacenamiento avanzado (RAID/LVM)
+P: ¿Cuáles de las siguientes estructuras de array RAID se consideran tolerantes a fallos? (Elija todas las que correspondan.)
+   A. RAID 0
+  *B. RAID 1
+  *C. RAID 10
+  *D. RAID 5
+  *E. RAID 6
+LIBRO: Las respuestas B, C, D y E se consideran todas tolerantes a fallos por su estructura. Solo RAID 0 no es tolerante a fallos, porque usa distribución por bandas (striping). Por tanto, la opción A es la única elección incorrecta.
+
+### SYBEX-CH05-RQ02  [multiple_choice]  tema: Almacenamiento avanzado (RAID/LVM)
+P: ¿Cuál de las siguientes estructuras RAID se denomina también distribución por bandas con doble paridad? (Elija la mejor respuesta.)
+   A. RAID 0
+   B. RAID 1
+   C. RAID 10
+   D. RAID 5
+  *E. RAID 6
+LIBRO: RAID 6 se denomina también distribución por bandas con doble paridad, así que la opción E es la respuesta correcta. RAID 0 se llama distribución por bandas (striping), así que la opción A es incorrecta. La opción B es incorrecta, porque RAID 1 se llama también duplicación en espejo (mirroring). La opción C también es errónea, porque RAID 10 se llama duplicación en espejo con distribución por bandas. RAID 5 se llama distribución por bandas con paridad (no con doble paridad) y, por tanto, la opción D también es incorrecta.
+
+### SYBEX-CH05-RQ03  [multiple_choice]  tema: Almacenamiento avanzado (RAID/LVM)
+P: Después de ejecutar el comando modprobe raid6 con privilegios de superusuario en su sistema, ¿qué archivo debería consultar para determinar si su sistema soporta RAID por software? (Elija la mejor respuesta.)
+  *A. /proc/mdstat
+   B. /dev/md0
+   C. /etc/fstab
+   D. /etc/mdadm/mdadm.conf
+   E. /dev/mapper
+LIBRO: El archivo /proc/mdstat indicará si ese nivel de RAID está soportado y, por tanto, si potencialmente hay soporte de RAID por software, así que la opción A es correcta. La opción B es incorrecta porque /dev/md0 es un archivo de dispositivo que representa un array RAID. La tabla de sistemas de archivos, /etc/fstab, puede tener un registro para montar un array RAID en el arranque, pero no es el indicador que se busca y, por tanto, la opción C también es incorrecta. La opción D es errónea porque /etc/mdadm/mdadm.conf es un archivo de configuración de RAID, no un archivo de estado. Por último, /dev/mapper de la opción E es el directorio que contiene los archivos de Device Mapper de LVM y RAID, y tampoco es un archivo de estado que indique soporte de RAID por software, así que es una elección incorrecta.
+
+### SYBEX-CH05-RQ04  [multiple_choice]  tema: Almacenamiento avanzado (RAID/LVM)
+P: ¿Cuál de los siguientes no es un modo de comando de mdadm? (Elija la mejor respuesta.)
+   A. Modo grow (crecimiento)
+   B. --follow
+  *C. Modo delete (borrado)
+   D. --manage
+   E. Modo miscellaneous (misceláneo)
+LIBRO: La opción C, el modo delete, es un modo de comando de mdadm inventado y, por tanto, es la elección correcta. El modo grow de la opción A es un modo legítimo, que hace crecer, reduce o reconfigura un array RAID. El --follow de la opción B es una opción que indica el modo follow, que monitoriza unidades md y, si se produce un evento o alerta, ejecuta una acción determinada. El --manage de la opción D es una opción que indica el modo manage. En modo manage, la utilidad mdadm puede gestionar los miembros del array RAID, por ejemplo añadir una nueva unidad de reserva. El modo miscellaneous de la opción E es un modo para operaciones sobre arrays RAID que no encajan en ninguna otra categoría, como borrar el superbloque de una unidad.
+
+### SYBEX-CH05-RQ05  [multiple_choice]  tema: Almacenamiento avanzado (RAID/LVM)
+P: ¿Cuál de las siguientes opciones del comando mdadm selecciona el modo para crear un array RAID? (Elija la mejor respuesta.)
+   A. --grow
+   B. -F
+   C. --make
+  *D. -C
+   E. --misc
+LIBRO: La opción D es correcta, porque la opción -C selecciona el modo create, con el que puede crearse un array RAID. La opción ––create hace lo mismo. La opción A selecciona el modo grow, la opción B el modo follow/monitor y la opción E el modo miscellaneous. Aunque son modos legítimos, no crean arrays RAID y por tanto son elecciones incorrectas. La respuesta de la opción C está inventada y, por tanto, también es incorrecta.
+
+### SYBEX-CH05-RQ06  [multiple_choice]  tema: Almacenamiento avanzado (RAID/LVM)
+P: ¿En qué archivo se guarda el estado actual de los arrays RAID? (Elija la mejor respuesta.)
+   A. /etc/mdadm/mdadm.conf
+   B. /etc/mdadm.conf
+   C. /etc/fstab
+  *D. /proc/mdstat
+   E. /etc/sysctl.conf
+LIBRO: El estado actual de los arrays RAID se encuentra en el archivo /proc/mdstat de la opción D y, por tanto, es la respuesta correcta. Las opciones A y B son incorrectas porque mdadm.conf es un archivo de configuración de RAID, no de estado, y puede estar en el directorio /etc/ o en /etc/mdadm/, según la distribución. El archivo /etc/fstab no guarda el estado del RAID, así que la opción C es errónea. Por último, el archivo /etc/sysctl.conf es un archivo de configuración del comando sysctl y, por tanto, es una elección incorrecta.
+
+### SYBEX-CH05-RQ07  [multiple_choice]  tema: Almacenamiento avanzado (RAID/LVM)
+P: ¿Cuál de las siguientes opciones de mdadm mostraría el array RAID del que forma parte la unidad /dev/sdc1? (Elija la mejor respuesta.)
+   A. --misc --detail /dev/md0
+  *B. --misc --examine /dev/sdc1
+   C. --detail --scan /dev/md0
+   D. --monitor –-help
+   E. Ninguna de las anteriores
+LIBRO: La opción B es la mejor respuesta, porque con esas opciones de mdadm se mostrará cualquier array RAID al que pueda pertenecer la unidad. La opción A se acerca, pero si la unidad /dev/sdc1 no es miembro del array /dev/md0, no se sabrá a qué array RAID pertenece. Por tanto, la opción A es incorrecta. La opción C también se acerca y sin embargo es incorrecta, porque de nuevo, si la unidad /dev/sdc1 no es miembro del array /dev/md0, no se sabrá a qué array RAID pertenece. La opción D es incorrecta, porque solo muestra las distintas opciones disponibles en modo monitor. Como la opción B es correcta, la opción E es incorrecta.
+
+### SYBEX-CH05-RQ08  [multiple_response]  tema: Almacenamiento avanzado (RAID/LVM)
+P: Para eliminar un array RAID desmontado, ¿qué debe hacer? (Elija todas las que correspondan.)
+  *A. Detener el array RAID.
+   B. Reducir el array RAID.
+   C. Monitorizar el array RAID.
+  *D. Borrar los superbloques de las unidades del array RAID.
+   E. Borrar los datos y los superbloques de las unidades del array RAID.
+LIBRO: Las opciones A y D son correctas, porque primero hay que detener el array RAID y después borrar los superbloques de cada una de sus unidades. No hace falta borrar los datos de las unidades, así que la opción E es incorrecta. Además, no es necesario ni reducir el array RAID ni monitorizarlo para eliminarlo, así que las opciones B y C son ambas incorrectas.
+
+### SYBEX-CH05-RQ09  [multiple_choice]  tema: Almacenamiento avanzado (RAID/LVM)
+P: ¿Sobre cuáles de los siguientes tipos de unidad puede usarse la utilidad hdparm? (Elija todas las que correspondan.)
+   A. PATA
+   B. ATAPI
+   C. SATA
+   D. SCSI
+  *E. Todas las anteriores
+LIBRO: La utilidad hdparm puede consultar, probar y, si hace falta, modificar diversos ajustes de unidades PATA, ATAPI, SATA y SCSI. Por tanto, la opción E es correcta. Sin embargo, solo puede trabajar con dispositivos SCSI que soporten SCSI-ATA Command Translation (SAT), y sobre ellos solo pueden usarse algunas opciones de hdparm.
+
+### SYBEX-CH05-RQ10  [multiple_choice]  tema: Almacenamiento avanzado (RAID/LVM)
+P: ¿Cuál de las siguientes opciones del comando sdparm mostrará todos los parámetros de modo comunes de un dispositivo determinado? (Elija la mejor respuesta.)
+   A. --all
+   B. --command show
+   C. --hex
+   D. --page
+  *E. Ninguna de las anteriores
+LIBRO: Si no se incluye ninguna opción junto al comando sdparm, este mostrará todos los parámetros de modo comunes del dispositivo indicado. Por tanto, la opción E es correcta. La opción A mostrará toda la información reconocida para ese tipo de dispositivo, la opción C mostrará las páginas VPD del dispositivo en hexadecimal y la opción D mostrará el código hexadecimal asociado a cada una de esas páginas VPD. Por tanto, todas esas opciones son incorrectas. La opción B es una opción válida, pero sus parámetros correctos son stop, sync, start y load, no show. Así pues, la opción B también es incorrecta.
+
+### SYBEX-CH05-RQ11  [multiple_choice]  tema: Almacenamiento avanzado (RAID/LVM)
+P: ¿Qué número designa tanto a un servidor destino (target) iSCSI como a un disco iSCSI ofrecido por ese destino? (Elija la mejor respuesta.)
+   A. WWID
+   B. WWN
+  *C. IQN
+   D. LUN
+   E. scsi_id
+LIBRO: La opción C es correcta, porque el IQN designa tanto al servidor destino iSCSI como al disco iSCSI que ofrece. Un WWID es lo mismo que un WWN y, aunque pueden identificar de forma única un disco iSCSI, no identifican un destino iSCSI, así que las opciones A y B son incorrectas. Un LUN también puede identificar de forma única un disco iSCSI, pero no identifica un destino iSCSI, así que la opción D también es incorrecta. La opción E es un comando que puede usarse para crear un número iSCSI único, así que también es incorrecta.
+
+### SYBEX-CH05-RQ12  [multiple_response]  tema: Almacenamiento avanzado (RAID/LVM)
+P: ¿Dónde se guardan los registros de descubrimiento (discovery) de iSCSI? (Elija todas las que correspondan.)
+   A. /etc/iscsi/iscsid.conf
+   B. /lib/udev/scsi_id
+  *C. /var/lib/iscsi/nodes
+  *D. /var/lib/iscsi/send_targets
+   E. /var/log/iscsi.conf
+LIBRO: Durante el proceso de descubrimiento, la herramienta iscsiadm crea dos registros: un registro de nodo descubierto que se guarda en el archivo de base de datos /var/lib/iscsi/nodes (opción C) y un registro con la dirección IP del servidor destino que se guarda en el archivo /var/lib/iscsi/send_targets (opción D). Por tanto, las opciones C y D son correctas. La opción A es el archivo de configuración de la herramienta iscsiadm, así que es incorrecta. La opción B es la ubicación del comando scsi_id, así que también es incorrecta. La opción E es un archivo inventado, así que es una elección errónea.
+
+### SYBEX-CH05-RQ13  [multiple_response]  tema: Almacenamiento avanzado (RAID/LVM)
+P: ¿Cuál de los siguientes permite agrupar varias particiones o discos enteros y usarlos como una sola unidad? (Elija todas las que correspondan.)
+   A. PATA
+  *B. RAID
+   C. iSCSI
+  *D. Gestión de volúmenes lógicos
+   E. Tejido de almacenamiento (storage fabric)
+LIBRO: Tanto RAID como la gestión de volúmenes lógicos o Logical Volume Manager (LVM) permiten agrupar varias particiones y usarlas como una sola partición para formatear, montar en la estructura de directorio virtual de Linux, almacenar datos, etc. Así pues, las opciones B y D son correctas. PATA es una tecnología de interfaz de unidades, así que la opción A es incorrecta. La opción C es incorrecta, porque iSCSI es un protocolo de transporte de almacenamiento en red, que hace que el disco iSCSI de un servidor destino aparezca como un disco conectado localmente, pero no hay agrupación de por medio. Por último, el tejido de almacenamiento de la opción E es una elección incorrecta, porque es cualquier hardware que conecta dispositivos de almacenamiento SAN con los sistemas.
+
+### SYBEX-CH05-RQ14  [multiple_choice]  tema: Almacenamiento avanzado (RAID/LVM)
+P: ¿Cuál es una partición de disco o unidad sin usar designada para que la utilice LVM? (Elija la mejor respuesta.)
+  *A. PV
+   B. VG
+   C. LV
+   D. SATA
+   E. Backstore
+LIBRO: La opción A es correcta, porque un volumen físico (PV) es una partición de disco (o una unidad entera) sin usar designada para que la utilice LVM. Un grupo de volúmenes (VG) tiene PV en su reserva de almacenamiento y alimenta a los volúmenes lógicos (LV), que se componen de bloques de espacio de almacenamiento (extents lógicos). Por tanto, las opciones B y C son incorrectas. El SATA de la opción D es incorrecto, porque SATA es una tecnología de interfaz de unidades. La opción E es incorrecta, porque un backstore es un método de acceso a datos que apunta y permite el acceso a un medio de almacenamiento físico en una SAN con tejido de almacenamiento.
+
+### SYBEX-CH05-RQ15  [multiple_choice]  tema: Almacenamiento avanzado (RAID/LVM)
+P: ¿Cuál de las siguientes afirmaciones sobre los PE no es cierta? (Elija la mejor respuesta.)
+   A. PE significa «physical extent» (extent físico).
+   B. Un PE es el tamaño de bloque más pequeño que puede asignarse en un PV.
+  *C. El tamaño de bloque del PE se establece durante el proceso de designar un PV.
+   D. El tamaño de bloque de PE predeterminado es 4 MiB.
+   E. El tamaño de bloque de PE puede elegirse.
+LIBRO: El tamaño de bloque del PE se establece en realidad durante el proceso de añadir un PV a un VG. Por tanto, la opción C es la respuesta correcta, porque no es cierta. Las opciones A, B, D y E son todas afirmaciones correctas sobre los PE y, por tanto, elecciones incorrectas.
+
+### SYBEX-CH05-RQ16  [multiple_choice]  tema: Almacenamiento avanzado (RAID/LVM)
+P: ¿Cuál de las siguientes afirmaciones sobre los LE es cierta? (Elija la mejor respuesta.)
+   A. Los LE se componen de LV.
+  *B. Los LE se asocian (mapean) a los extents físicos del VG.
+   C. El mapeo de LE proporciona una forma de bloquear el acceso a los datos.
+   D. El mapeo de LE se produce durante la designación del PV.
+   E. Ninguna de las anteriores.
+LIBRO: La opción B es cierta, porque los extents lógicos (LE) se asocian a los extents físicos del VG. La opción A no es cierta, porque son los LV los que se componen de extents lógicos (LE) y, por tanto, es una elección incorrecta. La opción C no es cierta, porque el mapeo proporciona una forma de acceder a los datos, no de bloquearlos. Por tanto, la opción C es una elección errónea. La opción D es incorrecta, porque el mapeo de LE no se produce durante la designación del PV. Por último, la opción E es incorrecta, porque la opción B sí es cierta.
+
+### SYBEX-CH05-RQ17  [multiple_choice]  tema: Almacenamiento avanzado (RAID/LVM)
+P: ¿Cuál de las siguientes utilidades de LVM designará una partición como PV? (Elija la mejor respuesta.)
+   A. pvdisplay
+   B. vgcreate
+   C. lvcreate
+  *D. pvcreate
+   E. pvscan
+LIBRO: La opción D es la respuesta correcta, porque la utilidad pvcreate puede designar una partición como PV. La utilidad pvdisplay muestra los atributos de un PV. La opción B es incorrecta, porque vgcreate añade uno o más PV a una reserva VG. La opción C es incorrecta, porque lvcreate crea un LV a partir de una reserva VG o crea instantáneas. La opción E también es incorrecta, porque la utilidad pvscan lista todos los PV del sistema.
+
+### SYBEX-CH05-RQ18  [multiple_choice]  tema: Almacenamiento avanzado (RAID/LVM)
+P: Acaba de terminar de crear vg01. ¿Qué utilidad sería la mejor para comprobarlo? (Elija la mejor respuesta.)
+   A. pvdisplay
+   B. vgcreate
+   C. pvscan
+  *D. vgdisplay
+   E. lvdisplay
+LIBRO: La opción D es la respuesta correcta, porque la utilidad vgdisplay muestra los atributos de un VG, y vg01 es un VG. La opción A es incorrecta, porque pvdisplay muestra atributos de PV. La opción B es incorrecta, porque vgcreate añade uno o más PV a una reserva VG. La opción C es incorrecta, porque la utilidad pvscan lista todos los PV del sistema y vg01 es un VG. La opción E también es incorrecta, porque lvdisplay muestra los atributos de un LV.
+
+### SYBEX-CH05-RQ19  [multiple_response]  tema: Almacenamiento avanzado (RAID/LVM)
+P: ¿Cuáles de las siguientes afirmaciones sobre las instantáneas (snapshots) de LV son ciertas? (Elija todas las que correspondan.)
+  *A. Las instantáneas de LV son a su vez LV.
+   B. Las instantáneas de LV son de solo lectura.
+  *C. Las instantáneas de LV pueden montarse en el directorio.
+   D. Las instantáneas de LV contienen copias de los datos del LV original.
+   E. Las instantáneas de LV se crean con el comando vgcreate.
+LIBRO: Las opciones A y C son ciertas y, por tanto, correctas. La opción B no es cierta y es incorrecta, porque una instantánea de LV tiene acceso tanto de lectura como de escritura. La opción D es incorrecta, porque los datos originales no se copian a la instantánea de LV. La opción E tampoco es cierta, porque las instantáneas de LV se crean con el comando lvcreate.
+
+### SYBEX-CH05-RQ20  [multiple_choice]  tema: Almacenamiento avanzado (RAID/LVM)
+P: Para renombrar un LV, ¿qué utilidad debería usar? (Elija la mejor respuesta.)
+  *A. lvrename
+   B. lvremove
+   C. lvconvert
+   D. lvs
+   E. lvmchange
+LIBRO: La opción A es correcta, porque el comando lvrename permite cambiar el nombre de un LV. La opción B es incorrecta, porque lvremove elimina un LV. La utilidad lvconvert cambia la disposición de un LV y, por tanto, la opción C es una respuesta incorrecta. El lvs de la opción D es incorrecto, porque muestra información sobre los LV del sistema. Por último, la opción E es incorrecta porque lvmchange es un comando obsoleto.

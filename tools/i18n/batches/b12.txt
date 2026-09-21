@@ -1,0 +1,89 @@
+### SYBEX-CH05-RQ01  [multiple_response]
+Q: Which of the following RAID array structures are considered fault tolerant? (Choose all that apply.)
+A: RAID 0
+B: RAID 1
+C: RAID 10
+D: RAID 5
+E: RAID 6
+X: Answers B, C, D, and E are all considered fault tolerant because of their structures. Only RAID 0 is not fault tolerant, because it uses disk striping. Thus, option A is the only incorrect choice.
+
+### SYBEX-CH05-RQ02  [multiple_choice]
+Q: Which one of the following RAID structures is also called disk striping with double parity? (Choose the best answer.)
+A: RAID 0
+B: RAID 1
+C: RAID 10
+D: RAID 5
+E: RAID 6
+X: RAID 6 is also called disk striping with double parity, and so option E is the correct answer. RAID 0 is called disk striping, so option A is incorrect. Option B is incorrect, because RAID 1 is also called disk mirroring. Option C is also wrong due to RAID 10 being called disk mirroring and striping. RAID 5 is called disk striping with parity (not double parity), and therefore option D is also incorrect.
+
+### SYBEX-CH05-RQ03  [multiple_choice]
+Q: After you issue the modprobe raid6 command using super user privileges on your system, which file should you check to determine if software RAID is supported on your system? (Choose the best answer.)
+A: /proc/mdstat
+B: /dev/md0
+C: /etc/fstab
+D: /etc/mdadm/mdadm.conf
+E: /dev/mapper
+X: The /proc/mdstat file will indicate if that RAID level is supported, and thus software RAID is potentially supported, so option A is correct. Option B is incorrect because /dev/md0 is a device file representing a RAID array. The filesystem table, /etc/fstab, may have a record for mounting a RAID array at boot, but it is not the indicator being sought, and therefore option C is also incorrect. Option D is wrong because /etc/mdadm/mdadm.conf is a RAID configuration file, not a status file. Finally, option E’s /dev/mapper is the directory holding LVM and RAID Device Mapper files, and it is also not a status file indicating software RAID support, so it is an incorrect choice.
+
+### SYBEX-CH05-RQ04  [multiple_choice]
+Q: Which of the following is not an mdadm command mode? (Choose the best answer.)
+A: Grow mode
+B: --follow
+C: Delete mode
+D: --manage
+E: Miscellaneous mode
+X: Option C, delete mode, is a made-up mdadm command mode and therefore is the correct choice. Option A’s grow mode is a legitimate mode, which grows, shrinks, or reshapes a RAID array. Option B’s --follow is an option to indicate follow mode, which monitors md drives, and if an event or alert occurs, performs a designated action. The --manage in option D is an option to indicate manage mode. In manage mode, the mdadm utility can manage RAID array members, such as adding a new spare drive to a RAID array. Option E’s miscellaneous mode is a mode for RAID array operations that do not fall into any other mode category, such as deleting a drive’s superblock.
+
+### SYBEX-CH05-RQ05  [multiple_choice]
+Q: Which of the following mdadm command options chooses the mode to make a RAID array? (Choose the best answer.)
+A: --grow
+B: -F
+C: --make
+D: -C
+E: --misc
+X: Option D is correct, because the -C option chooses the create mode, so a RAID array can be created. The ––create option does too. Option A chooses the grow mode, option B chooses the follow/monitor mode, and option E chooses the miscellaneous mode. While these are legitimate modes, they do not create RAID arrays and are thus incorrect choices. Option C’s answer is made up and therefore also incorrect.
+
+### SYBEX-CH05-RQ06  [multiple_choice]
+Q: Current RAID array status is held in what file? (Choose the best answer.)
+A: /etc/mdadm/mdadm.conf
+B: /etc/mdadm.conf
+C: /etc/fstab
+D: /proc/mdstat
+E: /etc/sysctl.conf
+X: Current RAID array status can be found in option D’s /proc/mdstat file, and it is therefore the correct answer. Options A and B are incorrect because mdadm.conf is a RAID configuration file, not a status file, which can be stored in either the /etc/ or the /etc/ mdadm/ directory, depending on the distribution. The /etc/fstab file does not hold RAID status, and so option C is wrong. Finally, the /etc/sysctl.conf file is a configuration file for the sysctl command, and it is therefore an incorrect choice.
+
+### SYBEX-CH05-RQ07  [multiple_choice]
+Q: Which of the following mdadm options would show in the RAID array in which the /dev/sdc1 drive has membership? (Choose the best answer.)
+A: --misc --detail ______ /dev/md0
+B: --misc --examine /dev/sdc1
+C: --detail --scan /dev/md0
+D: --monitor –-help
+E: None of the above
+X: Option B is the best answer, because any RAID array that the drive may belong to will be displayed using these mdadm options. Option A is close, but if the /dev/sdc1 drive is not a member of the /dev/md0 RAID array, then you won’t know which RAID array has its membership. Therefore, option A is incorrect. Option C is also close and yet incorrect, because again if the /dev/sdc1 drive is not a member of the /dev/md0 RAID array, then you won’t know which RAID array has its membership. Option D is incorrect, because it only shows various options available in monitor mode. Since option B is correct, option E is incorrect.
+
+### SYBEX-CH05-RQ08  [multiple_response]
+Q: To delete an unmounted RAID array, you must do which of the following? (Choose all that apply.)
+A: Stop the RAID array.
+B: Shrink the RAID array.
+C: Monitor the RAID array.
+D: Delete RAID array drives’ superblocks.
+E: Delete RAID array drives’ data and superblocks.
+X: Options A and D are correct, because you must first stop a RAID array and then delete the superblocks on each of the array’s drives. There is no need to delete the drives’ data, so option E is incorrect. In addition, you neither need to shrink the RAID array nor monitor it in order to delete it, so options B and C are both incorrect.
+
+### SYBEX-CH05-RQ09  [multiple_choice]
+Q: On which of the following drive types can the hdparm utility be used? (Choose all that apply.)
+A: PATA
+B: ATAPI
+C: SATA
+D: SCSI
+E: All of the above
+X: The hdparm utility can view, test, and, if needed, modify various PATA, ATAPI, SATA, and SCSI drive settings. Therefore, option E is correct. However, it can only handle SCSI devices that support SCSI-ATA command Translation (SAT), and only some hdparm options can be used on them.
+
+### SYBEX-CH05-RQ10  [multiple_choice]
+Q: Which of the following sdparm command options will show all of the common mode parameters for a designated device? (Choose the best answer.)
+A: --all
+B: --command show
+C: --hex
+D: --page
+E: None of the above
+X: If no option is included along with the sdparm command, it will show all of the common mode parameters for a designated device. Therefore, option E is correct. Option A will show all of the recognized file information for the device type, option C will display the device’s VPD pages in hex, and option D will display the hex code associated with each of those VPD pages. Therefore, those options are all incorrect. Option B is a correct option, but the correct option parameters include stop, sync, start, and load but not show. Thus, option B is also incorrect.

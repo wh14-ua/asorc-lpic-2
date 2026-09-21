@@ -1,0 +1,55 @@
+[
+{"id":"SYBEX-CH10-RQ11",
+ "q":"El servicio NFS que gestiona las peticiones de montaje de los clientes NFS en el servidor NFS es ¿cuál de los siguientes? (Elija la mejor respuesta.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"La opción E, mountd, es correcta porque ese demonio gestiona las peticiones de montaje que los clientes NFS envían al servidor NFS. La opción A, portmapper, y la opción C, rpcbind, son el mismo demonio (solo cambia el nombre), pero no son la respuesta correcta, porque ese demonio registra los servicios RPC en los distintos puertos RPC, entre otras cosas. La opción B, rpc.lockd, es incorrecta porque es el servicio del kernel que proporciona el bloqueo de archivos NFS. El demonio statd, opción D, es una elección errónea, porque trabaja junto con el servicio del kernel lockd para proporcionar el bloqueo de archivos del protocolo NLM."},
+
+{"id":"SYBEX-CH10-RQ12",
+ "q":"¿Dónde suelen encontrarse los archivos de configuración de exportación de NFS? (Elija todas las que correspondan.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"La opción A es correcta, porque el archivo de configuración principal de NFS es /etc/exports. La opción C también es correcta, porque el directorio /etc/exports.d/ puede contener archivos de configuración de exportación adicionales con la extensión .exports. La opción B es un nombre de directorio inventado, así que es una elección incorrecta. El directorio /proc/fs/nfs/ alberga el archivo exports, que contiene las exportaciones actuales y los clientes que las usan, así que la opción D es una elección errónea. Por último, la opción E es incorrecta, porque el directorio /var/lib/nfs/ guarda los archivos xtab, etab y rmtab, que contienen diversa información de las exportaciones NFS."},
+
+{"id":"SYBEX-CH10-RQ13",
+ "q":"¿Cuáles de las siguientes son ubicaciones típicas de directorios compartidos por NFS? (Elija todas las que correspondan.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"Las opciones D y E son correctas. En las distribuciones actuales, los administradores de sistemas suelen usar esas ubicaciones del sistema de archivos para crear subdirectorios que sirven como exportaciones (recursos compartidos) NFS. Las opciones A y B son erróneas, porque nunca deberían compartirse ni el directorio raíz (/) del servidor NFS ni su directorio /etc/. El directorio /proc/, opción C, también es incorrecto, porque no tiene sentido compartir ese directorio, que alberga información de los procesos."},
+
+{"id":"SYBEX-CH10-RQ14",
+ "q":"¿Cuáles de las siguientes directivas de /etc/exports serían importantes al crear el registro de configuración de un recurso compartido de solo lectura? (Elija todas las que correspondan.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"Las opciones A y C son las mejores respuestas. La directiva ro define el recurso compartido como de solo lectura y la directiva async mejora el rendimiento de las exportaciones de solo lectura (ro). La directiva rw define el recurso como de lectura/escritura, así que la opción B es incorrecta. La directiva sync se usa mejor con recursos de lectura/escritura, así que la opción D también es incorrecta. El subtree_check de la opción E habilita la comprobación de permisos en directorios de nivel superior y no está directamente ligado a un recurso de solo lectura."},
+
+{"id":"SYBEX-CH10-RQ15",
+ "q":"¿Cuáles de las siguientes utilidades de NFS mostrarían específicamente información de los recursos compartidos NFS? (Elija todas las que correspondan.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"Las opciones A y D son correctas, porque tanto exportfs como showmount muestran información de los recursos compartidos NFS. La utilidad mount.nfs de la opción B se usa para montar un recurso NFS desde un cliente, así que es una elección errónea. El comando rpcinfo (opción C) muestra información de los servicios RPC y, aunque esa información pueda estar relacionada con recursos NFS, no es información de recursos compartidos NFS. Por tanto, es una elección incorrecta. El comando smbstatus de la opción E se usa para mostrar las conexiones actuales de un servidor Samba y no recursos NFS, así que también es una elección incorrecta."},
+
+{"id":"SYBEX-CH10-RQ16",
+ "q":"Al usar el comando exportfs para mostrar información de los recursos compartidos en un servidor NFS, ¿cuál de los siguientes operandos es el más útil? (Elija la mejor respuesta.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"La opción E es correcta, porque exportfs -v usa el modo detallado de la utilidad y muestra todos los recursos NFS ofrecidos con información detallada sobre ellos. El -a (opción A) es incorrecto, porque se usa para exportar todos los recursos configurados en el archivo /etc/exports. El -o de la opción B también es erróneo, porque se usa para exportar un recurso configurado en la línea de comandos. El operando -r (opción C) vuelve a exportar los recursos configurados, así que es una elección errónea. Por último, el operando -u de la opción D deja de exportar un recurso NFS, así que también es una elección incorrecta."},
+
+{"id":"SYBEX-CH10-RQ17",
+ "q":"¿Cuál de los siguientes es software que puede emplear para implementar un servidor FTP? (Elija todas las que correspondan.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"El demonio pure-ftpd pertenece al paquete de servidor FTP Pure-FTPd, así que la opción B es correcta. El demonio vsftpd es el servidor Very Secure FTP, así que la opción C también es correcta. FileZilla (opción D) es un cliente FTP con interfaz gráfica, así que es una elección incorrecta. Las opciones A y E (ftp y lftp) son clientes FTP de línea de comandos, así que también son elecciones erróneas."},
+
+{"id":"SYBEX-CH10-RQ18",
+ "q":"¿Cuáles de las siguientes afirmaciones sobre el modo pasivo de FTP son ciertas? (Elija todas las que correspondan.)",
+ "o":{"A":"El servidor FTP y el cliente FTP son activos al establecer las conexiones.",
+      "B":"Solo el servidor FTP es activo al establecer las conexiones.",
+      "C":"Solo el cliente FTP es activo al establecer las conexiones.",
+      "D":"Se establecen una conexión de datos y una conexión de comandos.",
+      "E":"El servidor FTP usa los puertos 20 y 21 en las conexiones establecidas."},
+ "e":"En una conexión FTP pasiva, solo el cliente FTP es activo al establecer las conexiones, así que la opción C es una elección correcta y las opciones A y B son erróneas. Tanto en modo activo como en pasivo se establecen una conexión de datos y una de comandos, así que la opción D es correcta. La opción E es errónea, porque solo en modo activo usa el servidor FTP los puertos 20 y 21. En modo pasivo, el servidor FTP usa el puerto 20 como puerto de datos, pero un puerto no privilegiado aleatorio como puerto de comandos."},
+
+{"id":"SYBEX-CH10-RQ19",
+ "q":"¿Qué nombres de usuario se usan normalmente en el servidor FTP para gestionar las conexiones anónimas? (Elija todas las que correspondan.)",
+ "o":{"A":"=","B":"=","C":"Nombres de usuario individuales","D":"=","E":"="},
+ "e":"La opción A es correcta, porque a menudo el nombre de usuario que se acepta al conectar un cliente FTP es anonymous. La opción E también es correcta, porque el usuario y grupo para las conexiones FTP habituales es ftp y, en vsftpd, se establece con la directiva ftp_username. La opción B es incorrecta, porque es un demonio de servidor FTP. Los nombres de usuario individuales no se usan normalmente para conexiones FTP anónimas, así que la opción C es errónea. La opción D también es incorrecta, porque es un nombre de usuario inventado."},
+
+{"id":"SYBEX-CH10-RQ20",
+ "q":"¿Cuáles de las siguientes directivas se usan en distintos demonios de servidor FTP para permitir subidas anónimas? (Elija todas las que correspondan.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"Las opciones B, D y E son correctas, porque esas tres directivas son las que necesita vsftpd para que los usuarios anónimos puedan subir archivos. La opción C también es correcta, porque esa directiva es la que necesita pure-ftpd para que los usuarios anónimos puedan subir archivos. La opción A es una elección errónea, porque es una directiva inventada."}
+]

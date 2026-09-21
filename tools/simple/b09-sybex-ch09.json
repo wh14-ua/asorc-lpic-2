@@ -1,0 +1,144 @@
+{
+"SYBEX-CH09-RQ01": {
+  "idea": ["El que define pregunta y respuesta es HTTP."],
+  "otras": {"A": "HTML es el formato del documento.",
+            "B": "SSL cifra.",
+            "D": "TLS también cifra."},
+  "memorizar": "HTTP transporta; HTML da forma."
+},
+"SYBEX-CH09-RQ02": {
+  "idea": ["El formato de la página lo define HTML."],
+  "otras": {"B": "SSL cifra.",
+            "C": "HTTP transporta el documento.",
+            "D": "TLS también cifra."},
+  "memorizar": "HTML es el contenido; HTTP, el envío."
+},
+"SYBEX-CH09-RQ03": {
+  "idea": ["No encontrado es 404."],
+  "analogia": "Los 400 son culpa del cliente y los 500, del servidor.",
+  "otras": {"A": "200 significa que fue bien.",
+            "B": "403 es que existe pero no tienes permiso.",
+            "C": "500 es un problema del servidor."},
+  "memorizar": "404 no existe; 403 existe pero no entras."
+},
+"SYBEX-CH09-RQ04": {
+  "idea": ["Parar Apache sin cortar conexiones: apache2ctl."],
+  "otras": {"A": "systemctl para el proceso, pero no de forma ordenada.",
+            "C": "httpd es el servidor en sí.",
+            "D": "apache2 también es el servidor."},
+  "memorizar": "apache2ctl controla; httpd y apache2 sirven."
+},
+"SYBEX-CH09-RQ05": {
+  "idea": ["Comprobar la configuración antes de arrancar: apache2ctl."],
+  "otras": {"A": "systemctl arranca y para, pero no revisa archivos.",
+            "C": "httpd es el servidor en sí.",
+            "D": "apache2 también."},
+  "memorizar": "apache2ctl es la navaja de Apache."
+},
+"SYBEX-CH09-RQ06": {
+  "idea": ["La carpeta que se sirve a los clientes es DocumentRoot."],
+  "otras": {"B": "ServerRoot es dónde está la configuración del servidor.",
+            "C": "Listen son las IP y puertos de escucha.",
+            "D": "DirectoryIndex es qué archivo servir si piden una carpeta."},
+  "memorizar": "DocumentRoot = lo que se ve desde fuera."
+},
+"SYBEX-CH09-RQ07": {
+  "idea": ["Para aplicar reglas a una carpeta: <Directory>."],
+  "otras": {"A": "<VirtualHost> agrupa las reglas de un sitio virtual.",
+            "B": "<IfDefined> depende de que exista una variable de entorno.",
+            "D": "<IfModule> depende de que haya un módulo cargado."},
+  "memorizar": "el nombre del bloque dice a qué se aplica."
+},
+"SYBEX-CH09-RQ08": {
+  "idea": ["Qué se escribe en el registro lo decide LogFormat."],
+  "otras": {"A": "ErrorLog dice dónde está el registro de errores.",
+            "C": "ErrorDocument define los mensajes de error al cliente.",
+            "D": "DocumentRoot es la carpeta que se sirve."},
+  "memorizar": "LogFormat = qué se apunta; ErrorLog = dónde."
+},
+"SYBEX-CH09-RQ09": {
+  "idea": ["Lo que pide cada cliente queda en access.log."],
+  "otras": {"A": "error.log solo guarda errores.",
+            "B": "apache2.conf es configuración.",
+            "D": "httpd.conf también."},
+  "memorizar": "access = accesos; error = fallos."
+},
+"SYBEX-CH09-RQ10": {
+  "idea": ["La carpeta web de cada usuario la define UserDir.",
+           "Es el nombre de la carpeta que crean dentro de su directorio personal."],
+  "otras": {"A": "AuthUserFile es el archivo de autenticación.",
+            "C": "DocumentRoot es la carpeta del servidor.",
+            "D": "LoadModule carga módulos."},
+  "memorizar": "UserDir = la web de cada usuario."
+},
+"SYBEX-CH09-RQ11": {
+  "idea": ["ServerName es el dominio de esa web."],
+  "otras": {"A": "DocumentRoot es una carpeta.",
+            "B": "NameVirtualHost es la dirección IP del servidor físico.",
+            "C": "<VirtualHost> agrupa todas las directivas del sitio."},
+  "memorizar": "dominio → ServerName."
+},
+"SYBEX-CH09-RQ12": {
+  "idea": ["Las direcciones en las que escuchar las marca Listen."],
+  "otras": {"B": "<VirtualHost> agrupa directivas, no define direcciones.",
+            "C": "NameVirtualHost es para el alojamiento por nombre.",
+            "D": "DocumentRoot es una carpeta."},
+  "memorizar": "Listen = dónde escucha el servidor."
+},
+"SYBEX-CH09-RQ13": {
+  "idea": ["El archivo de usuarios y contraseñas se crea con htpasswd."],
+  "otras": {"A": "httpd es el servidor.",
+            "C": "apache2 también.",
+            "D": "mod_auth usa ese archivo, pero no lo crea."},
+  "memorizar": "htpasswd crea; mod_auth consulta."
+},
+"SYBEX-CH09-RQ14": {
+  "idea": ["Dónde está ese archivo lo dice AuthUserFile."],
+  "otras": {"A": "AuthType es el tipo de autenticación.",
+            "B": "AuthName es el texto que se pide al cliente.",
+            "D": "Order restringe por red, no por usuario."},
+  "memorizar": "AuthUserFile apunta al archivo de contraseñas."
+},
+"SYBEX-CH09-RQ15": {
+  "idea": ["Sacar el código fuera, a un intérprete externo, es CGI."],
+  "otras": {"B": "mod_perl interpreta dentro del propio servidor.",
+            "C": "mod_auth es de autenticación.",
+            "D": "mod_php también interpreta dentro."},
+  "memorizar": "CGI sale fuera; los mod_ se quedan dentro."
+},
+"SYBEX-CH09-RQ16": {
+  "idea": ["Mandar una extensión a un proceso concreto es AddHandler."],
+  "otras": {"A": "LoadModule instala el módulo, pero no reparte archivos.",
+            "C": "DocumentRoot es la carpeta que se sirve.",
+            "D": "DirectoryIndex es el archivo por defecto de una carpeta."},
+  "memorizar": "AddHandler = esta extensión, a este proceso."
+},
+"SYBEX-CH09-RQ17": {
+  "idea": ["El certificado se indica con SSLCertificateFile."],
+  "otras": {"A": "DirectoryIndex es el archivo por defecto de una carpeta.",
+            "B": "SSLCertificateKeyFile es la clave, no el certificado.",
+            "C": "SSLEngine decide cuándo se aceptan conexiones SSL."},
+  "memorizar": "CertificateFile el certificado; KeyFile la clave."
+},
+"SYBEX-CH09-RQ18": {
+  "idea": ["Un proxy web guarda en caché lo que piden los clientes.",
+           "Y también puede limitar a qué sitios llegan."],
+  "otras": {"B": "repartir entre varios servidores es un proxy inverso.",
+            "D": "lo que sirve el servidor lo limita DocumentRoot."},
+  "memorizar": "proxy web mira hacia fuera; el inverso, hacia dentro."
+},
+"SYBEX-CH09-RQ19": {
+  "idea": ["En Squid la autenticación se ajusta con auth_param."],
+  "otras": {"A": "mod_auth es de Apache.",
+            "C": "acl define grupos de acceso.",
+            "D": "http_access define las reglas de acceso."},
+  "memorizar": "auth_param autentica; acl y http_access filtran."
+},
+"SYBEX-CH09-RQ20": {
+  "idea": ["Lo que vale para todo el servidor va en la sección server."],
+  "otras": {"A": "location aplica a una carpeta concreta.",
+            "C": "root es dónde están los archivos.",
+            "D": "listen son las IP y puertos de escucha."},
+  "memorizar": "server manda en todo; location solo en su ruta."
+}
+}

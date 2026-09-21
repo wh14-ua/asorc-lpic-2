@@ -1,0 +1,89 @@
+### SYBEX-CH08-RQ01  [multiple_choice]
+Q: The .edu domain is considered which domain type? (Choose the best answer.)
+A: Root domain
+B: TLD
+C: First-level domain
+D: ICANN
+E: Second-level domain
+X: Option B is correct, because the .edu domain is a Top-Level Domain (TLD), like .gov or .us. The root domain, option A, can be represented by a single dot (.), and on the DNS database tree structure it is a level below the TLDs. Therefore, option A is incorrect. A first-level domain is a TLD subdomain, so option C is wrong. ICANN, option D, is incorrect, because ICANN is the organization responsible for selecting TLD managers. Option E is also wrong, because a second-level domain would be two levels above a TLD on the DNS database tree structure.
+
+### SYBEX-CH08-RQ02  [multiple_response]
+Q: Domain Name Space is broken into different zones. Which of the following could be one of those zones? (Choose all that apply.)
+A: The hint zone
+B: A first-level domain and all of its subdomains
+C: A first-level domain and a portion of its subdomains
+D: A root server
+E: The root zone
+X: A root server is a server that helps to manage the root zone, so option D is wrong. Options B and C are correct, because a zone can be either a first-level domain and all of its subdomains or a first-level domain and a portion of its subdomains. A zone can be the root zone, which is a special zone managed by root servers, and it encompasses the root domain, so option E is correct. Option A is also correct, because the hint zone is another name for the root zone.
+
+### SYBEX-CH08-RQ03  [multiple_response]
+Q: Which of the following server combinations could be the minimum two name servers required for a zone? (Choose all that apply.)
+A: Primary server and secondary server
+B: Secondary server and forwarding server
+C: Primary server and forwarding server
+D: Secondary server and caching server
+E: Primary server and caching server
+X: Options A, C, and E all fit the requirement of two servers per zone, because one of the servers must be a primary (master) server and one of the following: secondary server, caching server, or forwarding server. Options B and D are real server types but are missing the primary server from their configuration, so these options are incorrect.
+
+### SYBEX-CH08-RQ04  [multiple_choice]
+Q: A program or library routine that creates a DNS query, checks its own cache for the answer, and if it doesn’t find it there, sends the query to another name server, is called what? (Choose the best answer.)
+A: Name server
+B: Cache
+C: Name resolution
+D: Resolver
+E: Zone
+X: Option D is the correct choice, because a resolver is a program or library routine that creates a DNS query, checks its own cache for the answer, and if it doesn’t find it there, sends the query to another name server. Option A is incorrect, because a name server is not a program or library but a server that either has the name resolution data to answer a DNS query or contains a resolver to get the answer. Cache is a location typically checked for a DNS query’s answer, and it is not a program or library routine, so option B is wrong. Option C is incorrect, because name resolution is the process of translating an FQDN into an IP address (DNS query and answer). Finally, option E is also incorrect, because a zone is a Domain Name Space portion and not a program or library routine.
+
+### SYBEX-CH08-RQ05  [multiple_response]
+Q: Which of the following software provides either full or partial DNS protocol implementation? (Choose all that apply.)
+A: BIND
+B: dnsmasq
+C: pdnsd
+D: Bundy
+E: PowerDNS
+X: Options A, B, C, D, and E are all considered software that provides either full or partial DNS protocol implementation. Option D is the tricky one, because it was originally named BIND 10, and it has been renamed Bundy, which is maintained by the Bundy-Project instead of ICANN.
+
+### SYBEX-CH08-RQ06  [multiple_choice]
+Q: The BIND daemon is which program in the /usr/sbin/ directory? (Choose the best answer.)
+A: bind9
+B: bind
+C: named
+D: named.conf
+E: bindutils
+X: Option C is correct, because /usr/sbin/named is the BIND daemon. Option A is incorrect, but bind9 is the name of the BIND package on Ubuntu distributions. Option B is wrong, but bind is the name of the BIND package on CentOS distributions. The named.conf file is a BIND configuration file, not the BIND daemon, so option D is wrong. Option E is incorrect, because bindutils is the name of the BIND utilities package on CentOS distributions, not the BIND daemon.
+
+### SYBEX-CH08-RQ07  [multiple_response]
+Q: Which of the following are legitimate groupings (clauses) in the BIND’s primary configuration file, named.conf? (Choose all that apply.)
+A: options
+B: logging
+C: include
+D: named-checkconf
+E: comments
+X: Options A, B, C, and E are all legitimate groupings (clauses) in the BIND’s primary configuration file, named.conf. Option D is a utility, which will allow you to check the named.conf file for proper syntax, and it is the only incorrect choice.
+
+### SYBEX-CH08-RQ08  [multiple_response]
+Q: When setting up a local DNS caching-only server, which directives should be set and or modified in the named.conf file? (Choose all that apply.)
+A: acl
+B: allow-query
+C: logging
+D: listen-on
+E: recursion yes
+X: Options A, B, D, and E all need to be set and/or modified when setting up a local DNS caching-only server. Option A’s acl directive lets you create an access control list of hosts allowed to use this caching-only server. Option B’s allow-query can use the defined acl to allow the designated host to query this caching-only server. Option D’s listen-on directive sets the port to listen on as well as the acl to listen to for DNS queries coming from the allowed hosts. Option E’s recursion yes is modified, if needed, so that allowed hosts may use this caching-only server. Option C is incorrect, because you don’t have to have BIND logging set in order to use a DNS caching-only server (though it would be a good idea to set this directive as well).
+
+### SYBEX-CH08-RQ09  [multiple_response]
+Q: Ignoring distribution differences and assuming you have the appropriate privileges, which of the following commands will stop the BIND service? (Choose all that apply.)
+A: rndc flush
+B: service bind9 stop
+C: kill -s SIGTERM BIND_PID
+D: rndc stop
+E: systemctl stop named
+X: Options B, C, D, and E all are methods for stopping the BIND service. Of course, the methods that will work for your particular server depend on what distribution is on the server. Option A is incorrect, because rndc flush flushes all of the server’s caches but does not stop the BIND service.
+
+### SYBEX-CH08-RQ10  [multiple_choice]
+Q: A logging category directive determines what? (Choose the best answer.)
+A: Where DNS messages are to be logged
+B: The DNS message types to be logged
+C: How to restart BIND to load logging
+D: How DNS messages are filtered
+E: The DNS channel log sizes
+X: Option B is correct, because a category directive defines DNS message types to be logged. The channel directive defines where DNS messages are to be logged (option A) and how DNS messages are filtered (option D), so options A and D are incorrect. Option C’s “How to restart BIND to load logging” has nothing to do with the category directive, so it is a wrong answer. Also, DNS channel log sizes are not set by the category directive, so option E is also incorrect.

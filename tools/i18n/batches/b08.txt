@@ -1,0 +1,79 @@
+### SYBEX-CH03-RQ01  [multiple_choice]
+Q: Which part of a Linux system manages system memory?
+A: GNU utilities
+B: Kernel
+C: Graphical desktop
+D: Application software
+X: The kernel manages the system memory in Linux, so answer B is correct. The GNU utilities provide programs that mimic common Unix programs for file and data manipulation, but they don’t manage the system memory, so answer A is incorrect. The graphical desktop manages the graphical environment on the display but not memory, so answer C is incorrect. Application software doesn’t manage the system memory, so answer D is incorrect.
+
+### SYBEX-CH03-RQ02  [multiple_choice]
+Q: What is the area on the hard disk called that is used as memory storage?
+A: Swap space
+B: Virtual memory
+C: Filesystem
+D: Physical memory
+X: Swap space is the area on the hard drive that’s used to store memory pages in the virtual memory, so answer A is correct. Physical memory is the memory locations stored in the actual RAM on the system, so answer D is incorrect. Virtual memory is the combination of both RAM memory and hard disk memory, so answer B is incorrect. The filesystem stores data on the disk, not memory locations, so answer C is incorrect.
+
+### SYBEX-CH03-RQ03  [multiple_choice]
+Q: What method does Linux use to load device drivers into the kernel?
+A: DLL files
+B: Virtual memory
+C: Modules
+D: Bootloader
+X: Linux uses modules to load device drivers into the kernel, so answer C is correct. DLL files are used to load device drivers in the Microsoft Windows world, but they aren’t used in Linux, so answer A is incorrect. Virtual memory expands the physical memory used by the Linux system by utilizing a swap space on the hard drive, but it doesn’t help with loading device drivers, so answer B is incorrect. The bootloader loads the kernel software into memory, but it doesn’t load device drivers into the kernel, so answer D is incorrect.
+
+### SYBEX-CH03-RQ04  [multiple_choice]
+Q: Which kernel file type is used to boot the Linux system?
+A: Binary file
+B: Modules
+C: Patch file
+D: Source code
+X: Compiling the kernel source code produces a binary file that’s loaded into memory, so answer A is correct. The kernel source code files can’t be loaded into memory, so answer D is incorrect. Likewise, the source code patch files can’t be loaded into memory, so answer C is also incorrect. Modules are loaded into the kernel after the system boots, so they aren’t used directly to boot the Linux system, so answer B is incorrect.
+
+### SYBEX-CH03-RQ05  [multiple_choice]
+Q: What type of release can you use to upgrade an existing kernel to a newer version?
+A: Patch release
+B: Modules
+C: Binary files
+D: Development release
+X: The Linux kernel developers release patches to upgrade source code easily from one version to the next version, so answer A is correct. Modules are used to load device driver software into the kernel, so answer B is incorrect. Binary files are used to load the kernel into memory to run, so answer C is incorrect. Development releases are full source code software releases and are not used to upgrade an existing kernel, so answer D is incorrect.
+
+### SYBEX-CH03-RQ06  [multiple_choice]
+Q: Which make utility target uses text-based questions to configure the kernel?
+A: xconfig
+B: mrproper
+C: clean
+D: config
+X: The config target produces questions on the Linux console that you must answer to determine the configuration settings for the kernel, thus answer D is correct. The xconfig target produces a graphical menu system, which isn’t text-based, so answer A is incorrect. The mrproper and clean targets are used to remove previous configuration settings, not create new configuration settings, so answers B and C are incorrect.
+
+### SYBEX-CH03-RQ07  [multiple_choice]
+Q: Which make utility target uses a graphical interface to configure the kernel?
+A: config
+B: mrproper
+C: gconfig
+D: clean
+X: The gconfig target uses the GNOME desktop library to produce a graphical menu to determine the configuration settings, so answer C is correct. The config target uses text questions to determine the configuration settings, so answer A is incorrect. The mrproper and clean targets remove previous configuration settings, they do not create new settings, so answers B and D are incorrect.
+
+### SYBEX-CH03-RQ08  [multiple_choice]
+Q: Which make utility target should you use to remove any old object files from a previous compile?
+A: gconfig
+B: mrproper
+C: bzImage
+D: oldconfig
+X: The mrproper target removes all old configuration settings and object files from the source code folders, allowing you to start with a new configuration, thus answer B is correct. The gconfig and bzImage targets are used to create a new configuration file but don’t remove any previous object files, so answers A and C are incorrect. The oldconfig target uses the old configuration file, but it doesn’t remove any old object files, so answer D is incorrect.
+
+### SYBEX-CH03-RQ09  [multiple_choice]
+Q: Which make utility target is commonly used to generate a compressed kernel binary file?
+A: bzImage
+B: kernel
+C: config
+D: clean
+X: The zImage and bzImage targets create a compressed kernel binary file from the source code, so answer A is correct. The kernel target is invalid, and it will produce an error message, so answer B is incorrect. The config target creates a configuration file, but it doesn’t compile the kernel binary file, so answer C is incorrect. The clean target removes any previous configuration settings but doesn’t compile the kernel binary file, so answer D is incorrect.
+
+### SYBEX-CH03-RQ10  [multiple_choice]
+Q: Which program should you use to create an initial RAM disk for a Debian-based system?
+A: mkinitrd
+B: make bzImage
+C: mkinitramfs
+D: make initrd
+X: Debian-based systems use the mkinitramfs program to create the initial RAM disk used at boot time, so answer C is correct. The mkinitrd program is used by Red Hat–based systems, but it is not available on Debian-based systems, so answer A is incorrect. There is no make target to create an initial RAM disk, so answers B and D are incorrect.

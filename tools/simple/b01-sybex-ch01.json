@@ -1,0 +1,169 @@
+{
+"SYBEX-CH01-RQ01": {
+  "idea": ["El firmware solo sabe arrancar el cargador de arranque.",
+           "Todo lo demás llega después, cuando ya hay un sistema cargado."],
+  "otras": {"B": "init cambia el nivel de ejecución de un Linux ya en marcha.",
+            "C": "Windows arranca después de su propio cargador de arranque.",
+            "D": "mount acopla particiones, y solo existe con Linux ya arrancado.",
+            "E": "telinit también es de después del arranque."},
+  "memorizar": "firmware → cargador de arranque → todo lo demás."
+},
+"SYBEX-CH01-RQ02": {
+  "idea": ["El firmware mira el primer sector del primer disco: el Master Boot Record."],
+  "otras": {"A": "/boot/grub guarda la configuración de GRUB y la imagen del kernel, no el cargador.",
+            "C": "/var/log son archivos de registro.",
+            "D": "una partición de arranque la busca el cargador con chainloader, no el firmware.",
+            "E": "/etc son archivos de configuración."},
+  "memorizar": "el firmware solo mira el MBR."
+},
+"SYBEX-CH01-RQ03": {
+  "idea": ["Los mensajes de arranque se ven con dmesg.",
+           "Los guarda el búfer circular del kernel."],
+  "otras": {"A": "fsck repara particiones dañadas.",
+            "B": "init arranca programas desde el kernel.",
+            "C": "mount acopla particiones al directorio virtual.",
+            "E": "chkconfig muestra los niveles de ejecución de un programa."},
+  "memorizar": "mensajes de arranque → dmesg."
+},
+"SYBEX-CH01-RQ04": {
+  "idea": ["Los registros de arranque van a /var/log."],
+  "otras": {"A": "/etc son archivos de configuración.",
+            "B": "/var/messages lo usan algunos Unix, pero Linux no adoptó ese estándar.",
+            "D": "/boot tiene la configuración de GRUB y las imágenes de arranque.",
+            "E": "/proc son datos del kernel en vivo."},
+  "memorizar": "registros → /var/log."
+},
+"SYBEX-CH01-RQ05": {
+  "idea": ["La BIOS busca el cargador donde haga falta.",
+           "Disco interno primero y, si no lo encuentra, disco externo, DVD o memoria USB.",
+           "Con arranque PXE, incluso en un servidor de red."],
+  "memorizar": "la BIOS arranca de casi cualquier sitio, red incluida."
+},
+"SYBEX-CH01-RQ06": {
+  "idea": ["El MBR está en un solo sitio: primer sector del primer disco."],
+  "otras": {"B": "una partición de arranque puede tener un cargador, pero no es el MBR.",
+            "C": "el último sector no.",
+            "D": "cualquier sector tampoco.",
+            "E": "el segundo disco tampoco."},
+  "memorizar": "MBR = primer sector del primer disco."
+},
+"SYBEX-CH01-RQ07": {
+  "idea": ["La partición del sistema EFI va en /boot/efi.",
+           "Ahí es donde el firmware UEFI busca siempre los cargadores."],
+  "otras": {"A": "/boot a secas no: la ESP cuelga un nivel más abajo.",
+            "B": "/etc son archivos de configuración.",
+            "C": "/var son archivos variables, como los de registro.",
+            "E": "/boot/grub guarda configuración e imágenes de GRUB, no los cargadores."},
+  "memorizar": "ESP → /boot/efi."
+},
+"SYBEX-CH01-RQ08": {
+  "idea": ["Los cargadores UEFI se reconocen por la extensión .efi.",
+           "UEFI no la exige, pero en Linux es la costumbre."],
+  "otras": {"A": ".cfg es de configuración de GRUB2.",
+            "B": ".uefi no se usa en Linux.",
+            "C": ".lst es de configuración de GRUB Legacy.",
+            "D": ".conf también es de configuración de GRUB Legacy."},
+  "memorizar": "cargador UEFI → .efi."
+},
+"SYBEX-CH01-RQ09": {
+  "idea": ["El primero fue LILO, el Linux Loader.",
+           "GRUB Legacy vino después y GRUB2 es una mejora de GRUB Legacy."],
+  "otras": {"A": "GRUB Legacy fue el segundo, pese al nombre.",
+            "C": "GRUB2 es posterior a GRUB Legacy.",
+            "D": "SYSLINUX llegó más tarde, para particiones FAT y memorias USB.",
+            "E": "ISOLINUX también es posterior: arranca desde CD o DVD."},
+  "memorizar": "orden: LILO, GRUB Legacy, GRUB2."
+},
+"SYBEX-CH01-RQ10": {
+  "idea": ["La configuración de GRUB Legacy está en /boot/grub."],
+  "otras": {"B": "/boot/efi es para los cargadores UEFI.",
+            "C": "/etc tiene muchas configuraciones, pero no esta.",
+            "D": "/var son archivos variables, como los de registro.",
+            "E": "/proc son datos del kernel en vivo."},
+  "memorizar": "GRUB Legacy → /boot/grub."
+},
+"SYBEX-CH01-RQ11": {
+  "idea": ["GRUB2 reparte su configuración en dos sitios: /boot/grub y /etc/grub.d."],
+  "otras": {"A": "/proc son datos del kernel en vivo.",
+            "D": "/boot/efi guarda los archivos del cargador UEFI.",
+            "E": "/var son archivos variables, como los de registro."},
+  "memorizar": "GRUB2: /boot/grub y /etc/grub.d."
+},
+"SYBEX-CH01-RQ12": {
+  "idea": ["grub-mkconfig junta /etc/default/grub y lo de /etc/grub.d en un solo grub.cfg."],
+  "otras": {"A": "chkconfig consulta y cambia niveles de ejecución de programas.",
+            "B": "update-rc.d hace eso mismo en sistemas Debian.",
+            "D": "grub-install instala el cargador en el MBR o en una partición.",
+            "E": "init arranca programas desde los scripts de init."},
+  "memorizar": "generar grub.cfg → grub-mkconfig."
+},
+"SYBEX-CH01-RQ13": {
+  "idea": ["El kernel arranca init, e init arranca todo lo demás.",
+           "Lo hace con los scripts de init, según el nivel de ejecución predeterminado."],
+  "otras": {"A": "GRUB2 lo lanza el firmware, no el kernel.",
+            "B": "systemctl controla programas en systemd, pero no lo arranca el kernel.",
+            "C": "telinit cambia el nivel de ejecución actual.",
+            "E": "la BIOS es el firmware que empieza todo; el kernel no la arranca."},
+  "memorizar": "kernel → init → los demás programas."
+},
+"SYBEX-CH01-RQ14": {
+  "idea": ["El nivel por defecto de SysV está en /etc/inittab.",
+           "Lo marca el ajuste initdefault."],
+  "otras": {"A": "/etc/init.d guarda los scripts de arranque.",
+            "C": "/etc/grub.d es configuración de GRUB2.",
+            "D": "/etc/rc.d también son scripts de arranque.",
+            "E": "/boot/grub.cfg es configuración de GRUB2."},
+  "memorizar": "nivel por defecto → initdefault en /etc/inittab."
+},
+"SYBEX-CH01-RQ15": {
+  "idea": ["En Debian el nivel por defecto es el 2.",
+           "Ahí arranca todo lo necesario para trabajar en multiusuario."],
+  "otras": {"A": "el 0 apaga el sistema.",
+            "B": "el 1 es monousuario: diagnóstico y mantenimiento.",
+            "C": "el 6 reinicia.",
+            "D": "el 5 es el gráfico por defecto en Red Hat, no en Debian."},
+  "memorizar": "Debian arranca en 2; Red Hat gráfico, en 5."
+},
+"SYBEX-CH01-RQ16": {
+  "idea": ["Para cambiar el nivel de ejecución del sistema: init o telinit."],
+  "otras": {"B": "chkconfig cambia los niveles de un programa, no los del sistema.",
+            "C": "update-rc.d hace eso mismo en sistemas Debian.",
+            "E": "dmesg solo enseña mensajes de arranque."},
+  "memorizar": "nivel del sistema: init o telinit."
+},
+"SYBEX-CH01-RQ17": {
+  "idea": ["chkconfig enseña en qué niveles de ejecución arranca un programa.",
+           "Muestra los siete de golpe."],
+  "otras": {"B": "init cambia el nivel de todo el sistema.",
+            "C": "dmesg enseña mensajes de arranque.",
+            "D": "update-rc.d cambia los niveles de un programa, pero no los muestra.",
+            "E": "telinit también cambia el nivel de todo el sistema."},
+  "memorizar": "ver los niveles de un programa → chkconfig."
+},
+"SYBEX-CH01-RQ18": {
+  "idea": ["En Debian los niveles de un programa se tocan con update-rc.d."],
+  "otras": {"A": "chkconfig es el equivalente en Red Hat.",
+            "C": "init cambia el nivel de todo el sistema.",
+            "D": "telinit también.",
+            "E": "dmesg solo muestra mensajes de arranque."},
+  "memorizar": "Debian → update-rc.d; Red Hat → chkconfig."
+},
+"SYBEX-CH01-RQ19": {
+  "idea": ["fsck comprueba y repara el sistema de archivos de una partición.",
+           "Es lo que se usa cuando una partición no monta por errores."],
+  "otras": {"A": "mount acopla; con errores lo normal es que se niegue a montar.",
+            "B": "umount retira una partición ya montada.",
+            "D": "init cambia el nivel de ejecución.",
+            "E": "telinit también."},
+  "memorizar": "no monta por errores → fsck."
+},
+"SYBEX-CH01-RQ20": {
+  "idea": ["mount acopla una partición en un punto del directorio virtual.",
+           "Desde ese momento, sus archivos y carpetas aparecen en esa ruta."],
+  "otras": {"B": "umount hace lo contrario: la retira.",
+            "C": "fsck la repara, no la monta.",
+            "D": "dmesg puede decirte dónde se acopló un disco, pero no acopla.",
+            "E": "init controla el nivel de ejecución."},
+  "memorizar": "montar = enganchar la partición a una carpeta."
+}
+}

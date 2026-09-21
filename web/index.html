@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ASORC · LPIC-2</title>
+<meta name="color-scheme" content="light">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23FBF5EA'/%3E%3Cpath d='M16 5l3.2 6.8 7.3.9-5.4 5 1.4 7.3L16 21.5 9.5 25l1.4-7.3-5.4-5 7.3-.9z' fill='%23BE4B2B'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" media="print" onload="this.media='all'"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+
+<!-- ===================== INICIO ===================== -->
+<main id="home" class="screen">
+  <header class="home-top">
+    <div class="brand">
+      <span class="brand-mark">◆</span>
+      <span class="brand-name">ASORC</span>
+      <span class="brand-sub">LPIC-2</span>
+    </div>
+    <div class="top-acts">
+      <button type="button" id="btn-cloud" class="icon-btn">
+        <span>☁</span><span class="icon-btn-label" id="cloud-label">sincronizar</span>
+      </button>
+      <button type="button" id="btn-sound" class="icon-btn" aria-pressed="true">
+        <span id="sound-icon">♪</span><span class="icon-btn-label">sonido</span>
+      </button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <h1 class="hero-title">LPIC-2</h1>
+    <p class="hero-count"><b id="hero-seen">0</b> / <span id="hero-total">380</span> preguntas vistas</p>
+    <div class="bar hero-bar"><span id="hero-fill"></span></div>
+    <p class="hero-pct"><b id="hero-pct">0%</b> completado</p>
+
+    <div class="hero-chips">
+      <span class="kchip k-ok">✓ <b id="c-ok">0</b> acertadas</span>
+      <span class="kchip k-bad">✗ <b id="c-bad">0</b> falladas</span>
+      <span class="kchip k-mark">★ <b id="c-mark">0</b> repasar</span>
+      <span class="kchip k-new">○ <b id="c-new">0</b> no vistas</span>
+    </div>
+    <p class="hero-acc">Acierto <b id="hero-acc">—</b> sobre <b id="hero-tries">0</b> intentos
+      <span class="hero-note">· completado cuenta preguntas distintas, no repeticiones</span></p>
+  </section>
+
+  <section class="resume" id="resume" hidden>
+    <div class="resume-txt">
+      <p class="resume-kicker">CONTINUAR SESIÓN</p>
+      <p class="resume-count" id="resume-count">0 / 0</p>
+      <p class="resume-label" id="resume-label"></p>
+    </div>
+    <div class="resume-acts">
+      <button type="button" id="resume-go" class="cta">CONTINUAR</button>
+      <button type="button" id="resume-drop" class="ghost">DESCARTAR</button>
+    </div>
+  </section>
+
+  <section class="home-block">
+    <h2>Temas</h2>
+    <div id="topic-grid" class="topic-grid"></div>
+  </section>
+
+  <div class="mix-bar" id="mix-bar" hidden>
+    <span id="mix-text"></span>
+    <button type="button" id="mix-go" class="cta cta-sm">MEZCLAR</button>
+    <button type="button" id="mix-clear" class="ghost ghost-sm">QUITAR</button>
+  </div>
+
+  <section class="home-block">
+    <h2>Rondas rápidas</h2>
+    <p class="home-sub" id="home-sub">Cargando…</p>
+    <div id="modes" class="modes"></div>
+  </section>
+
+  <section id="topic-block" class="home-block" hidden>
+    <h2>¿Qué tema?</h2>
+    <div id="topics" class="topics"></div>
+  </section>
+
+  <section class="home-block home-prefs">
+    <div class="pref">
+      <h2>Sesión</h2>
+      <div class="seg" id="music-seg" role="group" aria-label="Etiqueta de sesión">
+        <button type="button" class="seg-btn is-on" data-music="sin">Sin música</button>
+        <button type="button" class="seg-btn" data-music="con">Con música</button>
+      </div>
+    </div>
+    <div class="pref">
+      <h2>Explicación</h2>
+      <div class="seg" id="burst-seg" role="group" aria-label="Modo de explicación">
+        <button type="button" class="seg-btn is-on" data-burst="si">Ráfaga</button>
+        <button type="button" class="seg-btn" data-burst="no">Completa</button>
+      </div>
+    </div>
+
+    <div class="pref">
+      <h2>Progreso</h2>
+      <div class="seg" role="group" aria-label="Copia del progreso">
+        <button type="button" class="seg-btn" id="btn-import">Importar…</button>
+        <button type="button" class="seg-btn" id="btn-export">Exportar</button>
+      </div>
+      <input type="file" id="file-import" accept="application/json,.json" hidden multiple>
+      <p class="pref-note" id="import-note" hidden></p>
+    </div>
+
+    <div class="pref">
+      <h2>Dejar en blanco</h2>
+      <div class="seg" id="blank-seg" role="group" aria-label="Cuándo se puede dejar en blanco">
+        <button type="button" class="seg-btn is-on" data-blank="asorc">Solo ASORC</button>
+        <button type="button" class="seg-btn" data-blank="siempre">Siempre</button>
+      </div>
+    </div>
+
+    <div class="pref">
+      <h2>Preguntas abiertas</h2>
+      <div class="seg" id="open-seg" role="group" aria-label="Incluir preguntas abiertas">
+        <button type="button" class="seg-btn is-on" data-open="no">Fuera</button>
+        <button type="button" class="seg-btn" data-open="si">Incluir</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="cloud-panel" id="cloud-panel" hidden>
+    <p class="cloud-state" id="cloud-state"></p>
+    <div class="cloud-form" id="cloud-form" hidden>
+      <input type="email" id="cloud-email" placeholder="tu@correo.com" autocomplete="email">
+      <button type="button" id="cloud-send" class="cta cta-sm">ENVIAR ENLACE</button>
+    </div>
+    <div class="cloud-acts" id="cloud-acts" hidden>
+      <button type="button" id="cloud-sync" class="cta cta-sm">SINCRONIZAR AHORA</button>
+      <button type="button" id="cloud-out" class="ghost ghost-sm">CERRAR SESIÓN</button>
+    </div>
+    <p class="cloud-note">Tus datos siguen guardándose en este navegador aunque no sincronices.</p>
+  </section>
+
+  <div id="home-error" class="home-error" hidden></div>
+
+  <footer class="home-foot">
+    <p><kbd>A</kbd><kbd>B</kbd><kbd>C</kbd> o <kbd>1</kbd><kbd>2</kbd><kbd>3</kbd> responder ·
+       <kbd>Enter</kbd> siguiente pregunta · <kbd>Space</kbd> pausa la explicación ·
+       <kbd>0</kbd> dejar en blanco · <kbd>T</kbd> inglés · <kbd>M</kbd> repasar ·
+       <kbd>S</kbd> sonido · <kbd>Esc</kbd> salir</p>
+  </footer>
+</main>
+
+<!-- ===================== JUEGO ===================== -->
+<main id="play" class="screen" hidden>
+  <div class="hud">
+    <div class="track"><span id="track-fill"></span></div>
+    <div class="hud-row">
+      <span class="chip chip-combo" id="chip-combo" data-lvl="0">
+        <span class="chip-ico">🔥</span><b id="combo-n">0</b>
+      </span>
+      <span class="chip chip-xp" id="chip-xp">
+        <span class="chip-ico">⚡</span><b id="xp-n">0</b><span class="chip-unit">XP</span>
+      </span>
+      <span class="hud-gap"></span>
+      <span class="chip chip-count"><b id="idx-n">1</b><span class="chip-unit">/ <span id="tot-n">20</span></span></span>
+      <span class="clock" id="clock" data-state="calm">0</span>
+      <button type="button" id="btn-exit" class="exit-btn">← SALIR</button>
+    </div>
+  </div>
+
+  <!-- Feed continuo: cada pregunta se añade debajo y nunca se borra del DOM. -->
+  <div id="feed" class="feed"></div>
+
+  <button type="button" id="to-active" class="to-active" hidden>
+    <span aria-hidden="true">↓</span> VOLVER A PREGUNTA ACTUAL
+  </button>
+</main>
+
+<!-- Molde de una pregunta del feed. Dentro se usa data-el en vez de id:
+     hay muchas tarjetas vivas a la vez y los id tienen que ser únicos. -->
+<template id="card-tpl">
+  <article class="card">
+    <!-- El enunciado se queda pegado bajo el HUD mientras lees esta pregunta:
+         es el contexto, y perderlo es peor que tener que bajar a leer. -->
+    <header class="q-top" data-el="q-top">
+      <div class="q-head">
+        <span class="tag" data-el="q-topic"></span>
+        <span class="tag tag-quiet" data-el="q-kind"></span>
+        <span class="tag tag-en" data-el="q-lang" hidden>EN</span>
+        <span class="tag tag-mark" data-el="q-mark" hidden>★ repasar</span>
+        <span class="tag tag-res" data-el="q-res" hidden></span>
+      </div>
+      <h2 class="q" data-el="q-text"></h2>
+    </header>
+
+    <!-- Solo en tarjetas ya contestadas: el resumen de una ojeada. -->
+    <div class="recap" data-el="recap" hidden></div>
+    <button type="button" class="fold-btn" data-el="fold-btn" data-keep="1"
+            hidden aria-expanded="true">explicación</button>
+
+    <!-- display:contents mientras la pregunta está activa; al completarse pasa
+         a ser una caja de verdad para poder plegarla. -->
+    <div class="fold" data-el="fold">
+      <div data-el="opts" class="opts"></div>
+
+      <div data-el="multi" class="multi" hidden>
+        <p data-el="multi-hint">Varias correctas. Marca todas.</p>
+        <button type="button" data-el="btn-confirm" class="cta cta-sm">CONFIRMAR <kbd>Enter</kbd></button>
+      </div>
+
+      <!-- solo en simulacro (o si lo activas para todo): dejarla en blanco -->
+      <div class="skip" data-el="skip" hidden>
+        <button type="button" data-el="btn-skip" class="ghost ghost-sm">
+          DEJAR EN BLANCO <kbd>0</kbd>
+        </button>
+      </div>
+
+      <!-- por si te has quedado mucho rato: sugiere, no interrumpe -->
+      <p class="stuck" data-el="stuck" hidden></p>
+
+      <!-- fase 2 -->
+      <section data-el="learn" class="learn" hidden>
+        <div class="verdict" data-el="verdict" data-r=""></div>
+        <p class="answer-line" data-el="answer-line" hidden></p>
+
+        <div class="insight" data-el="insight">
+          <p class="insight-eyebrow"><span>💡</span> QUÉ TENÍAS QUE SABER</p>
+          <p class="nutshell" data-el="nutshell"></p>
+
+          <!-- Modo Ráfaga: la explicación como subtítulos -->
+          <div class="burst" data-el="burst" hidden>
+            <div class="burst-bar">
+              <button type="button" class="bctl" data-el="burst-toggle"
+                      aria-label="Pausa" title="Pausa / reanuda (Space)">❚❚</button>
+              <button type="button" class="bctl" data-el="burst-prev"
+                      aria-label="Fragmento anterior" title="Fragmento anterior (←)">←</button>
+              <button type="button" class="bctl" data-el="burst-next"
+                      aria-label="Fragmento siguiente" title="Fragmento siguiente (→)">→</button>
+              <div class="bdots" data-el="burst-dots"></div>
+              <div class="bspeed" data-el="burst-speed" role="group" aria-label="Velocidad">
+                <button type="button" data-sp="0.75">0.75×</button>
+                <button type="button" data-sp="1" class="is-on">1×</button>
+                <button type="button" data-sp="1.25">1.25×</button>
+                <button type="button" data-sp="1.5">1.5×</button>
+              </div>
+            </div>
+            <!-- Ventana de lectura de altura fija: el fragmento actual queda
+                 siempre abajo del todo y el bloque no crece al avanzar.
+                 El historial va ENCIMA porque el botón de continuar está
+                 anclado al pie y, debajo, quedaría tapado. -->
+            <div class="burst-stage">
+              <div class="burst-past" data-el="burst-past"></div>
+              <p class="burst-now" data-el="burst-now" aria-live="polite"></p>
+            </div>
+          </div>
+
+          <!-- Modo completo, y explicación definitiva al quedar contestada -->
+          <p class="insight-more" data-el="insight-more"></p>
+
+          <!-- el modelo mental, cuando ayuda -->
+          <p class="analogy" data-el="analogy" hidden></p>
+
+          <!-- por qué las demás no valían, una línea por opción -->
+          <div class="otras" data-el="otras" hidden></div>
+
+          <!-- la frase que hay que llevarse -->
+          <p class="memo" data-el="memo" hidden></p>
+
+          <details class="full-expl" data-el="full-expl">
+            <summary>Ver explicación original</summary>
+            <p class="full-expl-body" data-el="full-expl-body"></p>
+          </details>
+          <p class="insight-src" data-el="insight-src"></p>
+        </div>
+
+        <div class="selfgrade" data-el="selfgrade" hidden></div>
+
+        <div class="learn-cta" data-el="learn-cta">
+          <button type="button" data-el="btn-next" class="cta cta-lg">SIGUIENTE <kbd class="cta-key">⏎</kbd></button>
+          <button type="button" data-el="btn-mark" class="ghost">★ REPASAR DESPUÉS</button>
+        </div>
+
+        <p data-el="nudge" class="nudge" hidden></p>
+      </section>
+    </div>
+  </article>
+</template>
+
+<!-- ===================== RESULTADO ===================== -->
+<main id="done" class="screen" hidden>
+  <p class="done-eyebrow" id="done-eyebrow">SPRINT COMPLETADO</p>
+
+  <div class="done-score">
+    <span class="done-frac"><b id="done-ok">0</b><i>/</i><span id="done-total">0</span></span>
+    <span class="done-pct" id="done-pct">0%</span>
+  </div>
+
+  <div class="done-chips">
+    <span class="dchip"><span class="dchip-ico">⚡</span><b id="done-xp">0</b> XP</span>
+    <span class="dchip"><span class="dchip-ico">🔥</span>mejor combo <b id="done-combo">0</b></span>
+    <span class="dchip"><span class="dchip-ico">⏱</span><b id="done-sec">0</b> s/pregunta</span>
+  </div>
+
+  <div class="done-deltas" id="done-deltas"></div>
+
+  <div class="done-cta">
+    <button type="button" id="btn-again" class="cta cta-lg">OTRO SPRINT</button>
+    <button type="button" id="btn-fails" class="ghost ghost-lg" hidden></button>
+    <button type="button" id="btn-home" class="ghost">CAMBIAR DE MODO</button>
+  </div>
+
+  <details class="done-more">
+    <summary>Ver detalle</summary>
+    <div class="done-grid">
+      <div class="dtile ok"><b id="d-ok">0</b><span>correctas</span></div>
+      <div class="dtile bad"><b id="d-bad">0</b><span>falladas</span></div>
+      <div class="dtile blank"><b id="d-blank">0</b><span>en blanco</span></div>
+      <div class="dtile"><b id="d-marked">0</b><span>para repasar</span></div>
+      <div class="dtile"><b id="d-read">0</b><span>s leyendo</span></div>
+    </div>
+    <h3>Por tema</h3>
+    <div id="done-topics" class="done-topics"></div>
+    <div id="music-block" hidden>
+      <h3>Música</h3>
+      <div id="music-cards" class="music-cards"></div>
+    </div>
+  </details>
+</main>
+
+<canvas id="fx-canvas" aria-hidden="true"></canvas>
+<div id="fx-toasts" class="toasts" aria-live="polite"></div>
+
+<script src="./config.js" onerror="window.__sinConfig=1"></script>
+<script src="./js/store.js"></script>
+<script src="./js/cloud.js"></script>
+<script src="./js/logic.js"></script>
+<script src="./js/dash.js"></script>
+<script src="./js/game.js"></script>
+<script src="./js/fx.js"></script>
+<script src="./js/burst.js"></script>
+<script src="./js/app.js"></script>
+</body>
+</html>

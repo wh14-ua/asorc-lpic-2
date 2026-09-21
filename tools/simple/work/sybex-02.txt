@@ -1,0 +1,179 @@
+### SYBEX-CH02-RQ01  [multiple_response]  tema: Mantenimiento del sistema
+P: ¿Cuáles de los siguientes comandos permiten enviar un mensaje a cualquier terminal tty que tenga permitido el acceso de escritura? (Elija todas las que correspondan.)
+   A. mesg
+  *B. write
+   C. echo
+   D. mail
+  *E. wall
+LIBRO: La opción B, el comando write, y la opción E, el comando wall, permiten enviar un mensaje a cualquier terminal tty que tenga permitido el acceso de escritura. La opción A es incorrecta, porque el comando mesg comprueba si está permitido el acceso de escritura al terminal, y también puede establecerlo. La opción C, el comando echo, simplemente muestra lo que le sigue en la salida estándar del terminal actual. La opción D, si está implementada en el sistema, permite al usuario enviar y leer correo electrónico, no mensajes de terminal.
+
+### SYBEX-CH02-RQ02  [multiple_choice]  tema: Mantenimiento del sistema
+P: Para apagar el sistema sin enviar un mensaje a los usuarios, ¿cuál de las siguientes opciones de /sbin/shutdown se utiliza?
+   A. -c
+   B. -k
+  *C. --no-wall
+   D. --wall
+   E. Ninguna de las anteriores
+LIBRO: La opción ––no-wall permite que el apagado se realice sin enviar mensajes wall a los usuarios de los terminales. Solo el superusuario que ejecuta el comando recibirá un mensaje. La opción A es incorrecta, porque la opción -c cancela un apagado. La opción B también es incorrecta, porque la opción -k no apaga el sistema, sino que deshabilita los inicios de sesión y envía mensajes de apagado. La opción ––wall que aparece en la opción D está inventada.
+
+### SYBEX-CH02-RQ03  [multiple_choice]  tema: Mantenimiento del sistema
+P: El departamento jurídico de su empresa ha decidido que hace falta un aviso en el inicio de sesión de un sistema Linux que usted administra, advirtiendo de que está prohibido el uso no autorizado del sistema. ¿Cuál es el mejor método para desplegar ese aviso legal?
+  *A. Editar el archivo /etc/issue y poner ahí el aviso.
+   B. Editar el archivo /etc/motd y poner ahí el aviso.
+   C. Usar el comando notify-send para enviar el aviso a los usuarios.
+   D. Editar el archivo ∼./bashrc y poner ahí el aviso.
+   E. Ninguna de las anteriores.
+LIBRO: La opción A es la mejor elección. Al editar el archivo /etc/issue, el aviso legal se mostrará a cualquiera antes de intentar iniciar sesión en el sistema mediante un terminal. También conviene poner el aviso en el archivo /etc/issue.net para los usuarios que se conecten por red, así como en un banner de inicio de sesión si hay usuarios con entorno gráfico. La opción B no es una buena elección, porque el aviso no se mostraría hasta después de que el usuario haya iniciado sesión. La opción C tampoco es buena, porque enviaría un mensaje único y solo a los usuarios del entorno gráfico. La opción D no es una buena elección, porque el archivo ~./bashrc es un script de entorno de inicio de sesión.
+
+### SYBEX-CH02-RQ04  [multiple_choice]  tema: Mantenimiento del sistema
+P: Suponga que hay dinero de sobra y quiere el soporte más rápido para las copias de seguridad de su empresa. Con esa información, ¿cuál es la mejor elección de soporte de copia de seguridad?
+   A. Cintas magnéticas
+   B. Discos ópticos
+   C. HDD
+  *D. SSD
+   E. NAS
+LIBRO: Actualmente los SSD pueden ser caros, pero si hay presupuesto son el soporte más rápido para copias de seguridad. La opción A, las cintas magnéticas, es una de las más lentas para copias de seguridad. Los discos ópticos, opción B, tienen capacidad limitada, así que hay que cambiarlos más a menudo, y además son más lentos que los SSD. Los discos duros, opción C, son más rápidos que la cinta pero más lentos que los SSD. Por último, con la opción E no se puede saber qué tipo de soporte hay conectado a la red; por tanto, no es la mejor respuesta.
+
+### SYBEX-CH02-RQ05  [multiple_response]  tema: Mantenimiento del sistema
+P: Un compañero, también administrador de sistemas, le entrega un SSD y le dice: «Aquí están todos los archivos creados o modificados desde la última copia de seguridad completa del sistema». ¿De cuáles de los siguientes tipos de copia de seguridad puede tratarse? (Elija todas las que correspondan.)
+   A. Completa
+  *B. Incremental
+  *C. Diferencial
+   D. Ninguna de las anteriores
+   E. Todas las anteriores
+LIBRO: Una copia incremental, opción B, es una copia de todos los datos añadidos o modificados desde la última copia de seguridad. Por tanto, da igual si la última copia fue completa o no; el SSD puede contener este tipo de copia. Además, la copia diferencial, opción C, es una copia de todos los datos añadidos o modificados desde la última copia completa. Como la última copia fue completa, es posible que el SSD contenga este tipo de copia. La opción A no encaja, porque una copia completa copia todos los datos.
+
+### SYBEX-CH02-RQ06  [multiple_response]  tema: Mantenimiento del sistema
+P: ¿Cuáles de los siguientes directorios de Linux deberían incluirse en una copia de seguridad si se piensa usar esos datos para restauraciones completas del sistema? (Elija todas las que correspondan.)
+  *A. /bin/
+  *B. /home/
+   C. /run/
+   D. /tmp/
+   E. Todas las anteriores
+LIBRO: El directorio /bin/, opción A, contiene programas de utilidad que harán falta en una restauración completa del sistema, así que deben incluirse en la copia de seguridad. El directorio /home/, opción B, suele contener los archivos de los usuarios del sistema. También deben incluirse en la copia. La opción C, /run/, y la opción D, /tmp/, contienen ambas datos temporales y no hace falta incluirlos en ninguna copia de seguridad de datos.
+
+### SYBEX-CH02-RQ07  [multiple_response]  tema: Mantenimiento del sistema
+P: ¿Cuáles de los siguientes paquetes de software son soluciones de copia de seguridad con interfaz gráfica o basadas en web? (Elija todas las que correspondan.)
+  *A. Amanda
+  *B. Duplicity
+   C. Nagios
+  *D. Bacula
+   E. connectd
+LIBRO: Amanda, Duplicity y Bacula son soluciones de copia de seguridad con interfaz gráfica o basadas en web que pueden emplearse para ayudar en las copias del sistema. La opción C, Nagios, y la opción E, connectd, son utilidades de monitorización de recursos.
+
+### SYBEX-CH02-RQ08  [multiple_response]  tema: Mantenimiento del sistema
+P: ¿Cuáles de las siguientes opciones del comando tar emplean compresión gzip al crear un tarball de copia de seguridad? (Elija todas las que correspondan.)
+   A. -g
+  *B. --gzip
+  *C. -z
+   D. g
+  *E. z
+LIBRO: Las opciones que hacen que tar use compresión gzip al crear un tarball son: la opción ––gzip, que es de estilo largo; la opción -z, que es de estilo corto; y la opción z, que es de estilo antiguo. Las opciones -g (opción A) y g (opción D) las usa tar para copias incrementales, no para compresión.
+
+### SYBEX-CH02-RQ09  [multiple_choice]  tema: Mantenimiento del sistema
+P: Al usar el comando tar para una copia de seguridad incremental se crea un archivo de instantánea (snapshot). ¿Qué extensión debería llevar ese archivo en su nombre?
+   A. .tar
+   B. .tgz
+   C. .tar.snap
+   D. .snap
+  *E. .snar
+LIBRO: El archivo de instantánea puede tener el nombre que se quiera y estar en cualquier lugar del sistema de archivos; sin embargo, necesita la extensión .snar para indicar que es un archivo de instantánea de un archivador tar. La opción A, .tar, indica que el archivo es un archivador tar. La opción B, .tgz, indica que el archivo es un tarball comprimido con gzip. Las opciones C y D, .tar.snap y .snap, son extensiones inventadas.
+
+### SYBEX-CH02-RQ10  [multiple_response]  tema: Mantenimiento del sistema
+P: Para verificar una copia de seguridad tar justo después de crearla, ¿cuál de las siguientes opciones del comando tar se utiliza? (Elija todas las que correspondan.)
+  *A. --compare
+  *B. --diff
+  *C. -d
+  *D. -W
+   E. -J
+LIBRO: Las opciones ––compare y ––diff (opciones A y B) son las formas de estilo largo de -d (opción C). Estas tres opciones comparan los miembros de un archivador tar con los archivos externos y listan las diferencias. La opción D, -W (en estilo largo ––verify), verifica automáticamente un archivador tar en cuanto se crea. Sin embargo, no puede usarse con tarballs, solo con archivadores tar. La opción E, -J, es una opción de tar que hace que el comando emplee compresión xz.
+
+### SYBEX-CH02-RQ11  [multiple_response]  tema: Mantenimiento del sistema
+P: ¿Cuáles de los siguientes indican un dispositivo de cinta que rebobina automáticamente? (Elija todas las que correspondan.)
+  *A. /dev/st0
+   B. /dev/nst0
+  *C. /dev/ht1
+   D. /dev/nht1
+   E. /dev/nht0
+LIBRO: Los archivos de dispositivo de cinta /dev/st0 (SCSI) y /dev/ht1 (PATA) corresponden a dispositivos de cinta con rebobinado automático. Las opciones B, D y E apuntan todas a dispositivos de cinta sin rebobinado, como indica la n inicial de su nombre de dispositivo, /dev/n*.
+
+### SYBEX-CH02-RQ12  [multiple_choice]  tema: Mantenimiento del sistema
+P: Para controlar una cinta magnética en copias de seguridad, se usa el programa _______.
+   A. tar
+   B. star
+  *C. mt
+   D. rsync
+   E. dd
+LIBRO: El programa mt permite controlar una cinta y conocer su estado actual. Las utilidades tar (opción A) y star (opción B) pueden usar cintas como medio de almacenamiento, pero no las controlan. La utilidad rsync (opción D) es un programa de copia de seguridad, pero no puede usarse con cintas magnéticas, y mucho menos controlarlas. La opción E, el comando dd, también puede usarse como utilidad de copia de seguridad, pero no controla cintas.
+
+### SYBEX-CH02-RQ13  [multiple_choice]  tema: Mantenimiento del sistema
+P: ¿Cuál de los siguientes comandos rsync es la forma correcta de enviar una copia de seguridad por la red al host remoto ServerA, cifrando la transferencia con OpenSSH?
+   A. rsync -av Project /run/media/ServerA
+   B. rsync -av Project ServerA
+   C. rsync -av ServerA Project
+  *D. rsync -av Project ServerA:∼/
+   E. rsync -av Project rsync://ServerA:/
+LIBRO: La opción D usa la sintaxis correcta de rsync para enviar una copia de seguridad al host remoto ServerA con cifrado mediante OpenSSH. La opción A simplemente usa rsync para enviar una copia a un dispositivo de medios extraíbles, indicado por /run/media/ServerA. En la opción B, el archivo Project simplemente se copia a otro archivo llamado ServerA. En la opción C, los nombres de archivo están invertidos, de modo que el archivo ServerA se copia a un archivo nuevo, Project. En la opción E, el archivo se copia a un host remoto, ServerA. Sin embargo, no se usa OpenSSH: se usa el demonio rsync y, por tanto, la transferencia no va cifrada.
+
+### SYBEX-CH02-RQ14  [multiple_response]  tema: Mantenimiento del sistema
+P: ¿Cuáles de las siguientes afirmaciones sobre el comando dd son ciertas? (Elija todas las que correspondan.)
+  *A. El comando dd puede usarse para crear una copia de bajo nivel de un disco duro.
+   B. El comando dd es muy usado para copias de seguridad incrementales diarias.
+   C. El comando dd puede usarse con seguridad para hacer copia de un disco montado en /.
+   D. El comando dd puede usarse para gestionar cintas.
+  *E. El comando dd puede usarse para poner a cero un disco duro.
+LIBRO: El comando dd puede usarse para crear una copia de bajo nivel de un disco duro. También puede usarse para poner a cero una unidad empleando el archivo /dev/zero. El comando dd no es habitual para copias incrementales diarias (opción B), porque puede corromper con facilidad una unidad montada. Por tanto, la opción C también es incorrecta. El comando dd no se usa para gestionar cintas (opción D).
+
+### SYBEX-CH02-RQ15  [multiple_response]  tema: Mantenimiento del sistema
+P: Al instalar un programa a partir del código fuente, ¿cuáles de los siguientes archivos de instalación suelen aportar información adicional sobre la instalación? (Elija todas las que correspondan.)
+  *A. README
+  *B. INSTALL
+   C. COPYING
+   D. RELEASE-NOTES
+   E. NEWS
+LIBRO: Los archivos README e INSTALL suelen aportar instrucciones adicionales de instalación, incluidas cosas como qué otros paquetes hacen falta para completar la instalación correctamente. El archivo COPYING (opción C) suele contener la información de licencia del software. Los archivos RELEASE-NOTES (opción D) y NEWS (opción E) suelen contener las novedades y las correcciones de errores incluidas en la última versión del programa.
+
+### SYBEX-CH02-RQ16  [multiple_choice]  tema: Mantenimiento del sistema
+P: Durante el proceso de instalación de un programa desde el código fuente, ¿cuál de los siguientes crea o actualiza el Makefile con el contenido del archivo Makefile.in y con lo que encuentra en su sistema?
+   A. INSTALL
+  *B. configure
+   C. make
+   D. make install
+   E. cp
+LIBRO: La utilidad configure es en realidad un script que comprueba en el sistema las distintas dependencias del programa y la existencia de un compilador. También crea o actualiza el Makefile con el contenido del archivo Makefile.in y con lo que encuentra en el sistema. La opción C, el comando make, toma la información del Makefile y la usa para compilar el código fuente en binario. La opción D, el comando make install, traslada los archivos del programa a las ubicaciones necesarias dentro de la estructura de directorios. El comando cp (opción E) solo copia archivos: puede usarse para copiar el tarball de instalación del programa de un sitio a otro. La opción A, el archivo INSTALL, suele aportar instrucciones adicionales de instalación.
+
+### SYBEX-CH02-RQ17  [multiple_response]  tema: Mantenimiento del sistema
+P: ¿Cuáles de los siguientes comandos de monitorización permiten ver información de la memoria del sistema? (Elija todas las que correspondan.)
+  *A. free
+   B. mpstat
+   C. mtr
+  *D. top
+  *E. vmstat
+LIBRO: Los comandos free (opción A) y vmstat (opción E) ofrecen información principalmente sobre el uso de memoria del sistema. El comando top (opción D), además de otras estadísticas de recursos, también ofrece datos de uso de memoria. El comando mpstat (opción B) ofrece información estadística de red, mientras que el comando mtr (opción C) ofrece una vista dinámica de los datos de encaminamiento de red.
+
+### SYBEX-CH02-RQ18  [multiple_choice]  tema: Mantenimiento del sistema
+P: ¿Cuál de los siguientes mostrará información de uso de CPU 20 veces a intervalos de 2 segundos?
+   A. uptime 20 2
+   B. uptime 2 20
+   C. sar 20 2
+  *D. sar 2 20
+   E. Ninguna de las anteriores
+LIBRO: El comando sar 2 20 mostrará información de uso de CPU 20 veces, separadas por 2 segundos. El comando uptime (opciones A y B) no acepta parámetros y, por tanto, mostraría los datos de CPU una sola vez. En la opción C, los parámetros del comando sar están al revés: en ese caso mostraría la información de CPU 2 veces, separadas por 20 segundos.
+
+### SYBEX-CH02-RQ19  [multiple_response]  tema: Mantenimiento del sistema
+P: ¿Cuáles de las siguientes se consideran soluciones de monitorización de recursos del sistema? (Elija todas las que correspondan.)
+  *A. collectd
+   B. Duplicity
+  *C. MRTG
+  *D. Nagios
+   E. Todas las anteriores
+LIBRO: MRTG, collectd y Nagios son soluciones de monitorización de recursos que pueden emplearse en un sistema Linux. Duplicity (opción B) también puede emplearse en un sistema Linux, pero sirve para hacer copias de seguridad de los datos, no para monitorizar el uso de recursos.
+
+### SYBEX-CH02-RQ20  [multiple_response]  tema: Mantenimiento del sistema
+P: ¿Cuáles de las siguientes afirmaciones sobre la memoria de un sistema Linux son ciertas? (Elija todas las que correspondan.)
+   A. La memoria se divide en hojas (sheets).
+  *B. La memoria de un proceso inactivo puede volcarse al espacio de intercambio (swap).
+  *C. El swap también puede llamarse memoria virtual.
+   D. El intercambio (swapping) es el esquema de gestión de memoria en el que los procesos inactivos intercambian memoria entre sí.
+   E. Las estadísticas de intercambio de memoria pueden verse con la utilidad psmap.
+LIBRO: La memoria de los procesos inactivos puede volcarse de la RAM a una partición especial llamada espacio de intercambio, swap o memoria virtual. Por tanto, las opciones B y C son correctas. La memoria se divide en bloques llamados páginas (opción A), no hojas. El intercambio es la técnica de gestión de memoria por la que la memoria de los procesos inactivos se vuelca al swap: los procesos no intercambian memoria entre sí (opción D). Por último, la herramienta psmap sirve principalmente para mapear procesos (opción E). Las mejores herramientas para ver estadísticas de memoria son free, sar y vmstat.

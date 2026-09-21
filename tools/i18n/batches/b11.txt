@@ -1,0 +1,89 @@
+### SYBEX-CH04-RQ11  [multiple_choice]
+Q: You’ve just created a new disk partition, /dev/sde3, and want to prepare it as swap space. Which command do you use? (Choose the best answer.)
+A: mkfs -t swapon /dev/sde3
+B: mkswap /dev/sde3
+C: swapon /dev/sde3
+D: swapoff /dev/sde3
+E: swapon -s
+X: Option B is correct, because the mkswap command is used to perform the preparations necessary to ready a partition to be used as swap space. Option A is incorrect, because there is no -t swapon option for the mkfs command. Option C is also incorrect. Although you can use this command to activate the swap space on /dev/sde3, it is not the command used to prepare the swap space. Option D is wrong, because the swapoff command deactivates the designated swap space. The swapon -s command is useful for displaying current swap statistics but not for preparing swap space, so option E is also incorrect.
+
+### SYBEX-CH04-RQ12  [multiple_response]
+Q: Which of the following map types can be found in the /etc/auto.master file? (Choose all that apply.)
+A: Built-in
+B: Direct
+C: Indirect
+D: SMART
+E: Road
+X: Options A, B, and C are all map types that you may find in the AutoFS master map file, /etc/auto.master. Option D’s SMART refers to Self-Monitoring Analysis and Reporting Technology devices, not AutoFS map types. Therefore, option D is incorrect. Option E is incorrect, because a road map is used for navigating your way while driving or walking, and it is not a known AutoFS map type.
+
+### SYBEX-CH04-RQ13  [multiple_choice]
+Q: You want to change the AutoFS service’s master map to a different configuration file than the /etc/auto.master file. Which configuration file might you edit to accomplish this, depending on your distribution? (Choose the best answer.)
+A: /etc/auto.direct
+B: /etc/auto.misc
+C: /etc/autofs.net
+D: /etc/auto.tmp
+E: /etc/sysconfig/autofs
+X: The /etc/sysconfig/autofs file, shown in option E, is a correct configuration file to modify. Depending on your distribution, the file’s name might be /etc/default/autofs. Option A’s file is a direct map file and is therefore incorrect. Options B and D show two possible indirect map type files and are also incorrect. In option C, an old AutoFS script file, /etc/autofs.net, that may be found on older distributions is shown but is also incorrect.
+
+### SYBEX-CH04-RQ14  [multiple_choice]
+Q: Which of the following encrypted filesystems is a layered filesystem? (Choose the best answer.)
+A: XFS
+B: dm-crypt
+C: eCryptfs
+D: LUKS
+E: Btrfs
+X: The eCryptfs filesystem is a pseudo-filesystem that is layered on top of another filesystem, and it provides file-by-file encryption. Thus, option C is correct. Both options B and D show encrypted filesystems, but they are not considered layered filesystems, so they are incorrect. Option A’s XFS filesystem is not encrypted, and neither is option E’s btrfs filesystem, so they are also incorrect.
+
+### SYBEX-CH04-RQ15  [multiple_choice]
+Q: Which of the following is not a utility for adjusting the ext2, ext3, and ext4 filesystems? (Choose the best answer.)
+A: debugfs
+B: e2label
+C: resize2fs
+D: uuidgen
+E: tune2fs
+X: The uuidgen utility is used for producing new UUID numbers that can be assigned to filesystems. It does not adjust any filesystem, and therefore option D is the correct answer. Commands in options A, B, C, and E all adjust extended filesystems and are therefore incorrect answers.
+
+### SYBEX-CH04-RQ16  [multiple_choice]
+Q: You have generated a new UUID and want to assign it to an unmounted ext4 filesystem. Which utility do you use? (Choose the best answer.)
+A: debugfs
+B: e2label
+C: resize2fs
+D: blkid
+E: tune2fs
+X: Option E’s tune2fs command can use the generated UUID and change the filesystem’s UUID, so it is the correct answer. Commands in options A, B, and C also adjust extended filesystems but not the UUID number and are therefore incorrect answers. The blkid command in option D can display a device’s UUID but not change it, so it is also an incorrect answer.
+
+### SYBEX-CH04-RQ17  [multiple_choice]
+Q: You have super user privileges, and you type the command fsck.xfs to run a filesystem check on an XFS filesystem. What will happen? (Choose the best answer.)
+A: You corrupt the filesystem, because you did not unmount it first.
+B: You only receive a report on filesystem health.
+C: No information is displayed, but if errors are found, you are asked if you would like to attempt a repair.
+D: You only receive a report on filesystem health, and if errors are found, you are asked if you would like to attempt a repair.
+E: Nothing.
+X: Because the XFS filesystems (btrfs too) have their own repair utilities and do not operate in the same fashion as extended filesystems, the fsck.xfs utility does nothing. Therefore, option E is correct. For extended filesystems, you may see the actions in options A through D occur, depending on your command options and actions prior to running the command. However, in this case, options A through D are incorrect.
+
+### SYBEX-CH04-RQ18  [multiple_choice]
+Q: You have a Btrfs filesystem that has performed well for a long time. However, for some reason, it has suffered a catastrophic problem and you need to restore files. Which utility should you use? (Choose the best answer.)
+A: btrfs check
+B: btrfs get property
+C: btrfs rescue
+D: btrfs restore
+E: btrfs scrub
+X: Option D, btrfs restore, is the most powerful command for restoring the btrfs filesystem data, and it is the best choice. Options A and C also can help, but they are not as powerful as option D, so they are not the correct answers. The btrfs commands in options B and E do not do repairs or restores, so those answers are also incorrect.
+
+### SYBEX-CH04-RQ19  [multiple_choice]
+Q: Which of the following commands checks for inconsistencies but does not conduct any repairs for an XFS filesystem? (Choose the best answer.)
+A: xfs_check
+B: xfsdump
+C: xfs_info
+D: xfs_metadump
+E: xfsrestore
+X: Option A is correct, because the xfs_check utility checks an XFS filesystem’s consistency but does no repairs. It is typically no longer included in many distributions, but you can use the xfs_repair -n command in its place. Option B’s xfsdump creates a backup of the filesystem’s data and attributes but does no checking, so it is incorrect. The xfs_info command displays and checks filesystem information, but it does not look for filesystem inconsistency, so option C is wrong. Option D’s xfs_metadump only copies the filesystem’s metadata to a file, so it is also wrong. Finally, the xfsrestore command restores a filesystem’s data and attributes from a backup dump, so option E is incorrect.
+
+### SYBEX-CH04-RQ20  [multiple_choice]
+Q: You have a disk drive partition /dev/sdc3 that supports SMART and has it enabled. Assuming that you have super user privileges, which command will show you a quick summary status, including whether or not it has passed the overall health self-assessment test? (Choose the best answer.)
+A: smartctl -t short /dev/sdc3
+B: smartctl -H /dev/sdc3
+C: smartctl -i /dev/sdc3
+D: smartctl -a /dev/sdc3
+E: smartctl -t long /dev/sdc3
+X: Option B’s command will show you a quick drive summary health status, including whether or not it has passed the overall health self-assessment test. Therefore, option B is correct. The commands in options A and E will conduct tests but will not show the results, so they are incorrect. Option C’s command will display information concerning the drive, such as whether or not it supports SMART and whether or not SMART is enabled. It is also incorrect. The command in option D will provide you with the drive’s health information, but it displays all of the information, not just a summary, so it is also an incorrect choice.

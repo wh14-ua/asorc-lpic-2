@@ -1,0 +1,89 @@
+### SYBEX-AT-11  [multiple_response]
+Q: To create or increase the size of a logical volume storage pool, which command should you use? (Choose all that apply.)
+A: mdadm
+B: vgextend
+C: pvcreate
+D: vgcreate
+E: lvcreate
+X: A logical volume storage pool (volume group) can be created using the vgcreate command, so option D is correct. The volume group can be increased in size via the vgextend command, so option B is also correct. The mdadm utility is used for managing RAID arrays and not logical volumes (though logical volumes can be RAID array members), so option A is a wrong choice. Option C’s pvcreate command is used for designating filesystem partitions as physical volumes that can be placed into a volume group, but it does not increase a volume group’s size or create it, so it is also an incorrect choice. The lvcreate command takes storage (logical extents) from a volume group and creates a logical volume, not a volume group, so option E is a wrong choice as well.
+
+### SYBEX-AT-12  [multiple_choice]
+Q: To view the ARP table, use which of the following commands? (Choose all that apply.)
+A: ifconfig -arp
+B: ip arp show
+C: arp
+D: route -n
+E: iwlist arp scan
+X: There is only one correct choice. The arp command will display ARP table information, so option C is the right choice. Option A is an incorrect choice, because this ifconfig command allows you to toggle on/off ARP for the designated network interface, not view the ARP table. The command in option B is made up, though close to a real command (ip addr show) that will display network interface information. Since it does not display ARP table information, option B is wrong. Option D’s command will display the routing table but not the ARP table, so it is an incorrect choice. Finally, option E is also wrong, because the iwlist command in this option allows you to scan and find a local wireless connection’s name, but you must specify the wireless device’s name (e.g., wlan0) and not arp.
+
+### SYBEX-AT-13  [multiple_choice]
+Q: To apply a simulated data transfer across a network using both a server and a client, use the utility. (Choose the best answer.)
+A: tcpdump
+B: ping or ping6
+C: traceroute or traceroute6
+D: nmap
+E: nc
+X: The nc utility allows you to simulate a server and a client, sending and receiving data on the network, by specifying command-line options. Therefore, option E is the best answer. Option A’s tcpdump command captures all packets that it sees on the network interface and displays a rough packet description, but it does not simulate data transfers, so it is an incorrect choice. The ping or ping6 utility allows you to send ICMP packets and test connectivity between a server and client system, but it doesn’t provide a true data transfer simulation, so option B is not the best answer. Also, option C’s traceroute or traceroute6 utility attempts to send ICMP packets to a specified destination and list the router “hops” that the packets traverse to get to the destination. However, they don’t provide a true data transfer simulation (and may be blocked by many routers), so this option is also not the best choice. Finally, option D is not the best answer, because the nmap utility can determine what applications are listening to which network ports on your Linux system but not simulate data transfers to another system.
+
+### SYBEX-AT-14  [multiple_response]
+Q: You just installed a new NIC and set up a wired network interface (eth2) on your server. However, it has no network connectivity (no packets are being sent or received through the interface). What should you do? (Choose all that apply.)
+A: Check the interface settings via the ifconfig eth2 command.
+B: Check the interface from another system using the ping or ping6 command.
+C: Check the packets coming to and from the interface by using the tcpdump utility.
+D: Check the kernel ring buffer using the dmesg utility.
+E: Check kernel messages in either of the /var/log/ directory’s dmesg, messages, or syslog files.
+X: Option A is a correct choice, because you can double-check all of the various wired network interface settings and view such things as whether an IP address has been assigned. Options D and E are also correct choices, because it’s possible that the appropriate network card hardware module was not loaded. You can find this information in either the kernel ring buffer or, if the buffer has been flushed to disk, in one of option E’s files (depending on your distribution). Option B is not a correct choice, because if you already know that packets are not being sent or received through the interface, using ping or ping6 will not give you any additional information. The same is true with option C, so it also is an incorrect choice.
+
+### SYBEX-AT-15  [multiple_response]
+Q: You need to use a rewinding tape device to create an archive. Which device could you use on your Linux system? (Choose all that apply.)
+A: /dev/st0
+B: /dev/ht1
+C: /dev/sdt1
+D: /dev/nst0
+E: /dev/nht0
+X: Options A and B are correct, because the /dev/st* (SCSI) and /dev/ht* (PATA) tape devices automatically rewind. Option C is incorrect, because the /dev/sdt1 device file does not represent a tape device but a filesystem partition. Options D and E are wrong, because the /dev/nst* (SCSI) and /dev/nht* (PATA) tape devices do not automatically rewind.
+
+### SYBEX-AT-16  [multiple_response]
+Q: Which of the following statements are true about the rndc utility? (Choose all that apply.)
+A: You can start the BIND daemon using it.
+B: You can stop the BIND daemon using it.
+C: You can reload BIND configuration files with it.
+D: You can reload BIND zone files with it.
+E: The rndc utility does not deal with BIND.
+X: Options B, C, and D are true and therefore correct choices. You cannot start the BIND daemon using the rndc utility, so option A is an incorrect answer. Also, the rndc utility does deal with BIND, so option E is also a wrong choice.
+
+### SYBEX-AT-17  [multiple_response]
+Q: The type directive in a BIND zone configuration file can be set to which of the following? (Choose all that apply.)
+A: hint
+B: primary
+C: secondary
+D: forward
+E: stub
+X: A type hint directive specifies the Hint Zone, which is a list of current root name servers, so option A is a correct choice. The type forward directive indicates that this is a forwarding server for the zone, so option D is also a correct choice. A type stub directive is used to set a stub zone, so option E is a correct choice. There is no type primary directive. You would use type master to indicate a zone’s primary name server, so option B is a wrong choice. Also, there is no type secondary directive. You would use type slave to set a zone’s secondary name server. Therefore, option C is also an incorrect answer.
+
+### SYBEX-AT-18  [multiple_response]
+Q: Which of the following are commands used with the apache2ctl utility? (Choose all that apply.)
+A: force-stop
+B: restart
+C: graceful
+D: fullstatus
+E: status
+X: The apache2ctl restart command will send a SIGHUP signal to the Apache server, causing it to close any existing connections and restart. Therefore, option B is a correct answer. The apache2ctl graceful command restarts the Apache server, but existing connections are not closed, so option C is also a correct choice. Option D’s apache2ctl command, fullstatus, will display a full Apache server status report, so it is a correct answer. Also, option E is a correct choice, because apache2ctl status will display a short Apache server status report. Option A is a made-up apache2ctl command, so it is the only incorrect answer.
+
+### SYBEX-AT-19  [multiple_response]
+Q: Which of the following statements are true concerning Nginx? (Choose all that apply.)
+A: Nginx uses separate program threads to handle each client.
+B: Nginx uses an asynchronous architecture that allows it to spawn client threads within the main program as needed.
+C: Nginx uses TCP port 80.
+D: Nginx is deprecated and is being replaced by Apache.
+E: Nginx can have multiple backend web servers to implement reverse proxy features.
+X: Options B, C, and E are all truthful statements and are therefore correct answers. Option A is wrong, because Nginx does not use separate program threads for each client but instead deals with spawned client threads described in option B. Option D is also an incorrect choice, because Nginx is not deprecated and, instead, may end up someday replacing Apache.
+
+### SYBEX-AT-20  [multiple_response]
+Q: Samba user account records can be stored in the ______ database. (Choose all that apply.)
+A: smbpasswd
+B: tdbsam
+C: net
+D: smbclient
+E: ldapsam
+X: Options A, B, and E are correct, because Samba user account information can be kept in the smbpasswd, tdbsam, or ldapsam databases. net is a command (not a database), which is similar to the Windows/DOS net utility and is used when a Samba server needs to join a domain or Active Directory as a member. Therefore, option C is a wrong answer. The smbclient in option D is either a command that connects, lists shares, and allows FTP-like services for a file share or a Samba package filename. Therefore, option D is also an incorrect choice.

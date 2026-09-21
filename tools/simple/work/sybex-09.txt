@@ -1,0 +1,159 @@
+### SYBEX-CH09-RQ01  [multiple_choice]  tema: Servidor web
+P: ¿Qué protocolo define cómo responde un servidor web a las peticiones de los clientes?
+   A. HTML
+   B. SSL
+  *C. HTTP
+   D. TLS
+LIBRO: HTTP define las peticiones del cliente y las respuestas del servidor necesarias para transferir un archivo de datos desde un servidor web, así que la opción C es correcta. HTML (opción A) define el formato de un documento web, pero no el protocolo de transferencia. SSL (opción B) y TLS (opción D) definen protocolos de cifrado y no se usan en el protocolo de transferencia de archivos propiamente dicho, así que ambas son incorrectas.
+
+### SYBEX-CH09-RQ02  [multiple_choice]  tema: Servidor web
+P: ¿Qué estándar define cómo da formato el cliente al contenido de una página web?
+  *A. HTML
+   B. SSL
+   C. HTTP
+   D. TLS
+LIBRO: El estándar HTML define las reglas de formato para crear páginas web, así que la opción A es correcta. HTTP (opción C) define el protocolo usado para transferir el documento del servidor web al navegador cliente, pero no cómo dar formato al documento en sí, así que la opción C es incorrecta. SSL y TLS son protocolos de cifrado y no dan formato al contenido de los datos, así que las opciones B y D son incorrectas.
+
+### SYBEX-CH09-RQ03  [multiple_choice]  tema: Servidor web
+P: ¿Qué código de respuesta HTTP del servidor indica que no se encontró el archivo solicitado por el cliente?
+   A. 200
+   B. 403
+   C. 500
+  *D. 404
+LIBRO: El código de respuesta 404 de HTTP indica que el archivo solicitado por el cliente no se encontró en el servidor web, así que la opción D es correcta. El código de estado 200 (opción A) indica que la petición tuvo éxito, así que la opción A es incorrecta. El código 403 indica que el cliente no tiene permiso para obtener el archivo solicitado, así que la opción B es incorrecta. El código 500 indica que hay un problema en el servidor que impide descargar el archivo, así que la opción C es incorrecta.
+
+### SYBEX-CH09-RQ04  [multiple_choice]  tema: Servidor web
+P: ¿Qué utilidad permite detener el servidor web Apache de forma ordenada (graceful)?
+   A. systemctl
+  *B. apache2ctl
+   C. httpd
+   D. apache2
+LIBRO: La utilidad apache2ctl permite enviar una petición de parada ordenada al servidor web Apache, preservando las conexiones existentes, así que la opción B es correcta. systemctl lo usan algunas distribuciones de Linux para detener o arrancar procesos, pero no detiene Apache de forma ordenada, así que la opción A es incorrecta. Los programas httpd y apache2 son el propio servidor web y no tienen opciones para detenerlo de forma ordenada, así que las opciones C y D son incorrectas.
+
+### SYBEX-CH09-RQ05  [multiple_choice]  tema: Servidor web
+P: ¿Qué utilidad permite comprobar la configuración de un servidor web Apache antes de arrancarlo?
+   A. systemctl
+  *B. apache2ctl
+   C. httpd
+   D. apache2
+LIBRO: La utilidad apache2ctl también puede analizar los archivos de configuración de Apache y señalar cualquier problema de sintaxis, así que la opción B es correcta. La utilidad systemctl la usan algunas distribuciones de Linux para detener o arrancar procesos, pero no analiza archivos de configuración, así que la opción A es incorrecta. Los programas httpd y apache2 son el servidor web Apache principal y no tienen la opción de analizar los archivos de configuración, así que las opciones C y D son incorrectas.
+
+### SYBEX-CH09-RQ06  [multiple_choice]  tema: Servidor web
+P: ¿Qué directiva define la ubicación del servidor que se compartirá con los clientes?
+  *A. DocumentRoot
+   B. ServerRoot
+   C. Listen
+   D. DirectoryIndex
+LIBRO: La directiva DocumentRoot define la carpeta desde la que el servidor web permite que los clientes soliciten archivos, así que la opción A es correcta. La directiva ServerRoot define la ubicación de los archivos de configuración del servidor, así que la opción B es incorrecta. La directiva Listen define las direcciones IP y los puertos que usa el servidor Apache para escuchar peticiones entrantes, así que la opción C es incorrecta. La directiva DirectoryIndex define los archivos predeterminados que se buscan cuando un cliente solicita un nombre de carpeta en lugar de un nombre de archivo, así que la opción D es incorrecta.
+
+### SYBEX-CH09-RQ07  [multiple_choice]  tema: Servidor web
+P: ¿Qué elemento de configuración permite aplicar directivas a carpetas concretas del sistema de archivos?
+   A. <VirtualHost>
+   B. <IfDefined>
+  *C. <Directory>
+   D. <IfModule>
+LIBRO: El elemento <Directory> permite crear un bloque de directivas que se aplican a una ubicación de carpeta concreta, así que la opción C es correcta. El elemento <VirtualHost> permite crear un bloque de directivas que se aplican a un host virtual concreto, pero no a un directorio, así que la opción A es incorrecta. El elemento <IfDefined> permite crear un bloque de directivas que se aplican solo cuando está definida una variable de entorno, pero no solo a un directorio concreto, así que la opción B es incorrecta. El elemento <IfModule> permite crear un bloque de directivas que se aplican solo cuando hay un módulo cargado, pero no a un directorio concreto, así que la opción D es incorrecta.
+
+### SYBEX-CH09-RQ08  [multiple_choice]  tema: Servidor web
+P: ¿Qué directiva de configuración define qué información aparece en el archivo de registro de Apache?
+   A. ErrorLog
+  *B. LogFormat
+   C. ErrorDocument
+   D. DocumentRoot
+LIBRO: La directiva LogFormat define el formato de las entradas del archivo de registro, permitiendo decidir qué información se guarda en él; por tanto, la opción B es correcta. La directiva ErrorLog define dónde se encuentran los registros de errores, pero no qué contienen, así que la opción A es incorrecta. La directiva ErrorDocument define cómo se definen los mensajes de error enviados a los clientes, pero no el formato de los registros de errores, así que la opción C es incorrecta. La directiva DocumentRoot define la carpeta desde la que se sirven archivos, pero no el formato del registro de errores, así que la opción D es incorrecta.
+
+### SYBEX-CH09-RQ09  [multiple_choice]  tema: Servidor web
+P: ¿Qué archivo de registro de Apache contiene información sobre qué páginas web solicitaron los clientes?
+   A. error.log
+   B. apache2.conf
+  *C. access.log
+   D. httpd.conf
+LIBRO: El archivo access.log registra todas las peticiones de los clientes al servidor web, así que la opción C es correcta. El archivo error.log contiene solo errores, no peticiones válidas, así que la opción A es incorrecta. Los archivos apache2.conf y httpd.conf son archivos de configuración del servidor web Apache, no de registro, así que las opciones B y D son ambas incorrectas.
+
+### SYBEX-CH09-RQ10  [multiple_choice]  tema: Servidor web
+P: ¿Qué directiva debería usar para permitir que los usuarios del sistema creen sus propias carpetas web?
+   A. AuthUserFile
+  *B. UserDir
+   C. DocumentRoot
+   D. LoadModule
+LIBRO: La directiva UserDir define el nombre de la carpeta que los usuarios pueden crear en sus directorios HOME para ofrecer archivos en el servidor web, así que la opción B es correcta. AuthUserFile define la ubicación de un archivo de autenticación de usuarios, así que la opción A es incorrecta. La directiva DocumentRoot define la carpeta del servidor que se ofrece a los clientes web, no el nombre de las carpetas individuales de los usuarios, así que la opción C es incorrecta. La directiva LoadModule carga módulos de funcionalidad en el servidor Apache; no especifica la ubicación de la carpeta web de los usuarios, así que la opción D es incorrecta.
+
+### SYBEX-CH09-RQ11  [multiple_choice]  tema: Servidor web
+P: En el alojamiento virtual basado en nombre, ¿qué directiva define el nombre de dominio usado?
+   A. DocumentRoot
+   B. NameVirtualHost
+   C. <VirtualHost>
+  *D. ServerName
+LIBRO: La directiva ServerName define el nombre de dominio en cada bloque de host virtual, así que la opción D es correcta. La directiva DocumentRoot define una carpeta y no un nombre de dominio, así que la opción A es incorrecta. La directiva NameVirtualHost define la dirección IP del servidor físico, no los nombres de dominio que se aceptan, así que la opción B es incorrecta. El bloque <VirtualHost> define todas las directivas del host virtual, no solo el nombre de dominio, así que la opción C es incorrecta.
+
+### SYBEX-CH09-RQ12  [multiple_choice]  tema: Servidor web
+P: En el alojamiento virtual basado en IP, ¿qué directiva define las distintas direcciones IP en las que debe escuchar el servidor?
+  *A. Listen
+   B. <VirtualHost>
+   C. NameVirtualHost
+   D. DocumentRoot
+LIBRO: La directiva Listen define la dirección IP y el puerto que usa el servidor Apache para aceptar peticiones entrantes de clientes, así que la opción A es correcta. El elemento <VirtualHost> permite crear un bloque de directivas para el host virtual, pero no define las direcciones IP, así que la opción B es incorrecta. La directiva NameVirtualHost define la dirección IP común para los hosts virtuales basados en nombre, pero no se usa en el alojamiento virtual basado en IP, así que la opción C es incorrecta. La directiva DocumentRoot define una carpeta y no una dirección IP, así que la opción D es incorrecta.
+
+### SYBEX-CH09-RQ13  [multiple_choice]  tema: Servidor web
+P: ¿Qué programa de utilidad de Apache permite crear archivos de texto de usuario/contraseña?
+   A. httpd
+  *B. htpasswd
+   C. apache2
+   D. mod_auth
+LIBRO: La utilidad htpasswd crea un archivo de texto con un identificador de usuario y una contraseña cifrada que pueden usarse para la autenticación, así que la opción B es correcta. Los programas httpd y apache2 son nombres del programa principal del servidor web Apache y no generan archivos de texto, así que las opciones A y C son incorrectas. mod_auth es un módulo que se usa para implementar autenticación en el servidor Apache, pero no crea el archivo de usuario/contraseña, así que la opción D es incorrecta.
+
+### SYBEX-CH09-RQ14  [multiple_choice]  tema: Servidor web
+P: ¿Qué directiva apunta al archivo de usuario/contraseña que controla el acceso?
+   A. AuthType
+   B. AuthName
+  *C. AuthUserFile
+   D. Order
+LIBRO: La directiva AuthUserFile define la ubicación del archivo de usuario/contraseña usado para la autenticación de usuarios, así que la opción C es correcta. La directiva AuthType define el tipo de autenticación utilizada, pero no la ubicación del archivo de autenticación, así que la opción A es incorrecta. La directiva AuthName define el texto con el que se solicita la autenticación al cliente, pero no la ubicación del archivo de autenticación, así que la opción B es incorrecta. La directiva Order define una restricción de red y no una restricción de autenticación, así que la opción D es incorrecta.
+
+### SYBEX-CH09-RQ15  [multiple_choice]  tema: Servidor web
+P: ¿Qué método de programación web dinámica permite al servidor Apache usar un intérprete de programas externo?
+  *A. CGI
+   B. mod_perl
+   C. mod_auth
+   D. mod_php
+LIBRO: La Common Gateway Interface (CGI) permite que el servidor web Apache pase archivos a un intérprete de programas externo para procesar el código embebido, así que la opción A es correcta. mod_perl y mod_php son nombres de módulos que incorporan el procesamiento interno de programas; no pasan el código a un programa externo, así que las opciones B y D son incorrectas. El módulo mod_auth es para autenticación y no para programación, así que la opción C es incorrecta.
+
+### SYBEX-CH09-RQ16  [multiple_choice]  tema: Servidor web
+P: ¿Qué directiva indica al servidor Apache que redirija los archivos .php al proceso del servidor PHP?
+   A. LoadModule
+  *B. AddHandler
+   C. DocumentRoot
+   D. DirectoryIndex
+LIBRO: La directiva AddHandler define cómo debe tratar el servidor web Apache los archivos según su extensión. Se usa para redirigir archivos a procesos concretos, como intérpretes de código, así que la opción B es correcta. La directiva LoadModule instala un módulo, pero no redirige archivos a procesos separados, así que la opción A es incorrecta. La directiva DocumentRoot define la carpeta del servidor desde la que se sirven los archivos, pero no cómo procesarlos, así que la opción C es incorrecta. La directiva DirectoryIndex define qué archivos deben usarse por defecto cuando un cliente solicita un directorio, pero no cómo procesarlos, así que la opción D es incorrecta.
+
+### SYBEX-CH09-RQ17  [multiple_choice]  tema: Servidor web
+P: ¿Qué directiva indica al servidor Apache la ubicación del certificado SSL?
+   A. DirectoryIndex
+   B. SSLCertificateKeyFile
+   C. SSLEngine
+  *D. SSLCertificateFile
+LIBRO: La directiva SSLCertificateFile define la ubicación del archivo de certificado firmado del servidor que debe usarse en las sesiones SSL, así que la opción D es correcta. La directiva DirectoryIndex define los archivos predeterminados que se sirven cuando un cliente solicita un directorio, así que la opción A es incorrecta. La directiva SSLCertificateKeyFile define el archivo de clave de cifrado, no el archivo de certificado, así que la opción B es incorrecta. La directiva SSLEngine define cuándo debe permitir el servidor conexiones SSL, pero no la ubicación del archivo de certificado, así que la opción C es incorrecta.
+
+### SYBEX-CH09-RQ18  [multiple_response]  tema: Servidor web
+P: ¿Qué hace un servidor proxy web? (Elija dos.)
+  *A. Almacena en caché las peticiones web de varios clientes
+   B. Redirige las peticiones de un cliente a varios servidores
+  *C. Restringe a qué sitios web pueden acceder los clientes
+   D. Restringe qué archivos puede servir un servidor
+LIBRO: Un servidor proxy web almacena en caché las peticiones web de varios clientes para que las peticiones futuras puedan servirse desde la caché. También puede restringir los sitios web que los clientes pueden ver. Eso hace correctas las opciones A y C. La opción B define el papel de un proxy inverso, no el de un proxy web estándar, así que es incorrecta. La opción D define el papel de la directiva DocumentRoot; un proxy web no restringe los archivos que puede servir un servidor, así que la opción D es incorrecta.
+
+### SYBEX-CH09-RQ19  [multiple_choice]  tema: Servidor web
+P: ¿Qué directiva usa Squid para definir los ajustes de autenticación de clientes?
+   A. mod_auth
+  *B. auth_param
+   C. acl
+   D. http_access
+LIBRO: La directiva auth_param define los ajustes de autenticación usados para autenticar a los clientes, así que la opción B es correcta. mod_auth es un módulo del servidor web Apache y no una directiva de Squid, así que la opción A es incorrecta. La directiva acl se usa para definir grupos de acceso, así que la opción C es incorrecta, y la directiva http_access se usa para definir reglas de acceso, así que también es incorrecta.
+
+### SYBEX-CH09-RQ20  [multiple_choice]  tema: Servidor web
+P: ¿Qué sección del archivo de configuración de nginx define los ajustes básicos del servidor?
+   A. location
+  *B. server
+   C. root
+   D. listen
+LIBRO: La sección server del archivo de configuración de nginx define las directivas que se aplican a todo el servidor, así que la opción B es correcta. La sección location define directivas que se aplican a una ubicación de carpeta concreta, no a todo el servidor, así que la opción A es incorrecta. La directiva root define la ubicación de DocumentRoot en el servidor web, así que es incorrecta, y la directiva listen define las direcciones IP y los puertos que usa el servidor para escuchar peticiones entrantes de clientes, así que también es incorrecta.

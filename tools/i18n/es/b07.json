@@ -1,0 +1,59 @@
+[
+{"id":"SYBEX-CH02-RQ11",
+ "q":"¿Cuáles de los siguientes indican un dispositivo de cinta que rebobina automáticamente? (Elija todas las que correspondan.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"Los archivos de dispositivo de cinta /dev/st0 (SCSI) y /dev/ht1 (PATA) corresponden a dispositivos de cinta con rebobinado automático. Las opciones B, D y E apuntan todas a dispositivos de cinta sin rebobinado, como indica la n inicial de su nombre de dispositivo, /dev/n*."},
+
+{"id":"SYBEX-CH02-RQ12",
+ "q":"Para controlar una cinta magnética en copias de seguridad, se usa el programa _______.",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"El programa mt permite controlar una cinta y conocer su estado actual. Las utilidades tar (opción A) y star (opción B) pueden usar cintas como medio de almacenamiento, pero no las controlan. La utilidad rsync (opción D) es un programa de copia de seguridad, pero no puede usarse con cintas magnéticas, y mucho menos controlarlas. La opción E, el comando dd, también puede usarse como utilidad de copia de seguridad, pero no controla cintas."},
+
+{"id":"SYBEX-CH02-RQ13",
+ "q":"¿Cuál de los siguientes comandos rsync es la forma correcta de enviar una copia de seguridad por la red al host remoto ServerA, cifrando la transferencia con OpenSSH?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"La opción D usa la sintaxis correcta de rsync para enviar una copia de seguridad al host remoto ServerA con cifrado mediante OpenSSH. La opción A simplemente usa rsync para enviar una copia a un dispositivo de medios extraíbles, indicado por /run/media/ServerA. En la opción B, el archivo Project simplemente se copia a otro archivo llamado ServerA. En la opción C, los nombres de archivo están invertidos, de modo que el archivo ServerA se copia a un archivo nuevo, Project. En la opción E, el archivo se copia a un host remoto, ServerA. Sin embargo, no se usa OpenSSH: se usa el demonio rsync y, por tanto, la transferencia no va cifrada."},
+
+{"id":"SYBEX-CH02-RQ14",
+ "q":"¿Cuáles de las siguientes afirmaciones sobre el comando dd son ciertas? (Elija todas las que correspondan.)",
+ "o":{"A":"El comando dd puede usarse para crear una copia de bajo nivel de un disco duro.",
+      "B":"El comando dd es muy usado para copias de seguridad incrementales diarias.",
+      "C":"El comando dd puede usarse con seguridad para hacer copia de un disco montado en /.",
+      "D":"El comando dd puede usarse para gestionar cintas.",
+      "E":"El comando dd puede usarse para poner a cero un disco duro."},
+ "e":"El comando dd puede usarse para crear una copia de bajo nivel de un disco duro. También puede usarse para poner a cero una unidad empleando el archivo /dev/zero. El comando dd no es habitual para copias incrementales diarias (opción B), porque puede corromper con facilidad una unidad montada. Por tanto, la opción C también es incorrecta. El comando dd no se usa para gestionar cintas (opción D)."},
+
+{"id":"SYBEX-CH02-RQ15",
+ "q":"Al instalar un programa a partir del código fuente, ¿cuáles de los siguientes archivos de instalación suelen aportar información adicional sobre la instalación? (Elija todas las que correspondan.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"Los archivos README e INSTALL suelen aportar instrucciones adicionales de instalación, incluidas cosas como qué otros paquetes hacen falta para completar la instalación correctamente. El archivo COPYING (opción C) suele contener la información de licencia del software. Los archivos RELEASE-NOTES (opción D) y NEWS (opción E) suelen contener las novedades y las correcciones de errores incluidas en la última versión del programa."},
+
+{"id":"SYBEX-CH02-RQ16",
+ "q":"Durante el proceso de instalación de un programa desde el código fuente, ¿cuál de los siguientes crea o actualiza el Makefile con el contenido del archivo Makefile.in y con lo que encuentra en su sistema?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"La utilidad configure es en realidad un script que comprueba en el sistema las distintas dependencias del programa y la existencia de un compilador. También crea o actualiza el Makefile con el contenido del archivo Makefile.in y con lo que encuentra en el sistema. La opción C, el comando make, toma la información del Makefile y la usa para compilar el código fuente en binario. La opción D, el comando make install, traslada los archivos del programa a las ubicaciones necesarias dentro de la estructura de directorios. El comando cp (opción E) solo copia archivos: puede usarse para copiar el tarball de instalación del programa de un sitio a otro. La opción A, el archivo INSTALL, suele aportar instrucciones adicionales de instalación."},
+
+{"id":"SYBEX-CH02-RQ17",
+ "q":"¿Cuáles de los siguientes comandos de monitorización permiten ver información de la memoria del sistema? (Elija todas las que correspondan.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"Los comandos free (opción A) y vmstat (opción E) ofrecen información principalmente sobre el uso de memoria del sistema. El comando top (opción D), además de otras estadísticas de recursos, también ofrece datos de uso de memoria. El comando mpstat (opción B) ofrece información estadística de red, mientras que el comando mtr (opción C) ofrece una vista dinámica de los datos de encaminamiento de red."},
+
+{"id":"SYBEX-CH02-RQ18",
+ "q":"¿Cuál de los siguientes mostrará información de uso de CPU 20 veces a intervalos de 2 segundos?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"Ninguna de las anteriores"},
+ "e":"El comando sar 2 20 mostrará información de uso de CPU 20 veces, separadas por 2 segundos. El comando uptime (opciones A y B) no acepta parámetros y, por tanto, mostraría los datos de CPU una sola vez. En la opción C, los parámetros del comando sar están al revés: en ese caso mostraría la información de CPU 2 veces, separadas por 20 segundos."},
+
+{"id":"SYBEX-CH02-RQ19",
+ "q":"¿Cuáles de las siguientes se consideran soluciones de monitorización de recursos del sistema? (Elija todas las que correspondan.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"Todas las anteriores"},
+ "e":"MRTG, collectd y Nagios son soluciones de monitorización de recursos que pueden emplearse en un sistema Linux. Duplicity (opción B) también puede emplearse en un sistema Linux, pero sirve para hacer copias de seguridad de los datos, no para monitorizar el uso de recursos."},
+
+{"id":"SYBEX-CH02-RQ20",
+ "q":"¿Cuáles de las siguientes afirmaciones sobre la memoria de un sistema Linux son ciertas? (Elija todas las que correspondan.)",
+ "o":{"A":"La memoria se divide en hojas (sheets).",
+      "B":"La memoria de un proceso inactivo puede volcarse al espacio de intercambio (swap).",
+      "C":"El swap también puede llamarse memoria virtual.",
+      "D":"El intercambio (swapping) es el esquema de gestión de memoria en el que los procesos inactivos intercambian memoria entre sí.",
+      "E":"Las estadísticas de intercambio de memoria pueden verse con la utilidad psmap."},
+ "e":"La memoria de los procesos inactivos puede volcarse de la RAM a una partición especial llamada espacio de intercambio, swap o memoria virtual. Por tanto, las opciones B y C son correctas. La memoria se divide en bloques llamados páginas (opción A), no hojas. El intercambio es la técnica de gestión de memoria por la que la memoria de los procesos inactivos se vuelca al swap: los procesos no intercambian memoria entre sí (opción D). Por último, la herramienta psmap sirve principalmente para mapear procesos (opción E). Las mejores herramientas para ver estadísticas de memoria son free, sar y vmstat."}
+]

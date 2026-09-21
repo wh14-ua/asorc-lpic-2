@@ -1,0 +1,159 @@
+### SYBEX-CH03-RQ01  [multiple_choice]  tema: Kernel y compilación
+P: ¿Qué parte de un sistema Linux gestiona la memoria del sistema?
+   A. Las utilidades GNU
+  *B. El kernel
+   C. El escritorio gráfico
+   D. El software de aplicación
+LIBRO: El kernel gestiona la memoria del sistema en Linux, así que la respuesta B es correcta. Las utilidades GNU proporcionan programas que imitan a los programas Unix habituales para manipular archivos y datos, pero no gestionan la memoria del sistema, así que la respuesta A es incorrecta. El escritorio gráfico gestiona el entorno gráfico de la pantalla, pero no la memoria, así que la respuesta C es incorrecta. El software de aplicación no gestiona la memoria del sistema, así que la respuesta D es incorrecta.
+
+### SYBEX-CH03-RQ02  [multiple_choice]  tema: Kernel y compilación
+P: ¿Cómo se llama la zona del disco duro que se usa como almacenamiento de memoria?
+  *A. Espacio de intercambio (swap space)
+   B. Memoria virtual
+   C. Sistema de archivos
+   D. Memoria física
+LIBRO: El espacio de intercambio (swap space) es la zona del disco duro que se usa para guardar páginas de memoria dentro de la memoria virtual, así que la respuesta A es correcta. La memoria física son las posiciones de memoria almacenadas en la RAM real del sistema, así que la respuesta D es incorrecta. La memoria virtual es la combinación de la memoria RAM y la memoria en disco duro, así que la respuesta B es incorrecta. El sistema de archivos guarda datos en el disco, no posiciones de memoria, así que la respuesta C es incorrecta.
+
+### SYBEX-CH03-RQ03  [multiple_choice]  tema: Kernel y compilación
+P: ¿Qué método usa Linux para cargar controladores de dispositivo en el kernel?
+   A. Archivos DLL
+   B. Memoria virtual
+  *C. Módulos
+   D. Cargador de arranque
+LIBRO: Linux usa módulos para cargar controladores de dispositivo en el kernel, así que la respuesta C es correcta. Los archivos DLL se usan para cargar controladores en el mundo de Microsoft Windows, pero no se usan en Linux, así que la respuesta A es incorrecta. La memoria virtual amplía la memoria física que usa el sistema Linux mediante un espacio de intercambio en el disco duro, pero no ayuda a cargar controladores, así que la respuesta B es incorrecta. El cargador de arranque carga el software del kernel en memoria, pero no carga controladores en el kernel, así que la respuesta D es incorrecta.
+
+### SYBEX-CH03-RQ04  [multiple_choice]  tema: Kernel y compilación
+P: ¿Qué tipo de archivo del kernel se usa para arrancar el sistema Linux?
+  *A. Archivo binario
+   B. Módulos
+   C. Archivo de parche
+   D. Código fuente
+LIBRO: Al compilar el código fuente del kernel se produce un archivo binario que se carga en memoria, así que la respuesta A es correcta. Los archivos de código fuente del kernel no pueden cargarse en memoria, así que la respuesta D es incorrecta. Del mismo modo, los archivos de parche del código fuente tampoco pueden cargarse en memoria, así que la respuesta C también es incorrecta. Los módulos se cargan en el kernel después de que el sistema arranque, así que no se usan directamente para arrancar el sistema Linux y la respuesta B es incorrecta.
+
+### SYBEX-CH03-RQ05  [multiple_choice]  tema: Kernel y compilación
+P: ¿Qué tipo de publicación puede usarse para actualizar un kernel existente a una versión más reciente?
+  *A. Publicación de parche (patch release)
+   B. Módulos
+   C. Archivos binarios
+   D. Publicación de desarrollo
+LIBRO: Los desarrolladores del kernel de Linux publican parches para actualizar fácilmente el código fuente de una versión a la siguiente, así que la respuesta A es correcta. Los módulos sirven para cargar software de controladores de dispositivo en el kernel, así que la respuesta B es incorrecta. Los archivos binarios sirven para cargar el kernel en memoria y ejecutarlo, así que la respuesta C es incorrecta. Las publicaciones de desarrollo son entregas completas de código fuente y no se usan para actualizar un kernel existente, así que la respuesta D es incorrecta.
+
+### SYBEX-CH03-RQ06  [multiple_choice]  tema: Kernel y compilación
+P: ¿Qué objetivo (target) de la utilidad make usa preguntas en modo texto para configurar el kernel?
+   A. xconfig
+   B. mrproper
+   C. clean
+  *D. config
+LIBRO: El objetivo config plantea preguntas en la consola de Linux que hay que responder para determinar los ajustes de configuración del kernel; por tanto, la respuesta D es correcta. El objetivo xconfig produce un sistema de menús gráfico, que no es en modo texto, así que la respuesta A es incorrecta. Los objetivos mrproper y clean sirven para eliminar ajustes de configuración anteriores, no para crear ajustes nuevos, así que las respuestas B y C son incorrectas.
+
+### SYBEX-CH03-RQ07  [multiple_choice]  tema: Kernel y compilación
+P: ¿Qué objetivo (target) de la utilidad make usa una interfaz gráfica para configurar el kernel?
+   A. config
+   B. mrproper
+  *C. gconfig
+   D. clean
+LIBRO: El objetivo gconfig usa la biblioteca del escritorio GNOME para producir un menú gráfico con el que determinar los ajustes de configuración, así que la respuesta C es correcta. El objetivo config usa preguntas de texto para determinar los ajustes, así que la respuesta A es incorrecta. Los objetivos mrproper y clean eliminan ajustes de configuración anteriores, no crean ajustes nuevos, así que las respuestas B y D son incorrectas.
+
+### SYBEX-CH03-RQ08  [multiple_choice]  tema: Kernel y compilación
+P: ¿Qué objetivo (target) de la utilidad make debería usar para eliminar los archivos objeto antiguos de una compilación anterior?
+   A. gconfig
+  *B. mrproper
+   C. bzImage
+   D. oldconfig
+LIBRO: El objetivo mrproper elimina todos los ajustes de configuración y archivos objeto antiguos de las carpetas del código fuente, permitiendo empezar con una configuración nueva; por tanto, la respuesta B es correcta. Los objetivos gconfig y bzImage sirven para crear un archivo de configuración nuevo, pero no eliminan los archivos objeto anteriores, así que las respuestas A y C son incorrectas. El objetivo oldconfig usa el archivo de configuración antiguo, pero no elimina archivos objeto antiguos, así que la respuesta D es incorrecta.
+
+### SYBEX-CH03-RQ09  [multiple_choice]  tema: Kernel y compilación
+P: ¿Qué objetivo (target) de la utilidad make se usa habitualmente para generar un archivo binario comprimido del kernel?
+  *A. bzImage
+   B. kernel
+   C. config
+   D. clean
+LIBRO: Los objetivos zImage y bzImage crean un archivo binario comprimido del kernel a partir del código fuente, así que la respuesta A es correcta. El objetivo kernel no es válido y producirá un mensaje de error, así que la respuesta B es incorrecta. El objetivo config crea un archivo de configuración, pero no compila el binario del kernel, así que la respuesta C es incorrecta. El objetivo clean elimina los ajustes de configuración anteriores, pero no compila el binario del kernel, así que la respuesta D es incorrecta.
+
+### SYBEX-CH03-RQ10  [multiple_choice]  tema: Kernel y compilación
+P: ¿Qué programa debería usar para crear un disco RAM inicial en un sistema basado en Debian?
+   A. mkinitrd
+   B. make bzImage
+  *C. mkinitramfs
+   D. make initrd
+LIBRO: Los sistemas basados en Debian usan el programa mkinitramfs para crear el disco RAM inicial que se emplea en el arranque, así que la respuesta C es correcta. El programa mkinitrd lo usan los sistemas basados en Red Hat, pero no está disponible en los basados en Debian, así que la respuesta A es incorrecta. No existe ningún objetivo de make para crear un disco RAM inicial, así que las respuestas B y D son incorrectas.
+
+### SYBEX-CH03-RQ11  [multiple_choice]  tema: Kernel y compilación
+P: ¿Qué comando debería usar para listar todos los módulos instalados?
+   A. modinfo
+   B. insmod
+   C. rmmod
+  *D. lsmod
+LIBRO: Para listar todos los módulos instalados en el kernel en ejecución se usa el comando lsmod, así que la respuesta D es correcta. El comando modinfo solo muestra la información de un único módulo: no lista todos los módulos instalados, así que la respuesta A es incorrecta. Los comandos insmod y rmmod sirven para insertar y eliminar módulos, respectivamente, así que las respuestas B y C son incorrectas.
+
+### SYBEX-CH03-RQ12  [multiple_choice]  tema: Kernel y compilación
+P: ¿Qué comando debería usar para instalar un módulo si no conoce su nombre de archivo?
+   A. insmod
+   B. rmmod
+  *C. modprobe
+   D. lsmod
+LIBRO: El comando insmod permite insertar un módulo, pero hay que conocer el nombre de archivo del módulo, así que la respuesta A es incorrecta. El comando modprobe permite insertar un módulo a partir del nombre del módulo, así que la respuesta C es correcta. El comando rmmod se usa para eliminar un módulo y lsmod para listar todos los módulos, así que las respuestas B y D son incorrectas.
+
+### SYBEX-CH03-RQ13  [multiple_choice]  tema: Kernel y compilación
+P: ¿Qué comando debería usar para mostrar información sobre los dispositivos USB instalados en el sistema?
+  *A. lsusb
+   B. lspci
+   C. lsmod
+   D. lsdev
+LIBRO: El comando lsusb lista todos los dispositivos USB conectados al sistema Linux, así que la respuesta A es correcta. El comando lspci lista tarjetas PCI, pero no dispositivos USB, así que la respuesta B es incorrecta. El comando lsmod lista los módulos cargados, lo que puede mostrar algunos de los dispositivos USB instalados, pero si algún controlador USB se compiló dentro del kernel no listará todos los dispositivos USB, así que la respuesta C es incorrecta. El comando lsdev muestra información de los puertos de E/S e interrupciones del hardware, pero de todos los dispositivos, no solo de los USB, así que la respuesta D es incorrecta.
+
+### SYBEX-CH03-RQ14  [multiple_choice]  tema: Kernel y compilación
+P: ¿Qué opción del comando lsusb muestra información detallada de los dispositivos USB?
+   A. –d
+   B. –s
+   C. –t
+  *D. –v
+LIBRO: La opción de modo detallado (verbose) del comando lsusb muestra información detallada de los dispositivos USB, así que la respuesta D, –v, es correcta. La opción –d solo muestra los dispositivos USB con un ID de fabricante concreto, así que la respuesta A es incorrecta. La opción –s solo muestra los dispositivos USB conectados a un bus concreto, así que la respuesta B es incorrecta. La opción –t muestra la información en formato de árbol, de modo que se ven las dependencias entre dispositivos pero no información detallada de ellos, así que la respuesta C es incorrecta.
+
+### SYBEX-CH03-RQ15  [multiple_choice]  tema: Kernel y compilación
+P: ¿Qué tipo de dispositivos de hardware puede conectar al sistema Linux mientras está en marcha?
+   A. Coldplug
+  *B. Hotplug
+   C. PCI
+   D. PCIe
+LIBRO: Los dispositivos hotplug, como los USB, permiten conectar el dispositivo mientras el sistema está en marcha, así que la respuesta B es correcta. Los dispositivos coldplug solo pueden conectarse con el sistema apagado, así que la respuesta A es incorrecta. Tanto las tarjetas PCI como las PCIe solo pueden insertarse con el sistema apagado, así que las respuestas C y D son incorrectas.
+
+### SYBEX-CH03-RQ16  [multiple_choice]  tema: Kernel y compilación
+P: ¿Qué programa usa Linux para detectar dispositivos hotplug y cargar los módulos adecuados?
+   A. lsusb
+  *B. udevd
+   C. modprobe
+   D. insmod
+LIBRO: El sistema gestor de dispositivos udev usa el programa udevd para escuchar los mensajes de eventos del kernel y cargar, según unas reglas, los módulos adecuados para el hardware insertado, así que la respuesta B es correcta. El comando lsusb solo lista los módulos instalados, así que la respuesta A es incorrecta. Los comandos modprobe e insmod solo pueden instalar módulos manualmente; no pueden detectar dispositivos nuevos automáticamente, así que las respuestas C y D son incorrectas.
+
+### SYBEX-CH03-RQ17  [multiple_choice]  tema: Kernel y compilación
+P: ¿Dónde se guardan los ajustes de configuración de udevd?
+   A. /lib/modules
+   B. /boot
+   C. /etc/udev/rules.d
+  *D. /etc/udev/udev.conf
+LIBRO: El archivo de configuración /etc/udev/udev.conf define los ajustes que controlan el funcionamiento del programa udevd; por tanto, la respuesta D es correcta. La carpeta /lib/modules se usa para guardar archivos de módulos, no archivos de configuración, así que la respuesta A es incorrecta. La carpeta /boot se usa para guardar el binario del kernel, pero no la configuración de udevd, así que la respuesta B es incorrecta. La carpeta /etc/udev/rules.d guarda las reglas de udevd, pero no los ajustes de configuración, así que la respuesta C es incorrecta.
+
+### SYBEX-CH03-RQ18  [multiple_choice]  tema: Kernel y compilación
+P: ¿Dónde se guardan las reglas de udevd?
+   A. /etc/udev/udevd.conf
+  *B. /etc/udev/rules.d
+   C. /boot
+   D. /lib/modules
+LIBRO: Las reglas del programa udevd se guardan en la carpeta /etc/udev/rules.d, así que la respuesta B es correcta. El archivo /etc/udev/udevd.conf contiene los ajustes de configuración que controlan el programa udevd, no reglas, así que la respuesta A es incorrecta. La carpeta /boot se usa para guardar el binario del kernel, no las reglas de udevd, así que la respuesta C es incorrecta. La carpeta /lib/modules se usa para guardar archivos de módulos del kernel, no archivos de configuración, así que la respuesta D es incorrecta.
+
+### SYBEX-CH03-RQ19  [multiple_choice]  tema: Kernel y compilación
+P: ¿Dónde se encuentra el pseudodirectorio dinámico que crea el kernel para consultar sus ajustes y estadísticas de rendimiento?
+   A. /etc/kernel
+   B. /boot/kernel
+  *C. /proc
+   D. /usr/src/linux
+LIBRO: El kernel crea automáticamente el sistema de archivos /proc para poder leer y escribir ajustes del kernel y ver sus estadísticas de rendimiento, así que la respuesta C es correcta. La carpeta /usr/src/linux se usa para guardar los archivos de código fuente del kernel, así que la respuesta D es incorrecta. Las respuestas A y B son carpetas que no son válidas en el sistema Linux, así que ambas son incorrectas.
+
+### SYBEX-CH03-RQ20  [multiple_choice]  tema: Kernel y compilación
+P: ¿Qué comando permite cambiar los ajustes del kernel en tiempo de ejecución?
+  *A. sysctl
+   B. lsmod
+   C. modprobe
+   D. lsdev
+LIBRO: El comando sysctl permite cambiar los ajustes del kernel en cualquier momento, así que la respuesta A es correcta. Los comandos lsmod y lsdev permiten ver los módulos del kernel y la información de dispositivos, respectivamente, así que las respuestas B y D son incorrectas. El comando modprobe permite insertar y eliminar módulos, pero no cambiar sus ajustes, así que la respuesta C es incorrecta.

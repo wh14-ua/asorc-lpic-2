@@ -1,0 +1,55 @@
+[
+{"id":"SYBEX-CH02-RQ01",
+ "q":"¿Cuáles de los siguientes comandos permiten enviar un mensaje a cualquier terminal tty que tenga permitido el acceso de escritura? (Elija todas las que correspondan.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"La opción B, el comando write, y la opción E, el comando wall, permiten enviar un mensaje a cualquier terminal tty que tenga permitido el acceso de escritura. La opción A es incorrecta, porque el comando mesg comprueba si está permitido el acceso de escritura al terminal, y también puede establecerlo. La opción C, el comando echo, simplemente muestra lo que le sigue en la salida estándar del terminal actual. La opción D, si está implementada en el sistema, permite al usuario enviar y leer correo electrónico, no mensajes de terminal."},
+
+{"id":"SYBEX-CH02-RQ02",
+ "q":"Para apagar el sistema sin enviar un mensaje a los usuarios, ¿cuál de las siguientes opciones de /sbin/shutdown se utiliza?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"Ninguna de las anteriores"},
+ "e":"La opción ––no-wall permite que el apagado se realice sin enviar mensajes wall a los usuarios de los terminales. Solo el superusuario que ejecuta el comando recibirá un mensaje. La opción A es incorrecta, porque la opción -c cancela un apagado. La opción B también es incorrecta, porque la opción -k no apaga el sistema, sino que deshabilita los inicios de sesión y envía mensajes de apagado. La opción ––wall que aparece en la opción D está inventada."},
+
+{"id":"SYBEX-CH02-RQ03",
+ "q":"El departamento jurídico de su empresa ha decidido que hace falta un aviso en el inicio de sesión de un sistema Linux que usted administra, advirtiendo de que está prohibido el uso no autorizado del sistema. ¿Cuál es el mejor método para desplegar ese aviso legal?",
+ "o":{"A":"Editar el archivo /etc/issue y poner ahí el aviso.",
+      "B":"Editar el archivo /etc/motd y poner ahí el aviso.",
+      "C":"Usar el comando notify-send para enviar el aviso a los usuarios.",
+      "D":"Editar el archivo ∼./bashrc y poner ahí el aviso.",
+      "E":"Ninguna de las anteriores."},
+ "e":"La opción A es la mejor elección. Al editar el archivo /etc/issue, el aviso legal se mostrará a cualquiera antes de intentar iniciar sesión en el sistema mediante un terminal. También conviene poner el aviso en el archivo /etc/issue.net para los usuarios que se conecten por red, así como en un banner de inicio de sesión si hay usuarios con entorno gráfico. La opción B no es una buena elección, porque el aviso no se mostraría hasta después de que el usuario haya iniciado sesión. La opción C tampoco es buena, porque enviaría un mensaje único y solo a los usuarios del entorno gráfico. La opción D no es una buena elección, porque el archivo ~./bashrc es un script de entorno de inicio de sesión."},
+
+{"id":"SYBEX-CH02-RQ04",
+ "q":"Suponga que hay dinero de sobra y quiere el soporte más rápido para las copias de seguridad de su empresa. Con esa información, ¿cuál es la mejor elección de soporte de copia de seguridad?",
+ "o":{"A":"Cintas magnéticas","B":"Discos ópticos","C":"=","D":"=","E":"="},
+ "e":"Actualmente los SSD pueden ser caros, pero si hay presupuesto son el soporte más rápido para copias de seguridad. La opción A, las cintas magnéticas, es una de las más lentas para copias de seguridad. Los discos ópticos, opción B, tienen capacidad limitada, así que hay que cambiarlos más a menudo, y además son más lentos que los SSD. Los discos duros, opción C, son más rápidos que la cinta pero más lentos que los SSD. Por último, con la opción E no se puede saber qué tipo de soporte hay conectado a la red; por tanto, no es la mejor respuesta."},
+
+{"id":"SYBEX-CH02-RQ05",
+ "q":"Un compañero, también administrador de sistemas, le entrega un SSD y le dice: «Aquí están todos los archivos creados o modificados desde la última copia de seguridad completa del sistema». ¿De cuáles de los siguientes tipos de copia de seguridad puede tratarse? (Elija todas las que correspondan.)",
+ "o":{"A":"Completa","B":"Incremental","C":"Diferencial","D":"Ninguna de las anteriores","E":"Todas las anteriores"},
+ "e":"Una copia incremental, opción B, es una copia de todos los datos añadidos o modificados desde la última copia de seguridad. Por tanto, da igual si la última copia fue completa o no; el SSD puede contener este tipo de copia. Además, la copia diferencial, opción C, es una copia de todos los datos añadidos o modificados desde la última copia completa. Como la última copia fue completa, es posible que el SSD contenga este tipo de copia. La opción A no encaja, porque una copia completa copia todos los datos."},
+
+{"id":"SYBEX-CH02-RQ06",
+ "q":"¿Cuáles de los siguientes directorios de Linux deberían incluirse en una copia de seguridad si se piensa usar esos datos para restauraciones completas del sistema? (Elija todas las que correspondan.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"Todas las anteriores"},
+ "e":"El directorio /bin/, opción A, contiene programas de utilidad que harán falta en una restauración completa del sistema, así que deben incluirse en la copia de seguridad. El directorio /home/, opción B, suele contener los archivos de los usuarios del sistema. También deben incluirse en la copia. La opción C, /run/, y la opción D, /tmp/, contienen ambas datos temporales y no hace falta incluirlos en ninguna copia de seguridad de datos."},
+
+{"id":"SYBEX-CH02-RQ07",
+ "q":"¿Cuáles de los siguientes paquetes de software son soluciones de copia de seguridad con interfaz gráfica o basadas en web? (Elija todas las que correspondan.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"Amanda, Duplicity y Bacula son soluciones de copia de seguridad con interfaz gráfica o basadas en web que pueden emplearse para ayudar en las copias del sistema. La opción C, Nagios, y la opción E, connectd, son utilidades de monitorización de recursos."},
+
+{"id":"SYBEX-CH02-RQ08",
+ "q":"¿Cuáles de las siguientes opciones del comando tar emplean compresión gzip al crear un tarball de copia de seguridad? (Elija todas las que correspondan.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"Las opciones que hacen que tar use compresión gzip al crear un tarball son: la opción ––gzip, que es de estilo largo; la opción -z, que es de estilo corto; y la opción z, que es de estilo antiguo. Las opciones -g (opción A) y g (opción D) las usa tar para copias incrementales, no para compresión."},
+
+{"id":"SYBEX-CH02-RQ09",
+ "q":"Al usar el comando tar para una copia de seguridad incremental se crea un archivo de instantánea (snapshot). ¿Qué extensión debería llevar ese archivo en su nombre?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"El archivo de instantánea puede tener el nombre que se quiera y estar en cualquier lugar del sistema de archivos; sin embargo, necesita la extensión .snar para indicar que es un archivo de instantánea de un archivador tar. La opción A, .tar, indica que el archivo es un archivador tar. La opción B, .tgz, indica que el archivo es un tarball comprimido con gzip. Las opciones C y D, .tar.snap y .snap, son extensiones inventadas."},
+
+{"id":"SYBEX-CH02-RQ10",
+ "q":"Para verificar una copia de seguridad tar justo después de crearla, ¿cuál de las siguientes opciones del comando tar se utiliza? (Elija todas las que correspondan.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"Las opciones ––compare y ––diff (opciones A y B) son las formas de estilo largo de -d (opción C). Estas tres opciones comparan los miembros de un archivador tar con los archivos externos y listan las diferencias. La opción D, -W (en estilo largo ––verify), verifica automáticamente un archivador tar en cuanto se crea. Sin embargo, no puede usarse con tarballs, solo con archivadores tar. La opción E, -J, es una opción de tar que hace que el comando emplee compresión xz."}
+]

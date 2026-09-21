@@ -1,0 +1,243 @@
+{
+ "preguntas": {
+  "SYBEX-CH12-RQ13": {
+   "respuestas": 1,
+   "ms_respuesta_total": 17884,
+   "ms_explicacion_total": 7398,
+   "marcada": false,
+   "ultimo_resultado": "wrong",
+   "ultima_vez": 1790008577
+  },
+  "SYBEX-CH12-RQ09": {
+   "respuestas": 2,
+   "ms_respuesta_total": 7302,
+   "ms_explicacion_total": 71713,
+   "marcada": false,
+   "ultimo_resultado": "wrong",
+   "ultima_vez": 1790013062
+  },
+  "SYBEX-CH10-RQ06": {
+   "respuestas": 1,
+   "ms_respuesta_total": 14864,
+   "ms_explicacion_total": 90924,
+   "marcada": false,
+   "ultimo_resultado": "wrong",
+   "ultima_vez": 1790008693
+  },
+  "SYBEX-CH04-RQ18": {
+   "respuestas": 1,
+   "ms_respuesta_total": 16948,
+   "ms_explicacion_total": 30525,
+   "marcada": false,
+   "ultimo_resultado": "wrong",
+   "ultima_vez": 1790008741
+  },
+  "SYBEX-CH03-RQ11": {
+   "respuestas": 1,
+   "ms_respuesta_total": 20065,
+   "ms_explicacion_total": 170693,
+   "marcada": false,
+   "ultimo_resultado": "blank",
+   "ultima_vez": 1790008931
+  },
+  "ENI-CH05-Q07": {
+   "respuestas": 1,
+   "ms_respuesta_total": 13368,
+   "ms_explicacion_total": 27947,
+   "marcada": false,
+   "ultimo_resultado": "partial",
+   "ultima_vez": 1790008973
+  },
+  "SYBEX-CH09-RQ09": {
+   "respuestas": 1,
+   "ms_respuesta_total": 20079,
+   "ms_explicacion_total": 312820,
+   "marcada": false,
+   "ultimo_resultado": "blank",
+   "ultima_vez": 1790009306
+  },
+  "ENI-CH10-Q02": {
+   "respuestas": 1,
+   "ms_respuesta_total": 11992,
+   "ms_explicacion_total": 43733,
+   "marcada": false,
+   "ultimo_resultado": "partial",
+   "ultima_vez": 1790009361
+  },
+  "SYBEX-CH01-RQ19": {
+   "respuestas": 1,
+   "ms_respuesta_total": 6630,
+   "ms_explicacion_total": 294679,
+   "marcada": false,
+   "ultimo_resultado": "correct",
+   "ultima_vez": 1790009663
+  },
+  "ENI-CH04-Q06": {
+   "respuestas": 1,
+   "ms_respuesta_total": 20053,
+   "ms_explicacion_total": 435295,
+   "marcada": false,
+   "ultimo_resultado": "partial",
+   "ultima_vez": 1790010118
+  },
+  "ENI-CH08-Q01": {
+   "respuestas": 1,
+   "ms_respuesta_total": 20113,
+   "ms_explicacion_total": 160897,
+   "marcada": false,
+   "ultimo_resultado": "blank",
+   "ultima_vez": 1790010299
+  },
+  "ENI-CH03-Q04": {
+   "respuestas": 1,
+   "ms_respuesta_total": 4761,
+   "ms_explicacion_total": 16753,
+   "marcada": false,
+   "ultimo_resultado": "blank",
+   "ultima_vez": 1790010320
+  },
+  "ENI-CH07-Q02": {
+   "respuestas": 1,
+   "ms_respuesta_total": 6579,
+   "ms_explicacion_total": 3432,
+   "marcada": false,
+   "ultimo_resultado": "partial",
+   "ultima_vez": 1790010330
+  },
+  "SYBEX-CH03-RQ03": {
+   "respuestas": 1,
+   "ms_respuesta_total": 7227,
+   "ms_explicacion_total": 67050,
+   "marcada": false,
+   "ultimo_resultado": "correct",
+   "ultima_vez": 1790010405
+  },
+  "SYBEX-CH10-RQ01": {
+   "respuestas": 1,
+   "ms_respuesta_total": 20097,
+   "ms_explicacion_total": 82983,
+   "marcada": false,
+   "ultimo_resultado": "blank",
+   "ultima_vez": 1790010508
+  },
+  "ENI-CH10-Q10": {
+   "respuestas": 1,
+   "ms_respuesta_total": 20069,
+   "ms_explicacion_total": 126334,
+   "marcada": false,
+   "ultimo_resultado": "partial",
+   "ultima_vez": 1790010654
+  },
+  "SYBEX-CH02-RQ18": {
+   "respuestas": 1,
+   "ms_respuesta_total": 12375,
+   "ms_explicacion_total": 18286,
+   "marcada": false,
+   "ultimo_resultado": "wrong",
+   "ultima_vez": 1790011050
+  },
+  "SYBEX-CH02-RQ07": {
+   "respuestas": 1,
+   "ms_respuesta_total": 14578,
+   "ms_explicacion_total": 20629,
+   "marcada": false,
+   "ultimo_resultado": "wrong",
+   "ultima_vez": 1790011085
+  },
+  "SYBEX-CH09-RQ14": {
+   "respuestas": 1,
+   "ms_respuesta_total": 12899,
+   "ms_explicacion_total": 26636,
+   "marcada": false,
+   "ultimo_resultado": "wrong",
+   "ultima_vez": 1790011125
+  },
+  "SYBEX-CH11-RQ04": {
+   "respuestas": 1,
+   "ms_respuesta_total": 17114,
+   "ms_explicacion_total": 105168,
+   "marcada": false,
+   "ultimo_resultado": "wrong",
+   "ultima_vez": 1790011247
+  },
+  "SYBEX-CH06-RQ08": {
+   "respuestas": 1,
+   "ms_respuesta_total": 4829,
+   "ms_explicacion_total": 8211,
+   "marcada": false,
+   "ultimo_resultado": "wrong",
+   "ultima_vez": 1790011260
+  },
+  "SYBEX-CH01-RQ15": {
+   "respuestas": 1,
+   "ms_respuesta_total": 18344,
+   "ms_explicacion_total": 63048,
+   "marcada": false,
+   "ultimo_resultado": "correct",
+   "ultima_vez": 1790011341
+  },
+  "SYBEX-CH09-RQ18": {
+   "respuestas": 1,
+   "ms_respuesta_total": 20052,
+   "ms_explicacion_total": 36670,
+   "marcada": false,
+   "ultimo_resultado": "blank",
+   "ultima_vez": 1790011398
+  },
+  "SYBEX-AT-11": {
+   "respuestas": 1,
+   "ms_respuesta_total": 20043,
+   "ms_explicacion_total": 213876,
+   "marcada": false,
+   "ultimo_resultado": "blank",
+   "ultima_vez": 1790011632
+  },
+  "SYBEX-AT-16": {
+   "respuestas": 1,
+   "ms_respuesta_total": 20044,
+   "ms_explicacion_total": 189359,
+   "marcada": false,
+   "ultimo_resultado": "blank",
+   "ultima_vez": 1790011842
+  },
+  "SYBEX-AT-19": {
+   "respuestas": 1,
+   "ms_respuesta_total": 20072,
+   "ms_explicacion_total": 804287,
+   "marcada": false,
+   "ultimo_resultado": "blank",
+   "ultima_vez": 1790012666
+  },
+  "SYBEX-CH09-RQ07": {
+   "respuestas": 1,
+   "ms_respuesta_total": 445512,
+   "ms_explicacion_total": 295032,
+   "marcada": false,
+   "ultimo_resultado": "correct",
+   "ultima_vez": 1790013803
+  },
+  "SYBEX-CH05-RQ06": {
+   "respuestas": 0,
+   "ms_respuesta_total": 0,
+   "ms_explicacion_total": 0,
+   "marcada": false
+  },
+  "SYBEX-CH05-RQ11": {
+   "respuestas": 1,
+   "ms_respuesta_total": 104155,
+   "ms_explicacion_total": 28609,
+   "marcada": false,
+   "ultimo_resultado": "correct",
+   "ultima_vez": 1790014081
+  },
+  "SYBEX-CH12-RQ18": {
+   "respuestas": 1,
+   "ms_respuesta_total": 10908,
+   "ms_explicacion_total": 24779,
+   "marcada": false,
+   "ultimo_resultado": "wrong",
+   "ultima_vez": 1790014117
+  }
+ },
+ "sesiones": []
+}

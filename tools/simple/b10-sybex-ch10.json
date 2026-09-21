@@ -1,0 +1,234 @@
+{
+ "SYBEX-CH10-RQ01": {
+  "idea": [
+   "Los registros de Samba están en /var/log/samba/."
+  ],
+  "otras": {
+   "A": "/etc/smb/ es configuración.",
+   "B": "/etc/samba/ también.",
+   "D": "/var/lib/samba/ guarda las bases de datos de usuarios.",
+   "E": "/etc/samba.d/ también fue configuración."
+  },
+  "memorizar": "/var/log siempre son registros."
+ },
+ "SYBEX-CH10-RQ02": {
+  "idea": [
+   "El principal es smbd, que habla SMB.",
+   "nmbd añade NetBIOS sobre TCP para Windows antiguos y cupsd comparte impresoras."
+  ],
+  "otras": {
+   "C": "el demonio se llama winbindd, con dos des.",
+   "E": "cifsd está inventado."
+  },
+  "memorizar": "smbd archivos, nmbd nombres, cupsd impresión."
+ },
+ "SYBEX-CH10-RQ03": {
+  "idea": [
+   "El archivo principal es smb.conf."
+  ],
+  "otras": {
+   "B": "samba.conf está inventado.",
+   "C": "mount.cifs monta un recurso desde el cliente.",
+   "D": "/etc/samba.d es un directorio en desuso.",
+   "E": "smbcontrol gestiona el demonio smbd."
+  },
+  "memorizar": "el archivo principal de Samba es smb.conf."
+ },
+ "SYBEX-CH10-RQ04": {
+  "idea": [
+   "Después de tocar la configuración, lo siguiente es comprobar la sintaxis.",
+   "Eso lo hace testparm."
+  ],
+  "otras": {
+   "A": "recargar sin comprobar es ir al revés.",
+   "B": "reiniciar el demonio no hace falta.",
+   "C": "smbstatus enseña las conexiones actuales.",
+   "E": "crear el directorio o la cola no es el paso siguiente."
+  },
+  "memorizar": "primero testparm, después recargar."
+ },
+ "SYBEX-CH10-RQ05": {
+  "idea": [
+   "La directiva es workgroup.",
+   "Se le pone el grupo de trabajo o dominio de Windows, no un FQDN."
+  ],
+  "otras": {
+   "A": "no es un nombre de directiva válido.",
+   "B": "adgroup está inventada.",
+   "C": "tampoco existe.",
+   "D": "tampoco."
+  },
+  "memorizar": "workgroup lleva el nombre de Windows, no un FQDN."
+ },
+ "SYBEX-CH10-RQ06": {
+  "idea": [
+   "passdb backend acepta tdbsam, smbpasswd y ldapsam.",
+   "Son las bases de datos de cuentas, que suelen vivir en /var/lib/samba/."
+  ],
+  "otras": {
+   "B": "ads es un valor de la directiva security.",
+   "E": "domain también es de security."
+  },
+  "memorizar": "passdb backend = dónde están las cuentas."
+ },
+ "SYBEX-CH10-RQ07": {
+  "idea": [
+   "Un recurso compartido vive bajo una sección con su propio nombre, como [myshare]."
+  ],
+  "otras": {
+   "A": "[global] son las directivas que valen para todo.",
+   "B": "[netlogins] es para cuando actúa de controlador de dominio.",
+   "D": "[printers] es para impresoras.",
+   "E": "[profiles] es para perfiles móviles."
+  },
+  "memorizar": "el nombre de la sección es el nombre del recurso."
+ },
+ "SYBEX-CH10-RQ08": {
+  "idea": [
+   "Si hace falta contraseña lo marca public.",
+   "public = no exige contraseña; public = yes no la pide."
+  ],
+  "otras": {
+   "B": "browseable decide si el recurso se ve en la lista.",
+   "C": "guest only limita a conexiones de invitado.",
+   "D": "writable es sobre escribir, no sobre entrar.",
+   "E": "read only es lo mismo al revés."
+  },
+  "memorizar": "public decide si se pide contraseña."
+ },
+ "SYBEX-CH10-RQ09": {
+  "idea": [
+   "Entrar a un recurso como si fuera FTP: smbclient."
+  ],
+  "otras": {
+   "A": "pdbedit gestiona las bases de datos de usuarios.",
+   "C": "smbpasswd gestiona smbpasswd o tdbsam.",
+   "D": "rpcclient ejecuta funciones RPC de Microsoft.",
+   "E": "ftp se conecta a servidores FTP de verdad."
+  },
+  "memorizar": "smbclient = cliente de línea de comandos de Samba."
+ },
+ "SYBEX-CH10-RQ10": {
+  "idea": [
+   "Sirven las cinco cosas.",
+   "Subir log level, mirar qué se ofrece con smbclient -L, probar la red entre ambos.",
+   "Y además pasar testparm y ver si los demonios están vivos."
+  ],
+  "memorizar": "de fuera hacia dentro: red, demonios, configuración, registro."
+ },
+ "SYBEX-CH10-RQ11": {
+  "idea": [
+   "Quien atiende las peticiones de montaje es mountd."
+  ],
+  "otras": {
+   "A": "portmapper registra servicios RPC en sus puertos.",
+   "B": "rpc.lockd da el bloqueo de archivos desde el kernel.",
+   "C": "rpcbind es el mismo que portmapper, con otro nombre.",
+   "D": "statd acompaña a lockd en el bloqueo."
+  },
+  "memorizar": "mountd monta; rpcbind solo reparte puertos."
+ },
+ "SYBEX-CH10-RQ12": {
+  "idea": [
+   "La configuración es /etc/exports, en /etc/.",
+   "Y se puede ampliar con archivos .exports dentro de /etc/exports.d/."
+  ],
+  "otras": {
+   "B": "/etc/exports/ como directorio está inventado.",
+   "D": "/proc/fs/nfs/ enseña las exportaciones en uso ahora.",
+   "E": "/var/lib/nfs/ guarda xtab, etab y rmtab."
+  },
+  "memorizar": "se configura en /etc/exports y /etc/exports.d/."
+ },
+ "SYBEX-CH10-RQ13": {
+  "idea": [
+   "Lo normal es compartir subdirectorios de /srv/ o de /var/."
+  ],
+  "otras": {
+   "A": "/ no se comparte nunca.",
+   "B": "/etc/ tampoco.",
+   "C": "/proc/ no tiene sentido: son procesos."
+  },
+  "memorizar": "comparte datos, nunca el sistema."
+ },
+ "SYBEX-CH10-RQ14": {
+  "idea": [
+   "Para solo lectura: ro y async.",
+   "ro lo hace de solo lectura y async le da rendimiento."
+  ],
+  "otras": {
+   "B": "rw es lectura y escritura.",
+   "D": "sync encaja mejor con lectura y escritura.",
+   "E": "subtree_check comprueba permisos de directorios superiores."
+  },
+  "memorizar": "ro + async para leer; rw + sync para escribir."
+ },
+ "SYBEX-CH10-RQ15": {
+  "idea": [
+   "De recursos NFS hablan exportfs y showmount."
+  ],
+  "otras": {
+   "B": "mount.nfs monta desde el cliente.",
+   "C": "rpcinfo informa de servicios RPC.",
+   "E": "smbstatus es de Samba."
+  },
+  "memorizar": "exportfs desde el servidor; showmount, quién monta."
+ },
+ "SYBEX-CH10-RQ16": {
+  "idea": [
+   "Para ver el detalle: exportfs -v."
+  ],
+  "otras": {
+   "A": "-a exporta todo lo de /etc/exports.",
+   "B": "-o exporta algo definido en la propia línea.",
+   "C": "-r vuelve a exportar lo configurado.",
+   "D": "-u deja de exportar."
+  },
+  "memorizar": "-v de verbose, el único que solo mira."
+ },
+ "SYBEX-CH10-RQ17": {
+  "idea": [
+   "Servidores FTP: pure-ftpd y vsftpd."
+  ],
+  "otras": {
+   "A": "ftp es un cliente de línea de comandos.",
+   "D": "FileZilla es un cliente con ventanas.",
+   "E": "lftp también es cliente."
+  },
+  "memorizar": "la d final delata al demonio."
+ },
+ "SYBEX-CH10-RQ18": {
+  "idea": [
+   "En pasivo, el que abre las conexiones es solo el cliente.",
+   "Siempre hay dos conexiones, de datos y de comandos, en pasivo y en activo."
+  ],
+  "otras": {
+   "A": "en pasivo el servidor no abre nada.",
+   "B": "tampoco es solo el servidor.",
+   "E": "los puertos 20 y 21 son los del modo activo."
+  },
+  "memorizar": "pasivo = el servidor espera, el cliente abre."
+ },
+ "SYBEX-CH10-RQ19": {
+  "idea": [
+   "Para conexiones anónimas se usan anonymous y ftp.",
+   "En vsftpd, el usuario ftp se fija con ftp_username."
+  ],
+  "otras": {
+   "B": "vsftpd es el demonio, no un usuario.",
+   "C": "los nombres individuales no son anónimos.",
+   "D": "anon está inventado."
+  },
+  "memorizar": "anónimo entra como anonymous; el sistema lo trata como ftp."
+ },
+ "SYBEX-CH10-RQ20": {
+  "idea": [
+   "En vsftpd hacen falta write_enable=YES, anon_upload_enable=YES y anon_mkdir_write_enable=YES.",
+   "En pure-ftpd la directiva es AnonymousCantUpload no."
+  ],
+  "otras": {
+   "A": "anonymous_upload=YES está inventada."
+  },
+  "memorizar": "vsftpd pide tres directivas; pure-ftpd, una."
+ }
+}

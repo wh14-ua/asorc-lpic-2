@@ -1,0 +1,89 @@
+### SYBEX-CH10-RQ11  [multiple_choice]
+Q: The NFS service that manages NFS client mount requests on the NFS server is which of the following? (Choose the best answer.)
+A: portmapper
+B: rpc.lockd
+C: rpcbind
+D: statd
+E: mountd
+X: Option E, mountd, is correct because this daemon manages any NFS client mount requests that come into the NFS server. Option A, portmapper, and option C, rpcbind, are the same daemon (just different names), but they are not the correct answer, because this daemon registers RPC services to the various RPC ports, among other things. Option B, rpc.lockd, is incorrect because it is the kernel service that provides NFS file locking. The statd daemon, option D, is a wrong choice, because this daemon works with the lockd kernel service to provide NLM protocol file locking.
+
+### SYBEX-CH10-RQ12  [multiple_response]
+Q: NFS export configuration files are typically located where? (Choose all that apply.)
+A: /etc/
+B: /etc/exports/
+C: /etc/exports.d/
+D: /proc/fs/nfs/
+E: /var/lib/nfs/
+X: Option A is correct, because the primary NFS configuration file is /etc/exports. Option C is also correct, because the /etc/exports.d/ directory may contain extra export configuration files with an .exports file extension name. Option B is a made-up directory name, so it is an incorrect choice. The /proc/fs/nfs/ directory houses the exports file, which contains current exports and the individual clients using them, so option D is a wrong choice. Finally, option E is incorrect, because the /var/lib/nfs/ directory stores the xtab, etab, and rmtab files, which contain various NFS export information.
+
+### SYBEX-CH10-RQ13  [multiple_response]
+Q: Which of the following are typical NFS share directory locations? (Choose all that apply.)
+A: /
+B: /etc/
+C: /proc/
+D: /srv/
+E: /var/
+X: Options D and E are correct. On current distributions, system administrators typically use these filesystem locations to create subdirectories, which serve as NFS exports (shares). Options A and B are wrong, because you should never share either the NFS server’s root directory (/) or its /etc/ directory. The /proc/ directory, option C, is also incorrect, because it is illogical to share this directory, which houses process information.
+
+### SYBEX-CH10-RQ14  [multiple_response]
+Q: Which of the following /etc/exports directives would be important for trying to create a read-only share’s configuration record? (Choose all that apply.)
+A: ro
+B: rw
+C: async
+D: sync
+E: subtree_check
+X: Options A and C are the best answers. The ro directive sets the share as read-only and the async directive increases performance of read-only (ro) exports. The rw directive sets the share as read/write, so option B is incorrect. The sync directive is best used with read/write shares, so option D is also incorrect. Option E’s subtree_check enables permission checking on higher-level directories and is not directly tied to a read-only share.
+
+### SYBEX-CH10-RQ15  [multiple_response]
+Q: Which of the following NFS utilities would show NFS share information specifically? (Choose all that apply.)
+A: exportfs
+B: mount.nfs
+C: rpcinfo
+D: showmount
+E: smbstatus
+X: Options A and D are correct, because both the exportfs and the showmount utilities display NFS share information. Option B’s mount.nfs utility is used for mounting an NFS share from an NFS client, so it is a wrong choice. The rpcinfo command (option C) displays RPC service information, and though the information may be related to NFS shares, it is not NFS share information. Therefore, it is an incorrect choice. The smbstatus command in Option E is used for displaying current Samba server connections and not NFS shares, so it also is an incorrect choice.
+
+### SYBEX-CH10-RQ16  [multiple_choice]
+Q: When using the exportfs command to display NFS share information on an NFS server, which of the following operands is the most helpful? (Choose the best answer.)
+A: -a
+B: -o
+C: -r
+D: -u
+E: -v
+X: Option E is correct, because the exportfs -v uses the utility’s verbose mode and displays all the various NFS shares being offered with detailed information concerning them. The -a (option A) is incorrect, because it is used to export all configured shares in the /etc/exports file. Option B’s -o is also wrong, because it is used to export a share configured on the command line. The -r operand (option C) re-exports configured shares, so it is a wrong choice. Finally, the -u operand in option D unexports an NFS share, so it is also an incorrect choice.
+
+### SYBEX-CH10-RQ17  [multiple_response]
+Q: Which of the following is software that you may employ to implement an FTP server? (Choose all that apply.)
+A: ftp
+B: pure-ftpd
+C: vsftpd
+D: FileZilla
+E: lftp
+X: The pure-ftpd daemon is from the Pure-FTPd FTP server package, so option B is correct. The vsftpd daemon is the Very Secure FTP server, so option C is also correct. FileZilla (option D) is a GUI-based FTP client, so it is an incorrect choice. Options A and E (ftp and lftp) are command-line FTP clients, so they are wrong choices as well.
+
+### SYBEX-CH10-RQ18  [multiple_response]
+Q: Which of the following statements are true about FTP passive mode? (Choose all that apply.)
+A: The FTP server and FTP client are active in establishing the connections.
+B: Only the FTP server is active in establishing the connections.
+C: Only the FTP client is active in establishing the connections.
+D: A data connection and a command connection are established.
+E: The FTP server uses port 20 and port 21 in the established connections.
+X: For a passive FTP connection, only the FTP client is active in establishing the connections, so option C is a correct choice and options A and B are wrong. A data connection and a command connection are established for both active and passive modes, so option D is correct. Option E is wrong, because only in active mode does the FTP server use ports 20 and 21. In passive mode, the FTP server uses port 20 as its data port but a random unprivileged port as its command port.
+
+### SYBEX-CH10-RQ19  [multiple_response]
+Q: Which usernames are typically used on the FTP server for handling anonymous connections? (Choose all that apply.)
+A: anonymous
+B: vsftpd
+C: Individual usernames
+D: anon
+E: ftp
+X: Option A is correct, because often the username accepted upon an FTP client connection is anonymous. Option E is also correct, because the user and group for typical FTP client connections is ftp and for vsftpd is set via the ftp_username directive. Option B is incorrect, because it is a FTP server daemon. Individual usernames are not typically used for anonymous FTP connections, so option C is wrong. Option D is also incorrect, because it is a made-up username.
+
+### SYBEX-CH10-RQ20  [multiple_response]
+Q: Which of the following directives are used in various FTP server daemons to allow anonymous uploads? (Choose all that apply.)
+A: anonymous_upload=YES
+B: write_enable=YES
+C: AnonymousCantUpload no
+D: anon_upload_enable=YES
+E: anon_mkdir_write_enable=YES
+X: Options B, D, and E are correct, because these three directives are needed by vsftpd for files to be uploaded by anonymous. Option C is also correct, because this directive is needed by pure-ftpd for files to be uploaded by anonymous. Option A is a wrong choice, because it is a made-up directive.

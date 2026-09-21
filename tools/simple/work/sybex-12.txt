@@ -1,0 +1,159 @@
+### SYBEX-CH12-RQ01  [multiple_choice]  tema: Seguridad del sistema
+P: ¿Cómo se llama una vulnerabilidad que permite a un atacante obtener acceso a un sistema?
+  *A. Vector de ataque
+   B. Puerto abierto
+   C. Aplicación abierta
+   D. Comunicación no segura
+LIBRO: Un vector de ataque es cualquier vía que permite a un atacante obtener acceso a un sistema. Como una vulnerabilidad permite el acceso a un sistema, es un vector de ataque; por tanto, la opción A es correcta. Las otras tres opciones solo describen otros tipos de vulnerabilidades, así que las opciones B, C y D son incorrectas.
+
+### SYBEX-CH12-RQ02  [multiple_choice]  tema: Seguridad del sistema
+P: ¿Qué archivo contiene una lista de los puertos estándar de las aplicaciones?
+   A. /etc/ssh/sshd_conf
+   B. /etc/openvpn
+  *C. /etc/services
+   D. /proc/sys/net/ipv4
+LIBRO: El archivo /etc/services contiene una correspondencia entre números de puerto y aplicaciones, así que la opción C es correcta. El archivo /etc/ssh/sshd_conf es la configuración del servidor OpenSSH, la carpeta /etc/openvpn contiene archivos de configuración de la aplicación OpenVPN y la carpeta /proc/sys/net/ipv4 contiene ajustes de la pila IPv4 del kernel, así que las opciones A, B y D son todas incorrectas.
+
+### SYBEX-CH12-RQ03  [multiple_choice]  tema: Seguridad del sistema
+P: ¿Cómo se puede usar el comando telnet para detectar un puerto abierto?
+   A. telnet puerto dirección
+  *B. telnet dirección puerto
+   C. telnet dirección:puerto
+   D. El comando telnet solo se conecta al puerto 23.
+LIBRO: El segundo parámetro del comando telnet especifica el puerto TCP al que conectarse, así que la opción B es correcta. Las opciones A y C muestran formatos incorrectos para el comando telnet, así que son incorrectas. La opción D es incorrecta, porque puede indicarse cualquier número de puerto TCP como segundo parámetro.
+
+### SYBEX-CH12-RQ04  [multiple_choice]  tema: Seguridad del sistema
+P: ¿Qué comando puede mostrar una lista de los puertos TCP que están escuchando conexiones entrantes en un servidor local?
+   A. telnet
+   B. iptables
+   C. ssh
+  *D. netstat
+LIBRO: El comando netstat puede mostrar todos los puertos abiertos que están escuchando conexiones de red entrantes, así que la opción D es correcta. El comando telnet solo puede conectarse a un puerto cada vez, así que la opción A es incorrecta. El comando iptables trabaja con las funciones de procesamiento de paquetes del kernel y no con puertos de red, así que la opción B es incorrecta. El comando ssh solo puede conectarse al puerto 22, así que la opción C es incorrecta.
+
+### SYBEX-CH12-RQ05  [multiple_choice]  tema: Seguridad del sistema
+P: ¿Qué opción del comando netcat le permite escanear varios puertos?
+   A. -v
+  *B. -z
+   C. -l
+   D. -6
+LIBRO: La opción –z indica una lista de puertos o un rango de puertos que el comando netcat debe escanear en busca de puertos a la escucha, así que la opción B es correcta. La opción –v ofrece una salida más detallada, así que la opción A es incorrecta. La opción –l indica a netcat que escuche conexiones entrantes, así que la opción C es incorrecta. La opción -6 indica a netcat que use direcciones IPv6, así que la opción D también es incorrecta.
+
+### SYBEX-CH12-RQ06  [multiple_choice]  tema: Seguridad del sistema
+P: ¿Qué opción de nmap indica que debe determinar la huella (fingerprint) del sistema remoto?
+  *A. -A
+   B. -sT
+   C. -sU
+   D. -p
+LIBRO: La opción –A indica a nmap que realice un análisis de huella del sistema remoto, así que la opción A es correcta. La opción –sT escanea todos los puertos TCP, mientras que la opción –sU escanea todos los puertos UDP, así que las opciones B y C son incorrectas. La opción –p indica un rango de puertos a escanear, así que la opción D también es incorrecta.
+
+### SYBEX-CH12-RQ07  [multiple_choice]  tema: Seguridad del sistema
+P: ¿Qué función de OpenVAS le permite simular distintos ataques de vulnerabilidad sobre el sistema que analiza?
+   A. La National Vulnerability Database (NVD)
+   B. El repositorio de software
+  *C. Los Network Vulnerability Tests (NVT)
+   D. La interfaz web
+LIBRO: Los Network Vulnerability Tests (NVT) simulan ataques conocidos contra los sistemas y se descargan como parte de OpenVAS, así que la opción C es correcta. La National Vulnerability Database (NVD) la mantiene US-CERT para definir vulnerabilidades, pero no para simularlas, así que la opción A es incorrecta. El repositorio de software de la distribución no almacena vulnerabilidades, así que la opción B es incorrecta. La interfaz web permite interactuar con OpenVAS, pero no simula vulnerabilidades, así que la opción D es incorrecta.
+
+### SYBEX-CH12-RQ08  [multiple_choice]  tema: Seguridad del sistema
+P: ¿Qué tipo de software puede avisarle de un ataque activo contra su sistema?
+   A. Escáner de puertos
+   B. Network Vulnerability Test (NVT)
+   C. Red privada virtual (VPN)
+  *D. Sistema de detección de intrusiones (IDS)
+LIBRO: Un sistema de detección de intrusiones (IDS) puede vigilar los eventos del sistema y de la red en busca de indicios de que se está produciendo un ataque activo, así que la opción D es correcta. Los escáneres de puertos pueden informar de vectores de ataque abiertos, pero no de cuándo se está produciendo un ataque, así que la opción A es incorrecta. El Network Vulnerability Test (NVT) simula ataques, pero no avisa de ataques en curso, así que la opción B es incorrecta. La VPN permite establecer una conexión segura entre dos hosts remotos, pero no avisa de un ataque, así que la opción C es incorrecta.
+
+### SYBEX-CH12-RQ09  [multiple_choice]  tema: Seguridad del sistema
+P: ¿Qué archivo contiene las reglas de fail2ban?
+   A. fail2ban.conf
+  *B. jail.conf
+   C. pwdfail
+   D. error.log
+LIBRO: El archivo jail.conf, situado en la carpeta /etc/fail2ban, contiene las definiciones de reglas que determinan qué eventos debe vigilar fail2ban.
+
+### SYBEX-CH12-RQ10  [multiple_choice]  tema: Seguridad del sistema
+P: ¿Qué aplicación es un sistema de detección de intrusiones en red (NIDS)?
+  *A. Snort
+   B. OpenVPN
+   C. OpenSSH
+   D. OpenVAS
+LIBRO: La aplicación Snort vigila la red en busca de ataques activos, así que la opción A es correcta. El paquete OpenVPN proporciona un túnel cifrado entre dos redes públicas para ofrecer un entorno seguro, pero no actúa como NIDS, así que la opción B es incorrecta. La aplicación OpenSSH proporciona un canal seguro entre un cliente y un servidor, pero no vigila los paquetes de la red, así que la opción C es incorrecta. La aplicación OpenVAS es una herramienta de vulnerabilidades, pero por sí sola no vigila los paquetes de la red, así que la opción D es incorrecta.
+
+### SYBEX-CH12-RQ11  [multiple_choice]  tema: Seguridad del sistema
+P: ¿Qué modo de Snort vuelca los paquetes a la pantalla para poder verlos?
+   A. Modo de registro (logging)
+   B. Modo NIDS
+  *C. Modo analizador (sniffer)
+   D. Modo de línea de comandos
+LIBRO: El modo analizador (sniffer) de Snort muestra una breve descripción de cada paquete recibido, así que la opción C es correcta. La opción A es el modo de registro, que guarda los paquetes en un archivo en lugar de mostrarlos, así que la opción A es incorrecta. El modo NIDS solo informa de eventos de vulnerabilidad, así que la opción B es incorrecta. Por defecto, el modo de línea de comandos de Snort no muestra los paquetes, así que la opción D también es incorrecta.
+
+### SYBEX-CH12-RQ12  [multiple_choice]  tema: Seguridad del sistema
+P: ¿Qué define la variable HOME_NET en la configuración de Snort?
+   A. Las direcciones remotas que hay que vigilar
+   B. La dirección del host local
+  *C. Las direcciones locales que hay que vigilar
+   D. La carpeta de configuración predeterminada
+LIBRO: La variable HOME_NET define las direcciones locales que Snort debe vigilar, así que la opción C es correcta. La variable EXTERNAL_NET define las direcciones remotas, así que la opción A es incorrecta. Snort no necesita definir direcciones locales ni apuntar al nombre de la carpeta de configuración, así que las opciones B y D son ambas incorrectas.
+
+### SYBEX-CH12-RQ13  [multiple_choice]  tema: Seguridad del sistema
+P: ¿Qué formato de dirección en una regla indica a Snort que busque únicamente paquetes que van de la dirección 10.0.0.1 a la 10.0.0.2?
+   A. 10.0.0.1 <- 10.0.0.2
+   B. 10.0.0.2 -> 10.0.0.1
+   C. 10.0.0.1 <> 10.0.0.2
+  *D. 10.0.0.1 -> 10.0.0.2
+LIBRO: La flecha indica el sentido del tráfico, así que 10.0.0.1 -> 10.0.0.2 define el flujo de tráfico que se busca, y la opción D es correcta. El indicador <- muestra que el tráfico viene de la dirección .2 hacia la .1, lo que es incorrecto, así que la opción A es incorrecta. La opción B también muestra el tráfico en sentido equivocado, así que es incorrecta. La opción C usa el operador bidireccional <>, así que también es incorrecta.
+
+### SYBEX-CH12-RQ14  [multiple_choice]  tema: Seguridad del sistema
+P: ¿Cuántos rangos de direcciones de red privadas admite IPv4?
+   A. Dos
+  *B. Tres
+   C. Cuatro
+   D. Ninguno
+LIBRO: Las especificaciones de IPv4 usan los rangos de direcciones de red 10.0.0.0 a 10.255.255.255, 172.16.0.0 a 172.31.255.255 y 192.168.0.0 a 192.168.255.255; por tanto, la opción B es correcta. Las opciones A, C y D indican un número incorrecto de rangos de direcciones, así que todas son incorrectas.
+
+### SYBEX-CH12-RQ15  [multiple_choice]  tema: Seguridad del sistema
+P: ¿Con qué valor empiezan las direcciones IPv6 de enlace local?
+  *A. fe80
+   B. ff02
+   C. ff05
+   D. aabb
+LIBRO: El valor fe80 identifica la dirección inicial de las direcciones de enlace local en IPv6. El resto de la dirección suele derivarse de la dirección MAC Ethernet para garantizar que sea única en la red. El valor ff02 es la dirección de multidifusión para routers y ff05 es la dirección de multidifusión para servidores DHCP, así que la opción C es incorrecta. El valor aabb no es un número reservado en IPv6, así que la opción D es incorrecta.
+
+### SYBEX-CH12-RQ16  [multiple_choice]  tema: Seguridad del sistema
+P: ¿Qué sistema permite conectar clientes con dirección de red privada a servidores externos?
+   A. SSH
+   B. Telnet
+  *C. NAT
+   D. IDS
+LIBRO: La traducción de direcciones de red (NAT) permite que la dirección de un cliente de una red privada se traduzca a una dirección pública antes de salir de la red, así que la opción C es correcta. SSH proporciona una conexión de red cifrada, así que la opción A es incorrecta. El comando telnet ofrece comunicación en texto plano, así que la opción B es incorrecta. El software IDS detecta atacantes; no proporciona soporte de conexión, así que la opción D es incorrecta.
+
+### SYBEX-CH12-RQ17  [multiple_choice]  tema: Seguridad del sistema
+P: ¿Qué comando de Linux se usa para crear reglas de cortafuegos en el sistema?
+   A. nc
+  *B. iptables
+   C. netstat
+   D. nmap
+LIBRO: El comando iptables permite manipular las reglas definidas en las cadenas y tablas del kernel para filtrar el tráfico de red, así que la opción B es correcta. El comando nc solo proporciona comunicación de red, así que la opción A es incorrecta. Los comandos netstat y nmap solo permiten ver el estado de los puertos de red, así que las opciones C y D son ambas incorrectas.
+
+### SYBEX-CH12-RQ18  [multiple_choice]  tema: Seguridad del sistema
+P: ¿Qué opción de iptables añade una nueva regla a una cadena?
+   A. -L
+   B. -F
+  *C. -A
+   D. -j
+LIBRO: La opción –A se usa para añadir nuevas reglas a una cadena o tabla, así que la opción C es correcta. La opción –L lista las reglas existentes, así que la opción A es incorrecta. La opción –F vacía la caché de reglas, así que la opción B es incorrecta. La opción –j especifica una acción predeterminada; no añade una regla nueva, así que la opción D es incorrecta.
+
+### SYBEX-CH12-RQ19  [multiple_choice]  tema: Seguridad del sistema
+P: ¿Qué política de iptables se usa para devolver un paquete al origen indicando que el paquete fue descartado?
+  *A. REJECT
+   B. DROP
+   C. ACCEPT
+   D. LOG
+LIBRO: La política REJECT descarta el paquete pero envía un mensaje ICMP de vuelta a la dirección IP de origen indicando el fallo; por tanto, la opción A es correcta. La política DROP descarta el paquete de forma silenciosa, así que la opción B es incorrecta. Las políticas ACCEPT y LOG aceptan todos los paquetes, y la política LOG además guarda información del paquete en un archivo de registro, así que las opciones C y D son incorrectas.
+
+### SYBEX-CH12-RQ20  [multiple_choice]  tema: Seguridad del sistema
+P: ¿Qué opción de iptables define la política predeterminada de una cadena?
+  *A. -P
+   B. -j
+   C. -L
+   D. -F
+LIBRO: La opción –P define la cadena y la política que se usará por defecto. La opción –j define la acción de una regla, así que la opción B es incorrecta. La opción –L solo lista cadenas y tablas; no las modifica, así que la opción C es incorrecta. La opción –F elimina todas las reglas de la cadena, así que la opción D es incorrecta.

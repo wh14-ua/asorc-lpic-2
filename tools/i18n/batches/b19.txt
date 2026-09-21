@@ -1,0 +1,89 @@
+### SYBEX-CH08-RQ11  [multiple_response]
+Q: Which of the following are legal zone type directives? (Choose all that apply.)
+A: master
+B: secondary
+C: hint
+D: delegation
+E: root
+X: Options A and C are correct. The type master directive indicates that this is a zone’s primary name server, and the type hint directive specifies that this is the hint or root zone, which is a list of current root name servers. Option B is wrong, because the type directive, which indicates that this is a zone’s secondary name server, is type slave and not type secondary. Option D is incorrect, because to indicate that this zone is to enforce a root zone’s delegation-only status, the type delegation-only directive should be used. Finally, option E is incorrect, because there is no type root directive.
+
+### SYBEX-CH08-RQ12  [multiple_response]
+Q: Which of the following are legal zone statement classes? (Choose all that apply.)
+A: CH
+B: DN
+C: HS
+D: IN
+E: IS
+X: Options A, C, and D are correct. A zone statement class can be either IN (Internet), CH (Chaosnet network protocol), or HS (Hesiod network software). Options B and E are made-up zone statement classes, so they are incorrect.
+
+### SYBEX-CH08-RQ13  [multiple_response]
+Q: Why might authoritative zone information be copied from the primary name server’s zone databases over to the secondary name server (called a zone transfer)? (Choose all that apply.)
+A: The primary server’s BIND daemon has restarted.
+B: The secondary server’s BIND daemon has started up.
+C: The rndc utility was used on the secondary server, and a manual zone data refresh was requested.
+D: The secondary server’s zone data’s refresh time has expired.
+E: The secondary server’s BIND daemon was stopped, and its configuration files were removed.
+X: Options B, C, and D are correct. In these cases, a zone transfer will occur. Option A is incorrect, because a zone transfer is not initiated by the primary server’s BIND daemon restarting. Option E is also incorrect, because this option essentially shuts down and removes the BIND service on the secondary server.
+
+### SYBEX-CH08-RQ14  [multiple_response]
+Q: The default zone databases are typically stored in which directories? (Choose the two best answers.)
+A: /etc/named/ directory
+B: /var/bind/ directory
+C: /var/named/ directory
+D: /etc/bind9/ directory
+E: /etc/bind/ directory
+X: You’ll typically find your default zone databases located in either the /var/named/ directory or the /etc/bind/ directory, depending on your server’s distribution. Therefore, options C and E are correct. The other directories are made up, so options A, B, and D are incorrect.
+
+### SYBEX-CH08-RQ15  [multiple_choice]
+Q: A zone database has resource records of various types. One such record identifies the authority zone’s start and includes the zone’s authoritative data. Which one of the following is this resource record type? (Choose the best answer.)
+A: CNAME
+B: A
+C: PTR
+D: NS
+E: SOA
+X: Option E is correct, because the SOA (start of authority) is the zone resource record type that identifies an authority zone’s start and includes the zone’s authoritative data. The CNAME (canonical name) record type maps an alias name to a host name, so option A is incorrect. Option B’s A record type is a host address record for IPv4 addresses. A PTR record type points to another domain name space location and is typically used in reverse lookups, so option C is wrong. Option D’s NS record type specifies the zone’s authoritative name server, so it is incorrect.
+
+### SYBEX-CH08-RQ16  [multiple_choice]
+Q: Which of the following best describes a Reverse Zone? (Choose the best answer.)
+A: A record used in zone delegation, which provides a child zone’s master name server’s IP address
+B: The process of copying over authoritative zone information to a name server
+C: A special zone that provides a mapping from an IP address to an FQDN
+D: A zone directive typically located in the named.conf file, which has a type hint setting
+E: A Domain Name Space portion, which delineates what a name server has authority over
+X: Option C is correct, because a Reverse Zone is a special zone that provides a mapping from an IP address to an FQDN (the reverse of regular DNS mappings). Option A is wrong, because it describes a glue record. Option B is a zone transfer, so it is an incorrect answer. Option D is wrong, because it describes a Hint Zone, and option E is also incorrect because it is the definition of a zone.
+
+### SYBEX-CH08-RQ17  [multiple_response]
+Q: Which of the following are methods for securing your DNS services? (Choose all that apply.)
+A: Run only BIND services on the server.
+B: Run the BIND daemon as a non-root user.
+C: Implement a Dual Horizon server.
+D: Update your BIND software yearly.
+E: Hide BIND version information.
+X: Options A, B, C, and E are correct. Only option D is incorrect. Updating BIND software is not tied to a calendar. Because of constant malicious attack threats, BIND software should be updated as soon as a new version is available.
+
+### SYBEX-CH08-RQ18  [multiple_response]
+Q: When setting up a chroot jail, the new root directory is typically which directory? (Choose two answers.)
+A: /etc/bind/
+B: /etc/named/
+C: /var/bind/
+D: /chroot/named/
+E: /chroot/bind/
+X: When setting up a chroot jail, either /chroot/named (option D) or /chroot/bind (option E) is typically used as the new root (/) directory, depending on your distribution. The other directories may also be used in the BIND configuration, but they are not used as the new root (/) directory in a chroot jail. Therefore, options A, B, and C are incorrect.
+
+### SYBEX-CH08-RQ19  [multiple_choice]
+Q: In the BIND DNSSEC security extension, the encryption key used to digitally sign a particular zone’s resource records is called what? (Choose the best answer.)
+A: Digital signature
+B: Key signing key
+C: Zone signing key
+D: Chain of trust
+E: DNSKEY
+X: The zone signing key (ZSK) is the encryption key used to digitally sign a particular zone’s resource records, so option C is correct. Option A’s digital signature is produced when the ZSK is used to sign the zone’s resource records, so option A is incorrect. A key signing key (KSK) is the encryption key used to sign a particular zone’s ZSK, so option B is wrong. In option D, the chain of trust has a higher zone’s key sign a lower zone’s key, creating a trusted chain with a trust anchor, so it is an incorrect choice. Finally, option E’s DNSKEY is where the KSK is stored, so it also is an incorrect choice.
+
+### SYBEX-CH08-RQ20  [multiple_choice]
+Q: Which utility is used to create either TSIG or DNSSEC keys? (Choose the best answer.)
+A: dnssec-keygen
+B: dnssec-signzone
+C: dnssec-dsfromkey
+D: dnssec-tsig-keygen
+E: tsig-keygen
+X: Option A’s dnssec-keygen utility can produce either TSIG or DNSSEC keys, depending on the options used, so it is the correct choice. The dnssec-signzone utility is used on systems that have the TSIG keys generated but do not set up automatic signing via the autodnssec and inline-signing directives in the named.conf file, to sign the zone manually. Therefore, option B is wrong. The dnssec-dsfromkey utility is used to create a record for the parent zone in the chain of trust, so option C is also wrong. Options D and E contain made-up utilities, so they are incorrect choices.

@@ -1,0 +1,179 @@
+### SYBEX-CH04-RQ01  [multiple_response]  tema: Sistemas de archivos
+P: Suponiendo que tiene o puede obtener privilegios de superusuario, ¿cuáles de los siguientes comandos permiten crear un sistema de archivos ext2 en la partición /dev/sdd2? (Elija todas las que correspondan.)
+  *A. mkfs -t ext2 /dev/sdd2
+   B. mkfs -t extended2 /dev/sdd2
+  *C. mkfs.ext2 /dev/sdd2
+   D. mke2fs.ext2 /dev/sdd2
+  *E. mke2fs /dev/sdd2
+LIBRO: Las respuestas A, C y E contienen variaciones válidas del comando mkfs que formatean la partición /dev/sdd2 como sistema de archivos ext2. La opción B usa un tipo de sistema de archivos inválido, extended2, y por tanto es incorrecta. No existe el comando mke2fs.ext2, así que la opción D también es incorrecta.
+
+### SYBEX-CH04-RQ02  [multiple_choice]  tema: Sistemas de archivos
+P: ¿Cuál de los siguientes archivos contiene una lista de todos los sistemas de archivos que soporta su sistema?
+  *A. /proc/filesystems
+   B. /etc/mtab
+   C. /proc/mounts
+   D. /proc/swaps
+   E. /proc/cpuinfo
+LIBRO: El archivo /proc/filesystems, opción A, contiene una lista de todos los sistemas de archivos soportados por el sistema. Los archivos /etc/mtab y /proc/mounts muestran los sistemas de archivos montados en ese momento. Aunque son sistemas de archivos soportados, no son todos los soportados y, por tanto, las opciones B y C son incorrectas. La opción D es incorrecta, porque el archivo /proc/swaps contiene información sobre el espacio de intercambio del sistema. La opción E también es una respuesta errónea, porque el archivo /proc/cpuinfo contiene información sobre los procesadores del sistema.
+
+### SYBEX-CH04-RQ03  [multiple_choice]  tema: Sistemas de archivos
+P: Suponiendo que tiene (o puede obtener) privilegios de superusuario para acoplar temporalmente un sistema de archivos formateado a la estructura de directorio virtual de Linux, ¿qué debería hacer? (Elija la mejor respuesta.)
+   A. Ejecutar el comando mkfs sobre el sistema de archivos con privilegios de superusuario.
+   B. Ejecutar la utilidad e2label sobre el sistema de archivos.
+   C. Nada. El servicio AutoFS lo acoplará automáticamente.
+   D. Añadir una entrada para este sistema de archivos en el archivo de configuración /etc/fstab.
+  *E. Usar el comando mount con las opciones y parámetros adecuados.
+LIBRO: El comando mount con las opciones y parámetros adecuados acoplará temporalmente el sistema de archivos a la estructura de directorio virtual de Linux. Por tanto, la opción E es la mejor respuesta. El comando mkfs sirve para el formateo de alto nivel y no para acoplar un sistema de archivos, así que la opción A es incorrecta. La opción B es mala respuesta porque, aunque con el comando e2label se puede averiguar la etiqueta de un sistema de archivos, que luego podría usarse en el comando mount, no acopla ningún sistema de archivos. La opción C también es mala respuesta, porque AutoFS tiene que configurarse antes de que acople automáticamente un archivo en red. El archivo /etc/fstab es para sistemas de archivos acoplados de forma persistente, así que si se añade una entrada ahí, no quedaría acoplado temporalmente. Por tanto, la opción D no es la mejor respuesta.
+
+### SYBEX-CH04-RQ04  [multiple_choice]  tema: Sistemas de archivos
+P: El número c344d0f9–6d54–4a92-ad4d-c5a44fac2eeb identifica un sistema de archivos que hay que montar temporalmente. ¿Qué opción del comando necesario debería elegir? (Elija la mejor respuesta.)
+   A. -o
+   B. -L
+  *C. -U
+   D. -a
+   E. -n
+LIBRO: El número que aparece en la pregunta es un número UUID de sistema de archivos. La opción -U se usa con el comando mount para identificar un sistema de archivos por su UUID. Por tanto, la opción C es correcta. La opción -o sirve para especificar opciones de montaje, así que la opción A es incorrecta. La opción B es errónea, porque la opción -L se usa para identificar por su etiqueta el sistema de archivos que se va a montar. La opción -a, usada con el comando mount, hará que se monte cualquier sistema de archivos listado en /etc/fstab que no esté montado en ese momento. Por tanto, la opción D es incorrecta. La opción -n del comando mount monta un sistema de archivos pero no actualiza el archivo /etc/mtab, así que la opción E es la respuesta errónea.
+
+### SYBEX-CH04-RQ05  [multiple_choice]  tema: Sistemas de archivos
+P: ¿Qué comando debe usarse para forzar a los sistemas de archivos a escribir en las estructuras del soporte los metadatos que residen en memoria? (Elija la mejor respuesta.)
+   A. unmount
+   B. fuser
+   C. lsof
+  *D. sync
+   E. dmesg
+LIBRO: La opción D es correcta, porque el comando sync permite vaciar los búferes del sistema de archivos, lo que en la práctica fuerza a que el volcado de datos se produzca de inmediato. El unmount de la opción A no es un comando (umount es la forma correcta del comando de desmontaje) y, por tanto, no es correcta. Las opciones B y C son incorrectas, porque los comandos fuser y lsof sirven para ayudar a determinar quién está usando un sistema de archivos cuando no se consigue desmontarlo. El comando dmesg muestra el búfer circular del kernel, que puede ayudar a determinar los nombres de las memorias USB conectadas, pero no a vaciar los búferes del sistema de archivos. Por tanto, la opción E es incorrecta.
+
+### SYBEX-CH04-RQ06  [multiple_response]  tema: Sistemas de archivos
+P: Cada entrada de /etc/fstab tiene varios campos obligatorios. ¿Cuáles de los siguientes podrían describir uno de esos campos? (Elija todas las que correspondan.)
+  *A. Punto de montaje
+  *B. Tipo de sistema de archivos
+   C. Opción de copia de seguridad de cpio
+  *D. Prioridad de comprobación del sistema de archivos
+   E. Identificador de AutoFS
+LIBRO: Los seis campos de cada entrada de /etc/fstab son: nombre (partición, volumen, UUID, etc.), punto de montaje, tipo de sistema de archivos, opciones de montaje, opción de volcado (dump) y prioridad de comprobación del sistema de archivos (fsck). Por tanto, las opciones A, B y D son correctas. La opción C es incorrecta, porque en el archivo /etc/fstab se indica la utilidad dump, no la utilidad cpio. La opción E es errónea, porque los sistemas de archivos que se montan mediante el servicio AutoFS no deben tener entradas en el archivo /etc/fstab.
+
+### SYBEX-CH04-RQ07  [multiple_choice]  tema: Sistemas de archivos
+P: Necesita averiguar el UUID de un sistema de archivos. ¿Qué utilidad puede ayudarle? (Elija la mejor respuesta.)
+   A. findmnt
+  *B. blkid
+   C. e2label
+   D. findfs
+   E. mount
+LIBRO: El comando blkid, usado con privilegios de superusuario, muestra diversos atributos de los dispositivos de bloques, incluido el UUID de un dispositivo. Por tanto, la opción B es correcta. El comando findmnt de la opción A muestra todos los sistemas de archivos montados en formato de árbol, pero no muestra los UUID de los dispositivos, así que es incorrecta. La utilidad e2label muestra la etiqueta de un sistema de archivos, no su UUID, así que también es incorrecta. La opción D es errónea porque el comando findfs encuentra sistemas de archivos, pero hay que conocer ya su etiqueta o su UUID, y solo muestra el nombre del dispositivo. Por último, la opción E es errónea porque, aunque el comando mount muestra los sistemas de archivos montados en ese momento, no muestra su UUID.
+
+### SYBEX-CH04-RQ08  [multiple_response]  tema: Sistemas de archivos
+P: Con un sistema de archivos Btrfs, ¿qué configuraciones RAID pueden implementarse? (Elija todas las que correspondan.)
+  *A. RAID 0
+  *B. RAID 1
+   C. RAID 5
+   D. RAID 6
+  *E. RAID 10
+LIBRO: Las opciones A, B y E son correctas, porque en un sistema de archivos btrfs pueden implementarse configuraciones RAID 0, RAID 1 y RAID 10. Las opciones C y D son incorrectas, porque las configuraciones RAID 5 y RAID 6 no pueden implementarse en un sistema de archivos btrfs… todavía.
+
+### SYBEX-CH04-RQ09  [multiple_response]  tema: Sistemas de archivos
+P: ¿Cuáles de las siguientes se consideran extensiones del estándar ISO9660? (Elija todas las que correspondan.)
+   A. UDF
+   B. btrfs
+  *C. El Torito
+  *D. Joliet
+  *E. Rock Ridge
+LIBRO: El Torito, Joliet y Rock Ridge son extensiones del estándar ISO9660 para soportes ópticos. Por tanto, las opciones C, D y E son correctas. La opción A es incorrecta, porque Universal Disk Format (UDF) es un estándar multiplataforma pensado sobre todo para DVD, no una extensión de ISO9660. La opción B también es errónea, porque btrfs es un sistema de archivos, no un estándar de soportes ópticos.
+
+### SYBEX-CH04-RQ10  [multiple_choice]  tema: Sistemas de archivos
+P: ¿Qué comando debe usarse para crear una imagen ISO? (Elija la mejor respuesta.)
+   A. mkfs
+   B. mkfs -t iso
+  *C. mkisofs
+   D. cdrecord
+   E. mount -t iso9660
+LIBRO: El comando mkisofs permite crear una imagen ISO, así que la opción C es correcta. El comando mkfs sirve para crear sistemas de archivos y no existe la opción -t iso, así que las opciones A y B son erróneas. El cdrecord de la opción D permite grabar una imagen ISO en un soporte óptico, pero no crear la imagen, así que es incorrecta. Por último, la opción E es incorrecta, porque es el comienzo del comando que permite montar temporalmente un soporte óptico con sistema de archivos ISO9660, pero no crear una imagen ISO.
+
+### SYBEX-CH04-RQ11  [multiple_choice]  tema: Sistemas de archivos
+P: Acaba de crear una nueva partición de disco, /dev/sde3, y quiere prepararla como espacio de intercambio. ¿Qué comando usa? (Elija la mejor respuesta.)
+   A. mkfs -t swapon /dev/sde3
+  *B. mkswap /dev/sde3
+   C. swapon /dev/sde3
+   D. swapoff /dev/sde3
+   E. swapon -s
+LIBRO: La opción B es correcta, porque el comando mkswap realiza los preparativos necesarios para dejar una partición lista para usarse como espacio de intercambio. La opción A es incorrecta, porque el comando mkfs no tiene una opción -t swapon. La opción C también es incorrecta: aunque con ese comando se puede activar el espacio de intercambio en /dev/sde3, no es el comando que prepara dicho espacio. La opción D es errónea, porque el comando swapoff desactiva el espacio de intercambio indicado. El comando swapon -s es útil para mostrar estadísticas actuales de intercambio, pero no para preparar el espacio de intercambio, así que la opción E también es incorrecta.
+
+### SYBEX-CH04-RQ12  [multiple_response]  tema: Sistemas de archivos
+P: ¿Cuáles de los siguientes tipos de mapa pueden encontrarse en el archivo /etc/auto.master? (Elija todas las que correspondan.)
+  *A. Integrado (built-in)
+  *B. Directo
+  *C. Indirecto
+   D. SMART
+   E. De carretera (road)
+LIBRO: Las opciones A, B y C son todas tipos de mapa que pueden aparecer en el archivo de mapa maestro de AutoFS, /etc/auto.master. El SMART de la opción D se refiere a los dispositivos con tecnología Self-Monitoring Analysis and Reporting Technology, no a tipos de mapa de AutoFS. Por tanto, la opción D es incorrecta. La opción E es incorrecta, porque un mapa de carreteras sirve para orientarse conduciendo o caminando y no es un tipo de mapa conocido de AutoFS.
+
+### SYBEX-CH04-RQ13  [multiple_choice]  tema: Sistemas de archivos
+P: Quiere cambiar el mapa maestro del servicio AutoFS a un archivo de configuración distinto de /etc/auto.master. ¿Qué archivo de configuración podría editar para conseguirlo, según su distribución? (Elija la mejor respuesta.)
+   A. /etc/auto.direct
+   B. /etc/auto.misc
+   C. /etc/autofs.net
+   D. /etc/auto.tmp
+  *E. /etc/sysconfig/autofs
+LIBRO: El archivo /etc/sysconfig/autofs, que aparece en la opción E, es un archivo de configuración correcto para modificar. Según la distribución, el archivo puede llamarse /etc/default/autofs. El archivo de la opción A es un archivo de mapa directo y, por tanto, es incorrecto. Las opciones B y D muestran dos posibles archivos de tipo mapa indirecto y también son incorrectas. En la opción C se muestra un antiguo archivo de script de AutoFS, /etc/autofs.net, que puede encontrarse en distribuciones antiguas, pero también es incorrecto.
+
+### SYBEX-CH04-RQ14  [multiple_choice]  tema: Sistemas de archivos
+P: ¿Cuál de los siguientes sistemas de archivos cifrados es un sistema de archivos por capas? (Elija la mejor respuesta.)
+   A. XFS
+   B. dm-crypt
+  *C. eCryptfs
+   D. LUKS
+   E. Btrfs
+LIBRO: El sistema de archivos eCryptfs es un pseudosistema de archivos que se superpone a otro sistema de archivos y proporciona cifrado archivo por archivo. Por tanto, la opción C es correcta. Las opciones B y D muestran sistemas de archivos cifrados, pero no se consideran sistemas de archivos por capas, así que son incorrectas. El sistema de archivos XFS de la opción A no está cifrado, y tampoco el btrfs de la opción E, así que también son incorrectas.
+
+### SYBEX-CH04-RQ15  [multiple_choice]  tema: Sistemas de archivos
+P: ¿Cuál de las siguientes no es una utilidad para ajustar los sistemas de archivos ext2, ext3 y ext4? (Elija la mejor respuesta.)
+   A. debugfs
+   B. e2label
+   C. resize2fs
+  *D. uuidgen
+   E. tune2fs
+LIBRO: La utilidad uuidgen sirve para generar nuevos números UUID que pueden asignarse a sistemas de archivos. No ajusta ningún sistema de archivos y, por tanto, la opción D es la respuesta correcta. Los comandos de las opciones A, B, C y E ajustan todos sistemas de archivos extendidos y, por tanto, son respuestas incorrectas.
+
+### SYBEX-CH04-RQ16  [multiple_choice]  tema: Sistemas de archivos
+P: Ha generado un nuevo UUID y quiere asignarlo a un sistema de archivos ext4 desmontado. ¿Qué utilidad usa? (Elija la mejor respuesta.)
+   A. debugfs
+   B. e2label
+   C. resize2fs
+   D. blkid
+  *E. tune2fs
+LIBRO: El comando tune2fs de la opción E puede usar el UUID generado y cambiar el UUID del sistema de archivos, así que es la respuesta correcta. Los comandos de las opciones A, B y C también ajustan sistemas de archivos extendidos, pero no el número UUID, y por tanto son respuestas incorrectas. El comando blkid de la opción D puede mostrar el UUID de un dispositivo, pero no cambiarlo, así que también es una respuesta incorrecta.
+
+### SYBEX-CH04-RQ17  [multiple_choice]  tema: Sistemas de archivos
+P: Tiene privilegios de superusuario y escribe el comando fsck.xfs para comprobar un sistema de archivos XFS. ¿Qué ocurrirá? (Elija la mejor respuesta.)
+   A. Corrompe el sistema de archivos, porque no lo desmontó antes.
+   B. Solo recibe un informe del estado del sistema de archivos.
+   C. No se muestra información, pero si se encuentran errores se le pregunta si quiere intentar repararlos.
+   D. Solo recibe un informe del estado del sistema de archivos y, si se encuentran errores, se le pregunta si quiere intentar repararlos.
+  *E. Nada.
+LIBRO: Como los sistemas de archivos XFS (y también btrfs) tienen sus propias utilidades de reparación y no funcionan igual que los sistemas de archivos extendidos, la utilidad fsck.xfs no hace nada. Por tanto, la opción E es correcta. En los sistemas de archivos extendidos sí podrían producirse las acciones de las opciones A, B, C y D, según las opciones del comando y las acciones previas a su ejecución. Sin embargo, en este caso las opciones A, B, C y D son incorrectas.
+
+### SYBEX-CH04-RQ18  [multiple_choice]  tema: Sistemas de archivos
+P: Tiene un sistema de archivos Btrfs que ha funcionado bien durante mucho tiempo. Sin embargo, por algún motivo ha sufrido un problema catastrófico y necesita restaurar archivos. ¿Qué utilidad debería usar? (Elija la mejor respuesta.)
+   A. btrfs check
+   B. btrfs get property
+   C. btrfs rescue
+  *D. btrfs restore
+   E. btrfs scrub
+LIBRO: La opción D, btrfs restore, es el comando más potente para restaurar los datos de un sistema de archivos btrfs y es la mejor elección. Las opciones A y C también pueden ayudar, pero no son tan potentes como la opción D, así que no son las respuestas correctas. Los comandos btrfs de las opciones B y E no hacen reparaciones ni restauraciones, así que esas respuestas también son incorrectas.
+
+### SYBEX-CH04-RQ19  [multiple_choice]  tema: Sistemas de archivos
+P: ¿Cuál de los siguientes comandos busca inconsistencias pero no realiza ninguna reparación en un sistema de archivos XFS? (Elija la mejor respuesta.)
+  *A. xfs_check
+   B. xfsdump
+   C. xfs_info
+   D. xfs_metadump
+   E. xfsrestore
+LIBRO: La opción A es correcta, porque la utilidad xfs_check comprueba la consistencia de un sistema de archivos XFS pero no hace reparaciones. Normalmente ya no se incluye en muchas distribuciones, pero puede usarse el comando xfs_repair -n en su lugar. El xfsdump de la opción B crea una copia de seguridad de los datos y atributos del sistema de archivos, pero no comprueba nada, así que es incorrecta. El comando xfs_info muestra y comprueba información del sistema de archivos, pero no busca inconsistencias, así que la opción C es errónea. El xfs_metadump de la opción D solo copia los metadatos del sistema de archivos a un archivo, así que también es errónea. Por último, el comando xfsrestore restaura los datos y atributos de un sistema de archivos a partir de un volcado de copia de seguridad, así que la opción E es incorrecta.
+
+### SYBEX-CH04-RQ20  [multiple_choice]  tema: Sistemas de archivos
+P: Tiene una partición de disco /dev/sdc3 que soporta SMART y lo tiene habilitado. Suponiendo que dispone de privilegios de superusuario, ¿qué comando le mostrará un resumen rápido del estado, incluido si ha superado o no la autoevaluación general de salud? (Elija la mejor respuesta.)
+   A. smartctl -t short /dev/sdc3
+  *B. smartctl -H /dev/sdc3
+   C. smartctl -i /dev/sdc3
+   D. smartctl -a /dev/sdc3
+   E. smartctl -t long /dev/sdc3
+LIBRO: El comando de la opción B muestra un resumen rápido del estado de salud de la unidad, incluido si ha superado o no la autoevaluación general de salud. Por tanto, la opción B es correcta. Los comandos de las opciones A y E realizan pruebas, pero no muestran los resultados, así que son incorrectos. El comando de la opción C muestra información sobre la unidad, como si soporta SMART y si SMART está habilitado. También es incorrecta. El comando de la opción D proporciona la información de salud de la unidad, pero muestra toda la información, no solo un resumen, así que también es una elección incorrecta.

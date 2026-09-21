@@ -1,0 +1,254 @@
+### SYBEX-AT-01  [multiple_response]  tema: Evaluación general (Assessment Test)
+P: ¿Cuáles de los siguientes comandos muestran información de procesos? (Elija todas las que correspondan.)
+  *A. lsof
+   B. iostat
+  *C. pstree
+  *D. netstat
+  *E. pmap
+LIBRO: La opción A es correcta, porque lsof muestra los archivos abiertos y las conexiones de red por proceso. El comando pstree muestra los procesos actuales en formato de árbol, así que también es una elección correcta. Aunque se centra principalmente en información de red y de encaminamiento, con la utilidad netstat se puede determinar qué proceso (a través de su PID) está escuchando en un puerto concreto. Por tanto, la opción D también es una respuesta correcta. La opción E es correcta, porque el comando pmap muestra el mapa de un proceso para el PID indicado. La utilidad iostat muestra un resumen de la carga de E/S desglosada por dispositivo, así que la opción B es la única elección incorrecta.
+
+### SYBEX-AT-02  [open]  tema: Evaluación general (Assessment Test)
+P: Los programadores desarrollaron el concepto de ______ del kernel para poder insertar código de controladores de dispositivo en un kernel en ejecución sin tener que recompilarlo. (Rellene con la mejor respuesta.)
+LIBRO: modules. Los programadores desarrollaron el concepto de módulos del kernel (kernel modules) para poder insertar código de controladores de dispositivo en un kernel en ejecución sin tener que recompilarlo. Un módulo es un archivo de biblioteca de controlador autónomo que puede enlazarse y desenlazarse dinámicamente con el kernel. Esto significa que un módulo del kernel puede retirarse del kernel cuando se termina de usar el dispositivo, algo que no puede hacerse con los controladores compilados dentro del kernel.
+
+### SYBEX-AT-03  [multiple_choice]  tema: Evaluación general (Assessment Test)
+P: ¿Cuál es el archivo de configuración del kernel de Linux? (Elija la mejor respuesta.)
+   A. /usr/src/linux/arch/x86/boot
+   B. /usr/src/linux/kernel.config
+   C. /boot/grub/grub.conf
+   D. /etc/modules.conf
+  *E. /usr/src/linux/.config
+LIBRO: La opción E es correcta, porque la configuración del kernel de Linux se guarda en el archivo /usr/src/linux/.config. La opción A es un directorio que contiene el binario final del kernel, bzImage, tras el proceso de compilación, así que es una elección incorrecta. La opción B es un nombre de archivo inventado, así que es errónea. El archivo /boot/grub/grub.conf es un archivo de configuración de GRUB Legacy, así que la opción C es una elección incorrecta. El archivo /etc/modules.conf de la opción D es un archivo de configuración para los módulos del kernel, así que también es una elección errónea.
+
+### SYBEX-AT-04  [multiple_choice]  tema: Evaluación general (Assessment Test)
+P: ¿Cuál de los siguientes contiene un archivo, o es un archivo, que puede consultar para ver información de la versión del kernel de Linux? (Elija la mejor respuesta.)
+   A. /proc/kernel
+  *B. /proc/sys/kernel
+   C. /proc/ioports
+   D. /proc/dma
+   E. /etc/sysctl.d
+LIBRO: /proc/sys/kernel es un directorio que contiene el archivo version. Ese archivo contiene información de la versión del kernel de Linux, así que la opción B es la elección correcta. La opción A está inventada, así que es una elección incorrecta. El archivo /proc/ioports de la opción C contiene información de los puertos de E/S del hardware, así que también es una elección incorrecta. El archivo /proc/dma contiene información de los canales de Acceso Directo a Memoria (DMA), así que la opción C es una elección errónea. Por último, /etc/sysctl.d es un directorio que contiene varios archivos de ajuste de parámetros del kernel, así que también es una elección incorrecta.
+
+### SYBEX-AT-05  [multiple_choice]  tema: Evaluación general (Assessment Test)
+P: ¿Qué comando(s) pueden considerarse equivalentes a chkconfig? (Elija todas las que correspondan.)
+   A. inittab
+   B. rc
+  *C. update-rc.d
+   D. init
+   E. telinit
+LIBRO: Solo hay una respuesta correcta y es la opción C. El comando update-rc.d es equivalente al comando chkconfig. Sin embargo, suele estar disponible en distribuciones basadas en Debian, mientras que chkconfig lo está en las basadas en Red Hat. El inittab (/etc/inittab) de la opción A sí define qué aplicaciones arrancan en cada nivel de ejecución; sin embargo, es un archivo y no un comando, así que es una elección errónea. El rc de la opción B es un script (/etc/rc.d/rc) que ejecuta todos los scripts de un nivel de ejecución determinado, así que es una elección incorrecta. Los comandos init (opción D) y telinit (opción E) son esencialmente equivalentes pero entre sí (con cualquiera de los dos se puede cambiar el nivel de ejecución actual del sistema Linux), así que son elecciones incorrectas.
+
+### SYBEX-AT-06  [multiple_response]  tema: Evaluación general (Assessment Test)
+P: ¿Cuáles de las siguientes afirmaciones sobre GRUB Legacy son ciertas? (Elija todas las que correspondan.)
+   A. GRUB Legacy se escribió para sustituir a LILO debido a UEFI.
+  *B. GRUB Legacy utiliza una interfaz de menú.
+  *C. GRUB Legacy utiliza un intérprete de comandos interactivo.
+  *D. GRUB Legacy utiliza el comando initrd.
+   E. GRUB Legacy utiliza el archivo de configuración /boot/grub/grub.cfg.
+LIBRO: GRUB Legacy utiliza tanto una interfaz de menú como un intérprete de comandos interactivo (el shell de grub), así que las opciones B y C son correctas. La opción D también es correcta, porque dentro del archivo de configuración de GRUB Legacy se emplea el comando initrd para definir un archivo que el kernel monta como disco RAM en el arranque. La opción A es incorrecta: aunque LILO no funciona con sistemas UEFI, GRUB Legacy se creó en 1999 para ofrecer un cargador de arranque más robusto y configurable que LILO, no por UEFI. Además, la opción E es incorrecta, porque /boot/grub/grub.cfg es un archivo de configuración de GRUB2, no de GRUB Legacy.
+
+### SYBEX-AT-07  [multiple_response]  tema: Evaluación general (Assessment Test)
+P: ¿Cuáles de los siguientes son cargadores de arranque de Linux? (Elija todas las que correspondan.)
+  *A. SYSLINUX
+  *B. EXTLINUX
+  *C. ISOLINUX
+  *D. PXELINUX
+   E. TFTP
+LIBRO: Las opciones A, B, C y D son todas cargadores de arranque alternativos de Linux, así que son respuestas correctas. La opción E es el Trivial File Transfer Protocol (TFTP), que el cargador de arranque PXELINUX emplea para transferir por red el archivo de imagen de arranque a la estación de trabajo. Sin embargo, TFTP no es un cargador de arranque, así que la opción E es incorrecta.
+
+### SYBEX-AT-08  [multiple_choice]  tema: Evaluación general (Assessment Test)
+P: Cuando se usa sin opciones ni parámetros, ¿de qué archivo obtiene los datos el comando mount? (Elija todas las que correspondan.)
+   A. /etc/fstab
+  *B. /etc/mtab
+   C. /proc/mounts
+   D. /proc/filesystems
+   E. blkid
+LIBRO: Solo hay una elección correcta. Cuando se usa sin opciones ni parámetros, el comando mount obtiene los datos del archivo /etc/mtab, que contiene la lista de todos los sistemas de archivos montados en ese momento, y la muestra. Por tanto, la opción B es correcta. La opción A es incorrecta, porque /etc/fstab es la tabla de sistemas de archivos (Filesystem Table) y contiene un registro por cada sistema de archivos que debe montarse al arrancar el sistema o al ejecutar el comando mount -a. Aunque los datos de /etc/mtab y /proc/mounts son casi idénticos, el comando mount no obtiene sus datos del archivo /proc/mounts, así que la opción C es errónea. El archivo /proc/filesystems de la opción D es incorrecto, porque ese archivo contiene los sistemas de archivos soportados por el kernel de Linux del sistema. La opción E también es errónea, porque blkid no es un archivo sino un comando, que muestra los distintos dispositivos de bloques y sus atributos.
+
+### SYBEX-AT-09  [open]  tema: Evaluación general (Assessment Test)
+P: El demonio smartd se configura mediante su archivo de configuración, que se llama ______. (Rellene solo el nombre del archivo, sin referencias a directorios.)
+LIBRO: smartd.conf. El archivo de configuración del demonio smartd es /etc/smartd.conf o /etc/smartmontools/smartd.conf (según la distribución).
+
+### SYBEX-AT-10  [multiple_response]  tema: Evaluación general (Assessment Test)
+P: ¿Cuáles de las siguientes opciones permiten comprobar un array RAID controlado por software, /dev/md1, en un sistema Linux? (Elija todas las que correspondan.)
+  *A. mdadm --misc --detail /dev/md1
+  *B. mdadm --detail /dev/md1
+   C. cat /etc/mdadm.conf
+  *D. cat /proc/mdstat
+   E. mdadm --show /dev/md1
+LIBRO: Las opciones A y B son el mismo comando (no hace falta incluir la opción --misc) y ambas muestran los detalles del array RAID indicado, así que esas opciones son correctas. La opción D también es correcta, porque el archivo /proc/mdstat contiene el estado actual de cualquier array RAID en funcionamiento. La opción C es una elección incorrecta, porque /etc/mdadm.conf es el archivo de configuración de mdadm (aunque puede estar en /etc/mdadm/, según la distribución). La opción E es una elección errónea, porque el comando mdadm no tiene una opción –show.
+
+### SYBEX-AT-11  [multiple_response]  tema: Evaluación general (Assessment Test)
+P: Para crear o aumentar el tamaño de un grupo de almacenamiento de volúmenes lógicos, ¿qué comando debe usar? (Elija todas las que correspondan.)
+   A. mdadm
+  *B. vgextend
+   C. pvcreate
+  *D. vgcreate
+   E. lvcreate
+LIBRO: Un grupo de almacenamiento de volúmenes lógicos (grupo de volúmenes) se crea con el comando vgcreate, así que la opción D es correcta. El grupo de volúmenes puede ampliarse con el comando vgextend, así que la opción B también es correcta. La utilidad mdadm sirve para gestionar arrays RAID y no volúmenes lógicos (aunque los volúmenes lógicos pueden formar parte de un array RAID), así que la opción A es una elección errónea. El comando pvcreate de la opción C sirve para designar particiones como volúmenes físicos que luego pueden incorporarse a un grupo de volúmenes, pero no crea ni amplía un grupo de volúmenes, así que también es una elección incorrecta. El comando lvcreate toma almacenamiento (extents lógicos) de un grupo de volúmenes y crea un volumen lógico, no un grupo de volúmenes, así que la opción E también es una elección errónea.
+
+### SYBEX-AT-12  [multiple_choice]  tema: Evaluación general (Assessment Test)
+P: Para ver la tabla ARP, ¿cuál de los siguientes comandos se utiliza? (Elija todas las que correspondan.)
+   A. ifconfig -arp
+   B. ip arp show
+  *C. arp
+   D. route -n
+   E. iwlist arp scan
+LIBRO: Solo hay una elección correcta. El comando arp muestra la información de la tabla ARP, así que la opción C es la elección acertada. La opción A es una elección incorrecta, porque ese comando ifconfig permite activar o desactivar ARP en la interfaz de red indicada, no ver la tabla ARP. El comando de la opción B está inventado, aunque se parece a un comando real (ip addr show) que muestra información de las interfaces de red. Como no muestra la información de la tabla ARP, la opción B es errónea. El comando de la opción D muestra la tabla de encaminamiento, pero no la tabla ARP, así que es una elección incorrecta. Por último, la opción E también es errónea, porque el comando iwlist de esa opción permite escanear y localizar el nombre de una conexión inalámbrica local, pero hay que indicar el nombre del dispositivo inalámbrico (por ejemplo, wlan0) y no arp.
+
+### SYBEX-AT-13  [multiple_choice]  tema: Evaluación general (Assessment Test)
+P: Para simular una transferencia de datos por la red utilizando tanto un servidor como un cliente, use la utilidad ______. (Elija la mejor respuesta.)
+   A. tcpdump
+   B. ping o ping6
+   C. traceroute o traceroute6
+   D. nmap
+  *E. nc
+LIBRO: La utilidad nc permite simular un servidor y un cliente, enviando y recibiendo datos por la red, indicando las opciones adecuadas en la línea de comandos. Por tanto, la opción E es la mejor respuesta. El comando tcpdump de la opción A captura todos los paquetes que ve en la interfaz de red y muestra una descripción somera de cada uno, pero no simula transferencias de datos, así que es una elección incorrecta. La utilidad ping o ping6 permite enviar paquetes ICMP y comprobar la conectividad entre un servidor y un cliente, pero no proporciona una simulación real de transferencia de datos, así que la opción B no es la mejor respuesta. Asimismo, la utilidad traceroute o traceroute6 de la opción C intenta enviar paquetes ICMP a un destino concreto y listar los «saltos» de router que atraviesan los paquetes hasta llegar a él. Sin embargo, no proporcionan una simulación real de transferencia de datos (y muchos routers pueden bloquearlas), así que esta opción tampoco es la mejor elección. Por último, la opción D no es la mejor respuesta, porque la utilidad nmap puede determinar qué aplicaciones están escuchando en qué puertos de red del sistema Linux, pero no simular transferencias de datos hacia otro sistema.
+
+### SYBEX-AT-14  [multiple_response]  tema: Evaluación general (Assessment Test)
+P: Acaba de instalar una nueva NIC y ha configurado una interfaz de red cableada (eth2) en su servidor. Sin embargo, no tiene conectividad de red (no se envían ni se reciben paquetes por la interfaz). ¿Qué debería hacer? (Elija todas las que correspondan.)
+  *A. Comprobar la configuración de la interfaz con el comando ifconfig eth2.
+   B. Comprobar la interfaz desde otro sistema con el comando ping o ping6.
+   C. Comprobar los paquetes que entran y salen de la interfaz con la utilidad tcpdump.
+  *D. Comprobar el búfer circular del kernel (kernel ring buffer) con la utilidad dmesg.
+  *E. Comprobar los mensajes del kernel en los archivos dmesg, messages o syslog del directorio /var/log/.
+LIBRO: La opción A es una elección correcta, porque permite revisar todos los ajustes de la interfaz de red cableada y ver cosas como si se ha asignado una dirección IP. Las opciones D y E también son elecciones correctas, porque es posible que no se haya cargado el módulo de hardware adecuado para la tarjeta de red. Esa información se encuentra en el búfer circular del kernel o, si el búfer ya se ha volcado a disco, en alguno de los archivos de la opción E (según la distribución). La opción B no es una elección correcta, porque si ya se sabe que no se envían ni reciben paquetes por la interfaz, usar ping o ping6 no aportará información adicional. Lo mismo ocurre con la opción C, así que también es una elección incorrecta.
+
+### SYBEX-AT-15  [multiple_response]  tema: Evaluación general (Assessment Test)
+P: Necesita usar un dispositivo de cinta con rebobinado para crear un archivo comprimido. ¿Qué dispositivo podría usar en su sistema Linux? (Elija todas las que correspondan.)
+  *A. /dev/st0
+  *B. /dev/ht1
+   C. /dev/sdt1
+   D. /dev/nst0
+   E. /dev/nht0
+LIBRO: Las opciones A y B son correctas, porque los dispositivos de cinta /dev/st* (SCSI) y /dev/ht* (PATA) rebobinan automáticamente. La opción C es incorrecta, porque el archivo de dispositivo /dev/sdt1 no representa un dispositivo de cinta, sino una partición. Las opciones D y E son erróneas, porque los dispositivos de cinta /dev/nst* (SCSI) y /dev/nht* (PATA) no rebobinan automáticamente.
+
+### SYBEX-AT-16  [multiple_response]  tema: Evaluación general (Assessment Test)
+P: ¿Cuáles de las siguientes afirmaciones sobre la utilidad rndc son ciertas? (Elija todas las que correspondan.)
+   A. Con ella se puede arrancar el demonio BIND.
+  *B. Con ella se puede detener el demonio BIND.
+  *C. Con ella se pueden recargar los archivos de configuración de BIND.
+  *D. Con ella se pueden recargar los archivos de zona de BIND.
+   E. La utilidad rndc no tiene nada que ver con BIND.
+LIBRO: Las opciones B, C y D son ciertas y, por tanto, elecciones correctas. No se puede arrancar el demonio BIND con la utilidad rndc, así que la opción A es una respuesta incorrecta. Además, la utilidad rndc sí tiene que ver con BIND, así que la opción E también es una elección errónea.
+
+### SYBEX-AT-17  [multiple_response]  tema: Evaluación general (Assessment Test)
+P: La directiva type de un archivo de configuración de zona de BIND puede tomar cuál de los siguientes valores? (Elija todas las que correspondan.)
+  *A. hint
+   B. primary
+   C. secondary
+  *D. forward
+  *E. stub
+LIBRO: Una directiva type hint especifica la zona de pistas (Hint Zone), que es una lista de los servidores raíz actuales, así que la opción A es una elección correcta. La directiva type forward indica que este es un servidor de reenvío para la zona, así que la opción D también es una elección correcta. Una directiva type stub se usa para definir una zona stub, así que la opción E es una elección correcta. No existe la directiva type primary: para indicar el servidor de nombres primario de una zona se usa type master, así que la opción B es una elección errónea. Tampoco existe la directiva type secondary: para definir el servidor de nombres secundario de una zona se usa type slave. Por tanto, la opción C también es una respuesta incorrecta.
+
+### SYBEX-AT-18  [multiple_response]  tema: Evaluación general (Assessment Test)
+P: ¿Cuáles de los siguientes son comandos que se usan con la utilidad apache2ctl? (Elija todas las que correspondan.)
+   A. force-stop
+  *B. restart
+  *C. graceful
+  *D. fullstatus
+  *E. status
+LIBRO: El comando apache2ctl restart envía una señal SIGHUP al servidor Apache, haciendo que cierre las conexiones existentes y se reinicie. Por tanto, la opción B es una respuesta correcta. El comando apache2ctl graceful reinicia el servidor Apache, pero sin cerrar las conexiones existentes, así que la opción C también es una elección correcta. El comando apache2ctl de la opción D, fullstatus, muestra un informe completo del estado del servidor Apache, así que es una respuesta correcta. La opción E también es una elección correcta, porque apache2ctl status muestra un informe breve del estado del servidor Apache. La opción A es un comando de apache2ctl inventado, así que es la única respuesta incorrecta.
+
+### SYBEX-AT-19  [multiple_response]  tema: Evaluación general (Assessment Test)
+P: ¿Cuáles de las siguientes afirmaciones sobre Nginx son ciertas? (Elija todas las que correspondan.)
+   A. Nginx utiliza hilos de programa independientes para atender a cada cliente.
+  *B. Nginx utiliza una arquitectura asíncrona que le permite crear hilos de cliente dentro del programa principal según se necesiten.
+  *C. Nginx utiliza el puerto TCP 80.
+   D. Nginx está obsoleto y está siendo sustituido por Apache.
+  *E. Nginx puede tener varios servidores web de backend para implementar funciones de proxy inverso.
+LIBRO: Las opciones B, C y E son afirmaciones ciertas y, por tanto, respuestas correctas. La opción A es errónea, porque Nginx no usa hilos de programa independientes para cada cliente, sino que trabaja con los hilos de cliente descritos en la opción B. La opción D también es una elección incorrecta, porque Nginx no está obsoleto y, al contrario, puede que algún día acabe sustituyendo a Apache.
+
+### SYBEX-AT-20  [multiple_response]  tema: Evaluación general (Assessment Test)
+P: Los registros de cuentas de usuario de Samba pueden almacenarse en la base de datos ______. (Elija todas las que correspondan.)
+  *A. smbpasswd
+  *B. tdbsam
+   C. net
+   D. smbclient
+  *E. ldapsam
+LIBRO: Las opciones A, B y E son correctas, porque la información de cuentas de usuario de Samba puede guardarse en las bases de datos smbpasswd, tdbsam o ldapsam. net es un comando (no una base de datos), similar a la utilidad net de Windows/DOS, que se usa cuando un servidor Samba necesita unirse a un dominio o a un Active Directory como miembro. Por tanto, la opción C es una respuesta errónea. El smbclient de la opción D es un comando que conecta, lista recursos compartidos y ofrece servicios de tipo FTP sobre un recurso compartido, o bien el nombre de un paquete de Samba. Por tanto, la opción D también es una elección incorrecta.
+
+### SYBEX-AT-21  [multiple_choice]  tema: Evaluación general (Assessment Test)
+P: ¿Cuál de los siguientes comandos puede mostrar todas las exportaciones NFS actuales y además lee la tabla de exportaciones NFS cuando arranca el servicio NFS? (Elija la mejor respuesta.)
+   A. rpcinfo
+   B. nfsstat
+   C. showmount
+  *D. exportfs
+   E. mountstats
+LIBRO: La opción D es la elección correcta, porque cuando se usa sin opciones, el comando exportfs muestra todas las exportaciones actuales y, al arrancar el servicio NFS, lee el archivo /etc/exports (la tabla de exportaciones NFS) y realiza la exportación necesaria de los recursos compartidos. La opción A es una elección incorrecta, porque el comando rpcinfo muestra diversos datos de los servicios RPC (incluidos los puertos implicados, si se añade la opción -p). La utilidad nfsstat muestra estadísticas de actividad de cliente y servidor NFS a partir de los archivos /proc/net/rpc/nfsd, /proc/net/rpc/nfs y /proc/mounts, así que la opción B es una elección incorrecta. El comando showmount de la opción C muestra información del servidor NFS, como su estado y los clientes NFS que montan las exportaciones que ofrece, pero no lee la tabla de exportaciones NFS al arrancar el servicio, así que también es una elección errónea. La utilidad mountstats muestra estadísticas por montaje del cliente NFS a partir del archivo /proc/self/mountstats, así que la opción E es una respuesta incorrecta.
+
+### SYBEX-AT-22  [multiple_response]  tema: Evaluación general (Assessment Test)
+P: ¿Dónde registra DHCPd normalmente los eventos DHCP? (Elija todas las que correspondan.)
+   A. archivo de registro pump
+  *B. archivo de registro messages
+   C. diario BOOTP
+   D. archivo dhcpd.log
+  *E. diario de systemd
+LIBRO: DHCPd registra todos los eventos DHCP en el archivo de registro estándar del sistema Linux. En las distribuciones que aún usan el servicio syslog, ese suele ser el archivo /var/log/messages (opción B). Sin embargo, algunas distribuciones actuales usan en su lugar el diario de systemd (opción E). El archivo de registro pump de la opción A no es un archivo de registro: pump es un paquete cliente DHCP de Linux y, por tanto, es una elección incorrecta. El diario BOOTP de la opción C es una elección incorrecta, porque se trata de un protocolo, Bootstrap Protocol (BOOTP), y no de un diario. BOOTP permite que una estación de trabajo sin disco envíe un mensaje de difusión por la red buscando un servidor que le envíe el archivo del sistema operativo con el que arrancar. El archivo dhcpd.log (opción D) también es una elección errónea: ese archivo no existe. Sí existen, en cambio, el archivo de configuración dhcpd.conf y el archivo dhcpd.leases (para registrar las direcciones IP cedidas por el servidor), ambos asociados a DHCP.
+
+### SYBEX-AT-23  [multiple_choice]  tema: Evaluación general (Assessment Test)
+P: ¿Qué módulo de autenticación PAM utiliza el Security Services Daemon para autenticar usuarios? (Elija la mejor respuesta.)
+  *A. pam_sss.so
+   B. pam_unix.so
+   C. pam_nis.so
+   D. pam_krb5.so
+   E. pam_ldap.so
+LIBRO: El módulo pam_sss.so utiliza el Security Services Daemon para autenticar usuarios, por lo que la opción A es la respuesta correcta. El módulo pam_unix.so (opción B) usa los archivos estándar /etc/passwd y /etc/shadow, así que es una elección incorrecta. El módulo pam_nis.so de la opción C es una respuesta errónea, porque utiliza un servidor NIS para la autenticación. El módulo pam_krb5.so (opción D) es una elección incorrecta, porque ese módulo PAM usa el sistema de autenticación Kerberos 5. El pam_ldap.so de la opción E también es una respuesta errónea, porque utiliza un servidor LDAP para la autenticación y no el Security Services Daemon.
+
+### SYBEX-AT-24  [multiple_response]  tema: Evaluación general (Assessment Test)
+P: ¿Cuáles de las siguientes utilidades cliente de OpenLDAP permiten añadir objetos, como objetos de usuario, a una base de datos LDAP? (Elija todas las que correspondan.)
+   A. ldappasswd
+  *B. ldapmodify
+  *C. ldapadd
+   D. ldapsearch
+   E. ldapobject
+LIBRO: La utilidad ldapmodify (opción B) permite añadir objetos, como objetos de usuario, a una base de datos LDAP, y además permite modificarlos, así que es una respuesta correcta. La utilidad ldapadd (opción C) es un enlace a la utilidad ldapmodify, y su finalidad principal es añadir a la base de datos LDAP los objetos definidos en un archivo LDIF. Por tanto, la opción C también es una respuesta correcta. La utilidad ldappasswd de la opción A permite generar un valor cifrado a partir de un texto para cambiar la contraseña asignada a la cuenta LDAP con la que se ha iniciado sesión y, por tanto, es una elección errónea. La utilidad ldapsearch (opción D) también es una respuesta incorrecta, porque permite crear y personalizar consultas para buscar en una base de datos LDAP. El ldapobject de la opción E es un nombre de utilidad inventado y, por tanto, una elección incorrecta.
+
+### SYBEX-AT-25  [multiple_choice]  tema: Evaluación general (Assessment Test)
+P: ¿Qué métodos soportados por OpenLDAP permiten configurar un entorno LDAP utilizando un único archivo de configuración de texto? (Elija todas las que correspondan.)
+   A. /etc/ldap.conf
+   B. slapd-conf
+   C. LDIF
+  *D. slapd.conf
+   E. /etc/ldap
+LIBRO: Esta pregunta tiene algo de trampa, porque solo hay una respuesta correcta: el método slapd.conf (opción D), que usa un único archivo de configuración de texto para configurar un entorno LDAP. El archivo /etc/ldap.conf (opción A) es el archivo de configuración de texto único, así que es una respuesta incorrecta. El método slapd-conf (opción B) usa archivos LDIF (opción C) para definir el árbol base del directorio LDAP, así que esas dos elecciones son erróneas. El /etc/ldap de la opción E es un directorio que se usa en el método slapd-conf, así que también es una elección incorrecta.
+
+### SYBEX-AT-26  [multiple_response]  tema: Evaluación general (Assessment Test)
+P: Al usar Postfix como servidor de correo, ¿cuáles de los siguientes comandos de emulación de sendmail están disponibles? (Elija todas las que correspondan.)
+  *A. sendmail
+   B. procmail
+  *C. mailq
+   D. mbox
+  *E. newaliases
+LIBRO: Postfix proporciona comandos similares que emulan funciones habituales de sendmail: sendmail (opción A) imita el programa ejecutable sendmail y sus opciones, pero redirige al programa Postfix; mailq (opción C) lista los mensajes de la cola de correo saliente; y newaliases (opción E) inicializa la base de datos de alias. Por tanto, las opciones A, C y E son todas elecciones correctas. El procmail de la opción B no es un comando de sendmail, sino un conocido programa de correo que permite definir recetas configuradas por el usuario para que cada usuario decida cómo se recibe y procesa su correo. Por tanto, es una elección incorrecta. El mbox de la opción D también es una respuesta errónea, porque es un tipo de buzón de correo que usa un único archivo por cuenta de usuario y que suele guardarse en el directorio /var/spool/mail o en los directorios personales de los usuarios.
+
+### SYBEX-AT-27  [multiple_choice]  tema: Evaluación general (Assessment Test)
+P: ¿Cuál de los siguientes directorios contiene pseudoarchivos que controlan funciones de encaminamiento? (Elija la mejor respuesta.)
+   A. /proc/sys/vm/
+  *B. /proc/sys/net/
+   C. /proc/sys/dev/
+   D. /srv/
+   E. /proc/sys/iptables/
+LIBRO: El directorio /proc/sys/net/ (opción B) contiene pseudoarchivos que controlan funciones de encaminamiento, sobre todo en los subdirectorios ipv4 e ipv6, así que es la elección correcta. El directorio /proc/sys/vm/ (opción A) contiene pseudoarchivos, pero se refieren a la configuración del subsistema de memoria virtual (VM) del kernel de Linux, así que es una elección errónea. El directorio /proc/sys/dev/ (opción C) también contiene pseudoarchivos. Sin embargo, esos archivos proporcionan parámetros de dispositivo para ciertos dispositivos del sistema, así que es una elección incorrecta. El directorio /srv/ no solo no contiene pseudoarchivos, sino que normalmente contiene datos servidos por el sistema, como recursos compartidos de Samba y páginas web. Por tanto, la opción D también es una respuesta errónea. El directorio /proc/sys/iptables/ (opción E) es un directorio inventado y una elección incorrecta.
+
+### SYBEX-AT-28  [open]  tema: Evaluación general (Assessment Test)
+P: El archivo de configuración principal del paquete Very Secure FTP es el archivo ______. (Rellene solo el nombre del archivo, sin referencias a directorios.)
+LIBRO: vsftpd.conf. El archivo de configuración principal es vsftpd.conf, y se encuentra en el directorio /etc/ o en el directorio /etc/vsftpd/ (según la distribución). Está documentado internamente y además existe una página de manual de vsftpd.conf.
+
+### SYBEX-AT-29  [multiple_choice]  tema: Evaluación general (Assessment Test)
+P: ¿Cuál de las siguientes opciones de configuración de OpenSSH establece el nivel soportado? (Elija la mejor respuesta.)
+   A. PermitRootLogin
+   B. PubKeyAuthentication
+   C. AllowUsers
+   D. PasswordAuthentication
+  *E. Protocol
+LIBRO: La opción Protocol (opción E) establece el nivel de soporte (más concretamente, el nivel de protocolo) admitido por la configuración de OpenSSH y, por tanto, es la elección correcta. La opción PermitRootLogin de la opción A activa o desactiva el inicio de sesión directo del usuario root, así que es una respuesta errónea. La opción PubKeyAuthentication (opción B) activa o desactiva la autenticación por clave pública, así que es una elección incorrecta. La opción de configuración AllowUsers de la opción C establece una lista de usuarios permitidos, que autoriza a los usuarios de esa lista a iniciar sesión en el sistema mediante OpenSSH. Por tanto, la opción C también es una respuesta errónea. La opción D es una elección incorrecta, porque la opción PasswordAuthentication activa o desactiva la autenticación mediante contraseñas.
+
+### SYBEX-AT-30  [multiple_choice]  tema: Evaluación general (Assessment Test)
+P: ¿Cuál de las siguientes utilidades actualiza por defecto las reglas del cortafuegos cuando detecta una amenaza? (Elija todas las que correspondan.)
+  *A. fail2ban
+   B. Snort
+   C. Bugtraq
+   D. nmap
+   E. nc
+LIBRO: Esta pregunta tiene truco. La opción A es la única elección correcta. La utilidad fail2ban examina ciertos archivos de registro en busca de intentos de inicio de sesión y, si detecta una dirección IP con varios fallos de autenticación, actualiza las reglas del cortafuegos para rechazar (banear) la IP infractora. Aunque Snort (opción B), que es un potente analizador de red, puede configurarse para lanzar scripts de shell (que sí podrían actualizar reglas del cortafuegos), por defecto solo envía alertas ante actividad sospechosa, así que es una elección incorrecta. El Bugtraq de la opción C no es una utilidad, sino una lista de correo de seguridad informática, así que es una respuesta errónea. La utilidad nmap de la opción D puede usarse para auditar puertos de red y determinar qué servicios se ven escuchando en puertos concretos (dentro y fuera de un cortafuegos), pero no modifica el cortafuegos, así que también es una respuesta errónea. Por último, el nc (o netcat) de la opción E es una utilidad también útil para auditar la seguridad de la red, pero no modifica cortafuegos sobre la marcha, así que es una elección incorrecta.

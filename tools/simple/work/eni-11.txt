@@ -1,0 +1,39 @@
+### ENI-CH11-Q01  [open]  tema: Kernel y compilación
+P: ¿Por qué razón un programa escrito en un lenguaje de programación compilado es generalmente más eficiente que un programa escrito en un lenguaje interpretado?
+LIBRO: La ejecución de un programa interpretado requiere el uso de otro programa llamado intérprete, que por cada acción descrita en el código del programa deberá traducirla en una multitud de instrucciones de procesador. En el caso de un programa compilado, el código binario del programa compilado contiene directamente instrucciones inteligibles por el procesador. El tratamiento es, por tanto, mucho más rápido. Como desventaja, el código compilado está íntimamente relacionado con el juego de instrucciones de un procesador y, por consiguiente, es menos portable.
+
+### ENI-CH11-Q02  [open]  tema: Kernel y compilación
+P: ¿Para que sirve el script configure que generalmente de publica con las fuentes de los programas open source?
+LIBRO: Para comprobar la validez del entorno de compilación y para generar un archivo de salida Makefile que utilizará el compilador. Puede ocurrir que las fuentes se publiquen sin el script configure. Generalmente sucede cuando el desarrollador no desea que se personalice su programa antes de la compilación.
+
+### ENI-CH11-Q03  [open]  tema: Kernel y compilación
+P: ¿Cuál es la diferencia entre los comandos make clean y make mrproper?
+LIBRO: El comando make clean limpia el directorio de las fuentes de todos los elementos resultantes de la compilación. Se puede realizar una nueva compilación sobre las mismas bases. El comando make mrproper borra cualquier otro elemento que no pertenezca a las fuentes, incluso los elementos de configuración. Deja una situación similar a si se hubiera borrado todo lo realizado hasta justo después de haber extraído las fuentes del archivo tar. Cabe destacar que estas opciones no siempre están disponibles (especialmente mrproper).
+
+### ENI-CH11-Q04  [open]  tema: Kernel y compilación
+P: Cuando un programa se compila de forma dinámica, ¿de qué elementos depende en su entorno de ejecución?
+LIBRO: De las librerías compartidas. Es muy extraño hoy en día encontrar ejecutables compilados con librerías estáticas. De este modo se optimiza el espacio en disco, pero el ejecutable se vuelve más dependiente de su entorno.
+
+### ENI-CH11-Q05  [open]  tema: Kernel y compilación
+P: ¿Cómo sabe el comando ldconfig qué directorios debe analizar para inventariar las librerías de un sistema?
+LIBRO: Consultando el archivo de configuración /etc/ld.so.conf. Este archivo contiene la lista de directorios que se deben analizar para encontrar los archivos de librerías.
+
+### ENI-CH11-Q06  [open]  tema: Kernel y compilación
+P: En el contexto de una compilación de kernel, ¿qué objetivo del comando make permite basarse en un archivo .config resultante de una compilación anterior?
+LIBRO: Es el objetivo oldconfig. Sólo los nuevos elementos a los que no se hace referencia en el antiguo archivo .config serán objeto de pregunta al usuario.
+
+### ENI-CH11-Q07  [open]  tema: Kernel y compilación
+P: ¿Por qué motivo no debería instalarse un kernel con versión 2.5.8?
+LIBRO: Porque la numeración impar de la segunda cifra indica que se trata de un kernel en desarrollo. Las versiones de producción pasan directamente de la versión 2.4 a la versión 2.6.
+
+### ENI-CH11-Q08  [open]  tema: Kernel y compilación
+P: Ante la ausencia de una configuración particular, ¿en qué circunstancia un módulo de kernel presente en forma de archivo en el sistema no se carga en el arranque?
+LIBRO: Si este módulo no es necesario. Ya sea porque gestiona un hardware que no está en el sistema, o bien porque no se invoca por ninguna función lógica.
+
+### ENI-CH11-Q09  [open]  tema: Kernel y compilación
+P: ¿Cuál es la naturaleza de un archivo de carga de ramdisk utilizado durante la carga del kernel para la detección de periféricos?
+LIBRO: Se trata de un archivo cpio comprimido en formato gzip. Ante la ausencia de extensión estándar en un archivo comprimido, hay que recurrir al comando file para averiguar su tipo. Atención, si desea ver el contenido, primero hay que renombrarlo con un nombre que lleve la extensión adecuada (gz), y después extraerlo con el comando cpio.
+
+### ENI-CH11-Q10  [open]  tema: Kernel y compilación
+P: ¿Por qué mkinitrd ha desaparecido en beneficio del comando mkinitramfs?
+LIBRO: Porque el comando initrd no se basa en la gestión de hardware moderno udev, sino que usa devfs y, además, no es capaz de gestionar discos duros sata, lo cual es un problema en los sistemas recientes.

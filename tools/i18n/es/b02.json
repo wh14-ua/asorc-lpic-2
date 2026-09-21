@@ -1,0 +1,122 @@
+[
+ {
+  "id": "SYBEX-AT-11",
+  "q": "Para crear o aumentar el tamaño de un grupo de almacenamiento de volúmenes lógicos, ¿qué comando debe usar? (Elija todas las que correspondan.)",
+  "o": {
+   "A": "=",
+   "B": "=",
+   "C": "=",
+   "D": "=",
+   "E": "="
+  },
+  "e": "Un grupo de almacenamiento de volúmenes lógicos (grupo de volúmenes) se crea con el comando vgcreate, así que la opción D es correcta. El grupo de volúmenes puede ampliarse con el comando vgextend, así que la opción B también es correcta. La utilidad mdadm sirve para gestionar arrays RAID y no volúmenes lógicos (aunque los volúmenes lógicos pueden formar parte de un array RAID), así que la opción A es una elección errónea. El comando pvcreate de la opción C sirve para designar particiones como volúmenes físicos que luego pueden incorporarse a un grupo de volúmenes, pero no crea ni amplía un grupo de volúmenes, así que también es una elección incorrecta. El comando lvcreate toma almacenamiento (extents lógicos) de un grupo de volúmenes y crea un volumen lógico, no un grupo de volúmenes, así que la opción E también es una elección errónea."
+ },
+ {
+  "id": "SYBEX-AT-12",
+  "q": "Para ver la tabla ARP, ¿cuál de los siguientes comandos se utiliza? (Elija todas las que correspondan.)",
+  "o": {
+   "A": "=",
+   "B": "=",
+   "C": "=",
+   "D": "=",
+   "E": "="
+  },
+  "e": "Solo hay una elección correcta. El comando arp muestra la información de la tabla ARP, así que la opción C es la elección acertada. La opción A es una elección incorrecta, porque ese comando ifconfig permite activar o desactivar ARP en la interfaz de red indicada, no ver la tabla ARP. El comando de la opción B está inventado, aunque se parece a un comando real (ip addr show) que muestra información de las interfaces de red. Como no muestra la información de la tabla ARP, la opción B es errónea. El comando de la opción D muestra la tabla de encaminamiento, pero no la tabla ARP, así que es una elección incorrecta. Por último, la opción E también es errónea, porque el comando iwlist de esa opción permite escanear y localizar el nombre de una conexión inalámbrica local, pero hay que indicar el nombre del dispositivo inalámbrico (por ejemplo, wlan0) y no arp."
+ },
+ {
+  "id": "SYBEX-AT-13",
+  "q": "Para simular una transferencia de datos por la red utilizando tanto un servidor como un cliente, use la utilidad ______. (Elija la mejor respuesta.)",
+  "o": {
+   "A": "=",
+   "B": "ping o ping6",
+   "C": "traceroute o traceroute6",
+   "D": "=",
+   "E": "="
+  },
+  "e": "La utilidad nc permite simular un servidor y un cliente, enviando y recibiendo datos por la red, indicando las opciones adecuadas en la línea de comandos. Por tanto, la opción E es la mejor respuesta. El comando tcpdump de la opción A captura todos los paquetes que ve en la interfaz de red y muestra una descripción somera de cada uno, pero no simula transferencias de datos, así que es una elección incorrecta. La utilidad ping o ping6 permite enviar paquetes ICMP y comprobar la conectividad entre un servidor y un cliente, pero no proporciona una simulación real de transferencia de datos, así que la opción B no es la mejor respuesta. Asimismo, la utilidad traceroute o traceroute6 de la opción C intenta enviar paquetes ICMP a un destino concreto y listar los «saltos» de router que atraviesan los paquetes hasta llegar a él. Sin embargo, no proporcionan una simulación real de transferencia de datos (y muchos routers pueden bloquearlas), así que esta opción tampoco es la mejor elección. Por último, la opción D no es la mejor respuesta, porque la utilidad nmap puede determinar qué aplicaciones están escuchando en qué puertos de red del sistema Linux, pero no simular transferencias de datos hacia otro sistema."
+ },
+ {
+  "id": "SYBEX-AT-14",
+  "q": "Acaba de instalar una nueva NIC y ha configurado una interfaz de red cableada (eth2) en su servidor. Sin embargo, no tiene conectividad de red (no se envían ni se reciben paquetes por la interfaz). ¿Qué debería hacer? (Elija todas las que correspondan.)",
+  "o": {
+   "A": "Comprobar la configuración de la interfaz con el comando ifconfig eth2.",
+   "B": "Comprobar la interfaz desde otro sistema con el comando ping o ping6.",
+   "C": "Comprobar los paquetes que entran y salen de la interfaz con la utilidad tcpdump.",
+   "D": "Comprobar el búfer circular del kernel (kernel ring buffer) con la utilidad dmesg.",
+   "E": "Comprobar los mensajes del kernel en los archivos dmesg, messages o syslog del directorio /var/log/."
+  },
+  "e": "La opción A es una elección correcta, porque permite revisar todos los ajustes de la interfaz de red cableada y ver cosas como si se ha asignado una dirección IP. Las opciones D y E también son elecciones correctas, porque es posible que no se haya cargado el módulo de hardware adecuado para la tarjeta de red. Esa información se encuentra en el búfer circular del kernel o, si el búfer ya se ha volcado a disco, en alguno de los archivos de la opción E (según la distribución). La opción B no es una elección correcta, porque si ya se sabe que no se envían ni reciben paquetes por la interfaz, usar ping o ping6 no aportará información adicional. Lo mismo ocurre con la opción C, así que también es una elección incorrecta."
+ },
+ {
+  "id": "SYBEX-AT-15",
+  "q": "Necesita usar un dispositivo de cinta con rebobinado para crear un archivo comprimido. ¿Qué dispositivo podría usar en su sistema Linux? (Elija todas las que correspondan.)",
+  "o": {
+   "A": "=",
+   "B": "=",
+   "C": "=",
+   "D": "=",
+   "E": "="
+  },
+  "e": "Las opciones A y B son correctas, porque los dispositivos de cinta /dev/st* (SCSI) y /dev/ht* (PATA) rebobinan automáticamente. La opción C es incorrecta, porque el archivo de dispositivo /dev/sdt1 no representa un dispositivo de cinta, sino una partición. Las opciones D y E son erróneas, porque los dispositivos de cinta /dev/nst* (SCSI) y /dev/nht* (PATA) no rebobinan automáticamente."
+ },
+ {
+  "id": "SYBEX-AT-16",
+  "q": "¿Cuáles de las siguientes afirmaciones sobre la utilidad rndc son ciertas? (Elija todas las que correspondan.)",
+  "o": {
+   "A": "Con ella se puede arrancar el demonio BIND.",
+   "B": "Con ella se puede detener el demonio BIND.",
+   "C": "Con ella se pueden recargar los archivos de configuración de BIND.",
+   "D": "Con ella se pueden recargar los archivos de zona de BIND.",
+   "E": "La utilidad rndc no tiene nada que ver con BIND."
+  },
+  "e": "Las opciones B, C y D son ciertas y, por tanto, elecciones correctas. No se puede arrancar el demonio BIND con la utilidad rndc, así que la opción A es una respuesta incorrecta. Además, la utilidad rndc sí tiene que ver con BIND, así que la opción E también es una elección errónea."
+ },
+ {
+  "id": "SYBEX-AT-17",
+  "q": "La directiva type de un archivo de configuración de zona de BIND puede tomar cuál de los siguientes valores? (Elija todas las que correspondan.)",
+  "o": {
+   "A": "=",
+   "B": "=",
+   "C": "=",
+   "D": "=",
+   "E": "="
+  },
+  "e": "Una directiva type hint especifica la zona de pistas (Hint Zone), que es una lista de los servidores raíz actuales, así que la opción A es una elección correcta. La directiva type forward indica que este es un servidor de reenvío para la zona, así que la opción D también es una elección correcta. Una directiva type stub se usa para definir una zona stub, así que la opción E es una elección correcta. No existe la directiva type primary: para indicar el servidor de nombres primario de una zona se usa type master, así que la opción B es una elección errónea. Tampoco existe la directiva type secondary: para definir el servidor de nombres secundario de una zona se usa type slave. Por tanto, la opción C también es una respuesta incorrecta."
+ },
+ {
+  "id": "SYBEX-AT-18",
+  "q": "¿Cuáles de los siguientes son comandos que se usan con la utilidad apache2ctl? (Elija todas las que correspondan.)",
+  "o": {
+   "A": "=",
+   "B": "=",
+   "C": "=",
+   "D": "=",
+   "E": "="
+  },
+  "e": "El comando apache2ctl restart envía una señal SIGHUP al servidor Apache, haciendo que cierre las conexiones existentes y se reinicie. Por tanto, la opción B es una respuesta correcta. El comando apache2ctl graceful reinicia el servidor Apache, pero sin cerrar las conexiones existentes, así que la opción C también es una elección correcta. El comando apache2ctl de la opción D, fullstatus, muestra un informe completo del estado del servidor Apache, así que es una respuesta correcta. La opción E también es una elección correcta, porque apache2ctl status muestra un informe breve del estado del servidor Apache. La opción A es un comando de apache2ctl inventado, así que es la única respuesta incorrecta."
+ },
+ {
+  "id": "SYBEX-AT-19",
+  "q": "¿Cuáles de las siguientes afirmaciones sobre Nginx son ciertas? (Elija todas las que correspondan.)",
+  "o": {
+   "A": "Nginx utiliza hilos de programa independientes para atender a cada cliente.",
+   "B": "Nginx utiliza una arquitectura asíncrona que le permite crear hilos de cliente dentro del programa principal según se necesiten.",
+   "C": "Nginx utiliza el puerto TCP 80.",
+   "D": "Nginx está obsoleto y está siendo sustituido por Apache.",
+   "E": "Nginx puede tener varios servidores web de backend para implementar funciones de proxy inverso."
+  },
+  "e": "Las opciones B, C y E son afirmaciones ciertas y, por tanto, respuestas correctas. La opción A es errónea, porque Nginx no usa hilos de programa independientes para cada cliente, sino que trabaja con los hilos de cliente descritos en la opción B. La opción D también es una elección incorrecta, porque Nginx no está obsoleto y, al contrario, puede que algún día acabe sustituyendo a Apache."
+ },
+ {
+  "id": "SYBEX-AT-20",
+  "q": "Los registros de cuentas de usuario de Samba pueden almacenarse en la base de datos ______. (Elija todas las que correspondan.)",
+  "o": {
+   "A": "=",
+   "B": "=",
+   "C": "=",
+   "D": "=",
+   "E": "="
+  },
+  "e": "Las opciones A, B y E son correctas, porque la información de cuentas de usuario de Samba puede guardarse en las bases de datos smbpasswd, tdbsam o ldapsam. net es un comando (no una base de datos), similar a la utilidad net de Windows/DOS, que se usa cuando un servidor Samba necesita unirse a un dominio o a un Active Directory como miembro. Por tanto, la opción C es una respuesta errónea. El smbclient de la opción D es un comando que conecta, lista recursos compartidos y ofrece servicios de tipo FTP sobre un recurso compartido, o bien el nombre de un paquete de Samba. Por tanto, la opción D también es una elección incorrecta."
+ }
+]

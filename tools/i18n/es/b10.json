@@ -1,0 +1,55 @@
+[
+{"id":"SYBEX-CH04-RQ01",
+ "q":"Suponiendo que tiene o puede obtener privilegios de superusuario, ¿cuáles de los siguientes comandos permiten crear un sistema de archivos ext2 en la partición /dev/sdd2? (Elija todas las que correspondan.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"Las respuestas A, C y E contienen variaciones válidas del comando mkfs que formatean la partición /dev/sdd2 como sistema de archivos ext2. La opción B usa un tipo de sistema de archivos inválido, extended2, y por tanto es incorrecta. No existe el comando mke2fs.ext2, así que la opción D también es incorrecta."},
+
+{"id":"SYBEX-CH04-RQ02",
+ "q":"¿Cuál de los siguientes archivos contiene una lista de todos los sistemas de archivos que soporta su sistema?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"El archivo /proc/filesystems, opción A, contiene una lista de todos los sistemas de archivos soportados por el sistema. Los archivos /etc/mtab y /proc/mounts muestran los sistemas de archivos montados en ese momento. Aunque son sistemas de archivos soportados, no son todos los soportados y, por tanto, las opciones B y C son incorrectas. La opción D es incorrecta, porque el archivo /proc/swaps contiene información sobre el espacio de intercambio del sistema. La opción E también es una respuesta errónea, porque el archivo /proc/cpuinfo contiene información sobre los procesadores del sistema."},
+
+{"id":"SYBEX-CH04-RQ03",
+ "q":"Suponiendo que tiene (o puede obtener) privilegios de superusuario para acoplar temporalmente un sistema de archivos formateado a la estructura de directorio virtual de Linux, ¿qué debería hacer? (Elija la mejor respuesta.)",
+ "o":{"A":"Ejecutar el comando mkfs sobre el sistema de archivos con privilegios de superusuario.",
+      "B":"Ejecutar la utilidad e2label sobre el sistema de archivos.",
+      "C":"Nada. El servicio AutoFS lo acoplará automáticamente.",
+      "D":"Añadir una entrada para este sistema de archivos en el archivo de configuración /etc/fstab.",
+      "E":"Usar el comando mount con las opciones y parámetros adecuados."},
+ "e":"El comando mount con las opciones y parámetros adecuados acoplará temporalmente el sistema de archivos a la estructura de directorio virtual de Linux. Por tanto, la opción E es la mejor respuesta. El comando mkfs sirve para el formateo de alto nivel y no para acoplar un sistema de archivos, así que la opción A es incorrecta. La opción B es mala respuesta porque, aunque con el comando e2label se puede averiguar la etiqueta de un sistema de archivos, que luego podría usarse en el comando mount, no acopla ningún sistema de archivos. La opción C también es mala respuesta, porque AutoFS tiene que configurarse antes de que acople automáticamente un archivo en red. El archivo /etc/fstab es para sistemas de archivos acoplados de forma persistente, así que si se añade una entrada ahí, no quedaría acoplado temporalmente. Por tanto, la opción D no es la mejor respuesta."},
+
+{"id":"SYBEX-CH04-RQ04",
+ "q":"El número c344d0f9–6d54–4a92-ad4d-c5a44fac2eeb identifica un sistema de archivos que hay que montar temporalmente. ¿Qué opción del comando necesario debería elegir? (Elija la mejor respuesta.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"El número que aparece en la pregunta es un número UUID de sistema de archivos. La opción -U se usa con el comando mount para identificar un sistema de archivos por su UUID. Por tanto, la opción C es correcta. La opción -o sirve para especificar opciones de montaje, así que la opción A es incorrecta. La opción B es errónea, porque la opción -L se usa para identificar por su etiqueta el sistema de archivos que se va a montar. La opción -a, usada con el comando mount, hará que se monte cualquier sistema de archivos listado en /etc/fstab que no esté montado en ese momento. Por tanto, la opción D es incorrecta. La opción -n del comando mount monta un sistema de archivos pero no actualiza el archivo /etc/mtab, así que la opción E es la respuesta errónea."},
+
+{"id":"SYBEX-CH04-RQ05",
+ "q":"¿Qué comando debe usarse para forzar a los sistemas de archivos a escribir en las estructuras del soporte los metadatos que residen en memoria? (Elija la mejor respuesta.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"La opción D es correcta, porque el comando sync permite vaciar los búferes del sistema de archivos, lo que en la práctica fuerza a que el volcado de datos se produzca de inmediato. El unmount de la opción A no es un comando (umount es la forma correcta del comando de desmontaje) y, por tanto, no es correcta. Las opciones B y C son incorrectas, porque los comandos fuser y lsof sirven para ayudar a determinar quién está usando un sistema de archivos cuando no se consigue desmontarlo. El comando dmesg muestra el búfer circular del kernel, que puede ayudar a determinar los nombres de las memorias USB conectadas, pero no a vaciar los búferes del sistema de archivos. Por tanto, la opción E es incorrecta."},
+
+{"id":"SYBEX-CH04-RQ06",
+ "q":"Cada entrada de /etc/fstab tiene varios campos obligatorios. ¿Cuáles de los siguientes podrían describir uno de esos campos? (Elija todas las que correspondan.)",
+ "o":{"A":"Punto de montaje","B":"Tipo de sistema de archivos","C":"Opción de copia de seguridad de cpio","D":"Prioridad de comprobación del sistema de archivos","E":"Identificador de AutoFS"},
+ "e":"Los seis campos de cada entrada de /etc/fstab son: nombre (partición, volumen, UUID, etc.), punto de montaje, tipo de sistema de archivos, opciones de montaje, opción de volcado (dump) y prioridad de comprobación del sistema de archivos (fsck). Por tanto, las opciones A, B y D son correctas. La opción C es incorrecta, porque en el archivo /etc/fstab se indica la utilidad dump, no la utilidad cpio. La opción E es errónea, porque los sistemas de archivos que se montan mediante el servicio AutoFS no deben tener entradas en el archivo /etc/fstab."},
+
+{"id":"SYBEX-CH04-RQ07",
+ "q":"Necesita averiguar el UUID de un sistema de archivos. ¿Qué utilidad puede ayudarle? (Elija la mejor respuesta.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"El comando blkid, usado con privilegios de superusuario, muestra diversos atributos de los dispositivos de bloques, incluido el UUID de un dispositivo. Por tanto, la opción B es correcta. El comando findmnt de la opción A muestra todos los sistemas de archivos montados en formato de árbol, pero no muestra los UUID de los dispositivos, así que es incorrecta. La utilidad e2label muestra la etiqueta de un sistema de archivos, no su UUID, así que también es incorrecta. La opción D es errónea porque el comando findfs encuentra sistemas de archivos, pero hay que conocer ya su etiqueta o su UUID, y solo muestra el nombre del dispositivo. Por último, la opción E es errónea porque, aunque el comando mount muestra los sistemas de archivos montados en ese momento, no muestra su UUID."},
+
+{"id":"SYBEX-CH04-RQ08",
+ "q":"Con un sistema de archivos Btrfs, ¿qué configuraciones RAID pueden implementarse? (Elija todas las que correspondan.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"Las opciones A, B y E son correctas, porque en un sistema de archivos btrfs pueden implementarse configuraciones RAID 0, RAID 1 y RAID 10. Las opciones C y D son incorrectas, porque las configuraciones RAID 5 y RAID 6 no pueden implementarse en un sistema de archivos btrfs… todavía."},
+
+{"id":"SYBEX-CH04-RQ09",
+ "q":"¿Cuáles de las siguientes se consideran extensiones del estándar ISO9660? (Elija todas las que correspondan.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"El Torito, Joliet y Rock Ridge son extensiones del estándar ISO9660 para soportes ópticos. Por tanto, las opciones C, D y E son correctas. La opción A es incorrecta, porque Universal Disk Format (UDF) es un estándar multiplataforma pensado sobre todo para DVD, no una extensión de ISO9660. La opción B también es errónea, porque btrfs es un sistema de archivos, no un estándar de soportes ópticos."},
+
+{"id":"SYBEX-CH04-RQ10",
+ "q":"¿Qué comando debe usarse para crear una imagen ISO? (Elija la mejor respuesta.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"El comando mkisofs permite crear una imagen ISO, así que la opción C es correcta. El comando mkfs sirve para crear sistemas de archivos y no existe la opción -t iso, así que las opciones A y B son erróneas. El cdrecord de la opción D permite grabar una imagen ISO en un soporte óptico, pero no crear la imagen, así que es incorrecta. Por último, la opción E es incorrecta, porque es el comienzo del comando que permite montar temporalmente un soporte óptico con sistema de archivos ISO9660, pero no crear una imagen ISO."}
+]

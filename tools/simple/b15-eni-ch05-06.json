@@ -1,0 +1,153 @@
+{
+ "ENI-CH05-Q01": {
+  "idea": [
+   "Montándola.",
+   "El directorio compartido se monta en un directorio local.",
+   "Ojo: aunque el comando mount sea el mismo, hay que tener instalado el software cliente."
+  ],
+  "memorizar": "NFS o Samba, se accede montando."
+ },
+ "ENI-CH05-Q02": {
+  "idea": [
+   "Sí, con exportfs -a."
+  ],
+  "memorizar": "exportfs -a comparte sin arrancar el servicio."
+ },
+ "ENI-CH05-Q03": {
+  "idea": [
+   "Porque el control de acceso va por identificador de usuario.",
+   "La cuenta root siempre tiene el identificador 0, y root_squash le quita los privilegios.",
+   "Se puede desactivar al montar la compartición, con no_root_squash."
+  ],
+  "memorizar": "root_squash: root entra, pero sin ser root."
+ },
+ "ENI-CH05-Q04": {
+  "idea": [
+   "NFS depende de tres procesos: portmapd, nfsd y mountd.",
+   "El nombre del script cambia con la distribución: nfs en Red Hat, nfk-kernel-server en Debian."
+  ],
+  "memorizar": "NFS son tres procesos, no uno."
+ },
+ "ENI-CH05-Q05": {
+  "idea": [
+   "La opción de montaje sync.",
+   "Prohíbe la caché en escritura, así que no hay escrituras asíncronas.",
+   "El cliente no da por buena una escritura hasta que está físicamente en disco."
+  ],
+  "memorizar": "sync = no te fío nada hasta que esté escrito."
+ },
+ "ENI-CH05-Q06": {
+  "idea": [
+   "Sí, con testparm.",
+   "Comprueba el archivo y saca por pantalla las comparticiones activas.",
+   "Los valores por defecto solo se ven si lo llamas con -v."
+  ],
+  "memorizar": "testparm revisa sin arrancar nada."
+ },
+ "ENI-CH05-Q07": {
+  "idea": [
+   "Con el parámetro browseable en la definición de esa compartición.",
+   "Es el que decide si los clientes la ven."
+  ],
+  "memorizar": "browseable decide si se ve, no si se entra."
+ },
+ "ENI-CH05-Q08": {
+  "idea": [
+   "No se puede.",
+   "La contraseña Unix se encripta con MD5, que es irreversible.",
+   "Y las contraseñas SMB necesitan MD4, así que no se pueden sacar de ahí."
+  ],
+  "memorizar": "MD5 y MD4 no se convierten entre sí."
+ },
+ "ENI-CH05-Q09": {
+  "idea": [
+   "Sí, con la directiva unix passwd sync = yes.",
+   "Solo funciona cuando la contraseña Samba viaja sin encriptar.",
+   "Entonces se encripta dos veces: en MD5 para Unix y en MD4 para Samba."
+  ],
+  "memorizar": "sincronizar exige tener la contraseña en claro."
+ },
+ "ENI-CH05-Q10": {
+  "idea": [
+   "Porque en activo la conexión de datos la abre el servidor.",
+   "Y los cortafuegos ven eso como una amenaza.",
+   "En pasivo abre el cliente las dos sesiones, la de comandos y la de datos."
+  ],
+  "memorizar": "pasivo = todo lo abre el cliente; menos problemas."
+ },
+ "ENI-CH06-Q01": {
+  "idea": [
+   "Para guardar información de distinto tipo.",
+   "Así un cliente puede preguntar algo concreto: quién es el maestro de esta zona, o qué servidores DNS tiene."
+  ],
+  "memorizar": "cada tipo de registro responde a una pregunta distinta."
+ },
+ "ENI-CH06-Q02": {
+  "idea": [
+   "Los registros MX son los que apuntan al servicio de correo del dominio.",
+   "Un servidor de correo perfecto no recibe nada de fuera si su registro MX está mal."
+  ],
+  "memorizar": "sin MX correcto no entra correo."
+ },
+ "ENI-CH06-Q03": {
+  "idea": [
+   "Guarda en memoria las resoluciones ya hechas y responde al instante.",
+   "Y como casi todos los clientes piden los mismos nombres comunes, se aprovecha mucho.",
+   "El servidor se ahorra repetir la resolución pública."
+  ],
+  "memorizar": "la caché responde sin volver a preguntar fuera."
+ },
+ "ENI-CH06-Q04": {
+  "idea": [
+   "No hay que instalarlo.",
+   "El resolver forma parte de la pila IP en todas las distribuciones."
+  ],
+  "memorizar": "el resolver ya viene puesto."
+ },
+ "ENI-CH06-Q05": {
+  "idea": [
+   "Sí, se puede prescindir.",
+   "include sirve para trocear la configuración en varios archivos.",
+   "Si lo metes todo en named.conf funciona igual, solo que queda largo."
+  ],
+  "memorizar": "include ordena; no es obligatorio."
+ },
+ "ENI-CH06-Q06": {
+  "idea": [
+   "Declarando una redirección hacia él con la directiva forwarders.",
+   "Resuelve él las zonas locales y manda todo lo demás al servidor del proveedor."
+  ],
+  "memorizar": "forwarders = lo que no sé, se lo paso a otro."
+ },
+ "ENI-CH06-Q07": {
+  "idea": [
+   "Con el comando de control rndc.",
+   "Aplica cambios de configuración o de una sola zona sin recargar el servicio entero."
+  ],
+  "memorizar": "rndc recarga por partes."
+ },
+ "ENI-CH06-Q08": {
+  "idea": [
+   "El comando dig.",
+   "Es la herramienta de referencia para diagnosticar DNS, aunque mucha gente siga usando nslookup."
+  ],
+  "memorizar": "para el detalle de verdad, dig."
+ },
+ "ENI-CH06-Q09": {
+  "idea": [
+   "Con dos técnicas que suelen ir juntas.",
+   "Encerrar el proceso named en una prisión chroot, con copia de lo que necesite para funcionar.",
+   "Y ejecutarlo con una cuenta de servicio de privilegios limitados."
+  ],
+  "analogia": "La jaula limita hasta dónde puede mirar y la cuenta limitada, qué puede tocar.",
+  "memorizar": "jaula chroot más cuenta sin privilegios."
+ },
+ "ENI-CH06-Q10": {
+  "idea": [
+   "Porque delegar es mandar las peticiones al servidor de la zona hija.",
+   "Todo lo que llegue al padre sobre esa zona se redirige allí.",
+   "Sin comunicación, esa redirección es imposible."
+  ],
+  "memorizar": "delegar solo funciona si los dos se hablan."
+ }
+}

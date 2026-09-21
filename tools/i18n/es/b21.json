@@ -1,0 +1,54 @@
+[
+{"id":"SYBEX-CH09-RQ11",
+ "q":"En el alojamiento virtual basado en nombre, ¿qué directiva define el nombre de dominio usado?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"La directiva ServerName define el nombre de dominio en cada bloque de host virtual, así que la opción D es correcta. La directiva DocumentRoot define una carpeta y no un nombre de dominio, así que la opción A es incorrecta. La directiva NameVirtualHost define la dirección IP del servidor físico, no los nombres de dominio que se aceptan, así que la opción B es incorrecta. El bloque <VirtualHost> define todas las directivas del host virtual, no solo el nombre de dominio, así que la opción C es incorrecta."},
+
+{"id":"SYBEX-CH09-RQ12",
+ "q":"En el alojamiento virtual basado en IP, ¿qué directiva define las distintas direcciones IP en las que debe escuchar el servidor?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"La directiva Listen define la dirección IP y el puerto que usa el servidor Apache para aceptar peticiones entrantes de clientes, así que la opción A es correcta. El elemento <VirtualHost> permite crear un bloque de directivas para el host virtual, pero no define las direcciones IP, así que la opción B es incorrecta. La directiva NameVirtualHost define la dirección IP común para los hosts virtuales basados en nombre, pero no se usa en el alojamiento virtual basado en IP, así que la opción C es incorrecta. La directiva DocumentRoot define una carpeta y no una dirección IP, así que la opción D es incorrecta."},
+
+{"id":"SYBEX-CH09-RQ13",
+ "q":"¿Qué programa de utilidad de Apache permite crear archivos de texto de usuario/contraseña?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"La utilidad htpasswd crea un archivo de texto con un identificador de usuario y una contraseña cifrada que pueden usarse para la autenticación, así que la opción B es correcta. Los programas httpd y apache2 son nombres del programa principal del servidor web Apache y no generan archivos de texto, así que las opciones A y C son incorrectas. mod_auth es un módulo que se usa para implementar autenticación en el servidor Apache, pero no crea el archivo de usuario/contraseña, así que la opción D es incorrecta."},
+
+{"id":"SYBEX-CH09-RQ14",
+ "q":"¿Qué directiva apunta al archivo de usuario/contraseña que controla el acceso?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"La directiva AuthUserFile define la ubicación del archivo de usuario/contraseña usado para la autenticación de usuarios, así que la opción C es correcta. La directiva AuthType define el tipo de autenticación utilizada, pero no la ubicación del archivo de autenticación, así que la opción A es incorrecta. La directiva AuthName define el texto con el que se solicita la autenticación al cliente, pero no la ubicación del archivo de autenticación, así que la opción B es incorrecta. La directiva Order define una restricción de red y no una restricción de autenticación, así que la opción D es incorrecta."},
+
+{"id":"SYBEX-CH09-RQ15",
+ "q":"¿Qué método de programación web dinámica permite al servidor Apache usar un intérprete de programas externo?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"La Common Gateway Interface (CGI) permite que el servidor web Apache pase archivos a un intérprete de programas externo para procesar el código embebido, así que la opción A es correcta. mod_perl y mod_php son nombres de módulos que incorporan el procesamiento interno de programas; no pasan el código a un programa externo, así que las opciones B y D son incorrectas. El módulo mod_auth es para autenticación y no para programación, así que la opción C es incorrecta."},
+
+{"id":"SYBEX-CH09-RQ16",
+ "q":"¿Qué directiva indica al servidor Apache que redirija los archivos .php al proceso del servidor PHP?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"La directiva AddHandler define cómo debe tratar el servidor web Apache los archivos según su extensión. Se usa para redirigir archivos a procesos concretos, como intérpretes de código, así que la opción B es correcta. La directiva LoadModule instala un módulo, pero no redirige archivos a procesos separados, así que la opción A es incorrecta. La directiva DocumentRoot define la carpeta del servidor desde la que se sirven los archivos, pero no cómo procesarlos, así que la opción C es incorrecta. La directiva DirectoryIndex define qué archivos deben usarse por defecto cuando un cliente solicita un directorio, pero no cómo procesarlos, así que la opción D es incorrecta."},
+
+{"id":"SYBEX-CH09-RQ17",
+ "q":"¿Qué directiva indica al servidor Apache la ubicación del certificado SSL?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"La directiva SSLCertificateFile define la ubicación del archivo de certificado firmado del servidor que debe usarse en las sesiones SSL, así que la opción D es correcta. La directiva DirectoryIndex define los archivos predeterminados que se sirven cuando un cliente solicita un directorio, así que la opción A es incorrecta. La directiva SSLCertificateKeyFile define el archivo de clave de cifrado, no el archivo de certificado, así que la opción B es incorrecta. La directiva SSLEngine define cuándo debe permitir el servidor conexiones SSL, pero no la ubicación del archivo de certificado, así que la opción C es incorrecta."},
+
+{"id":"SYBEX-CH09-RQ18",
+ "q":"¿Qué hace un servidor proxy web? (Elija dos.)",
+ "o":{"A":"Almacena en caché las peticiones web de varios clientes",
+      "B":"Redirige las peticiones de un cliente a varios servidores",
+      "C":"Restringe a qué sitios web pueden acceder los clientes",
+      "D":"Restringe qué archivos puede servir un servidor"},
+ "e":"Un servidor proxy web almacena en caché las peticiones web de varios clientes para que las peticiones futuras puedan servirse desde la caché. También puede restringir los sitios web que los clientes pueden ver. Eso hace correctas las opciones A y C. La opción B define el papel de un proxy inverso, no el de un proxy web estándar, así que es incorrecta. La opción D define el papel de la directiva DocumentRoot; un proxy web no restringe los archivos que puede servir un servidor, así que la opción D es incorrecta."},
+
+{"id":"SYBEX-CH09-RQ19",
+ "q":"¿Qué directiva usa Squid para definir los ajustes de autenticación de clientes?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"La directiva auth_param define los ajustes de autenticación usados para autenticar a los clientes, así que la opción B es correcta. mod_auth es un módulo del servidor web Apache y no una directiva de Squid, así que la opción A es incorrecta. La directiva acl se usa para definir grupos de acceso, así que la opción C es incorrecta, y la directiva http_access se usa para definir reglas de acceso, así que también es incorrecta."},
+
+{"id":"SYBEX-CH09-RQ20",
+ "q":"¿Qué sección del archivo de configuración de nginx define los ajustes básicos del servidor?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"La sección server del archivo de configuración de nginx define las directivas que se aplican a todo el servidor, así que la opción B es correcta. La sección location define directivas que se aplican a una ubicación de carpeta concreta, no a todo el servidor, así que la opción A es incorrecta. La directiva root define la ubicación de DocumentRoot en el servidor web, así que es incorrecta, y la directiva listen define las direcciones IP y los puertos que usa el servidor para escuchar peticiones entrantes de clientes, así que también es incorrecta."}
+]

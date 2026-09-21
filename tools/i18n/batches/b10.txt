@@ -1,0 +1,89 @@
+### SYBEX-CH04-RQ01  [multiple_response]
+Q: Assuming that you have or can obtain super user privileges, which of the following commands would allow you to make an ext2 filesystem on the /dev/sdd2 partition? (Choose all that apply.)
+A: mkfs -t ext2 /dev/sdd2
+B: mkfs -t extended2 /dev/sdd2
+C: mkfs.ext2 /dev/sdd2
+D: mke2fs.ext2 /dev/sdd2
+E: mke2fs /dev/sdd2
+X: Answers A, C, and E all contain legitimate mkfs command variations, which format the /dev/sdd2 partition into an ext2 filesystem. Option B uses an invalid filesystem type, extended2, and therefore is incorrect. There is no mke2fs.ext2 command, so option D is also incorrect.
+
+### SYBEX-CH04-RQ02  [multiple_choice]
+Q: Which one of the following files contains a list of all of the filesystems your system supports?
+A: /proc/filesystems
+B: /etc/mtab
+C: /proc/mounts
+D: /proc/swaps
+E: /proc/cpuinfo
+X: The /proc/filesystems file, option A, contains a list of all of the filesystems supported by your system. The /etc/mtab and /proc/mounts files show currently mounted filesystems. While these are supported filesystems, they are not all of the supported filesystems, and therefore options B and C are incorrect. Option D is incorrect, because the /proc/ swaps file contains information concerning your system’s swap space. Option E is also a wrong answer, because the /proc/cpuinfo file contains information concerning your system’s processors.
+
+### SYBEX-CH04-RQ03  [multiple_choice]
+Q: Assuming that you have (or have access to) super user privileges to temporarily attach a formatted filesystem to the Linux virtual directory structure, which of the following should you do? (Choose the best answer.)
+A: Issue the mkfs command, using super user privileges, on the filesystem.
+B: Run the e2label utility on the filesystem.
+C: Nothing. The AutoFS service will automatically attach it.
+D: Add an entry for this filesystem in the /etc/fstab configuration file.
+E: Use the mount command with the proper options and parameters.
+X: The mount command with the proper options and parameters will temporarily attach the filesystem to the Linux virtual directory structure. Therefore, option E is the best answer. The mkfs command is for high-level formatting and not attaching a filesystem, and therefore option A is incorrect. Option B is a bad answer, because even though you can use the e2label command to determine a filesystem’s label, which you might use in the mount command, it does not attach a filesystem. Option C is also a bad answer, because AutoFS has to be configured before it will automatically attach a network-based file. The /etc/ fstab file is for persistently attached filesystems, so if you added an entry for the filesystem in this file, it would not be temporarily attached. Therefore, option D is not the best answer.
+
+### SYBEX-CH04-RQ04  [multiple_choice]
+Q: The number c344d0f9–6d54–4a92-ad4d-c5a44fac2eeb identifies a filesystem that needs to be temporarily mounted. Which option for the needed command should you choose? (Choose the best answer.)
+A: -o
+B: -L
+C: -U
+D: -a
+E: -n
+X: The number shown in the question is a filesystem UUID number. The -U option is used with the mount command to identify a filesystem via its UUID number. Therefore, option C is correct. The -o is for specifying filesystem mount options, so option A is incorrect. Option B is wrong, because the -L option is used to identify a filesystem to be mounted by its label. The -a option, used with the mount command, will cause any filesystem listed in the /etc/fstab file that is not currently mounted to be mounted. Therefore, option D is incorrect. The mount command -n option will mount a filesystem but not update the /etc/ mtab file, and thus option E is the wrong answer.
+
+### SYBEX-CH04-RQ05  [multiple_choice]
+Q: Which command should be used to force filesystems to write metadata residing in memory to the filesystem media structures? (Choose the best answer.)
+A: unmount
+B: fuser
+C: lsof
+D: sync
+E: dmesg
+X: Option D is correct, because the sync command allows you to flush the filesystem buffers, which essentially forces the data commitment process to take place immediately. Option A’s unmount is not a command (umount is the correct spelling of the unmount command), and it is therefore not correct. Options B and C are incorrect, because the fuser and lsof commands are for assisting you in determining who is using a filesystem when you are unsuccessfully attempting to unmount it. The dmesg command displays the kernel ring buffer, which may be helpful in determining attached USB flash drive names but not in flushing filesystem buffers. Therefore, option E is incorrect.
+
+### SYBEX-CH04-RQ06  [multiple_response]
+Q: Each entry in the /etc/fstab has several required fields. Which of the following could describe one of the fields? (Choose all that apply.)
+A: Mount point
+B: Filesystem type
+C: cpio backup option
+D: Filesystem check priority
+E: AutoFS identifier
+X: The six fields for each /etc/fstab entry include name (partition, volume, UUID, and so on), mount point, filesystem type, mount options, dump option, and filesystem check (fsck) priority. Therefore, options A, B, and D are correct. Option C is incorrect, because the dump utility, not the cpio utility, is indicated in the /etc/fstab file. Option E is wrong, because filesystems that are mounted via the AutoFS service should have no entries within the /etc/fstab file.
+
+### SYBEX-CH04-RQ07  [multiple_choice]
+Q: You need to determine a filesystem’s UUID. Which utility can help you do this? (Choose the best answer.)
+A: findmnt
+B: blkid
+C: e2label
+D: findfs
+E: mount
+X: The blkid command, when used with super user privileges, displays various block device attributes, including a device’s UUID. Therefore, option B is correct. Option A’s findmnt command displays all of the mounted filesystems in a tree format, but it does not display device UUIDs, so it is incorrect. The e2label utility shows a filesystem’s label, not its UUID, so it is also incorrect. Option D is wrong because the findfs command finds filesystems, but you must already know either its label or its UUID, and only the device name is shown. Finally, option E is wrong because, although the mount command shows you the currently mounted filesystems, their UUID is not displayed.
+
+### SYBEX-CH04-RQ08  [multiple_response]
+Q: Using a Btrfs filesystem, which RAID configurations can be implemented? (Choose all that apply.)
+A: RAID 0
+B: RAID 1
+C: RAID 5
+D: RAID 6
+E: RAID 10
+X: Options A, B, and E are correct, because RAID 0, RAID 1, and RAID 10 configurations can be implemented on a btrfs filesystem. Options C and D are incorrect, because RAID 5 and RAID 6 configurations cannot be implemented on a btrfs filesystem…yet.
+
+### SYBEX-CH04-RQ09  [multiple_response]
+Q: Which of the following are considered extensions of the ISO9660 standard? (Choose all that apply.)
+A: UDF
+B: btrfs
+C: El Torito
+D: Joliet
+E: Rock Ridge
+X: El Torito, Joliet, and Rock Ridge are all ISO9660 standard extensions for use with optical media. Therefore, options C, D, and E are correct. Option A is incorrect, because Universal Disk Format (UDF) is a cross-platform specification standard primarily for DVDs, not an ISO9660 extension. Option B is also wrong, because btrfs is a filesystem, not an optical media standard.
+
+### SYBEX-CH04-RQ10  [multiple_choice]
+Q: Which command should be used to create an ISO? (Choose the best answer.)
+A: mkfs
+B: mkfs -t iso
+C: mkisofs
+D: cdrecord
+E: mount -t iso9660
+X: The mkisofs command will allow you to create an ISO image, so option C is correct. The mkfs command is for making filesystems, and there is no -t iso option, so options A and B are wrong. Option D’s cdrecord allows you to record an ISO image onto optical media but not create the image, so it is incorrect. Finally, option E is incorrect, because it is the start of the command to allow you to temporarily mount optical media with an ISO9660 filesystem but not create an ISO image.

@@ -1,0 +1,79 @@
+### SYBEX-CH11-RQ11  [multiple_choice]
+Q: When using a single configuration file for PAM, where is it located?
+A: /etc/pam.d
+B: /etc/pam.conf
+C: /etc/pam.d/pam.conf
+D: /etc/pamd.conf
+X: The PAM application uses the pam.conf configuration file, stored in the /etc/ folder, so option B is correct. Option A, /etc/pam.d, is a folder, not a single configuration file, so option A is incorrect. The /etc/pam.d/pam.conf location mixes the single file and multiple file methods together and doesn’t exist in the PAM setup, so option C is incorrect. The /etc/pamd.conf file doesn’t exist in the PAM setup, so option D is incorrect.
+
+### SYBEX-CH11-RQ12  [multiple_choice]
+Q: What folder does PAM use to store multiple application configuration files?
+A: /etc/pam.d
+B: /etc/pam.conf
+C: /etc/pam.d/pam.conf
+D: /etc/pamd.conf
+X: The PAM application uses the /etc/pam.d folder to store individual application configuration files, so option A is correct. When using separate application configuration files, PAM doesn’t use the pam.conf file, so options B and C are incorrect. The pamd.conf file doesn’t exist in the PAM set up, so option D is incorrect.
+
+### SYBEX-CH11-RQ13  [multiple_choice]
+Q: Which PAM control entry terminates the application if the authentication fails?
+A: sufficient
+B: required
+C: requisite
+D: optional
+X: The requisite control entry terminates the authentication process if the authentication fails. No other entries in the configuration are checked. Thus, option C is correct. The sufficient entry passes the authentication if the check succeeds, but it doesn’t terminate the authentication if it fails, so option A is incorrect. The required entry only indicates a failure status if the authentication fails, but it allows the authentication process to check other entries, so option B is incorrect. The optional entry doesn’t block further entries if it fails, so option D is also incorrect.
+
+### SYBEX-CH11-RQ14  [multiple_choice]
+Q: Which PAM feature type logs authentication attempts to a log file?
+A: account
+B: session
+C: password
+D: auth
+X: The session feature type allows you to define a log file where PAM will log authentication attempts, so option B is correct. The account feature type only verifies the account; it doesn’t log the transaction, so option A is incorrect. Likewise, the auth feature type only provides authentication services; it doesn’t log them, so option D is also incorrect. The password feature type provides password management features but also doesn’t log the transactions, so option C is incorrect.
+
+### SYBEX-CH11-RQ15  [multiple_choice]
+Q: What part of the LDAP database defines a template for a set of attributes that can be assigned to an object?
+A: The object ID
+B: The schema
+C: The LDAP tree
+D: The object class
+X: The object class defines a template that provides a set of attributes assigned to an object in the LDAP database, so option D is correct. The object ID uniquely identifies each object, but it doesn’t provide a template of attributes, so option A is incorrect. The schema defines the structure of the database, but it isn’t used as a template for objects, so option B is incorrect. The LDAP tree encompasses the actual objects contained in the LDAP database, not just a template for new objects, so option C is incorrect.
+
+### SYBEX-CH11-RQ16  [multiple_choice]
+Q: What part of the LDAP database defines the information stored for an object?
+A: Attributes
+B: Object class
+C: Object ID
+D: Schema
+X: The attributes define the data values associated with an object in the LDAP database, so option A is correct. The object class defines a template of attributes that is applied to an object but not the actual attribute values themselves, so option B is incorrect. The object ID is a unique value assigned to each object, but it doesn’t include any information about the object, so option C is incorrect. The schema defines the objects in the database and how they are interrelated, but it doesn’t define the actual information about individual objects, so option D is incorrect.
+
+### SYBEX-CH11-RQ17  [multiple_choice]
+Q: What is the unique name assigned to each object in the LDAP database called?
+A: Object ID
+B: Attribute
+C: Object class
+D: Distinguished name
+X: Each object must have a unique distinguished name that references the location of the object in the LDAP tree as well as the object name, thus option D is correct. The object ID value for each object is unique, but it isn’t a name that you can reference, so option A is incorrect. The attributes of objects aren’t unique, so option B is incorrect. The object class defines a template that is applied to all similar objects in the LDAP tree, so it too is not unique, and option C is incorrect.
+
+### SYBEX-CH11-RQ18  [multiple_choice]
+Q: What OpenLDAP program runs as the main LDAP server, listening for LDAP client requests?
+A: slurpd
+B: slapd
+C: slapadd
+D: slapindex
+X: The main application program for the OpenLDAP server is slapd, so option B is correct. The slurpd program is used only when replicating LDAP servers, so option A is incorrect. The slapadd program is used to add new objects to the LDAP database; it isn’t the main LDAP server program, so option C is incorrect. The slapindex program allows you to re-index the LDAP database, but it too isn’t the main LDAP server program, so option D is incorrect.
+
+### SYBEX-CH11-RQ19  [multiple_choice]
+Q: What LDAP server program allows you to add new objects to the LDAP database?
+A: ldapadd
+B: slapindex
+C: slapadd
+D: ldapmodify
+X: The slapadd command-line program allows you to update the LDAP database with new objects, so option C is correct. The ldapadd and ldapmodify programs are client applications and not server applications, so options A and D are incorrect. The slapindex program only re-indexes the existing objects in the LDAP database; it can’t add new objects, so option B is incorrect.
+
+### SYBEX-CH11-RQ20  [multiple_choice]
+Q: What LDAP client application allows you to add new objects to the LDAP database?
+A: slapadd
+B: ldapadd
+C: ldapmodify
+D: slapindex
+X: The ldapadd program allows you to add new objects into the LDAP database from a client, so option B is correct. The slapadd program also allows you to add new objects, but only from the server, since it interacts directly with the LDAP files, so option A is incorrect. The ldapmodify program is a client program, but it can only modify existing LDAP objects, not add new ones, so option C is incorrect. The slapindex program is a server program that re-indexes the existing objects in the LDAP database, so option D is incorrect.

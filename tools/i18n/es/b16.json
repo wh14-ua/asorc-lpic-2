@@ -1,0 +1,51 @@
+[
+{"id":"SYBEX-CH07-RQ01",
+ "q":"¿Dónde se encuentran los archivos de configuración de Postfix?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"El paquete Postfix instala los archivos de configuración en el directorio /etc/postfix, así que la opción B es correcta. El directorio /var/spool/postfix contiene los directorios y archivos de procesamiento del correo, pero no los archivos de configuración, así que la respuesta A es incorrecta. El directorio /var/spool/mail contiene los buzones de los usuarios locales, pero no archivos de configuración, así que la respuesta C es incorrecta. El directorio /var/log contiene archivos de registro, pero no de configuración, así que la respuesta D es incorrecta. El directorio /etc/mail no forma parte de la instalación de Postfix, así que la respuesta E es incorrecta."},
+
+{"id":"SYBEX-CH07-RQ02",
+ "q":"¿Cómo se llama el proceso principal de Postfix?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"El proceso master de Postfix controla qué programas de Postfix se arrancan para procesar los mensajes, así que la opción C es correcta. Los procesos qmgr, pickup, cleanup y smtp gestionan los mensajes de correo en la cola, pero no controlan a los demás procesos, así que las opciones A, B, D y E son todas incorrectas."},
+
+{"id":"SYBEX-CH07-RQ03",
+ "q":"¿Cuál es el archivo de configuración de Postfix que gestiona cuándo arrancan y se detienen los procesos de Postfix?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"El archivo de configuración master.cf contiene los ajustes que definen cuándo arrancan y se detienen los procesos de Postfix, así que la opción A es correcta. El archivo main.cf controla cómo gestiona Postfix los mensajes de correo, pero no los procesos individuales, así que la opción B es incorrecta. El archivo install.cf controla qué funciones instala y habilita Postfix, pero no controla los procesos individuales, así que la opción C es incorrecta. Las opciones /var/spool/postfix y /var/log/maillog no son archivos de configuración de Postfix, así que ambas son incorrectas."},
+
+{"id":"SYBEX-CH07-RQ04",
+ "q":"¿Cuál es el archivo de configuración de Postfix que controla el procesamiento del correo?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"El archivo de configuración main.cf contiene los ajustes que controlan cómo procesa Postfix los mensajes de correo, así que la opción D es correcta. El archivo master.cf contiene ajustes que controlan cómo gestiona Postfix los procesos, pero no cómo procesa los mensajes, así que la opción A es incorrecta. El archivo de configuración sendmail.cf lo usa sendmail, no Postfix, así que la opción B es incorrecta. El archivo /etc/aliases contiene nombres de alias y nombres de buzones de usuarios locales para reenviar mensajes, pero no controla cómo procesa Postfix los mensajes, así que la opción C es incorrecta. El archivo /var/log/maillog contiene entradas de registro de Postfix; no es un archivo de configuración, así que la opción E es incorrecta."},
+
+{"id":"SYBEX-CH07-RQ05",
+ "q":"¿Qué directorio usa Postfix para guardar los mensajes de correo mientras los procesa?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"El directorio /var/spool/postfix contiene subdirectorios donde Postfix guarda los mensajes mientras los procesa, así que la opción B es correcta. El directorio /var/spool/mail contiene los archivos de buzón donde se guarda el correo entregado, pero no mientras se procesan los mensajes, así que la opción A es incorrecta. El directorio /etc/postfix contiene los archivos de configuración de Postfix, no los mensajes en procesamiento, así que la opción C es incorrecta. El directorio /etc/mail no lo usa Postfix, así que la opción D es incorrecta."},
+
+{"id":"SYBEX-CH07-RQ06",
+ "q":"¿Qué comando de emulación de sendmail en Postfix permite comprobar cuántos mensajes están esperando en la cola de correo para ser entregados?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"El comando mailq muestra el número de mensajes de correo que esperan en la cola para ser entregados, así que la opción E es correcta. Los programas master, pickup y smtp forman parte del proceso de correo de Postfix y no se usan desde la línea de comandos, así que las opciones B, C y D son incorrectas. El comando newaliases crea un nuevo archivo de base de datos de alias a partir de un archivo de alias de texto, pero no muestra el número de mensajes en la cola, así que la opción A es incorrecta."},
+
+{"id":"SYBEX-CH07-RQ07",
+ "q":"¿Qué comando de emulación de sendmail convierte las entradas de alias en texto en el archivo binario de base de datos de alias?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"El comando newaliases convierte las entradas de alias en texto al archivo de base de datos de alias para su procesamiento, así que la opción A es correcta. Los comandos master, pickup y smtp forman parte del sistema de procesamiento de correo de Postfix, pero no procesan alias, así que las opciones B, C y D son todas incorrectas. El comando mailq muestra el número de mensajes que esperan en la cola para ser enviados, así que la opción E es incorrecta."},
+
+{"id":"SYBEX-CH07-RQ08",
+ "q":"¿Qué archivo de texto lee el comando newaliases para crear la base de datos de alias?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"El archivo /etc/aliases contiene los nombres de alias y las cuentas de usuario locales a las que apuntan. El comando newaliases lee ese archivo para generar la base de datos binaria de alias que usa Postfix al entregar mensajes, así que la opción A es correcta. Los archivos master.cf, main.cf e install.cf son archivos de configuración de Postfix, pero no especifican asignaciones de alias, así que las opciones B, C y D son incorrectas."},
+
+{"id":"SYBEX-CH07-RQ09",
+ "q":"¿Qué archivo de registro usa Postfix para guardar los mensajes del sistema?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"Postfix escribe los mensajes del sistema en el archivo /var/log/maillog por defecto, así que la opción B es correcta. En /var/spool/mail es donde Postfix guarda los mensajes de correo en formato mbox, así que la opción A es incorrecta. El directorio /var/spool/postfix es donde Postfix guarda los mensajes mientras los procesa, así que la opción C es incorrecta. El archivo /var/log/messages es donde el kernel guarda los mensajes del sistema, pero Postfix no lo usa, así que la opción D es incorrecta."},
+
+{"id":"SYBEX-CH07-RQ10",
+ "q":"¿Dónde guardan los usuarios individuales las recetas de procmail que se aplican a su propio correo?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"Cada usuario del sistema puede crear recetas personalizadas y guardarlas en el archivo .procmailrc de su directorio $HOME, así que la opción C es correcta. El directorio /etc/postfix no forma parte de la configuración de procmail, así que la opción A es incorrecta. El archivo /etc/procmailrc define recetas que se aplican a todos los mensajes de correo de todas las cuentas de usuario, así que la opción B es incorrecta. El archivo /etc/aliases define asignaciones de alias a cuentas de usuario locales, no recetas de procmail, así que la opción D es incorrecta. El archivo .procmailrc debe estar en el directorio $HOME del usuario para que pueda acceder a él; como la carpeta /users no corresponde a una cuenta de usuario concreta, la opción E es incorrecta."}
+]

@@ -1,0 +1,39 @@
+### ENI-CH01-Q01  [open]  tema: Almacenamiento y sistemas de archivos
+P: ¿Por qué es necesario crear un sistema de archivos para utilizar un espacio de almacenamiento en un disco?
+LIBRO: Porque el sistema de archivos es el que permite organizar el espacio de almacenamiento. Sin él, una partición o un volumen lógico es tan sólo una serie de bytes sin sentido alguno. El sistema de archivos gestiona los nombres de los archivos y la ubicación física de los espacios de almacenamiento. Una cinta magnética es un ejemplo de espacio de almacenamiento sin sistema de archivos: los datos están contiguos forzosamente y no es posible modificar un archivo. Hay que borrarla y reescribirla.
+
+### ENI-CH01-Q02  [open]  tema: Almacenamiento y sistemas de archivos
+P: ¿Cuánto espacio de disco pueden llegar a ocupar los sistemas de archivos virtuales o pseudosistemas de archivos?
+LIBRO: Ninguno. Como su nombre indica, los sistemas de archivos virtuales no existen físicamente. Habitan en memoria y se montan en un directorio del sistema de archivos real.
+
+### ENI-CH01-Q03  [open]  tema: Almacenamiento y sistemas de archivos
+P: Los UUID sirven para identificar formalmente un sistema de archivos. ¿Qué o quién garantiza su unicidad?
+LIBRO: El azar. El UUID es, cada vez en más sistemas, la forma natural de identificar un sistema de archivos. Aunque los UUID puedan modificarse a voluntad del administrador, generalmente se asignan de forma automática en la creación de los sistemas de archivos y la aleatoriedad de 128 bits es su única garantía de unicidad.
+
+### ENI-CH01-Q04  [open]  tema: Almacenamiento y sistemas de archivos
+P: ¿Cómo se optimiza la escritura de datos en un sistema de archivos lento?
+LIBRO: Con una escritura asíncrona: los datos escritos en disco se registran en primer lugar en memoria para más tarde escribirse en el disco. Este modo de funcionamiento, utilizado por defecto en el marco de un montaje normal, no está exento de riesgos. Los datos se consideran guardados de forma segura por parte de las aplicaciones y del usuario. En el caso de corte de la corriente eléctrica, los datos que estén en memoria pendientes de grabarse en el disco se perderán.
+
+### ENI-CH01-Q05  [open]  tema: Almacenamiento y sistemas de archivos
+P: ¿Por qué es difícil comprobar la coherencia del sistema de archivos raíz montado en /?
+LIBRO: Porque los comandos de comprobación se ejecutan con sistemas de archivos desmontados. El sistema de archivos raíz contiene un gran número de programas en ejecución en un sistema activo y, a menudo, los propios comandos de comprobación. Por lo tanto es imposible desmontarlo porque los programas que están en ejecución impiden la realización de esta operación. La solución consiste en forzar la comprobación en el reinicio, antes de que se monte el sistema de archivos. Se puede provocar esta comprobación de dos modos: modificando el contador de comprobación periódica con el comando e2fsck o bien forzando la comprobación con el comando shutdown y su opción -F.
+
+### ENI-CH01-Q06  [open]  tema: Almacenamiento y sistemas de archivos
+P: ¿Qué dependencia tiene el comando lsdev respecto a los pseudosistemas de archivos?
+LIBRO: El comando lsdev, como otros muchos comandos, busca la información que necesita en los archivos de los pseudosistemas de archivos (/proc/interrupts, /proc/ioports, y /proc/dma). Esto ilustra hasta qué punto es importante y útil la información que albergan los pseudosistemas de archivos.
+
+### ENI-CH01-Q07  [open]  tema: Almacenamiento y sistemas de archivos
+P: ¿Por qué las opciones de compresión del comando tar deben estar reservadas a las copias de seguridad en disco?
+LIBRO: Porque la compresión de datos hace que sean más difíciles de usar en caso de pérdida parcial. Las cintas magnéticas que se usaban tradicionalmente con el comando tar presentaban a menudo zonas de magnetización débil que las exponían a pérdidas parciales. Sin embargo, en estas circunstancias, la ausencia de compresión limitaba la pérdida a solamente los archivos albergados en estas zonas débiles.
+
+### ENI-CH01-Q08  [open]  tema: Almacenamiento y sistemas de archivos
+P: ¿Se requiere que el cdrom esté montado en la copia de un cdrom con el comando dd para la realización de una imagen iso?
+LIBRO: No. El sistema de archivos tiene que montarse si hay que copiar archivos concretos. Como el comando dd copia bloques de datos sin comprender su contenido, manipulando directamente el hardware y no los archivos, no es necesario montar el cdrom para realizar una imagen.
+
+### ENI-CH01-Q09  [open]  tema: Almacenamiento y sistemas de archivos
+P: ¿Cuántos discos duros se necesitan para realizar un RAID 5?
+LIBRO: Tres como mínimo. Dos para los datos y un tercero para la paridad. Si se incluye un disco de recambio (spare) en la configuración, este mínimo pasa a ser de cuatro: dos discos de datos, un disco de paridad y un disco preparado para reemplazar a otro disco que falle.
+
+### ENI-CH01-Q10  [open]  tema: Almacenamiento y sistemas de archivos
+P: ¿Cuál es la diferencia entre una partición y un volumen lógico LVM?
+LIBRO: Depende. Desde un punto de vista funcional ninguna: los dos tendrán un sistema de archivos y se montarán en un directorio. Sin embargo, solamente se podrá agrandar el volumen lógico cuando sea necesario (mediante el comando lvextend). No obstante, este cambio de tamaño no modificará el sistema de archivos, que deberá reorganizarse mediante un comando de redimensionamiento del sistema de archivos (resize2fs).

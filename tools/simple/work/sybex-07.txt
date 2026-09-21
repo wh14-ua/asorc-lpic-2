@@ -1,0 +1,175 @@
+### SYBEX-CH07-RQ01  [multiple_choice]  tema: Correo electrónico
+P: ¿Dónde se encuentran los archivos de configuración de Postfix?
+   A. /var/spool/postfix
+  *B. /etc/postfix
+   C. /var/spool/mail
+   D. /var/log
+   E. /etc/mail
+LIBRO: El paquete Postfix instala los archivos de configuración en el directorio /etc/postfix, así que la opción B es correcta. El directorio /var/spool/postfix contiene los directorios y archivos de procesamiento del correo, pero no los archivos de configuración, así que la respuesta A es incorrecta. El directorio /var/spool/mail contiene los buzones de los usuarios locales, pero no archivos de configuración, así que la respuesta C es incorrecta. El directorio /var/log contiene archivos de registro, pero no de configuración, así que la respuesta D es incorrecta. El directorio /etc/mail no forma parte de la instalación de Postfix, así que la respuesta E es incorrecta.
+
+### SYBEX-CH07-RQ02  [multiple_choice]  tema: Correo electrónico
+P: ¿Cómo se llama el proceso principal de Postfix?
+   A. qmgr
+   B. pickup
+  *C. master
+   D. cleanup
+   E. smtp
+LIBRO: El proceso master de Postfix controla qué programas de Postfix se arrancan para procesar los mensajes, así que la opción C es correcta. Los procesos qmgr, pickup, cleanup y smtp gestionan los mensajes de correo en la cola, pero no controlan a los demás procesos, así que las opciones A, B, D y E son todas incorrectas.
+
+### SYBEX-CH07-RQ03  [multiple_choice]  tema: Correo electrónico
+P: ¿Cuál es el archivo de configuración de Postfix que gestiona cuándo arrancan y se detienen los procesos de Postfix?
+  *A. master.cf
+   B. main.cf
+   C. install.cf
+   D. /var/spool/postfix
+   E. /var/log/maillog
+LIBRO: El archivo de configuración master.cf contiene los ajustes que definen cuándo arrancan y se detienen los procesos de Postfix, así que la opción A es correcta. El archivo main.cf controla cómo gestiona Postfix los mensajes de correo, pero no los procesos individuales, así que la opción B es incorrecta. El archivo install.cf controla qué funciones instala y habilita Postfix, pero no controla los procesos individuales, así que la opción C es incorrecta. Las opciones /var/spool/postfix y /var/log/maillog no son archivos de configuración de Postfix, así que ambas son incorrectas.
+
+### SYBEX-CH07-RQ04  [multiple_choice]  tema: Correo electrónico
+P: ¿Cuál es el archivo de configuración de Postfix que controla el procesamiento del correo?
+   A. master.cf
+   B. /etc/sendmail.cf
+   C. /etc/aliases
+  *D. main.cf
+   E. /var/log/maillog
+LIBRO: El archivo de configuración main.cf contiene los ajustes que controlan cómo procesa Postfix los mensajes de correo, así que la opción D es correcta. El archivo master.cf contiene ajustes que controlan cómo gestiona Postfix los procesos, pero no cómo procesa los mensajes, así que la opción A es incorrecta. El archivo de configuración sendmail.cf lo usa sendmail, no Postfix, así que la opción B es incorrecta. El archivo /etc/aliases contiene nombres de alias y nombres de buzones de usuarios locales para reenviar mensajes, pero no controla cómo procesa Postfix los mensajes, así que la opción C es incorrecta. El archivo /var/log/maillog contiene entradas de registro de Postfix; no es un archivo de configuración, así que la opción E es incorrecta.
+
+### SYBEX-CH07-RQ05  [multiple_choice]  tema: Correo electrónico
+P: ¿Qué directorio usa Postfix para guardar los mensajes de correo mientras los procesa?
+   A. /var/spool/mail
+  *B. /var/spool/postfix
+   C. /etc/postfix
+   D. /etc/mail
+LIBRO: El directorio /var/spool/postfix contiene subdirectorios donde Postfix guarda los mensajes mientras los procesa, así que la opción B es correcta. El directorio /var/spool/mail contiene los archivos de buzón donde se guarda el correo entregado, pero no mientras se procesan los mensajes, así que la opción A es incorrecta. El directorio /etc/postfix contiene los archivos de configuración de Postfix, no los mensajes en procesamiento, así que la opción C es incorrecta. El directorio /etc/mail no lo usa Postfix, así que la opción D es incorrecta.
+
+### SYBEX-CH07-RQ06  [multiple_choice]  tema: Correo electrónico
+P: ¿Qué comando de emulación de sendmail en Postfix permite comprobar cuántos mensajes están esperando en la cola de correo para ser entregados?
+   A. newaliases
+   B. master
+   C. pickup
+   D. smtp
+  *E. mailq
+LIBRO: El comando mailq muestra el número de mensajes de correo que esperan en la cola para ser entregados, así que la opción E es correcta. Los programas master, pickup y smtp forman parte del proceso de correo de Postfix y no se usan desde la línea de comandos, así que las opciones B, C y D son incorrectas. El comando newaliases crea un nuevo archivo de base de datos de alias a partir de un archivo de alias de texto, pero no muestra el número de mensajes en la cola, así que la opción A es incorrecta.
+
+### SYBEX-CH07-RQ07  [multiple_choice]  tema: Correo electrónico
+P: ¿Qué comando de emulación de sendmail convierte las entradas de alias en texto en el archivo binario de base de datos de alias?
+  *A. newaliases
+   B. master
+   C. pickup
+   D. smtp
+   E. mailq
+LIBRO: El comando newaliases convierte las entradas de alias en texto al archivo de base de datos de alias para su procesamiento, así que la opción A es correcta. Los comandos master, pickup y smtp forman parte del sistema de procesamiento de correo de Postfix, pero no procesan alias, así que las opciones B, C y D son todas incorrectas. El comando mailq muestra el número de mensajes que esperan en la cola para ser enviados, así que la opción E es incorrecta.
+
+### SYBEX-CH07-RQ08  [multiple_choice]  tema: Correo electrónico
+P: ¿Qué archivo de texto lee el comando newaliases para crear la base de datos de alias?
+  *A. /etc/aliases
+   B. /etc/postfix/master.cf
+   C. /etc/postfix/main.cf
+   D. /etc/postfix/install.cf
+LIBRO: El archivo /etc/aliases contiene los nombres de alias y las cuentas de usuario locales a las que apuntan. El comando newaliases lee ese archivo para generar la base de datos binaria de alias que usa Postfix al entregar mensajes, así que la opción A es correcta. Los archivos master.cf, main.cf e install.cf son archivos de configuración de Postfix, pero no especifican asignaciones de alias, así que las opciones B, C y D son incorrectas.
+
+### SYBEX-CH07-RQ09  [multiple_choice]  tema: Correo electrónico
+P: ¿Qué archivo de registro usa Postfix para guardar los mensajes del sistema?
+   A. /var/spool/mail
+  *B. /var/log/maillog
+   C. /var/spool/postfix
+   D. /var/log/messages
+LIBRO: Postfix escribe los mensajes del sistema en el archivo /var/log/maillog por defecto, así que la opción B es correcta. En /var/spool/mail es donde Postfix guarda los mensajes de correo en formato mbox, así que la opción A es incorrecta. El directorio /var/spool/postfix es donde Postfix guarda los mensajes mientras los procesa, así que la opción C es incorrecta. El archivo /var/log/messages es donde el kernel guarda los mensajes del sistema, pero Postfix no lo usa, así que la opción D es incorrecta.
+
+### SYBEX-CH07-RQ10  [multiple_choice]  tema: Correo electrónico
+P: ¿Dónde guardan los usuarios individuales las recetas de procmail que se aplican a su propio correo?
+   A. /etc/postfix
+   B. /etc/procmailrc
+  *C. $HOME/.procmailrc
+   D. /etc/aliases
+   E. /users/.procmailrc
+LIBRO: Cada usuario del sistema puede crear recetas personalizadas y guardarlas en el archivo .procmailrc de su directorio $HOME, así que la opción C es correcta. El directorio /etc/postfix no forma parte de la configuración de procmail, así que la opción A es incorrecta. El archivo /etc/procmailrc define recetas que se aplican a todos los mensajes de correo de todas las cuentas de usuario, así que la opción B es incorrecta. El archivo /etc/aliases define asignaciones de alias a cuentas de usuario locales, no recetas de procmail, así que la opción D es incorrecta. El archivo .procmailrc debe estar en el directorio $HOME del usuario para que pueda acceder a él; como la carpeta /users no corresponde a una cuenta de usuario concreta, la opción E es incorrecta.
+
+### SYBEX-CH07-RQ11  [multiple_choice]  tema: Correo electrónico
+P: ¿Qué archivos usa el administrador de correo para guardar recetas que se apliquen a todos los mensajes entrantes?
+   A. /etc/postfix
+  *B. /etc/procmailrc
+   C. $HOME/.procmailrc
+   D. /etc/aliases
+   E. /users/.procmailrc
+LIBRO: Procmail aplica las recetas definidas en el archivo /etc/procmailrc a todos los mensajes de correo entrantes, así que la opción B es correcta. Procmail aplica el archivo $HOME/.procmailrc solo a los mensajes entrantes de esa cuenta de usuario concreta, así que la opción C es incorrecta. Las opciones A, D y E no son ubicaciones válidas para recetas de procmail.
+
+### SYBEX-CH07-RQ12  [multiple_choice]  tema: Correo electrónico
+P: ¿Qué le hace a los mensajes de correo entrantes la siguiente receta de procmail? :0 c messages
+   A. El sistema rechaza todos los mensajes entrantes.
+   B. El sistema reenvía todos los mensajes a una cuenta de alias.
+  *C. El sistema copia todos los mensajes entrantes al directorio messages.
+   D. El sistema mueve todos los mensajes entrantes al directorio messages.
+   E. El sistema borra todos los mensajes entrantes.
+LIBRO: La receta :0 c coincide con todos los mensajes de correo entrantes, y la opción c copia los mensajes al directorio indicado, así que la opción C es correcta.
+
+### SYBEX-CH07-RQ13  [multiple_choice]  tema: Correo electrónico
+P: ¿Qué programa MDA se usa habitualmente para reenviar mensajes de correo a los buzones locales?
+   A. Sendmail
+  *B. Procmail
+   C. Postfix
+   D. Courier
+   E. Dovecot
+LIBRO: El programa procmail es el único de la lista que es un programa MDA usado para procesar los mensajes de correo entrantes, así que la opción B es la única respuesta correcta.
+
+### SYBEX-CH07-RQ14  [multiple_choice]  tema: Correo electrónico
+P: ¿Qué ajuste de configuración de Postfix hay que cambiar para reenviar todos los mensajes entrantes a procmail?
+  *A. mailbox_command
+   B. mydestination
+   C. myhost
+   D. relayhost
+LIBRO: El ajuste mailbox_command define un programa al que Postfix envía todos los mensajes locales entrantes, así que la opción A es correcta. El ajuste mydestination define las direcciones para las que Postfix aceptará mensajes entrantes, así que la opción B es incorrecta. El ajuste myhost define el nombre de host del servidor local, así que la opción C es incorrecta. El ajuste relayhost define un host al que enviar todos los mensajes salientes, así que la opción D es incorrecta.
+
+### SYBEX-CH07-RQ15  [multiple_choice]  tema: Correo electrónico
+P: ¿Qué estilo de buzón guarda todos los mensajes de un usuario en un único archivo?
+   A. Sendmail
+   B. Courier
+   C. Maildir
+  *D. Mbox
+   E. Exim
+LIBRO: El estilo de buzón mbox guarda todos los mensajes de un usuario en un único archivo, bien en el directorio /var/spool/mail o bien en el directorio $HOME del usuario, así que la opción D es correcta. Sendmail, Courier y exim son nombres de aplicaciones y no estilos de buzón, así que las opciones A, B y E son incorrectas. El estilo de buzón maildir usa un directorio para guardar los mensajes, así que la opción C es incorrecta.
+
+### SYBEX-CH07-RQ16  [multiple_choice]  tema: Correo electrónico
+P: ¿Qué estilo de buzón usa archivos separados para guardar cada mensaje de cada usuario?
+   A. Sendmail
+   B. Courier
+  *C. Maildir
+   D. Mbox
+   E. Exim
+LIBRO: El estilo de buzón maildir crea archivos separados para cada mensaje de correo guardado en una carpeta común, así que la opción C es correcta. Sendmail, Courier y exim son nombres de aplicaciones y no estilos de buzón, así que las opciones A, B y E son incorrectas. El estilo de buzón mbox usa un único archivo para guardar todos los mensajes de un usuario, así que la opción D es incorrecta.
+
+### SYBEX-CH07-RQ17  [multiple_choice]  tema: Correo electrónico
+P: ¿Dónde se encuentran los archivos de configuración de Courier?
+   A. /var/spool/mail
+   B. /var/spool/postfix
+  *C. /etc/courier
+   D. /etc/mail
+   E. /var/log
+LIBRO: El programa Courier usa la carpeta /etc/courier para guardar los archivos de configuración que definen su funcionamiento, así que la opción C es correcta. Las carpetas /var/spool/mail y /var/spool/postfix guardan mensajes de correo, no archivos de configuración, así que las opciones A y B son incorrectas. El directorio /var/log guarda archivos de registro y no de configuración, así que la opción E es incorrecta. Courier no usa el directorio /etc/mail, así que la opción D es incorrecta.
+
+### SYBEX-CH07-RQ18  [multiple_choice]  tema: Correo electrónico
+P: ¿Qué ajuste de configuración de Courier determina cuántos clientes remotos pueden conectarse al mismo tiempo?
+  *A. MAXDAEMONS
+   B. MAILDIRPATH
+   C. ADDRESS
+   D. MAXPERIP
+   E. PORT
+LIBRO: El ajuste MAXDAEMONS determina cuántas copias del programa Courier pueden ejecutarse a la vez, lo que controla cuántos clientes pueden conectarse, así que la opción A es correcta. El ajuste MAILDIRPATH define la ubicación del directorio de buzones, así que la opción B es incorrecta. El ajuste ADDRESS define la interfaz o interfaces en las que escuchar conexiones entrantes, así que la opción C es incorrecta. El ajuste MAXPERIP define el número de conexiones desde un mismo cliente, pero no el número total de clientes que pueden conectarse, así que la opción D es incorrecta. El ajuste PORT define el puerto TCP en el que escuchar conexiones entrantes, así que la opción E es incorrecta.
+
+### SYBEX-CH07-RQ19  [multiple_response]  tema: Correo electrónico
+P: ¿Dónde guarda Dovecot sus ajustes de configuración? (Elija dos.)
+  *A. /etc/dovecot
+   B. /etc/postfix
+   C. /var/spool/mail
+  *D. dovecot.conf
+   E. /var/spool/postfix
+LIBRO: Algunas distribuciones de Linux guardan los ajustes de configuración de Dovecot en el archivo de configuración dovecot.conf, mientras que otras crean varios archivos dentro del directorio /etc/dovecot, así que las opciones A y D son ambas correctas. Dovecot no usa ninguno de los archivos ni carpetas de Postfix, así que las opciones B, C y E son todas incorrectas.
+
+### SYBEX-CH07-RQ20  [multiple_choice]  tema: Correo electrónico
+P: ¿Qué ajuste de Dovecot especifica los métodos de autenticación que soporta el servidor?
+   A. mail_location
+  *B. mechanisms
+   C. listen
+   D. login_max_connections
+   E. protocols
+LIBRO: El ajuste mechanisms lista los métodos de autenticación que soporta el servidor, así que la opción B es correcta. El ajuste mail_location define la ubicación del buzón, así que la opción A es incorrecta. El ajuste listen define el puerto TCP en el que Dovecot escucha las conexiones entrantes de clientes, así que la opción C es incorrecta. Los ajustes login_max_connections definen cuántos usuarios pueden conectarse a la vez, así que la opción D es incorrecta. El ajuste protocols define qué protocolos de correo soporta el servidor, así que la opción E es incorrecta.

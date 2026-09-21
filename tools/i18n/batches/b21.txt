@@ -1,0 +1,79 @@
+### SYBEX-CH09-RQ11  [multiple_choice]
+Q: In name-based virtual hosting, what directive defines the domain name used?
+A: DocumentRoot
+B: NameVirtualHost
+C: <VirtualHost>
+D: ServerName
+X: The ServerName directive defines the domain name in each virtual host block, so option D is correct. The DocumentRoot directive defines a folder and not a domain name, so option A is incorrect. The NameVirtualHost directive defines the IP address of the physical server, not the domain names to accept, so option B is incorrect. The <VirtualHost> block defines all of the directives for the virtual host, not just the domain name, so option C is incorrect.
+
+### SYBEX-CH09-RQ12  [multiple_choice]
+Q: In IP-based virtual hosting, what directive defines the different IP addresses for the server to listen on?
+A: Listen
+B: <VirtualHost>
+C: NameVirtualHost
+D: DocumentRoot
+X: The Listen directive defines the IP address and port the Apache server uses to accept incoming client requests, so option A is correct. The <VirtualHost> feature allows you to create a block of directives for the virtual host, but it doesn’t define the IP addresses, so option B is incorrect. The NameVirtualHost directive defines the common IP address for name-based virtual hosts, but it isn’t used for IP-based virtual hosting, so option C is incorrect. The DocumentRoot directive defines a folder and not an IP address, so option D is incorrect.
+
+### SYBEX-CH09-RQ13  [multiple_choice]
+Q: What Apache utility program allows you to create text userid/password files?
+A: httpd
+B: htpasswd
+C: apache2
+D: mod_auth
+X: The htpasswd utility creates a text file with a userid and encrypted password that can be used for authentication, so option B is correct. The httpd and apache2 programs are names for the main Apache web server program and don’t generate text files, so options A and C are incorrect. The mod_auth is a module used to implement authentication on the Apache server, but it doesn’t create the userid/password file, so option D is incorrect.
+
+### SYBEX-CH09-RQ14  [multiple_choice]
+Q: What directive points to the userid/password file that controls access?
+A: AuthType
+B: AuthName
+C: AuthUserFile
+D: Order
+X: The AuthUserFile directive defines the location of the userid/password file used for user authentication, so option C is correct. The AuthType directive defines the type of authentication used but not the location of the authentication file, so option A is incorrect. The AuthName directive defines the text used to query the client for authentication but not the location of the authentication file, so option B is incorrect. The Order directive defines a network restriction and not an authentication restriction, so option D is incorrect.
+
+### SYBEX-CH09-RQ15  [multiple_choice]
+Q: What dynamic web programming method allows the Apache server to utilize an external program interpreter?
+A: CGI
+B: mod_perl
+C: mod_auth
+D: mod_php
+X: The Common Gateway Interface (CGI) allows the Apache web server to pass files to an external program interpreter to process embedded program code, so option A is correct. mod_perl and mod_php are names for modules that incorporate internal program processing; they don’t pass the code to an external program, so both options B and D are incorrect. The mod_auth module is for authentication and not programming, so option C is incorrect.
+
+### SYBEX-CH09-RQ16  [multiple_choice]
+Q: What directive tells the Apache server to redirect .php files to the PHP server process?
+A: LoadModule
+B: AddHandler
+C: DocumentRoot
+D: DirectoryIndex
+X: The AddHandler directive defines how the Apache web server should handle files based on their file extensions. It is used to redirect files to specific processes, such as code interpreters, so option B is correct. The LoadModule directive installs a module but doesn’t redirect files to separate processes, so option A is incorrect. The DocumentRoot directive defines the folder on the server from which files are served but not how to process them, so option C is incorrect. The DirectoryIndex directive defines what files should be used by default when a client requests a directory but not how to process them, so option D is incorrect.
+
+### SYBEX-CH09-RQ17  [multiple_choice]
+Q: What directive tells the Apache server the location of the SSL certificate?
+A: DirectoryIndex
+B: SSLCertificateKeyFile
+C: SSLEngine
+D: SSLCertificateFile
+X: The SSLCertificateFile directive defines the location of the signed server certificate file that should be used for SSL sessions, so option D is correct. The DirectoryIndex directive defines the default files to serve when a client requests a directory, so option A is incorrect. The SSLCertificateKeyFile directive defines the encryption key file, not the certificate file, so option B is incorrect. The SSLEngine directive defines when the server should allow SSL connections but not the location of the certificate file, so option C is incorrect.
+
+### SYBEX-CH09-RQ18  [multiple_response]
+Q: What does a web proxy server do? (Select two.)
+A: Caches web requests from multiple clients
+B: Redirects requests from one client to multiple servers
+C: Restricts what websites clients can access
+D: Restricts what files a server can serve
+X: A web proxy server caches web requests from multiple clients so that future requests can be served from the cache. It also can restrict the websites clients are allowed to view. That makes options A and C correct. Option B defines the role of a reverse proxy server, not a standard web proxy server, so it is incorrect. Option D defines the role of the DocumentRoot directive, a web proxy server doesn’t restrict the files that a server can serve, so option D is incorrect.
+
+### SYBEX-CH09-RQ19  [multiple_choice]
+Q: What directive does Squid use to define client authentication settings?
+A: mod_auth
+B: auth_param
+C: acl
+D: http_access
+X: The auth_param directive defines authentication settings used to authenticate clients, so option B is correct. mod_auth is an Apache web server module and not a Squid directive, so option A is incorrect. The acl directive is used to define access groups, so option C is incorrect, and the http_access directive is used to define access rules, so it too is incorrect.
+
+### SYBEX-CH09-RQ20  [multiple_choice]
+Q: What section in the nginx configuration file defines the basic server settings?
+A: location
+B: server
+C: root
+D: listen
+X: The server section in the nginx configuration file defines the directives that apply to the entire server, so option B is correct. The location section defines directives that apply to a specific folder location, not the entire server, so option A is incorrect. The root directive defines the DocumentRoot location on the web server, so it is incorrect, and the listen directive defines the IP addresses and ports the server uses to listen for incoming client requests, so it too is incorrect.

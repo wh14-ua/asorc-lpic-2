@@ -1,0 +1,3983 @@
+{
+ "schema_version": 1,
+ "nota": "Explicaciones reescritas en lenguaje llano. El texto original del libro sigue en questions.json y se muestra bajo «Ver explicación original».",
+ "explicaciones": {
+  "SYBEX-AT-01": {
+   "idea": [
+    "lsof, pstree, netstat y pmap dicen algo sobre procesos.",
+    "lsof: qué archivos y conexiones tiene abiertos.",
+    "pstree: el árbol de quién lanzó a quién.",
+    "netstat: qué proceso escucha en cada puerto.",
+    "pmap: su mapa de memoria."
+   ],
+   "otras": {
+    "B": "iostat resume la carga de E/S por dispositivo: mira discos, no procesos."
+   },
+   "memorizar": "iostat mira discos; los otros cuatro, procesos."
+  },
+  "SYBEX-AT-02": {
+   "idea": [
+    "La palabra es modules: módulos del kernel.",
+    "Un módulo es un controlador en un archivo aparte que se enchufa y se quita del kernel en caliente.",
+    "Por eso se añade un controlador sin recompilar."
+   ],
+   "analogia": "Es el enchufe del kernel: lo conectas cuando usas el dispositivo y lo quitas al terminar.",
+   "memorizar": "módulo = controlador que entra y sale sin recompilar."
+  },
+  "SYBEX-AT-03": {
+   "idea": [
+    "La configuración del kernel vive en /usr/src/linux/.config.",
+    "Es un archivo oculto dentro del código fuente del kernel."
+   ],
+   "otras": {
+    "A": "/usr/src/linux/arch/x86/boot es donde queda bzImage tras compilar.",
+    "B": "/usr/src/linux/kernel.config está inventado.",
+    "C": "/boot/grub/grub.conf configura GRUB Legacy.",
+    "D": "/etc/modules.conf configura los módulos, no el kernel."
+   },
+   "memorizar": "configuración del kernel → .config, en el fuente."
+  },
+  "SYBEX-AT-04": {
+   "idea": [
+    "/proc/sys/kernel es un directorio y dentro está el archivo version.",
+    "Ahí se lee la versión del kernel."
+   ],
+   "otras": {
+    "A": "/proc/kernel está inventado.",
+    "C": "/proc/ioports son los puertos de E/S del hardware.",
+    "D": "/proc/dma son los canales DMA.",
+    "E": "/etc/sysctl.d guarda ajustes de parámetros del kernel."
+   },
+   "memorizar": "versión del kernel → /proc/sys/kernel, archivo version."
+  },
+  "SYBEX-AT-05": {
+   "idea": [
+    "update-rc.d hace lo mismo que chkconfig.",
+    "Cambia la distribución: chkconfig en las de tipo Red Hat, update-rc.d en las basadas en Debian."
+   ],
+   "otras": {
+    "A": "inittab es un archivo (/etc/inittab), no un comando.",
+    "B": "rc es un script que lanza los de un nivel de ejecución.",
+    "D": "init cambia el nivel de ejecución.",
+    "E": "telinit hace lo mismo que init, no que chkconfig."
+   },
+   "memorizar": "chkconfig (Red Hat) = update-rc.d (Debian)."
+  },
+  "SYBEX-AT-06": {
+   "idea": [
+    "GRUB Legacy trae menú y también una consola interactiva, el shell de grub.",
+    "Dentro de su configuración, initrd señala el archivo que el kernel monta como disco RAM al arrancar."
+   ],
+   "otras": {
+    "A": "GRUB Legacy nació en 1999 para mejorar LILO, no por UEFI.",
+    "E": "/boot/grub/grub.cfg es de GRUB2."
+   },
+   "memorizar": "GRUB Legacy: menú, shell e initrd."
+  },
+  "SYBEX-AT-07": {
+   "idea": [
+    "SYSLINUX, EXTLINUX, ISOLINUX y PXELINUX son cargadores de arranque.",
+    "TFTP no arranca nada: es el protocolo con el que PXELINUX se trae la imagen por red."
+   ],
+   "otras": {
+    "E": "TFTP transporta el archivo de arranque, pero no arranca."
+   },
+   "memorizar": "SYSLINUX, EXTLINUX, ISOLINUX y PXELINUX arrancan; TFTP transporta."
+  },
+  "SYBEX-AT-08": {
+   "idea": [
+    "mount a secas lee /etc/mtab y enseña lo que está montado ahora mismo."
+   ],
+   "analogia": "fstab es la lista de la compra y mtab el ticket: uno dice qué hay que montar, el otro qué se montó.",
+   "otras": {
+    "A": "/etc/fstab dice qué montar al arrancar o con mount -a.",
+    "C": "/proc/mounts tiene casi lo mismo, pero mount no lee de ahí.",
+    "D": "/proc/filesystems lista los sistemas de archivos que soporta el kernel.",
+    "E": "blkid es un comando: muestra dispositivos de bloques y sus atributos."
+   },
+   "memorizar": "fstab = lo que se montará; mtab = lo que está montado."
+  },
+  "SYBEX-AT-09": {
+   "idea": [
+    "El archivo es smartd.conf.",
+    "Según la distribución está en /etc/smartd.conf o en /etc/smartmontools/smartd.conf."
+   ],
+   "memorizar": "demonio smartd → smartd.conf."
+  },
+  "SYBEX-AT-10": {
+   "idea": [
+    "mdadm --detail /dev/md1 enseña los detalles del array; poner --misc sobra.",
+    "Y cat /proc/mdstat enseña de golpe el estado de los arrays en marcha."
+   ],
+   "otras": {
+    "C": "/etc/mdadm.conf es la configuración de mdadm, no su estado.",
+    "E": "mdadm no tiene opción --show."
+   },
+   "memorizar": "estado RAID: mdadm --detail o /proc/mdstat."
+  },
+  "SYBEX-AT-11": {
+   "idea": [
+    "vgcreate crea el grupo de volúmenes y vgextend lo agranda.",
+    "Los dos empiezan por vg, que es justo lo que se está tocando."
+   ],
+   "otras": {
+    "A": "mdadm gestiona arrays RAID, no volúmenes lógicos.",
+    "C": "pvcreate marca una partición como volumen físico.",
+    "E": "lvcreate saca un volumen lógico del grupo, pero no crea el grupo."
+   },
+   "memorizar": "pv = físico, vg = grupo, lv = lógico."
+  },
+  "SYBEX-AT-12": {
+   "idea": [
+    "Para ver la tabla ARP el comando es arp, sin más."
+   ],
+   "otras": {
+    "A": "ifconfig -arp activa o desactiva ARP en la interfaz.",
+    "B": "ip arp show no existe; el parecido real es ip addr show.",
+    "D": "route -n muestra la tabla de encaminamiento.",
+    "E": "iwlist escanea redes inalámbricas y espera un dispositivo como wlan0."
+   },
+   "memorizar": "tabla ARP → arp."
+  },
+  "SYBEX-AT-13": {
+   "idea": [
+    "nc hace de servidor y de cliente a la vez.",
+    "Por eso puede simular una transferencia de datos de verdad por la red."
+   ],
+   "otras": {
+    "A": "tcpdump captura y describe paquetes, pero no los genera.",
+    "B": "ping y ping6 solo comprueban que hay conexión.",
+    "C": "traceroute y traceroute6 listan los saltos hasta el destino.",
+    "D": "nmap dice qué aplicaciones escuchan en qué puertos."
+   },
+   "memorizar": "simular tráfico entre dos puntos → nc."
+  },
+  "SYBEX-AT-14": {
+   "idea": [
+    "Primero mira cómo está la interfaz con ifconfig eth2.",
+    "Si eso no aclara nada, sospecha del módulo de la tarjeta.",
+    "Eso se ve en dmesg o, si ya se volcó a disco, en los archivos de /var/log/."
+   ],
+   "otras": {
+    "B": "ping desde otro equipo no añade nada: ya sabes que no pasan paquetes.",
+    "C": "tcpdump tampoco: si no hay paquetes, no hay nada que capturar."
+   },
+   "memorizar": "sin red: primero la configuración, luego dmesg."
+  },
+  "SYBEX-AT-15": {
+   "idea": [
+    "Rebobinan solas las cintas /dev/st* (SCSI) y /dev/ht* (PATA).",
+    "Si el nombre lleva una n delante, no rebobina."
+   ],
+   "otras": {
+    "C": "/dev/sdt1 no es una cinta, es una partición.",
+    "D": "/dev/nst0 es SCSI sin rebobinado.",
+    "E": "/dev/nht0 es PATA sin rebobinado."
+   },
+   "memorizar": "la n de nst y nht = no rebobina."
+  },
+  "SYBEX-AT-16": {
+   "idea": [
+    "rndc maneja BIND cuando ya está en marcha.",
+    "Lo para y le hace recargar la configuración y los archivos de zona.",
+    "Lo que no hace es arrancarlo."
+   ],
+   "otras": {
+    "A": "rndc no arranca el demonio BIND.",
+    "E": "rndc sí tiene que ver con BIND."
+   },
+   "memorizar": "rndc controla BIND en marcha; no lo arranca."
+  },
+  "SYBEX-AT-17": {
+   "idea": [
+    "En una zona de BIND, type acepta hint, forward y stub.",
+    "hint es la lista de servidores raíz, forward reenvía la zona y stub define una zona stub."
+   ],
+   "otras": {
+    "B": "primary no existe: el primario se declara con type master.",
+    "C": "secondary tampoco: el secundario es type slave."
+   },
+   "memorizar": "en BIND se dice master y slave, no primary y secondary."
+  },
+  "SYBEX-AT-18": {
+   "idea": [
+    "apache2ctl acepta restart, graceful, fullstatus y status.",
+    "restart corta las conexiones abiertas y graceful reinicia sin cortarlas.",
+    "fullstatus da el informe completo y status el breve."
+   ],
+   "otras": {
+    "A": "force-stop está inventado."
+   },
+   "memorizar": "graceful = reiniciar sin cortar a nadie."
+  },
+  "SYBEX-AT-19": {
+   "idea": [
+    "Nginx no abre un hilo por cliente.",
+    "Usa una arquitectura asíncrona y crea los hilos de cliente dentro del programa principal según hacen falta.",
+    "Escucha en el puerto TCP 80 y puede repartir entre varios servidores de backend como proxy inverso."
+   ],
+   "otras": {
+    "A": "Nginx no usa un hilo de programa independiente por cliente.",
+    "D": "Nginx no está obsoleto."
+   },
+   "memorizar": "Nginx: asíncrono, puerto 80, proxy inverso."
+  },
+  "SYBEX-AT-20": {
+   "idea": [
+    "Las cuentas de Samba se guardan en smbpasswd, tdbsam o ldapsam.",
+    "Esas tres son bases de datos; las otras dos opciones son comandos."
+   ],
+   "otras": {
+    "C": "net es un comando: une el servidor Samba a un dominio o a un Active Directory.",
+    "D": "smbclient es un comando para conectarse y listar recursos compartidos."
+   },
+   "memorizar": "cuentas Samba: smbpasswd, tdbsam, ldapsam."
+  },
+  "SYBEX-AT-21": {
+   "idea": [
+    "exportfs sin opciones lista las exportaciones NFS.",
+    "Y al arrancar el servicio NFS es quien lee /etc/exports y exporta lo que toca."
+   ],
+   "otras": {
+    "A": "rpcinfo informa de los servicios RPC.",
+    "B": "nfsstat da estadísticas de cliente y servidor NFS.",
+    "C": "showmount dice quién monta qué, pero no lee la tabla al arrancar.",
+    "E": "mountstats da estadísticas por montaje en el cliente."
+   },
+   "memorizar": "exportfs = listar y aplicar /etc/exports."
+  },
+  "SYBEX-AT-22": {
+   "idea": [
+    "DHCPd no tiene un registro propio: escribe en el registro estándar del sistema.",
+    "Con syslog eso es /var/log/messages; en distribuciones actuales, el diario de systemd."
+   ],
+   "otras": {
+    "A": "pump es un cliente DHCP, no un archivo de registro.",
+    "C": "BOOTP es un protocolo, no un diario.",
+    "D": "dhcpd.log no existe; sí existen dhcpd.conf y dhcpd.leases."
+   },
+   "memorizar": "DHCPd registra donde registre el sistema."
+  },
+  "SYBEX-AT-23": {
+   "idea": [
+    "pam_sss.so es el módulo que habla con el Security Services Daemon.",
+    "El sss del nombre es la pista."
+   ],
+   "otras": {
+    "B": "pam_unix.so usa /etc/passwd y /etc/shadow.",
+    "C": "pam_nis.so usa un servidor NIS.",
+    "D": "pam_krb5.so usa Kerberos 5.",
+    "E": "pam_ldap.so usa un servidor LDAP."
+   },
+   "memorizar": "el nombre del módulo PAM dice contra qué autentica."
+  },
+  "SYBEX-AT-24": {
+   "idea": [
+    "ldapmodify añade objetos a la base LDAP y además los modifica.",
+    "ldapadd es un enlace a ldapmodify, pensado para meter los objetos de un archivo LDIF."
+   ],
+   "otras": {
+    "A": "ldappasswd cambia la contraseña de la cuenta LDAP con la que has entrado.",
+    "D": "ldapsearch consulta, no añade.",
+    "E": "ldapobject está inventado."
+   },
+   "memorizar": "añadir en LDAP: ldapadd o ldapmodify."
+  },
+  "SYBEX-AT-25": {
+   "idea": [
+    "El método de un solo archivo de texto es slapd.conf.",
+    "El otro método, slapd-conf, reparte la configuración en varios archivos LDIF."
+   ],
+   "otras": {
+    "A": "/etc/ldap.conf no es el método por el que pregunta el enunciado.",
+    "B": "slapd-conf se apoya en archivos LDIF, no en uno solo.",
+    "C": "LDIF son los archivos que define slapd-conf, no un método de archivo único.",
+    "E": "/etc/ldap es un directorio que usa el método slapd-conf."
+   },
+   "memorizar": "un solo archivo → slapd.conf."
+  },
+  "SYBEX-AT-26": {
+   "idea": [
+    "Postfix imita tres comandos de sendmail: sendmail, mailq y newaliases.",
+    "sendmail redirige al programa de Postfix, mailq lista la cola de salida y newaliases inicializa la base de alias."
+   ],
+   "otras": {
+    "B": "procmail no viene de sendmail: filtra el correo con recetas de cada usuario.",
+    "D": "mbox es un tipo de buzón, un archivo por cuenta."
+   },
+   "memorizar": "emulación de sendmail: sendmail, mailq, newaliases."
+  },
+  "SYBEX-AT-27": {
+   "idea": [
+    "Los pseudoarchivos que controlan el encaminamiento están en /proc/sys/net/.",
+    "Sobre todo en sus subdirectorios ipv4 e ipv6."
+   ],
+   "otras": {
+    "A": "/proc/sys/vm/ es la memoria virtual.",
+    "C": "/proc/sys/dev/ son parámetros de dispositivos.",
+    "D": "/srv/ guarda datos servidos, como páginas web o recursos de Samba.",
+    "E": "/proc/sys/iptables/ está inventado."
+   },
+   "memorizar": "red dentro de /proc → /proc/sys/net/."
+  },
+  "SYBEX-AT-28": {
+   "idea": [
+    "El archivo es vsftpd.conf.",
+    "Está en /etc/ o en /etc/vsftpd/ según la distribución, y viene comentado por dentro."
+   ],
+   "memorizar": "Very Secure FTP → vsftpd.conf."
+  },
+  "SYBEX-AT-29": {
+   "idea": [
+    "La opción que fija el nivel de protocolo soportado es Protocol."
+   ],
+   "otras": {
+    "A": "PermitRootLogin deja entrar a root directamente, o no.",
+    "B": "PubKeyAuthentication activa la autenticación por clave pública.",
+    "C": "AllowUsers es la lista de usuarios con permiso para entrar.",
+    "D": "PasswordAuthentication activa la autenticación por contraseña."
+   },
+   "memorizar": "nivel de protocolo → Protocol."
+  },
+  "SYBEX-AT-30": {
+   "idea": [
+    "fail2ban es el único que toca el cortafuegos él solo.",
+    "Vigila los registros y, si una IP falla al entrar varias veces, la banea."
+   ],
+   "otras": {
+    "B": "Snort avisa de actividad sospechosa; tocaría el cortafuegos solo si le añades scripts.",
+    "C": "Bugtraq es una lista de correo de seguridad.",
+    "D": "nmap audita puertos, pero no toca el cortafuegos.",
+    "E": "nc audita la red, pero tampoco lo modifica."
+   },
+   "memorizar": "fail2ban es el único que banea por su cuenta."
+  },
+  "SYBEX-CH01-RQ01": {
+   "idea": [
+    "El firmware solo sabe arrancar el cargador de arranque.",
+    "Todo lo demás llega después, cuando ya hay un sistema cargado."
+   ],
+   "otras": {
+    "B": "init cambia el nivel de ejecución de un Linux ya en marcha.",
+    "C": "Windows arranca después de su propio cargador de arranque.",
+    "D": "mount acopla particiones, y solo existe con Linux ya arrancado.",
+    "E": "telinit también es de después del arranque."
+   },
+   "memorizar": "firmware → cargador de arranque → todo lo demás."
+  },
+  "SYBEX-CH01-RQ02": {
+   "idea": [
+    "El firmware mira el primer sector del primer disco: el Master Boot Record."
+   ],
+   "otras": {
+    "A": "/boot/grub guarda la configuración de GRUB y la imagen del kernel, no el cargador.",
+    "C": "/var/log son archivos de registro.",
+    "D": "una partición de arranque la busca el cargador con chainloader, no el firmware.",
+    "E": "/etc son archivos de configuración."
+   },
+   "memorizar": "el firmware solo mira el MBR."
+  },
+  "SYBEX-CH01-RQ03": {
+   "idea": [
+    "Los mensajes de arranque se ven con dmesg.",
+    "Los guarda el búfer circular del kernel."
+   ],
+   "otras": {
+    "A": "fsck repara particiones dañadas.",
+    "B": "init arranca programas desde el kernel.",
+    "C": "mount acopla particiones al directorio virtual.",
+    "E": "chkconfig muestra los niveles de ejecución de un programa."
+   },
+   "memorizar": "mensajes de arranque → dmesg."
+  },
+  "SYBEX-CH01-RQ04": {
+   "idea": [
+    "Los registros de arranque van a /var/log."
+   ],
+   "otras": {
+    "A": "/etc son archivos de configuración.",
+    "B": "/var/messages lo usan algunos Unix, pero Linux no adoptó ese estándar.",
+    "D": "/boot tiene la configuración de GRUB y las imágenes de arranque.",
+    "E": "/proc son datos del kernel en vivo."
+   },
+   "memorizar": "registros → /var/log."
+  },
+  "SYBEX-CH01-RQ05": {
+   "idea": [
+    "La BIOS busca el cargador donde haga falta.",
+    "Disco interno primero y, si no lo encuentra, disco externo, DVD o memoria USB.",
+    "Con arranque PXE, incluso en un servidor de red."
+   ],
+   "memorizar": "la BIOS arranca de casi cualquier sitio, red incluida."
+  },
+  "SYBEX-CH01-RQ06": {
+   "idea": [
+    "El MBR está en un solo sitio: primer sector del primer disco."
+   ],
+   "otras": {
+    "B": "una partición de arranque puede tener un cargador, pero no es el MBR.",
+    "C": "el último sector no.",
+    "D": "cualquier sector tampoco.",
+    "E": "el segundo disco tampoco."
+   },
+   "memorizar": "MBR = primer sector del primer disco."
+  },
+  "SYBEX-CH01-RQ07": {
+   "idea": [
+    "La partición del sistema EFI va en /boot/efi.",
+    "Ahí es donde el firmware UEFI busca siempre los cargadores."
+   ],
+   "otras": {
+    "A": "/boot a secas no: la ESP cuelga un nivel más abajo.",
+    "B": "/etc son archivos de configuración.",
+    "C": "/var son archivos variables, como los de registro.",
+    "E": "/boot/grub guarda configuración e imágenes de GRUB, no los cargadores."
+   },
+   "memorizar": "ESP → /boot/efi."
+  },
+  "SYBEX-CH01-RQ08": {
+   "idea": [
+    "Los cargadores UEFI se reconocen por la extensión .efi.",
+    "UEFI no la exige, pero en Linux es la costumbre."
+   ],
+   "otras": {
+    "A": ".cfg es de configuración de GRUB2.",
+    "B": ".uefi no se usa en Linux.",
+    "C": ".lst es de configuración de GRUB Legacy.",
+    "D": ".conf también es de configuración de GRUB Legacy."
+   },
+   "memorizar": "cargador UEFI → .efi."
+  },
+  "SYBEX-CH01-RQ09": {
+   "idea": [
+    "El primero fue LILO, el Linux Loader.",
+    "GRUB Legacy vino después y GRUB2 es una mejora de GRUB Legacy."
+   ],
+   "otras": {
+    "A": "GRUB Legacy fue el segundo, pese al nombre.",
+    "C": "GRUB2 es posterior a GRUB Legacy.",
+    "D": "SYSLINUX llegó más tarde, para particiones FAT y memorias USB.",
+    "E": "ISOLINUX también es posterior: arranca desde CD o DVD."
+   },
+   "memorizar": "orden: LILO, GRUB Legacy, GRUB2."
+  },
+  "SYBEX-CH01-RQ10": {
+   "idea": [
+    "La configuración de GRUB Legacy está en /boot/grub."
+   ],
+   "otras": {
+    "B": "/boot/efi es para los cargadores UEFI.",
+    "C": "/etc tiene muchas configuraciones, pero no esta.",
+    "D": "/var son archivos variables, como los de registro.",
+    "E": "/proc son datos del kernel en vivo."
+   },
+   "memorizar": "GRUB Legacy → /boot/grub."
+  },
+  "SYBEX-CH01-RQ11": {
+   "idea": [
+    "GRUB2 reparte su configuración en dos sitios: /boot/grub y /etc/grub.d."
+   ],
+   "otras": {
+    "A": "/proc son datos del kernel en vivo.",
+    "D": "/boot/efi guarda los archivos del cargador UEFI.",
+    "E": "/var son archivos variables, como los de registro."
+   },
+   "memorizar": "GRUB2: /boot/grub y /etc/grub.d."
+  },
+  "SYBEX-CH01-RQ12": {
+   "idea": [
+    "grub-mkconfig junta /etc/default/grub y lo de /etc/grub.d en un solo grub.cfg."
+   ],
+   "otras": {
+    "A": "chkconfig consulta y cambia niveles de ejecución de programas.",
+    "B": "update-rc.d hace eso mismo en sistemas Debian.",
+    "D": "grub-install instala el cargador en el MBR o en una partición.",
+    "E": "init arranca programas desde los scripts de init."
+   },
+   "memorizar": "generar grub.cfg → grub-mkconfig."
+  },
+  "SYBEX-CH01-RQ13": {
+   "idea": [
+    "El kernel arranca init, e init arranca todo lo demás.",
+    "Lo hace con los scripts de init, según el nivel de ejecución predeterminado."
+   ],
+   "otras": {
+    "A": "GRUB2 lo lanza el firmware, no el kernel.",
+    "B": "systemctl controla programas en systemd, pero no lo arranca el kernel.",
+    "C": "telinit cambia el nivel de ejecución actual.",
+    "E": "la BIOS es el firmware que empieza todo; el kernel no la arranca."
+   },
+   "memorizar": "kernel → init → los demás programas."
+  },
+  "SYBEX-CH01-RQ14": {
+   "idea": [
+    "El nivel por defecto de SysV está en /etc/inittab.",
+    "Lo marca el ajuste initdefault."
+   ],
+   "otras": {
+    "A": "/etc/init.d guarda los scripts de arranque.",
+    "C": "/etc/grub.d es configuración de GRUB2.",
+    "D": "/etc/rc.d también son scripts de arranque.",
+    "E": "/boot/grub.cfg es configuración de GRUB2."
+   },
+   "memorizar": "nivel por defecto → initdefault en /etc/inittab."
+  },
+  "SYBEX-CH01-RQ15": {
+   "idea": [
+    "En Debian el nivel por defecto es el 2.",
+    "Ahí arranca todo lo necesario para trabajar en multiusuario."
+   ],
+   "otras": {
+    "A": "el 0 apaga el sistema.",
+    "B": "el 1 es monousuario: diagnóstico y mantenimiento.",
+    "C": "el 6 reinicia.",
+    "D": "el 5 es el gráfico por defecto en Red Hat, no en Debian."
+   },
+   "memorizar": "Debian arranca en 2; Red Hat gráfico, en 5."
+  },
+  "SYBEX-CH01-RQ16": {
+   "idea": [
+    "Para cambiar el nivel de ejecución del sistema: init o telinit."
+   ],
+   "otras": {
+    "B": "chkconfig cambia los niveles de un programa, no los del sistema.",
+    "C": "update-rc.d hace eso mismo en sistemas Debian.",
+    "E": "dmesg solo enseña mensajes de arranque."
+   },
+   "memorizar": "nivel del sistema: init o telinit."
+  },
+  "SYBEX-CH01-RQ17": {
+   "idea": [
+    "chkconfig enseña en qué niveles de ejecución arranca un programa.",
+    "Muestra los siete de golpe."
+   ],
+   "otras": {
+    "B": "init cambia el nivel de todo el sistema.",
+    "C": "dmesg enseña mensajes de arranque.",
+    "D": "update-rc.d cambia los niveles de un programa, pero no los muestra.",
+    "E": "telinit también cambia el nivel de todo el sistema."
+   },
+   "memorizar": "ver los niveles de un programa → chkconfig."
+  },
+  "SYBEX-CH01-RQ18": {
+   "idea": [
+    "En Debian los niveles de un programa se tocan con update-rc.d."
+   ],
+   "otras": {
+    "A": "chkconfig es el equivalente en Red Hat.",
+    "C": "init cambia el nivel de todo el sistema.",
+    "D": "telinit también.",
+    "E": "dmesg solo muestra mensajes de arranque."
+   },
+   "memorizar": "Debian → update-rc.d; Red Hat → chkconfig."
+  },
+  "SYBEX-CH01-RQ19": {
+   "idea": [
+    "fsck comprueba y repara el sistema de archivos de una partición.",
+    "Es lo que se usa cuando una partición no monta por errores."
+   ],
+   "otras": {
+    "A": "mount acopla; con errores lo normal es que se niegue a montar.",
+    "B": "umount retira una partición ya montada.",
+    "D": "init cambia el nivel de ejecución.",
+    "E": "telinit también."
+   },
+   "memorizar": "no monta por errores → fsck."
+  },
+  "SYBEX-CH01-RQ20": {
+   "idea": [
+    "mount acopla una partición en un punto del directorio virtual.",
+    "Desde ese momento, sus archivos y carpetas aparecen en esa ruta."
+   ],
+   "otras": {
+    "B": "umount hace lo contrario: la retira.",
+    "C": "fsck la repara, no la monta.",
+    "D": "dmesg puede decirte dónde se acopló un disco, pero no acopla.",
+    "E": "init controla el nivel de ejecución."
+   },
+   "memorizar": "montar = enganchar la partición a una carpeta."
+  },
+  "SYBEX-CH02-RQ01": {
+   "idea": [
+    "write manda un mensaje a una terminal y wall a todas.",
+    "Los dos escriben en terminales tty que lo tengan permitido."
+   ],
+   "otras": {
+    "A": "mesg no manda nada: consulta o cambia si te dejan escribir en tu terminal.",
+    "C": "echo escribe en tu propia salida estándar.",
+    "D": "mail envía correo, no mensajes de terminal."
+   },
+   "memorizar": "write = a uno; wall = a todos."
+  },
+  "SYBEX-CH02-RQ02": {
+   "idea": [
+    "--no-wall apaga sin avisar a nadie.",
+    "Solo recibe mensaje el superusuario que lanza el comando."
+   ],
+   "otras": {
+    "A": "-c cancela un apagado.",
+    "B": "-k no apaga: bloquea los inicios de sesión y manda el aviso.",
+    "D": "--wall está inventada."
+   },
+   "memorizar": "apagar en silencio → shutdown --no-wall."
+  },
+  "SYBEX-CH02-RQ03": {
+   "idea": [
+    "El aviso legal va en /etc/issue, que se ve antes de entrar.",
+    "Conviene ponerlo también en /etc/issue.net para los que entran por red."
+   ],
+   "otras": {
+    "B": "/etc/motd se muestra ya dentro, cuando el aviso ya no sirve.",
+    "C": "notify-send manda un aviso único y solo a los de entorno gráfico.",
+    "D": "~./bashrc es un script de entorno de inicio de sesión."
+   },
+   "memorizar": "issue = antes de entrar; motd = después."
+  },
+  "SYBEX-CH02-RQ04": {
+   "idea": [
+    "Si el dinero da igual, el soporte más rápido es el SSD."
+   ],
+   "otras": {
+    "A": "las cintas magnéticas son de lo más lento.",
+    "B": "los discos ópticos tienen poca capacidad y son más lentos.",
+    "C": "los HDD superan a la cinta, pero no al SSD.",
+    "E": "con NAS no sabes qué soporte hay detrás."
+   },
+   "memorizar": "el más rápido para copias = SSD."
+  },
+  "SYBEX-CH02-RQ05": {
+   "idea": [
+    "Puede ser incremental o diferencial.",
+    "Incremental: lo cambiado desde la última copia, sea del tipo que sea.",
+    "Diferencial: lo cambiado desde la última completa."
+   ],
+   "analogia": "La incremental es un diario que sigue donde lo dejaste; la diferencial siempre mide desde la última completa.",
+   "otras": {
+    "A": "una copia completa lo copia todo, no solo lo cambiado."
+   },
+   "memorizar": "incremental: desde la última; diferencial: desde la completa."
+  },
+  "SYBEX-CH02-RQ06": {
+   "idea": [
+    "Para restaurar el sistema entero hacen falta /bin/ y /home/.",
+    "/bin/ trae los programas y /home/ los archivos de los usuarios."
+   ],
+   "otras": {
+    "C": "/run/ son datos temporales.",
+    "D": "/tmp/ también."
+   },
+   "memorizar": "copia lo que no se puede regenerar; lo temporal, no."
+  },
+  "SYBEX-CH02-RQ07": {
+   "idea": [
+    "Amanda, Duplicity y Bacula hacen copias de seguridad."
+   ],
+   "otras": {
+    "C": "Nagios monitoriza recursos.",
+    "E": "connectd también monitoriza recursos."
+   },
+   "memorizar": "copias: Amanda, Duplicity, Bacula."
+  },
+  "SYBEX-CH02-RQ08": {
+   "idea": [
+    "gzip en tar se pide de tres formas: --gzip, -z y z.",
+    "Son la larga, la corta y la antigua del mismo interruptor."
+   ],
+   "otras": {
+    "A": "-g es para copias incrementales.",
+    "D": "g también es para incrementales."
+   },
+   "memorizar": "z comprime con gzip; g es de incremental."
+  },
+  "SYBEX-CH02-RQ09": {
+   "idea": [
+    "El archivo de instantánea de tar lleva extensión .snar.",
+    "El nombre y la ruta son libres; la extensión es lo que lo identifica."
+   ],
+   "otras": {
+    "A": ".tar es un archivador sin comprimir.",
+    "B": ".tgz es un tarball comprimido con gzip.",
+    "C": ".tar.snap está inventada.",
+    "D": ".snap también."
+   },
+   "memorizar": "instantánea de tar → .snar."
+  },
+  "SYBEX-CH02-RQ10": {
+   "idea": [
+    "--compare, --diff y -d son la misma cosa.",
+    "Comparan lo que hay dentro del archivador con los archivos de fuera y listan las diferencias.",
+    "-W verifica el archivador nada más crearlo, pero solo si no está comprimido."
+   ],
+   "otras": {
+    "E": "-J no verifica: hace que tar comprima con xz."
+   },
+   "memorizar": "comparar: -d; verificar al crear: -W."
+  },
+  "SYBEX-CH02-RQ11": {
+   "idea": [
+    "Rebobinan /dev/st0 (SCSI) y /dev/ht1 (PATA).",
+    "La n al principio del nombre significa que no rebobina."
+   ],
+   "otras": {
+    "B": "/dev/nst0 no rebobina.",
+    "D": "/dev/nht1 tampoco.",
+    "E": "/dev/nht0 tampoco."
+   },
+   "memorizar": "n de no rebobina."
+  },
+  "SYBEX-CH02-RQ12": {
+   "idea": [
+    "Quien manda sobre la cinta es mt.",
+    "Los demás la usan como almacén, pero no la controlan."
+   ],
+   "otras": {
+    "A": "tar guarda en la cinta, pero no la maneja.",
+    "B": "star igual.",
+    "D": "rsync hace copias, pero no trabaja con cintas.",
+    "E": "dd hace copias, pero tampoco controla cintas."
+   },
+   "memorizar": "controlar la cinta → mt."
+  },
+  "SYBEX-CH02-RQ13": {
+   "idea": [
+    "La forma correcta es rsync -av Project ServerA:~/.",
+    "Los dos puntos son los que convierten ServerA en un host remoto, y ahí entra OpenSSH."
+   ],
+   "otras": {
+    "A": "/run/media/ServerA es un medio extraíble local.",
+    "B": "sin dos puntos, ServerA es solo otro nombre de archivo.",
+    "C": "aquí los nombres están al revés.",
+    "E": "rsync:// usa el demonio rsync y va sin cifrar."
+   },
+   "memorizar": "los dos puntos hacen remoto el destino."
+  },
+  "SYBEX-CH02-RQ14": {
+   "idea": [
+    "dd copia a bajo nivel: sirve para clonar un disco entero.",
+    "Y con /dev/zero también sirve para dejarlo a ceros."
+   ],
+   "otras": {
+    "B": "para incrementales diarias no se usa.",
+    "C": "sobre una unidad montada puede corromperla.",
+    "D": "no gestiona cintas."
+   },
+   "memorizar": "dd = copia bruta, disco entero."
+  },
+  "SYBEX-CH02-RQ15": {
+   "idea": [
+    "Las instrucciones de instalación están en README e INSTALL.",
+    "Ahí es donde se dice qué otros paquetes hacen falta."
+   ],
+   "otras": {
+    "C": "COPYING es la licencia.",
+    "D": "RELEASE-NOTES son las novedades de la versión.",
+    "E": "NEWS también."
+   },
+   "memorizar": "instalar: README e INSTALL."
+  },
+  "SYBEX-CH02-RQ16": {
+   "idea": [
+    "configure mira tu sistema y escribe el Makefile a partir de Makefile.in.",
+    "Es el paso que comprueba dependencias y compilador."
+   ],
+   "otras": {
+    "A": "INSTALL es un archivo de instrucciones.",
+    "C": "make compila usando el Makefile que ya existe.",
+    "D": "make install coloca los archivos en su sitio.",
+    "E": "cp solo copia archivos."
+   },
+   "memorizar": "configure → make → make install."
+  },
+  "SYBEX-CH02-RQ17": {
+   "idea": [
+    "De memoria hablan free, vmstat y top.",
+    "free y vmstat van a lo suyo; top la da entre otras estadísticas."
+   ],
+   "otras": {
+    "B": "mpstat da información estadística de red.",
+    "C": "mtr da una vista dinámica del encaminamiento."
+   },
+   "memorizar": "memoria: free, vmstat y top."
+  },
+  "SYBEX-CH02-RQ18": {
+   "idea": [
+    "sar 2 20: primero el intervalo, después las veces."
+   ],
+   "otras": {
+    "A": "uptime no acepta parámetros.",
+    "B": "uptime tampoco aquí.",
+    "C": "sar 20 2 sería 2 veces cada 20 segundos."
+   },
+   "memorizar": "sar intervalo veces, en ese orden."
+  },
+  "SYBEX-CH02-RQ19": {
+   "idea": [
+    "Monitorizan recursos collectd, MRTG y Nagios."
+   ],
+   "otras": {
+    "B": "Duplicity hace copias de seguridad, no monitoriza."
+   },
+   "memorizar": "monitorizar: collectd, MRTG, Nagios."
+  },
+  "SYBEX-CH02-RQ20": {
+   "idea": [
+    "La memoria de un proceso parado se puede volcar al swap.",
+    "Y a ese swap también se le llama memoria virtual."
+   ],
+   "otras": {
+    "A": "la memoria se divide en páginas, no en hojas.",
+    "D": "los procesos no intercambian memoria entre sí: se vuelca de RAM al swap.",
+    "E": "psmap mapea procesos; para memoria están free, sar y vmstat."
+   },
+   "memorizar": "swap = memoria virtual; la unidad es la página."
+  },
+  "SYBEX-CH03-RQ01": {
+   "idea": [
+    "De la memoria se ocupa el kernel.",
+    "Es su trabajo, junto con el resto del hardware."
+   ],
+   "otras": {
+    "A": "las utilidades GNU manipulan archivos y datos.",
+    "C": "el escritorio gráfico gestiona la pantalla.",
+    "D": "las aplicaciones piden memoria, pero no la gestionan."
+   },
+   "memorizar": "quien reparte la memoria es el kernel."
+  },
+  "SYBEX-CH03-RQ02": {
+   "idea": [
+    "El disco que hace de memoria es el espacio de intercambio.",
+    "También se le llama swap."
+   ],
+   "otras": {
+    "B": "la memoria virtual es la suma de RAM más disco, no solo el disco.",
+    "C": "el sistema de archivos guarda datos, no páginas de memoria.",
+    "D": "la memoria física es la RAM de verdad."
+   },
+   "memorizar": "swap = la parte del disco que hace de RAM."
+  },
+  "SYBEX-CH03-RQ03": {
+   "idea": [
+    "Los controladores entran en el kernel como módulos."
+   ],
+   "otras": {
+    "A": "los DLL son de Windows.",
+    "B": "la memoria virtual amplía la memoria, no carga controladores.",
+    "D": "el cargador de arranque mete el kernel en memoria, no los controladores."
+   },
+   "memorizar": "controlador en Linux = módulo."
+  },
+  "SYBEX-CH03-RQ04": {
+   "idea": [
+    "Para arrancar se carga el binario del kernel.",
+    "Sale de compilar el código fuente."
+   ],
+   "otras": {
+    "B": "los módulos se cargan después, con el sistema ya arrancado.",
+    "C": "un parche es texto para el fuente, no se carga en memoria.",
+    "D": "el código fuente tampoco se carga en memoria."
+   },
+   "memorizar": "arranca el binario; el fuente hay que compilarlo antes."
+  },
+  "SYBEX-CH03-RQ05": {
+   "idea": [
+    "Para saltar de una versión a la siguiente se aplica un parche."
+   ],
+   "otras": {
+    "B": "los módulos cargan controladores.",
+    "C": "los binarios son el kernel ya compilado.",
+    "D": "una publicación de desarrollo es el fuente completo, no una actualización."
+   },
+   "memorizar": "actualizar el fuente del kernel → parche."
+  },
+  "SYBEX-CH03-RQ06": {
+   "idea": [
+    "El que pregunta en texto es make config."
+   ],
+   "otras": {
+    "A": "xconfig saca menús gráficos.",
+    "B": "mrproper borra configuraciones y objetos antiguos.",
+    "C": "clean también borra lo anterior."
+   },
+   "memorizar": "config pregunta en texto; xconfig y gconfig, en ventanas."
+  },
+  "SYBEX-CH03-RQ07": {
+   "idea": [
+    "El gráfico es make gconfig, que usa la biblioteca de GNOME."
+   ],
+   "otras": {
+    "A": "config pregunta en texto.",
+    "B": "mrproper borra lo anterior.",
+    "D": "clean también."
+   },
+   "memorizar": "gconfig = configuración con ventanas."
+  },
+  "SYBEX-CH03-RQ08": {
+   "idea": [
+    "Para dejarlo todo limpio de compilaciones viejas: make mrproper.",
+    "Borra los archivos objeto y también los ajustes anteriores."
+   ],
+   "otras": {
+    "A": "gconfig crea configuración nueva.",
+    "C": "bzImage compila el binario.",
+    "D": "oldconfig reaprovecha la configuración antigua, pero no borra objetos."
+   },
+   "memorizar": "empezar de cero → mrproper."
+  },
+  "SYBEX-CH03-RQ09": {
+   "idea": [
+    "El binario comprimido del kernel sale de make bzImage.",
+    "zImage hace lo mismo."
+   ],
+   "otras": {
+    "B": "kernel no es un objetivo válido: da error.",
+    "C": "config solo crea el archivo de configuración.",
+    "D": "clean borra lo anterior."
+   },
+   "memorizar": "compilar el kernel → bzImage."
+  },
+  "SYBEX-CH03-RQ10": {
+   "idea": [
+    "En Debian el disco RAM inicial lo crea mkinitramfs."
+   ],
+   "otras": {
+    "A": "mkinitrd es el de Red Hat.",
+    "B": "make bzImage compila el kernel.",
+    "D": "no existe un objetivo de make para el disco RAM."
+   },
+   "memorizar": "Debian → mkinitramfs; Red Hat → mkinitrd."
+  },
+  "SYBEX-CH03-RQ11": {
+   "idea": [
+    "Para ver todos los módulos cargados: lsmod."
+   ],
+   "otras": {
+    "A": "modinfo enseña los datos de un módulo suelto.",
+    "B": "insmod inserta un módulo.",
+    "C": "rmmod lo quita."
+   },
+   "memorizar": "ls… lista; ins… mete; rm… quita."
+  },
+  "SYBEX-CH03-RQ12": {
+   "idea": [
+    "modprobe funciona con el nombre del módulo; insmod necesita la ruta del archivo."
+   ],
+   "otras": {
+    "A": "insmod exige saber el nombre de archivo.",
+    "B": "rmmod elimina un módulo.",
+    "D": "lsmod solo lista."
+   },
+   "memorizar": "sin saber el archivo → modprobe."
+  },
+  "SYBEX-CH03-RQ13": {
+   "idea": [
+    "Para ver los dispositivos USB: lsusb."
+   ],
+   "otras": {
+    "B": "lspci lista tarjetas PCI.",
+    "C": "lsmod lista módulos; si un controlador va dentro del kernel, no lo verás.",
+    "D": "lsdev muestra puertos de E/S e interrupciones de todo el hardware."
+   },
+   "memorizar": "USB → lsusb; PCI → lspci."
+  },
+  "SYBEX-CH03-RQ14": {
+   "idea": [
+    "El detalle se pide con -v, de verbose."
+   ],
+   "otras": {
+    "A": "-d filtra por ID de fabricante.",
+    "B": "-s filtra por bus.",
+    "C": "-t lo pinta en árbol: enseña dependencias, no detalle."
+   },
+   "memorizar": "-v = verbose = todo el detalle."
+  },
+  "SYBEX-CH03-RQ15": {
+   "idea": [
+    "Los que se enchufan en marcha son los hotplug, como el USB."
+   ],
+   "otras": {
+    "A": "coldplug es justo lo contrario: con el equipo apagado.",
+    "C": "las tarjetas PCI se ponen con el equipo apagado.",
+    "D": "las PCIe también."
+   },
+   "memorizar": "hot = en caliente, con el equipo encendido."
+  },
+  "SYBEX-CH03-RQ16": {
+   "idea": [
+    "Quien detecta lo que enchufas y carga su módulo es udevd.",
+    "Escucha los eventos del kernel y aplica sus reglas."
+   ],
+   "otras": {
+    "A": "lsusb solo lista.",
+    "C": "modprobe instala a mano.",
+    "D": "insmod también a mano."
+   },
+   "memorizar": "enchufar algo y que funcione solo → udevd."
+  },
+  "SYBEX-CH03-RQ17": {
+   "idea": [
+    "La configuración de udevd está en /etc/udev/udev.conf."
+   ],
+   "otras": {
+    "A": "/lib/modules guarda archivos de módulos.",
+    "B": "/boot guarda el binario del kernel.",
+    "C": "/etc/udev/rules.d guarda las reglas, no la configuración."
+   },
+   "memorizar": "udev.conf = cómo se comporta udevd."
+  },
+  "SYBEX-CH03-RQ18": {
+   "idea": [
+    "Las reglas de udevd están en /etc/udev/rules.d."
+   ],
+   "otras": {
+    "A": "/etc/udev/udevd.conf son los ajustes de udevd.",
+    "C": "/boot guarda el binario del kernel.",
+    "D": "/lib/modules guarda archivos de módulos."
+   },
+   "memorizar": "rules.d = las reglas; udevd.conf = los ajustes."
+  },
+  "SYBEX-CH03-RQ19": {
+   "idea": [
+    "El kernel se expone a sí mismo en /proc.",
+    "Ahí se leen y se escriben sus ajustes y sus estadísticas."
+   ],
+   "analogia": "No es un disco: es una ventana al kernel con forma de carpeta.",
+   "otras": {
+    "A": "/etc/kernel no es una carpeta válida.",
+    "B": "/boot/kernel tampoco.",
+    "D": "/usr/src/linux guarda el código fuente del kernel."
+   },
+   "memorizar": "el kernel se asoma por /proc."
+  },
+  "SYBEX-CH03-RQ20": {
+   "idea": [
+    "sysctl cambia ajustes del kernel con el sistema en marcha."
+   ],
+   "otras": {
+    "B": "lsmod lista módulos.",
+    "C": "modprobe mete y saca módulos, pero no toca sus ajustes.",
+    "D": "lsdev muestra información de dispositivos."
+   },
+   "memorizar": "tocar el kernel en caliente → sysctl."
+  },
+  "SYBEX-CH04-RQ01": {
+   "idea": [
+    "Valen mkfs -t ext2, mkfs.ext2 y mke2fs: son tres caras del mismo comando."
+   ],
+   "otras": {
+    "B": "extended2 no es un tipo de sistema de archivos.",
+    "D": "mke2fs.ext2 no existe."
+   },
+   "memorizar": "para ext valen mkfs, mkfs.ext2 y mke2fs."
+  },
+  "SYBEX-CH04-RQ02": {
+   "idea": [
+    "Los que el sistema sabe manejar están en /proc/filesystems."
+   ],
+   "otras": {
+    "B": "/etc/mtab enseña lo que está montado ahora.",
+    "C": "/proc/mounts, casi lo mismo.",
+    "D": "/proc/swaps es el espacio de intercambio.",
+    "E": "/proc/cpuinfo son los procesadores."
+   },
+   "memorizar": "soportados ≠ montados: filesystems vs mtab."
+  },
+  "SYBEX-CH04-RQ03": {
+   "idea": [
+    "Para acoplar algo un rato, mount y ya está."
+   ],
+   "otras": {
+    "A": "mkfs formatea, no monta.",
+    "B": "e2label te da la etiqueta, que luego usarías en mount.",
+    "C": "AutoFS hay que configurarlo antes.",
+    "D": "/etc/fstab es para montajes que aguantan reinicios, no temporales."
+   },
+   "memorizar": "temporal → mount; permanente → /etc/fstab."
+  },
+  "SYBEX-CH04-RQ04": {
+   "idea": [
+    "Ese número largo es un UUID.",
+    "A mount se le pasa con -U."
+   ],
+   "otras": {
+    "A": "-o son opciones de montaje.",
+    "B": "-L identifica por etiqueta.",
+    "D": "-a monta todo lo de /etc/fstab que falte.",
+    "E": "-n monta sin actualizar /etc/mtab."
+   },
+   "memorizar": "-U por UUID, -L por etiqueta."
+  },
+  "SYBEX-CH04-RQ05": {
+   "idea": [
+    "sync vacía los búferes y obliga a escribir ya en el disco."
+   ],
+   "otras": {
+    "A": "unmount no es un comando; el bueno es umount.",
+    "B": "fuser sirve para ver quién tiene ocupado el sistema de archivos.",
+    "C": "lsof, lo mismo.",
+    "E": "dmesg enseña el búfer del kernel, no vacía nada."
+   },
+   "memorizar": "escribir ya lo pendiente → sync."
+  },
+  "SYBEX-CH04-RQ06": {
+   "idea": [
+    "Cada línea de /etc/fstab tiene seis campos.",
+    "Nombre, punto de montaje, tipo, opciones, volcado y prioridad de comprobación."
+   ],
+   "otras": {
+    "C": "el campo de volcado es de dump, no de cpio.",
+    "E": "lo que monta AutoFS no debe estar en /etc/fstab."
+   },
+   "memorizar": "fstab: qué, dónde, de qué tipo, cómo, dump y fsck."
+  },
+  "SYBEX-CH04-RQ07": {
+   "idea": [
+    "El UUID lo enseña blkid, junto con los demás atributos del dispositivo."
+   ],
+   "otras": {
+    "A": "findmnt pinta en árbol lo montado, sin UUID.",
+    "C": "e2label da la etiqueta, no el UUID.",
+    "D": "findfs necesita que ya sepas la etiqueta o el UUID.",
+    "E": "mount lista lo montado, sin UUID."
+   },
+   "memorizar": "averiguar el UUID → blkid."
+  },
+  "SYBEX-CH04-RQ08": {
+   "idea": [
+    "Btrfs llega a RAID 0, 1 y 10."
+   ],
+   "otras": {
+    "C": "RAID 5 todavía no.",
+    "D": "RAID 6 tampoco."
+   },
+   "memorizar": "btrfs: 0, 1 y 10; con paridad aún no."
+  },
+  "SYBEX-CH04-RQ09": {
+   "idea": [
+    "Las extensiones de ISO9660 son El Torito, Joliet y Rock Ridge."
+   ],
+   "otras": {
+    "A": "UDF es un estándar aparte, sobre todo para DVD.",
+    "B": "btrfs es un sistema de archivos, no un estándar óptico."
+   },
+   "memorizar": "ISO9660 se amplía con El Torito, Joliet y Rock Ridge."
+  },
+  "SYBEX-CH04-RQ10": {
+   "idea": [
+    "La imagen ISO se crea con mkisofs."
+   ],
+   "otras": {
+    "A": "mkfs crea sistemas de archivos.",
+    "B": "no existe mkfs -t iso.",
+    "D": "cdrecord graba la imagen en el disco, pero no la crea.",
+    "E": "mount -t iso9660 monta un soporte óptico."
+   },
+   "memorizar": "crear ISO → mkisofs; grabarla → cdrecord."
+  },
+  "SYBEX-CH04-RQ11": {
+   "idea": [
+    "Primero se prepara la partición con mkswap.",
+    "Activarla ya es otro paso."
+   ],
+   "otras": {
+    "A": "mkfs no tiene una opción -t swapon.",
+    "C": "swapon activa un swap que ya esté preparado.",
+    "D": "swapoff lo desactiva.",
+    "E": "swapon -s solo enseña estadísticas."
+   },
+   "memorizar": "mkswap prepara; swapon enciende."
+  },
+  "SYBEX-CH04-RQ12": {
+   "idea": [
+    "En /etc/auto.master los mapas son integrados, directos e indirectos."
+   ],
+   "otras": {
+    "D": "SMART es la tecnología de autodiagnóstico de los discos.",
+    "E": "un mapa de carreteras no pinta nada aquí."
+   },
+   "memorizar": "mapas de AutoFS: integrado, directo, indirecto."
+  },
+  "SYBEX-CH04-RQ13": {
+   "idea": [
+    "El mapa maestro se cambia desde /etc/sysconfig/autofs.",
+    "En otras distribuciones el archivo es /etc/default/autofs."
+   ],
+   "otras": {
+    "A": "/etc/auto.direct es un mapa directo.",
+    "B": "/etc/auto.misc es un mapa indirecto.",
+    "C": "/etc/autofs.net es un script antiguo de AutoFS.",
+    "D": "/etc/auto.tmp también es un mapa indirecto."
+   },
+   "memorizar": "los auto.* son mapas; la configuración está en sysconfig."
+  },
+  "SYBEX-CH04-RQ14": {
+   "idea": [
+    "eCryptfs se pone encima de otro sistema de archivos.",
+    "Cifra archivo por archivo, sin ser él mismo el disco."
+   ],
+   "analogia": "No es un disco cifrado, es una capa de cifrado puesta sobre el que ya tienes.",
+   "otras": {
+    "A": "XFS no cifra.",
+    "B": "dm-crypt cifra, pero no es por capas.",
+    "D": "LUKS tampoco es por capas.",
+    "E": "Btrfs no cifra."
+   },
+   "memorizar": "eCryptfs = cifrado por encima de otro sistema de archivos."
+  },
+  "SYBEX-CH04-RQ15": {
+   "idea": [
+    "La que no ajusta nada es uuidgen: solo fabrica números UUID nuevos."
+   ],
+   "otras": {
+    "A": "debugfs ajusta sistemas de archivos extendidos.",
+    "B": "e2label también.",
+    "C": "resize2fs también.",
+    "E": "tune2fs también."
+   },
+   "memorizar": "uuidgen fabrica el UUID; no toca el sistema de archivos."
+  },
+  "SYBEX-CH04-RQ16": {
+   "idea": [
+    "Poner ese UUID en el sistema de archivos es cosa de tune2fs."
+   ],
+   "otras": {
+    "A": "debugfs ajusta otras cosas del sistema de archivos.",
+    "B": "e2label cambia la etiqueta.",
+    "C": "resize2fs cambia el tamaño.",
+    "D": "blkid enseña el UUID, pero no lo cambia."
+   },
+   "memorizar": "uuidgen lo genera, tune2fs lo asigna."
+  },
+  "SYBEX-CH04-RQ17": {
+   "idea": [
+    "No pasa nada: fsck.xfs no hace nada.",
+    "XFS (y btrfs) traen sus propias herramientas de reparación."
+   ],
+   "otras": {
+    "A": "eso podría pasar en un sistema de archivos extendido, no aquí.",
+    "B": "tampoco informa.",
+    "C": "tampoco pregunta.",
+    "D": "ni una cosa ni la otra."
+   },
+   "memorizar": "fsck.xfs existe, pero no hace nada."
+  },
+  "SYBEX-CH04-RQ18": {
+   "idea": [
+    "Para recuperar datos tras un desastre: btrfs restore."
+   ],
+   "otras": {
+    "A": "btrfs check ayuda, pero es menos potente.",
+    "B": "btrfs get property no repara ni restaura.",
+    "C": "btrfs rescue ayuda, pero tampoco llega tan lejos.",
+    "E": "btrfs scrub tampoco restaura."
+   },
+   "memorizar": "datos perdidos en btrfs → btrfs restore."
+  },
+  "SYBEX-CH04-RQ19": {
+   "idea": [
+    "xfs_check mira si hay inconsistencias y no toca nada.",
+    "Donde ya no venga, se usa xfs_repair -n."
+   ],
+   "otras": {
+    "B": "xfsdump hace copia de datos y atributos.",
+    "C": "xfs_info enseña información, pero no busca inconsistencias.",
+    "D": "xfs_metadump solo copia los metadatos a un archivo.",
+    "E": "xfsrestore restaura desde un volcado."
+   },
+   "memorizar": "comprobar sin tocar: xfs_check o xfs_repair -n."
+  },
+  "SYBEX-CH04-RQ20": {
+   "idea": [
+    "El resumen rápido de salud es smartctl -H."
+   ],
+   "otras": {
+    "A": "-t short lanza una prueba, pero no enseña resultados.",
+    "C": "-i informa del disco: si soporta SMART y si está activo.",
+    "D": "-a lo da todo, no un resumen.",
+    "E": "-t long lanza la prueba larga."
+   },
+   "memorizar": "-H de health: el resumen de salud."
+  },
+  "SYBEX-CH05-RQ01": {
+   "idea": [
+    "Todos aguantan un fallo menos RAID 0.",
+    "RAID 0 solo reparte por bandas: no guarda nada de más, así que no tiene de dónde recuperar."
+   ],
+   "otras": {
+    "A": "RAID 0 es distribución por bandas, sin tolerancia a fallos."
+   },
+   "memorizar": "el 0 no protege; el resto, sí."
+  },
+  "SYBEX-CH05-RQ02": {
+   "idea": [
+    "Doble paridad es RAID 6."
+   ],
+   "otras": {
+    "A": "RAID 0 es distribución por bandas a secas.",
+    "B": "RAID 1 es duplicación en espejo.",
+    "C": "RAID 10 es espejo con bandas.",
+    "D": "RAID 5 es bandas con paridad simple."
+   },
+   "memorizar": "5 = una paridad; 6 = dos."
+  },
+  "SYBEX-CH05-RQ03": {
+   "idea": [
+    "Si el nivel de RAID está soportado, se ve en /proc/mdstat."
+   ],
+   "otras": {
+    "B": "/dev/md0 es el dispositivo de un array, no un estado.",
+    "C": "/etc/fstab puede montar el array al arrancar, pero no dice esto.",
+    "D": "/etc/mdadm/mdadm.conf es configuración, no estado.",
+    "E": "/dev/mapper son los archivos de Device Mapper de LVM y RAID."
+   },
+   "memorizar": "estado del RAID → /proc/mdstat."
+  },
+  "SYBEX-CH05-RQ04": {
+   "idea": [
+    "El modo delete no existe en mdadm.",
+    "Para deshacer un array se usa el modo misceláneo, que borra el superbloque."
+   ],
+   "otras": {
+    "A": "grow hace crecer, reduce o reconfigura un array.",
+    "B": "--follow vigila unidades md y reacciona a los eventos.",
+    "D": "--manage toca los miembros del array, por ejemplo añadir una reserva.",
+    "E": "el misceláneo es el cajón de lo que no encaja en los demás."
+   },
+   "memorizar": "mdadm no borra: detiene y limpia superbloques."
+  },
+  "SYBEX-CH05-RQ05": {
+   "idea": [
+    "Crear un array es -C, o su forma larga --create."
+   ],
+   "otras": {
+    "A": "--grow es el modo grow.",
+    "B": "-F es follow o monitor.",
+    "C": "--make está inventada.",
+    "E": "--misc es el modo misceláneo."
+   },
+   "memorizar": "-C de create."
+  },
+  "SYBEX-CH05-RQ06": {
+   "idea": [
+    "El estado de los arrays está en /proc/mdstat."
+   ],
+   "otras": {
+    "A": "/etc/mdadm/mdadm.conf es configuración.",
+    "B": "/etc/mdadm.conf es la misma configuración en otra distribución.",
+    "C": "/etc/fstab no guarda estado de RAID.",
+    "E": "/etc/sysctl.conf es la configuración de sysctl."
+   },
+   "memorizar": "conf configura; mdstat informa."
+  },
+  "SYBEX-CH05-RQ07": {
+   "idea": [
+    "Se pregunta por la unidad, no por el array: --misc --examine /dev/sdc1.",
+    "Así te dice a qué array pertenece, sea el que sea."
+   ],
+   "otras": {
+    "A": "--detail /dev/md0 solo sirve si resulta que es ese array.",
+    "C": "--detail --scan /dev/md0 tiene el mismo problema.",
+    "D": "--monitor --help solo enseña las opciones del modo monitor.",
+    "E": "sí hay una respuesta buena."
+   },
+   "memorizar": "examinar la unidad para saber su array → --examine."
+  },
+  "SYBEX-CH05-RQ08": {
+   "idea": [
+    "Primero se detiene el array.",
+    "Después se borran los superbloques de cada una de sus unidades."
+   ],
+   "otras": {
+    "B": "reducirlo no hace falta.",
+    "C": "monitorizarlo tampoco.",
+    "E": "los datos no hay que borrarlos."
+   },
+   "memorizar": "detener y limpiar superbloques; los datos dan igual."
+  },
+  "SYBEX-CH05-RQ09": {
+   "idea": [
+    "hdparm vale para PATA, ATAPI, SATA y SCSI.",
+    "En SCSI solo si el dispositivo soporta SAT, y solo algunas opciones."
+   ],
+   "memorizar": "hdparm con todas, pero con SCSI a medias."
+  },
+  "SYBEX-CH05-RQ10": {
+   "idea": [
+    "sdparm sin nada detrás ya enseña los parámetros de modo comunes."
+   ],
+   "otras": {
+    "A": "--all da toda la información reconocida del tipo de dispositivo.",
+    "B": "--command existe, pero sus parámetros son stop, sync, start y load.",
+    "C": "--hex enseña las páginas VPD en hexadecimal.",
+    "D": "--page enseña el código de esas páginas."
+   },
+   "memorizar": "sdparm a secas = los parámetros comunes."
+  },
+  "SYBEX-CH05-RQ11": {
+   "idea": [
+    "El IQN nombra las dos cosas.",
+    "Identifica el destino iSCSI y también el disco que ese destino ofrece."
+   ],
+   "otras": {
+    "A": "WWID identifica el disco, no el destino.",
+    "B": "WWN es lo mismo que WWID.",
+    "D": "LUN también identifica el disco, no el destino.",
+    "E": "scsi_id es un comando para generar un número único."
+   },
+   "memorizar": "IQN nombra destino y disco; los demás, solo el disco."
+  },
+  "SYBEX-CH05-RQ12": {
+   "idea": [
+    "El descubrimiento deja dos registros en /var/lib/iscsi/.",
+    "nodes guarda el nodo descubierto y send_targets la dirección IP del destino."
+   ],
+   "otras": {
+    "A": "/etc/iscsi/iscsid.conf es la configuración de iscsiadm.",
+    "B": "/lib/udev/scsi_id es donde vive el comando scsi_id.",
+    "E": "/var/log/iscsi.conf está inventado."
+   },
+   "memorizar": "descubrimiento → /var/lib/iscsi/nodes y send_targets."
+  },
+  "SYBEX-CH05-RQ13": {
+   "idea": [
+    "Agrupan varios discos en uno solo RAID y LVM."
+   ],
+   "otras": {
+    "A": "PATA es una interfaz de unidades.",
+    "C": "iSCSI trae un disco de red, pero no agrupa nada.",
+    "E": "el tejido de almacenamiento es el hardware que conecta una SAN."
+   },
+   "memorizar": "agrupar discos: RAID o LVM."
+  },
+  "SYBEX-CH05-RQ14": {
+   "idea": [
+    "Una partición libre entregada a LVM es un volumen físico, el PV."
+   ],
+   "analogia": "PV es el ladrillo, VG el montón de ladrillos y LV lo que construyes con ellos.",
+   "otras": {
+    "B": "VG es el grupo que reúne varios PV.",
+    "C": "LV es lo que se saca del grupo.",
+    "D": "SATA es una interfaz de unidades.",
+    "E": "un backstore da acceso a un medio físico en una SAN."
+   },
+   "memorizar": "PV = la materia prima de LVM."
+  },
+  "SYBEX-CH05-RQ15": {
+   "idea": [
+    "Lo falso es lo de designar el PV.",
+    "El tamaño del PE se fija al meter ese PV en un grupo de volúmenes."
+   ],
+   "otras": {
+    "A": "PE sí significa extent físico.",
+    "B": "sí es el bloque más pequeño que se asigna en un PV.",
+    "D": "el tamaño por defecto sí es 4 MiB.",
+    "E": "y sí se puede elegir."
+   },
+   "memorizar": "el tamaño del PE se decide al entrar en el VG."
+  },
+  "SYBEX-CH05-RQ16": {
+   "idea": [
+    "Cada extent lógico apunta a un extent físico del grupo."
+   ],
+   "analogia": "Es un índice: el extent lógico es la entrada y el físico, el trozo real de disco.",
+   "otras": {
+    "A": "al revés: son los LV los que se componen de LE.",
+    "C": "el mapeo da acceso a los datos, no los bloquea.",
+    "D": "no ocurre al designar el PV.",
+    "E": "sí hay una afirmación cierta."
+   },
+   "memorizar": "LE apunta a extent físico: lógico → físico."
+  },
+  "SYBEX-CH05-RQ17": {
+   "idea": [
+    "Marcar una partición como PV es cosa de pvcreate."
+   ],
+   "otras": {
+    "A": "pvdisplay enseña los atributos de un PV.",
+    "B": "vgcreate mete PV en un grupo.",
+    "C": "lvcreate saca un LV del grupo.",
+    "E": "pvscan lista los PV del sistema."
+   },
+   "memorizar": "…create crea, …display enseña, …scan lista."
+  },
+  "SYBEX-CH05-RQ18": {
+   "idea": [
+    "vg01 es un grupo de volúmenes, así que se mira con vgdisplay."
+   ],
+   "otras": {
+    "A": "pvdisplay es para volúmenes físicos.",
+    "B": "vgcreate crea, no comprueba.",
+    "C": "pvscan lista volúmenes físicos.",
+    "E": "lvdisplay es para volúmenes lógicos."
+   },
+   "memorizar": "el prefijo manda: pv, vg o lv."
+  },
+  "SYBEX-CH05-RQ19": {
+   "idea": [
+    "Una instantánea es un LV más, y como tal se puede montar.",
+    "Se crea con lvcreate y se puede leer y escribir."
+   ],
+   "otras": {
+    "B": "no es de solo lectura.",
+    "D": "no copia los datos originales.",
+    "E": "no se crea con vgcreate, sino con lvcreate."
+   },
+   "memorizar": "la instantánea es un LV normal y corriente."
+  },
+  "SYBEX-CH05-RQ20": {
+   "idea": [
+    "Renombrar un LV es lvrename."
+   ],
+   "otras": {
+    "B": "lvremove lo elimina.",
+    "C": "lvconvert cambia su disposición.",
+    "D": "lvs muestra información de los LV.",
+    "E": "lvmchange está obsoleto."
+   },
+   "memorizar": "lvrename cambia el nombre, nada más."
+  },
+  "SYBEX-CH06-RQ01": {
+   "idea": [
+    "El WPA protege la señal inalámbrica.",
+    "Y lo inalámbrico ocurre en la capa física."
+   ],
+   "otras": {
+    "A": "la capa de red direcciona con IP, sin tocar la señal.",
+    "C": "la de transporte reparte por puertos.",
+    "D": "la de aplicación es donde corren los programas."
+   },
+   "memorizar": "el Wi-Fi es señal, o sea capa física."
+  },
+  "SYBEX-CH06-RQ02": {
+   "idea": [
+    "Qué parte de la IP es la red lo dice la máscara."
+   ],
+   "otras": {
+    "A": "la dirección IP sola no lo dice sin la máscara.",
+    "B": "el router predeterminado es otra IP más.",
+    "C": "el nombre de host no habla de direcciones.",
+    "E": "el servidor DNS traduce nombres a IP, nada más."
+   },
+   "memorizar": "la máscara parte la IP en red y host."
+  },
+  "SYBEX-CH06-RQ03": {
+   "idea": [
+    "Una máscara son unos seguidos al principio y ceros después.",
+    "255.255.255.0 son 24 unos: vale."
+   ],
+   "otras": {
+    "B": "255.255.0.255 tiene los unos cortados.",
+    "C": "192.168.1.0 es una dirección de red.",
+    "D": "192.168.0.1 es una dirección de host.",
+    "E": "0.255.255.255 tiene los unos al final."
+   },
+   "memorizar": "máscara = unos seguidos, y siempre delante."
+  },
+  "SYBEX-CH06-RQ04": {
+   "idea": [
+    "Una IP son dos cosas: dirección de red y dirección de host."
+   ],
+   "otras": {
+    "A": "el router no forma parte de tu IP.",
+    "B": "la máscara no está dentro de la IP: la interpreta.",
+    "C": "esos dos dan la red, pero no tu host.",
+    "D": "el nombre de host no forma parte de la IP."
+   },
+   "memorizar": "IP = red + host."
+  },
+  "SYBEX-CH06-RQ05": {
+   "idea": [
+    "IPv6 usa 128 bits.",
+    "Son ocho grupos de cuatro valores hexadecimales."
+   ],
+   "otras": {
+    "A": "32 bits es IPv4.",
+    "B": "64 suele ser solo la parte de red.",
+    "D": "256 no existe.",
+    "E": "8 tampoco."
+   },
+   "memorizar": "IPv4 32 bits, IPv6 128."
+  },
+  "SYBEX-CH06-RQ06": {
+   "idea": [
+    "Lo que sale de tu red pasa por el router predeterminado."
+   ],
+   "otras": {
+    "B": "la máscara define solo la red local.",
+    "C": "el nombre de host es cosa tuya, local.",
+    "D": "la dirección IP también.",
+    "E": "el servidor DNS traduce nombres, no encamina."
+   },
+   "memorizar": "salir de la red local → router predeterminado."
+  },
+  "SYBEX-CH06-RQ07": {
+   "idea": [
+    "Quien convierte un nombre en una IP es el servidor DNS."
+   ],
+   "otras": {
+    "A": "el router predeterminado manda paquetes fuera.",
+    "B": "la máscara define la red local.",
+    "C": "el nombre de host describe tu propia máquina.",
+    "D": "la dirección IP también."
+   },
+   "memorizar": "nombre → IP lo hace el DNS."
+  },
+  "SYBEX-CH06-RQ08": {
+   "idea": [
+    "Las IP se reparten solas con DHCP."
+   ],
+   "otras": {
+    "A": "el router predeterminado no reparte direcciones.",
+    "C": "la tabla ARP une IP con dirección hardware, pero no asigna.",
+    "D": "la máscara da la red, no tu dirección.",
+    "E": "ifconfig pone una IP fija a mano."
+   },
+   "memorizar": "IP automática → DHCP."
+  },
+  "SYBEX-CH06-RQ09": {
+   "idea": [
+    "Para hablar consigo misma, la máquina usa el bucle local.",
+    "Es la dirección de la interfaz de loopback."
+   ],
+   "otras": {
+    "A": "una dirección dinámica es para hablar con fuera.",
+    "C": "una estática también.",
+    "D": "el nombre de host identifica la máquina hacia fuera.",
+    "E": "la MAC es la dirección hardware de la tarjeta."
+   },
+   "memorizar": "loopback = red consigo mismo."
+  },
+  "SYBEX-CH06-RQ10": {
+   "idea": [
+    "El que garantiza la entrega es TCP."
+   ],
+   "analogia": "TCP es carta certificada y UDP es echarla al buzón: más rápido, sin acuse de recibo.",
+   "otras": {
+    "B": "UDP es más rápido, pero no garantiza nada.",
+    "C": "ICMP manda mensajes de control, sin garantía.",
+    "D": "DNS no es de la capa de transporte.",
+    "E": "DHCP tampoco."
+   },
+   "memorizar": "TCP asegura; UDP corre."
+  },
+  "SYBEX-CH06-RQ11": {
+   "idea": [
+    "Escuchar es -l y HTTP es el puerto 80.",
+    "De ahí, nc -l 80."
+   ],
+   "otras": {
+    "A": "sin -l se conecta al 80 de esa máquina en vez de escuchar.",
+    "C": "le falta el puerto.",
+    "D": "el orden está cambiado.",
+    "E": "-l 22 escucha, pero en otro puerto."
+   },
+   "memorizar": "-l de listen; 80 es HTTP."
+  },
+  "SYBEX-CH06-RQ12": {
+   "idea": [
+    "En Red Hat la red está en /etc/sysconfig/network-scripts."
+   ],
+   "otras": {
+    "B": "/etc/network es lo de Debian, con su archivo interfaces.",
+    "C": "ifcfg-eth0 es un archivo, no una carpeta.",
+    "D": "ifconfig es un comando.",
+    "E": "iwconfig también."
+   },
+   "memorizar": "Red Hat: network-scripts; Debian: /etc/network."
+  },
+  "SYBEX-CH06-RQ13": {
+   "idea": [
+    "En Debian, IP automática es iface eth0 inet dhcp."
+   ],
+   "otras": {
+    "A": "static es justo lo contrario: dirección fija.",
+    "C": "auto eth0 solo dice que se levante al arrancar.",
+    "D": "inet6 auto es una dirección IPv6 de enlace local.",
+    "E": "BOOTPROTO no es de Debian."
+   },
+   "memorizar": "en Debian se configura con iface; dhcp = automática."
+  },
+  "SYBEX-CH06-RQ14": {
+   "idea": [
+    "Los servidores DNS se listan en /etc/resolv.conf.",
+    "Cada uno va en una línea nameserver."
+   ],
+   "otras": {
+    "A": "/etc/hosts.allow es de tcp_wrappers.",
+    "C": "/etc/inetd.conf también.",
+    "D": "/etc/network/interfaces configura la red en Debian, pero no el DNS.",
+    "E": "/etc/host.deny también es de tcp_wrappers."
+   },
+   "memorizar": "a quién preguntar los nombres → /etc/resolv.conf."
+  },
+  "SYBEX-CH06-RQ15": {
+   "idea": [
+    "El orden manda: interfaz, dirección y luego netmask con su máscara.",
+    "up o down se pueden poner, pero no son obligatorios."
+   ],
+   "otras": {
+    "B": "aquí falta netmask y el orden está cambiado.",
+    "C": "se ha olvidado la interfaz.",
+    "D": "no configura nada.",
+    "E": "tampoco."
+   },
+   "memorizar": "ifconfig interfaz IP netmask máscara."
+  },
+  "SYBEX-CH06-RQ16": {
+   "idea": [
+    "Ver qué redes inalámbricas hay alrededor: iwlist."
+   ],
+   "otras": {
+    "B": "iwconfig te conecta a un punto concreto, pero no los lista.",
+    "C": "ifconfig pone la dirección IP.",
+    "D": "ip también.",
+    "E": "arp relaciona IP con direcciones hardware."
+   },
+   "memorizar": "list de iwlist: listar redes."
+  },
+  "SYBEX-CH06-RQ17": {
+   "idea": [
+    "El nombre del punto de acceso, el SSID, se pone con essid."
+   ],
+   "otras": {
+    "A": "key es la clave de cifrado.",
+    "B": "netmask no se toca con iwconfig.",
+    "C": "address tampoco.",
+    "E": "channel es la radiofrecuencia."
+   },
+   "memorizar": "essid = el nombre de la red inalámbrica."
+  },
+  "SYBEX-CH06-RQ18": {
+   "idea": [
+    "El único que hace las tres cosas es ip."
+   ],
+   "otras": {
+    "A": "ifconfig llega a la dirección y la máscara, pero no al router.",
+    "B": "iwconfig es de redes inalámbricas.",
+    "C": "router pone el router predeterminado, y nada más.",
+    "D": "ifup solo levanta la interfaz."
+   },
+   "memorizar": "ip lo hace todo; ifconfig se queda corto."
+  },
+  "SYBEX-CH06-RQ19": {
+   "idea": [
+    "Mandar ICMP y esperar respuesta es ping."
+   ],
+   "otras": {
+    "A": "netstat da estadísticas de la interfaz.",
+    "B": "nmap busca puertos abiertos.",
+    "D": "nc simula cliente o servidor con TCP o UDP.",
+    "E": "tcpdump captura, no envía."
+   },
+   "memorizar": "¿llego? → ping."
+  },
+  "SYBEX-CH06-RQ20": {
+   "idea": [
+    "Ver los paquetes que pasan: tcpdump.",
+    "Los enseña por pantalla o los guarda en un archivo."
+   ],
+   "otras": {
+    "A": "dig consulta el DNS.",
+    "C": "ping manda paquetes ICMP.",
+    "D": "netstat da estadísticas, no paquetes.",
+    "E": "nc simula un cliente o un servidor."
+   },
+   "memorizar": "mirar el tráfico → tcpdump."
+  },
+  "SYBEX-CH07-RQ01": {
+   "idea": [
+    "La configuración de Postfix está en /etc/postfix."
+   ],
+   "analogia": "Regla general: /etc es configuración y /var es lo que se mueve o crece.",
+   "otras": {
+    "A": "/var/spool/postfix son los mensajes en proceso.",
+    "C": "/var/spool/mail son los buzones locales.",
+    "D": "/var/log son registros.",
+    "E": "/etc/mail no es de Postfix."
+   },
+   "memorizar": "configuración en /etc; correo en /var."
+  },
+  "SYBEX-CH07-RQ02": {
+   "idea": [
+    "El que manda es master.",
+    "Decide qué programas de Postfix se arrancan."
+   ],
+   "otras": {
+    "A": "qmgr trabaja con los mensajes en cola.",
+    "B": "pickup también.",
+    "D": "cleanup también.",
+    "E": "smtp también."
+   },
+   "memorizar": "master dirige; los demás trabajan."
+  },
+  "SYBEX-CH07-RQ03": {
+   "idea": [
+    "Cuándo arrancan y paran los procesos: master.cf."
+   ],
+   "otras": {
+    "B": "main.cf dice cómo se tratan los mensajes.",
+    "C": "install.cf dice qué funciones se instalan.",
+    "D": "/var/spool/postfix guarda mensajes en proceso.",
+    "E": "/var/log/maillog es el registro."
+   },
+   "memorizar": "master.cf = procesos; main.cf = mensajes."
+  },
+  "SYBEX-CH07-RQ04": {
+   "idea": [
+    "Cómo se procesa el correo lo decide main.cf."
+   ],
+   "otras": {
+    "A": "master.cf gestiona los procesos.",
+    "B": "/etc/sendmail.cf es de sendmail.",
+    "C": "/etc/aliases son alias, no proceso.",
+    "E": "/var/log/maillog es el registro."
+   },
+   "memorizar": "main.cf = cómo se trata el correo."
+  },
+  "SYBEX-CH07-RQ05": {
+   "idea": [
+    "Mientras los procesa, Postfix guarda los mensajes en /var/spool/postfix."
+   ],
+   "otras": {
+    "A": "/var/spool/mail es el buzón, ya entregado.",
+    "C": "/etc/postfix es configuración.",
+    "D": "/etc/mail no lo usa Postfix."
+   },
+   "memorizar": "en tránsito: spool/postfix; entregado: spool/mail."
+  },
+  "SYBEX-CH07-RQ06": {
+   "idea": [
+    "Ver la cola de salida: mailq."
+   ],
+   "otras": {
+    "A": "newaliases construye la base de datos de alias.",
+    "B": "master es parte interna de Postfix.",
+    "C": "pickup también.",
+    "D": "smtp también."
+   },
+   "memorizar": "mailq = mail queue, la cola."
+  },
+  "SYBEX-CH07-RQ07": {
+   "idea": [
+    "Pasar los alias de texto a base de datos: newaliases."
+   ],
+   "otras": {
+    "B": "master es parte interna de Postfix.",
+    "C": "pickup también.",
+    "D": "smtp también.",
+    "E": "mailq enseña la cola."
+   },
+   "memorizar": "newaliases pasa los alias de texto a base de datos."
+  },
+  "SYBEX-CH07-RQ08": {
+   "idea": [
+    "El texto de partida está en /etc/aliases.",
+    "Ahí se dice qué alias apunta a qué cuenta local."
+   ],
+   "otras": {
+    "B": "master.cf es configuración de procesos.",
+    "C": "main.cf es configuración de mensajes.",
+    "D": "install.cf es configuración de instalación."
+   },
+   "memorizar": "/etc/aliases → newaliases → base de datos."
+  },
+  "SYBEX-CH07-RQ09": {
+   "idea": [
+    "Postfix escribe su registro en /var/log/maillog."
+   ],
+   "otras": {
+    "A": "/var/spool/mail guarda el correo en formato mbox.",
+    "C": "/var/spool/postfix guarda mensajes en proceso.",
+    "D": "/var/log/messages es del sistema, y Postfix no lo usa."
+   },
+   "memorizar": "registro de correo → /var/log/maillog."
+  },
+  "SYBEX-CH07-RQ10": {
+   "idea": [
+    "Cada usuario pone sus recetas en $HOME/.procmailrc."
+   ],
+   "otras": {
+    "A": "/etc/postfix no es de procmail.",
+    "B": "/etc/procmailrc aplica a todo el mundo.",
+    "D": "/etc/aliases son alias de cuentas.",
+    "E": "/users no es el directorio de nadie."
+   },
+   "memorizar": "con punto y en $HOME = solo tuyo."
+  },
+  "SYBEX-CH07-RQ11": {
+   "idea": [
+    "Las recetas para todo el correo entrante van en /etc/procmailrc."
+   ],
+   "otras": {
+    "A": "/etc/postfix no vale para recetas.",
+    "C": "$HOME/.procmailrc solo afecta a ese usuario.",
+    "D": "/etc/aliases tampoco vale.",
+    "E": "/users/.procmailrc tampoco."
+   },
+   "memorizar": "en /etc para todos; en $HOME para uno."
+  },
+  "SYBEX-CH07-RQ12": {
+   "idea": [
+    ":0 c coge todos los mensajes y los copia al directorio messages.",
+    "La c es de copia: el original sigue su camino."
+   ],
+   "otras": {
+    "A": "no rechaza nada.",
+    "B": "no reenvía a ningún alias.",
+    "D": "no los mueve: los copia.",
+    "E": "no borra nada."
+   },
+   "memorizar": "c de copia: se queda con una y sigue."
+  },
+  "SYBEX-CH07-RQ13": {
+   "idea": [
+    "El MDA de la lista es Procmail."
+   ],
+   "otras": {
+    "A": "Sendmail no es un MDA.",
+    "C": "Postfix tampoco.",
+    "D": "Courier tampoco.",
+    "E": "Dovecot tampoco."
+   },
+   "memorizar": "el que entrega al buzón local es procmail."
+  },
+  "SYBEX-CH07-RQ14": {
+   "idea": [
+    "El ajuste que entrega a otro programa es mailbox_command."
+   ],
+   "otras": {
+    "B": "mydestination dice para qué direcciones acepta correo.",
+    "C": "myhost es el nombre del servidor.",
+    "D": "relayhost es a dónde se manda todo lo que sale."
+   },
+   "memorizar": "mailbox_command = quién recibe el correo local."
+  },
+  "SYBEX-CH07-RQ15": {
+   "idea": [
+    "Todo en un archivo es mbox."
+   ],
+   "otras": {
+    "A": "Sendmail es una aplicación.",
+    "B": "Courier también.",
+    "C": "maildir usa un directorio con un archivo por mensaje.",
+    "E": "exim también es una aplicación."
+   },
+   "memorizar": "mbox = una caja; maildir = un directorio."
+  },
+  "SYBEX-CH07-RQ16": {
+   "idea": [
+    "Un archivo por mensaje es maildir."
+   ],
+   "otras": {
+    "A": "Sendmail es una aplicación.",
+    "B": "Courier también.",
+    "D": "mbox mete todo en un solo archivo.",
+    "E": "exim también es una aplicación."
+   },
+   "memorizar": "dir en el nombre: un directorio lleno de mensajes."
+  },
+  "SYBEX-CH07-RQ17": {
+   "idea": [
+    "La configuración de Courier está en /etc/courier."
+   ],
+   "otras": {
+    "A": "/var/spool/mail guarda correo.",
+    "B": "/var/spool/postfix también.",
+    "D": "/etc/mail no lo usa Courier.",
+    "E": "/var/log son registros."
+   },
+   "memorizar": "cada programa, su carpeta en /etc."
+  },
+  "SYBEX-CH07-RQ18": {
+   "idea": [
+    "Cuántos clientes a la vez lo marca MAXDAEMONS.",
+    "Es cuántas copias del programa pueden correr a la vez."
+   ],
+   "otras": {
+    "B": "MAILDIRPATH es dónde están los buzones.",
+    "C": "ADDRESS es en qué interfaz escuchar.",
+    "D": "MAXPERIP limita por cliente, no el total.",
+    "E": "PORT es el puerto TCP."
+   },
+   "memorizar": "MAXDAEMONS = total; MAXPERIP = por cliente."
+  },
+  "SYBEX-CH07-RQ19": {
+   "idea": [
+    "Según la distribución: el archivo dovecot.conf o varios en /etc/dovecot."
+   ],
+   "otras": {
+    "B": "/etc/postfix es de Postfix.",
+    "C": "/var/spool/mail guarda correo.",
+    "E": "/var/spool/postfix también."
+   },
+   "memorizar": "Dovecot: dovecot.conf o /etc/dovecot."
+  },
+  "SYBEX-CH07-RQ20": {
+   "idea": [
+    "Los métodos de autenticación se listan en mechanisms."
+   ],
+   "otras": {
+    "A": "mail_location es dónde está el buzón.",
+    "C": "listen es el puerto TCP de escucha.",
+    "D": "login_max_connections limita usuarios a la vez.",
+    "E": "protocols dice qué protocolos de correo se soportan."
+   },
+   "memorizar": "mechanisms = cómo te autenticas; protocols = por dónde."
+  },
+  "SYBEX-CH08-RQ01": {
+   "idea": [
+    ".edu es un TLD, un dominio de nivel superior.",
+    "Como .gov o .us."
+   ],
+   "otras": {
+    "A": "el dominio raíz es solo un punto, y está por debajo de los TLD.",
+    "C": "un dominio de primer nivel es un subdominio de un TLD.",
+    "D": "ICANN es la organización que elige quién gestiona los TLD.",
+    "E": "un dominio de segundo nivel queda aún más arriba en el árbol."
+   },
+   "memorizar": ".edu, .gov, .us = TLD."
+  },
+  "SYBEX-CH08-RQ02": {
+   "idea": [
+    "Una zona es un trozo del espacio de nombres.",
+    "Vale un dominio de primer nivel con todos sus subdominios o solo con parte.",
+    "También vale la zona raíz, que es la zona de pistas."
+   ],
+   "otras": {
+    "D": "un servidor raíz es una máquina que atiende la zona raíz, no la zona."
+   },
+   "memorizar": "zona = trozo del árbol; servidor = quien lo atiende."
+  },
+  "SYBEX-CH08-RQ03": {
+   "idea": [
+    "Hacen falta dos servidores y uno tiene que ser el primario.",
+    "El segundo puede ser secundario, de caché o de reenvío."
+   ],
+   "otras": {
+    "B": "aquí falta el primario.",
+    "D": "aquí también falta el primario."
+   },
+   "memorizar": "siempre un primario más otro cualquiera."
+  },
+  "SYBEX-CH08-RQ04": {
+   "idea": [
+    "Quien pregunta es el resolutor.",
+    "Mira primero su caché y, si no está, se lo pregunta a otro servidor."
+   ],
+   "otras": {
+    "A": "un servidor de nombres es la máquina que responde.",
+    "B": "la caché es el sitio donde se guardan las respuestas.",
+    "C": "la resolución de nombres es el proceso, no el programa.",
+    "E": "una zona es una porción del espacio de nombres."
+   },
+   "memorizar": "el resolutor pregunta; el servidor responde."
+  },
+  "SYBEX-CH08-RQ05": {
+   "idea": [
+    "Los cinco implementan DNS: BIND, dnsmasq, pdnsd, Bundy y PowerDNS.",
+    "Bundy engaña porque antes se llamaba BIND 10."
+   ],
+   "memorizar": "Bundy = el antiguo BIND 10."
+  },
+  "SYBEX-CH08-RQ06": {
+   "idea": [
+    "El demonio se llama named, en /usr/sbin/."
+   ],
+   "otras": {
+    "A": "bind9 es el nombre del paquete en Ubuntu.",
+    "B": "bind es el nombre del paquete en CentOS.",
+    "D": "named.conf es su archivo de configuración.",
+    "E": "bindutils es el paquete de utilidades en CentOS."
+   },
+   "memorizar": "el paquete es BIND; el demonio, named."
+  },
+  "SYBEX-CH08-RQ07": {
+   "idea": [
+    "En named.conf las cláusulas son options, logging, include y comments."
+   ],
+   "otras": {
+    "D": "named-checkconf es una utilidad que comprueba la sintaxis del archivo."
+   },
+   "memorizar": "checkconf revisa el archivo; no vive dentro de él."
+  },
+  "SYBEX-CH08-RQ08": {
+   "idea": [
+    "Un servidor de solo caché necesita cuatro cosas.",
+    "acl define quién puede usarlo y allow-query aplica esa lista.",
+    "listen-on fija el puerto y recursion yes permite que resuelva por ellos."
+   ],
+   "otras": {
+    "C": "logging conviene, pero no es obligatorio."
+   },
+   "memorizar": "quién, desde dónde, en qué puerto y con recursión."
+  },
+  "SYBEX-CH08-RQ09": {
+   "idea": [
+    "Lo para casi todo menos rndc flush.",
+    "Valen service bind9 stop, rndc stop, systemctl stop named y un kill con SIGTERM.",
+    "Cuál funciona depende de la distribución."
+   ],
+   "otras": {
+    "A": "rndc flush vacía las cachés, pero no para nada."
+   },
+   "memorizar": "flush limpia; stop para."
+  },
+  "SYBEX-CH08-RQ10": {
+   "idea": [
+    "category dice qué mensajes se registran."
+   ],
+   "otras": {
+    "A": "dónde se registran lo dice channel.",
+    "C": "reiniciar BIND no tiene que ver con category.",
+    "D": "el filtrado también es cosa de channel.",
+    "E": "los tamaños tampoco los fija category."
+   },
+   "memorizar": "category = qué; channel = dónde."
+  },
+  "SYBEX-CH08-RQ11": {
+   "idea": [
+    "Como tipo de zona valen master y hint.",
+    "master es el primario y hint es la zona raíz con los servidores raíz."
+   ],
+   "otras": {
+    "B": "el secundario se declara type slave, no secondary.",
+    "D": "la directiva completa es type delegation-only.",
+    "E": "type root no existe."
+   },
+   "memorizar": "master, slave, hint y delegation-only."
+  },
+  "SYBEX-CH08-RQ12": {
+   "idea": [
+    "Las clases válidas son IN, CH y HS.",
+    "IN es Internet, CH es Chaosnet y HS es Hesiod."
+   ],
+   "otras": {
+    "B": "DN está inventada.",
+    "E": "IS también."
+   },
+   "memorizar": "IN, CH y HS; en la práctica siempre IN."
+  },
+  "SYBEX-CH08-RQ13": {
+   "idea": [
+    "La transferencia la pide siempre el secundario.",
+    "Al arrancar, al expirar el tiempo de refresco o si se lo pides con rndc."
+   ],
+   "otras": {
+    "A": "que se reinicie el primario no dispara nada.",
+    "E": "eso es apagar y desmontar el servicio del secundario."
+   },
+   "memorizar": "el secundario tira; el primario no empuja."
+  },
+  "SYBEX-CH08-RQ14": {
+   "idea": [
+    "Según la distribución, las zonas están en /var/named/ o en /etc/bind/."
+   ],
+   "otras": {
+    "A": "/etc/named/ está inventado.",
+    "B": "/var/bind/ también.",
+    "D": "/etc/bind9/ también."
+   },
+   "memorizar": "zonas: /var/named/ o /etc/bind/."
+  },
+  "SYBEX-CH08-RQ15": {
+   "idea": [
+    "El registro que abre la zona es SOA.",
+    "Es el que lleva sus datos de autoridad."
+   ],
+   "otras": {
+    "A": "CNAME es un alias que apunta a otro nombre.",
+    "B": "A da la dirección IPv4 de un host.",
+    "C": "PTR apunta a otro sitio del espacio de nombres, para búsquedas inversas.",
+    "D": "NS dice cuál es el servidor de nombres de la zona."
+   },
+   "memorizar": "SOA = start of authority, el primero de la zona."
+  },
+  "SYBEX-CH08-RQ16": {
+   "idea": [
+    "Una zona inversa va de IP a FQDN.",
+    "Es el camino contrario al habitual."
+   ],
+   "otras": {
+    "A": "eso es un registro de pegamento.",
+    "B": "eso es una transferencia de zona.",
+    "D": "eso es una zona de pistas.",
+    "E": "eso es la definición de zona a secas."
+   },
+   "memorizar": "normal: nombre → IP; inversa: IP → nombre."
+  },
+  "SYBEX-CH08-RQ17": {
+   "idea": [
+    "Cuatro medidas, y ninguna es un calendario.",
+    "Que el servidor solo haga de BIND y que el demonio no corra como root.",
+    "Además, doble horizonte y esconder la versión."
+   ],
+   "otras": {
+    "D": "actualizar una vez al año no vale: hay que hacerlo en cuanto salga la versión."
+   },
+   "memorizar": "actualizar cuando salga, no por calendario."
+  },
+  "SYBEX-CH08-RQ18": {
+   "idea": [
+    "La jaula suele colgar de /chroot/named/ o /chroot/bind/."
+   ],
+   "otras": {
+    "A": "/etc/bind/ se usa en BIND, pero no como raíz de la jaula.",
+    "B": "/etc/named/ tampoco.",
+    "C": "/var/bind/ tampoco."
+   },
+   "memorizar": "la jaula empieza por /chroot/."
+  },
+  "SYBEX-CH08-RQ19": {
+   "idea": [
+    "Los registros los firma la clave de firma de zona.",
+    "Su sigla es ZSK."
+   ],
+   "analogia": "La ZSK firma el contenido y la KSK firma a la ZSK: una cadena de sellos.",
+   "otras": {
+    "A": "la firma digital es el resultado de usar la ZSK.",
+    "B": "la KSK firma la ZSK, no los registros.",
+    "D": "la cadena de confianza encadena zonas de arriba abajo.",
+    "E": "DNSKEY es donde se guarda la KSK."
+   },
+   "memorizar": "ZSK firma la zona; KSK firma la ZSK."
+  },
+  "SYBEX-CH08-RQ20": {
+   "idea": [
+    "Las claves se crean con dnssec-keygen, sean TSIG o DNSSEC."
+   ],
+   "otras": {
+    "B": "dnssec-signzone firma la zona a mano.",
+    "C": "dnssec-dsfromkey crea el registro para la zona padre.",
+    "D": "dnssec-tsig-keygen está inventada.",
+    "E": "tsig-keygen también."
+   },
+   "memorizar": "keygen genera; signzone firma."
+  },
+  "SYBEX-CH09-RQ01": {
+   "idea": [
+    "El que define pregunta y respuesta es HTTP."
+   ],
+   "otras": {
+    "A": "HTML es el formato del documento.",
+    "B": "SSL cifra.",
+    "D": "TLS también cifra."
+   },
+   "memorizar": "HTTP transporta; HTML da forma."
+  },
+  "SYBEX-CH09-RQ02": {
+   "idea": [
+    "El formato de la página lo define HTML."
+   ],
+   "otras": {
+    "B": "SSL cifra.",
+    "C": "HTTP transporta el documento.",
+    "D": "TLS también cifra."
+   },
+   "memorizar": "HTML es el contenido; HTTP, el envío."
+  },
+  "SYBEX-CH09-RQ03": {
+   "idea": [
+    "No encontrado es 404."
+   ],
+   "analogia": "Los 400 son culpa del cliente y los 500, del servidor.",
+   "otras": {
+    "A": "200 significa que fue bien.",
+    "B": "403 es que existe pero no tienes permiso.",
+    "C": "500 es un problema del servidor."
+   },
+   "memorizar": "404 no existe; 403 existe pero no entras."
+  },
+  "SYBEX-CH09-RQ04": {
+   "idea": [
+    "Parar Apache sin cortar conexiones: apache2ctl."
+   ],
+   "otras": {
+    "A": "systemctl para el proceso, pero no de forma ordenada.",
+    "C": "httpd es el servidor en sí.",
+    "D": "apache2 también es el servidor."
+   },
+   "memorizar": "apache2ctl controla; httpd y apache2 sirven."
+  },
+  "SYBEX-CH09-RQ05": {
+   "idea": [
+    "Comprobar la configuración antes de arrancar: apache2ctl."
+   ],
+   "otras": {
+    "A": "systemctl arranca y para, pero no revisa archivos.",
+    "C": "httpd es el servidor en sí.",
+    "D": "apache2 también."
+   },
+   "memorizar": "apache2ctl es la navaja de Apache."
+  },
+  "SYBEX-CH09-RQ06": {
+   "idea": [
+    "La carpeta que se sirve a los clientes es DocumentRoot."
+   ],
+   "otras": {
+    "B": "ServerRoot es dónde está la configuración del servidor.",
+    "C": "Listen son las IP y puertos de escucha.",
+    "D": "DirectoryIndex es qué archivo servir si piden una carpeta."
+   },
+   "memorizar": "DocumentRoot = lo que se ve desde fuera."
+  },
+  "SYBEX-CH09-RQ07": {
+   "idea": [
+    "Para aplicar reglas a una carpeta: <Directory>."
+   ],
+   "otras": {
+    "A": "<VirtualHost> agrupa las reglas de un sitio virtual.",
+    "B": "<IfDefined> depende de que exista una variable de entorno.",
+    "D": "<IfModule> depende de que haya un módulo cargado."
+   },
+   "memorizar": "el nombre del bloque dice a qué se aplica."
+  },
+  "SYBEX-CH09-RQ08": {
+   "idea": [
+    "Qué se escribe en el registro lo decide LogFormat."
+   ],
+   "otras": {
+    "A": "ErrorLog dice dónde está el registro de errores.",
+    "C": "ErrorDocument define los mensajes de error al cliente.",
+    "D": "DocumentRoot es la carpeta que se sirve."
+   },
+   "memorizar": "LogFormat = qué se apunta; ErrorLog = dónde."
+  },
+  "SYBEX-CH09-RQ09": {
+   "idea": [
+    "Lo que pide cada cliente queda en access.log."
+   ],
+   "otras": {
+    "A": "error.log solo guarda errores.",
+    "B": "apache2.conf es configuración.",
+    "D": "httpd.conf también."
+   },
+   "memorizar": "access = accesos; error = fallos."
+  },
+  "SYBEX-CH09-RQ10": {
+   "idea": [
+    "La carpeta web de cada usuario la define UserDir.",
+    "Es el nombre de la carpeta que crean dentro de su directorio personal."
+   ],
+   "otras": {
+    "A": "AuthUserFile es el archivo de autenticación.",
+    "C": "DocumentRoot es la carpeta del servidor.",
+    "D": "LoadModule carga módulos."
+   },
+   "memorizar": "UserDir = la web de cada usuario."
+  },
+  "SYBEX-CH09-RQ11": {
+   "idea": [
+    "ServerName es el dominio de esa web."
+   ],
+   "otras": {
+    "A": "DocumentRoot es una carpeta.",
+    "B": "NameVirtualHost es la dirección IP del servidor físico.",
+    "C": "<VirtualHost> agrupa todas las directivas del sitio."
+   },
+   "memorizar": "dominio → ServerName."
+  },
+  "SYBEX-CH09-RQ12": {
+   "idea": [
+    "Las direcciones en las que escuchar las marca Listen."
+   ],
+   "otras": {
+    "B": "<VirtualHost> agrupa directivas, no define direcciones.",
+    "C": "NameVirtualHost es para el alojamiento por nombre.",
+    "D": "DocumentRoot es una carpeta."
+   },
+   "memorizar": "Listen = dónde escucha el servidor."
+  },
+  "SYBEX-CH09-RQ13": {
+   "idea": [
+    "El archivo de usuarios y contraseñas se crea con htpasswd."
+   ],
+   "otras": {
+    "A": "httpd es el servidor.",
+    "C": "apache2 también.",
+    "D": "mod_auth usa ese archivo, pero no lo crea."
+   },
+   "memorizar": "htpasswd crea; mod_auth consulta."
+  },
+  "SYBEX-CH09-RQ14": {
+   "idea": [
+    "Dónde está ese archivo lo dice AuthUserFile."
+   ],
+   "otras": {
+    "A": "AuthType es el tipo de autenticación.",
+    "B": "AuthName es el texto que se pide al cliente.",
+    "D": "Order restringe por red, no por usuario."
+   },
+   "memorizar": "AuthUserFile apunta al archivo de contraseñas."
+  },
+  "SYBEX-CH09-RQ15": {
+   "idea": [
+    "Sacar el código fuera, a un intérprete externo, es CGI."
+   ],
+   "otras": {
+    "B": "mod_perl interpreta dentro del propio servidor.",
+    "C": "mod_auth es de autenticación.",
+    "D": "mod_php también interpreta dentro."
+   },
+   "memorizar": "CGI sale fuera; los mod_ se quedan dentro."
+  },
+  "SYBEX-CH09-RQ16": {
+   "idea": [
+    "Mandar una extensión a un proceso concreto es AddHandler."
+   ],
+   "otras": {
+    "A": "LoadModule instala el módulo, pero no reparte archivos.",
+    "C": "DocumentRoot es la carpeta que se sirve.",
+    "D": "DirectoryIndex es el archivo por defecto de una carpeta."
+   },
+   "memorizar": "AddHandler = esta extensión, a este proceso."
+  },
+  "SYBEX-CH09-RQ17": {
+   "idea": [
+    "El certificado se indica con SSLCertificateFile."
+   ],
+   "otras": {
+    "A": "DirectoryIndex es el archivo por defecto de una carpeta.",
+    "B": "SSLCertificateKeyFile es la clave, no el certificado.",
+    "C": "SSLEngine decide cuándo se aceptan conexiones SSL."
+   },
+   "memorizar": "CertificateFile el certificado; KeyFile la clave."
+  },
+  "SYBEX-CH09-RQ18": {
+   "idea": [
+    "Un proxy web guarda en caché lo que piden los clientes.",
+    "Y también puede limitar a qué sitios llegan."
+   ],
+   "otras": {
+    "B": "repartir entre varios servidores es un proxy inverso.",
+    "D": "lo que sirve el servidor lo limita DocumentRoot."
+   },
+   "memorizar": "proxy web mira hacia fuera; el inverso, hacia dentro."
+  },
+  "SYBEX-CH09-RQ19": {
+   "idea": [
+    "En Squid la autenticación se ajusta con auth_param."
+   ],
+   "otras": {
+    "A": "mod_auth es de Apache.",
+    "C": "acl define grupos de acceso.",
+    "D": "http_access define las reglas de acceso."
+   },
+   "memorizar": "auth_param autentica; acl y http_access filtran."
+  },
+  "SYBEX-CH09-RQ20": {
+   "idea": [
+    "Lo que vale para todo el servidor va en la sección server."
+   ],
+   "otras": {
+    "A": "location aplica a una carpeta concreta.",
+    "C": "root es dónde están los archivos.",
+    "D": "listen son las IP y puertos de escucha."
+   },
+   "memorizar": "server manda en todo; location solo en su ruta."
+  },
+  "SYBEX-CH10-RQ01": {
+   "idea": [
+    "Los registros de Samba están en /var/log/samba/."
+   ],
+   "otras": {
+    "A": "/etc/smb/ es configuración.",
+    "B": "/etc/samba/ también.",
+    "D": "/var/lib/samba/ guarda las bases de datos de usuarios.",
+    "E": "/etc/samba.d/ también fue configuración."
+   },
+   "memorizar": "/var/log siempre son registros."
+  },
+  "SYBEX-CH10-RQ02": {
+   "idea": [
+    "El principal es smbd, que habla SMB.",
+    "nmbd añade NetBIOS sobre TCP para Windows antiguos y cupsd comparte impresoras."
+   ],
+   "otras": {
+    "C": "el demonio se llama winbindd, con dos des.",
+    "E": "cifsd está inventado."
+   },
+   "memorizar": "smbd archivos, nmbd nombres, cupsd impresión."
+  },
+  "SYBEX-CH10-RQ03": {
+   "idea": [
+    "El archivo principal es smb.conf."
+   ],
+   "otras": {
+    "B": "samba.conf está inventado.",
+    "C": "mount.cifs monta un recurso desde el cliente.",
+    "D": "/etc/samba.d es un directorio en desuso.",
+    "E": "smbcontrol gestiona el demonio smbd."
+   },
+   "memorizar": "el archivo principal de Samba es smb.conf."
+  },
+  "SYBEX-CH10-RQ04": {
+   "idea": [
+    "Después de tocar la configuración, lo siguiente es comprobar la sintaxis.",
+    "Eso lo hace testparm."
+   ],
+   "otras": {
+    "A": "recargar sin comprobar es ir al revés.",
+    "B": "reiniciar el demonio no hace falta.",
+    "C": "smbstatus enseña las conexiones actuales.",
+    "E": "crear el directorio o la cola no es el paso siguiente."
+   },
+   "memorizar": "primero testparm, después recargar."
+  },
+  "SYBEX-CH10-RQ05": {
+   "idea": [
+    "La directiva es workgroup.",
+    "Se le pone el grupo de trabajo o dominio de Windows, no un FQDN."
+   ],
+   "otras": {
+    "A": "no es un nombre de directiva válido.",
+    "B": "adgroup está inventada.",
+    "C": "tampoco existe.",
+    "D": "tampoco."
+   },
+   "memorizar": "workgroup lleva el nombre de Windows, no un FQDN."
+  },
+  "SYBEX-CH10-RQ06": {
+   "idea": [
+    "passdb backend acepta tdbsam, smbpasswd y ldapsam.",
+    "Son las bases de datos de cuentas, que suelen vivir en /var/lib/samba/."
+   ],
+   "otras": {
+    "B": "ads es un valor de la directiva security.",
+    "E": "domain también es de security."
+   },
+   "memorizar": "passdb backend = dónde están las cuentas."
+  },
+  "SYBEX-CH10-RQ07": {
+   "idea": [
+    "Un recurso compartido vive bajo una sección con su propio nombre, como [myshare]."
+   ],
+   "otras": {
+    "A": "[global] son las directivas que valen para todo.",
+    "B": "[netlogins] es para cuando actúa de controlador de dominio.",
+    "D": "[printers] es para impresoras.",
+    "E": "[profiles] es para perfiles móviles."
+   },
+   "memorizar": "el nombre de la sección es el nombre del recurso."
+  },
+  "SYBEX-CH10-RQ08": {
+   "idea": [
+    "Si hace falta contraseña lo marca public.",
+    "public = no exige contraseña; public = yes no la pide."
+   ],
+   "otras": {
+    "B": "browseable decide si el recurso se ve en la lista.",
+    "C": "guest only limita a conexiones de invitado.",
+    "D": "writable es sobre escribir, no sobre entrar.",
+    "E": "read only es lo mismo al revés."
+   },
+   "memorizar": "public decide si se pide contraseña."
+  },
+  "SYBEX-CH10-RQ09": {
+   "idea": [
+    "Entrar a un recurso como si fuera FTP: smbclient."
+   ],
+   "otras": {
+    "A": "pdbedit gestiona las bases de datos de usuarios.",
+    "C": "smbpasswd gestiona smbpasswd o tdbsam.",
+    "D": "rpcclient ejecuta funciones RPC de Microsoft.",
+    "E": "ftp se conecta a servidores FTP de verdad."
+   },
+   "memorizar": "smbclient = cliente de línea de comandos de Samba."
+  },
+  "SYBEX-CH10-RQ10": {
+   "idea": [
+    "Sirven las cinco cosas.",
+    "Subir log level, mirar qué se ofrece con smbclient -L, probar la red entre ambos.",
+    "Y además pasar testparm y ver si los demonios están vivos."
+   ],
+   "memorizar": "de fuera hacia dentro: red, demonios, configuración, registro."
+  },
+  "SYBEX-CH10-RQ11": {
+   "idea": [
+    "Quien atiende las peticiones de montaje es mountd."
+   ],
+   "otras": {
+    "A": "portmapper registra servicios RPC en sus puertos.",
+    "B": "rpc.lockd da el bloqueo de archivos desde el kernel.",
+    "C": "rpcbind es el mismo que portmapper, con otro nombre.",
+    "D": "statd acompaña a lockd en el bloqueo."
+   },
+   "memorizar": "mountd monta; rpcbind solo reparte puertos."
+  },
+  "SYBEX-CH10-RQ12": {
+   "idea": [
+    "La configuración es /etc/exports, en /etc/.",
+    "Y se puede ampliar con archivos .exports dentro de /etc/exports.d/."
+   ],
+   "otras": {
+    "B": "/etc/exports/ como directorio está inventado.",
+    "D": "/proc/fs/nfs/ enseña las exportaciones en uso ahora.",
+    "E": "/var/lib/nfs/ guarda xtab, etab y rmtab."
+   },
+   "memorizar": "se configura en /etc/exports y /etc/exports.d/."
+  },
+  "SYBEX-CH10-RQ13": {
+   "idea": [
+    "Lo normal es compartir subdirectorios de /srv/ o de /var/."
+   ],
+   "otras": {
+    "A": "/ no se comparte nunca.",
+    "B": "/etc/ tampoco.",
+    "C": "/proc/ no tiene sentido: son procesos."
+   },
+   "memorizar": "comparte datos, nunca el sistema."
+  },
+  "SYBEX-CH10-RQ14": {
+   "idea": [
+    "Para solo lectura: ro y async.",
+    "ro lo hace de solo lectura y async le da rendimiento."
+   ],
+   "otras": {
+    "B": "rw es lectura y escritura.",
+    "D": "sync encaja mejor con lectura y escritura.",
+    "E": "subtree_check comprueba permisos de directorios superiores."
+   },
+   "memorizar": "ro + async para leer; rw + sync para escribir."
+  },
+  "SYBEX-CH10-RQ15": {
+   "idea": [
+    "De recursos NFS hablan exportfs y showmount."
+   ],
+   "otras": {
+    "B": "mount.nfs monta desde el cliente.",
+    "C": "rpcinfo informa de servicios RPC.",
+    "E": "smbstatus es de Samba."
+   },
+   "memorizar": "exportfs desde el servidor; showmount, quién monta."
+  },
+  "SYBEX-CH10-RQ16": {
+   "idea": [
+    "Para ver el detalle: exportfs -v."
+   ],
+   "otras": {
+    "A": "-a exporta todo lo de /etc/exports.",
+    "B": "-o exporta algo definido en la propia línea.",
+    "C": "-r vuelve a exportar lo configurado.",
+    "D": "-u deja de exportar."
+   },
+   "memorizar": "-v de verbose, el único que solo mira."
+  },
+  "SYBEX-CH10-RQ17": {
+   "idea": [
+    "Servidores FTP: pure-ftpd y vsftpd."
+   ],
+   "otras": {
+    "A": "ftp es un cliente de línea de comandos.",
+    "D": "FileZilla es un cliente con ventanas.",
+    "E": "lftp también es cliente."
+   },
+   "memorizar": "la d final delata al demonio."
+  },
+  "SYBEX-CH10-RQ18": {
+   "idea": [
+    "En pasivo, el que abre las conexiones es solo el cliente.",
+    "Siempre hay dos conexiones, de datos y de comandos, en pasivo y en activo."
+   ],
+   "otras": {
+    "A": "en pasivo el servidor no abre nada.",
+    "B": "tampoco es solo el servidor.",
+    "E": "los puertos 20 y 21 son los del modo activo."
+   },
+   "memorizar": "pasivo = el servidor espera, el cliente abre."
+  },
+  "SYBEX-CH10-RQ19": {
+   "idea": [
+    "Para conexiones anónimas se usan anonymous y ftp.",
+    "En vsftpd, el usuario ftp se fija con ftp_username."
+   ],
+   "otras": {
+    "B": "vsftpd es el demonio, no un usuario.",
+    "C": "los nombres individuales no son anónimos.",
+    "D": "anon está inventado."
+   },
+   "memorizar": "anónimo entra como anonymous; el sistema lo trata como ftp."
+  },
+  "SYBEX-CH10-RQ20": {
+   "idea": [
+    "En vsftpd hacen falta write_enable=YES, anon_upload_enable=YES y anon_mkdir_write_enable=YES.",
+    "En pure-ftpd la directiva es AnonymousCantUpload no."
+   ],
+   "otras": {
+    "A": "anonymous_upload=YES está inventada."
+   },
+   "memorizar": "vsftpd pide tres directivas; pure-ftpd, una."
+  },
+  "SYBEX-CH11-RQ01": {
+   "idea": [
+    "DHCPd se configura en el archivo /etc/dhcp/dhcpd.conf."
+   ],
+   "otras": {
+    "A": "/etc/dhcpd.d/ sería una carpeta, y DHCPd no usa carpeta.",
+    "C": "isc-dhcp-server es el nombre del paquete en Debian.",
+    "D": "/etc/services lista puertos TCP y UDP."
+   },
+   "memorizar": "un solo archivo: /etc/dhcp/dhcpd.conf."
+  },
+  "SYBEX-CH11-RQ02": {
+   "idea": [
+    "El router predeterminado se reparte con la opción router."
+   ],
+   "otras": {
+    "A": "smtp-server reparte el servidor de correo.",
+    "B": "broadcast-address es la dirección de difusión.",
+    "D": "range es el conjunto de direcciones a repartir."
+   },
+   "memorizar": "cada opción se llama como lo que reparte."
+  },
+  "SYBEX-CH11-RQ03": {
+   "idea": [
+    "El conjunto de direcciones que se reparten es range."
+   ],
+   "otras": {
+    "A": "smtp-server es el servidor de correo.",
+    "B": "broadcast-address es la dirección de difusión.",
+    "C": "router es la salida predeterminada."
+   },
+   "memorizar": "range = de aquí a aquí."
+  },
+  "SYBEX-CH11-RQ04": {
+   "idea": [
+    "Las concesiones en curso están en /var/lib/dhcp/dhcpd.leases."
+   ],
+   "analogia": "En /etc está lo que decides tú; en /var, lo que el servicio va anotando.",
+   "otras": {
+    "B": "/etc/dhcp/dhcpd.conf es la configuración.",
+    "C": "dhcpd.leases no vive en /etc/dhcp.",
+    "D": "dhcpd.conf no guarda concesiones."
+   },
+   "memorizar": "conf en /etc; leases en /var."
+  },
+  "SYBEX-CH11-RQ05": {
+   "idea": [
+    "La dirección MAC del cliente se declara con hardware."
+   ],
+   "otras": {
+    "A": "range es el conjunto de direcciones repartidas.",
+    "B": "fixed-address es la IP fija que le das, no su MAC.",
+    "C": "host-name es el nombre que le asignas."
+   },
+   "memorizar": "hardware = MAC; fixed-address = IP."
+  },
+  "SYBEX-CH11-RQ06": {
+   "idea": [
+    "Los ajustes de un cliente concreto se agrupan en host."
+   ],
+   "otras": {
+    "B": "group agrupa varios hosts a la vez.",
+    "C": "range reparte direcciones a todos.",
+    "D": "fixed-address es un ajuste suelto, no un grupo."
+   },
+   "memorizar": "host = uno; group = varios."
+  },
+  "SYBEX-CH11-RQ07": {
+   "idea": [
+    "La máscara de subred es la opción 1."
+   ],
+   "otras": {
+    "B": "la 3 es el router predeterminado.",
+    "C": "la 5 es el servidor de nombres.",
+    "D": "la 6 es el servidor de dominio."
+   },
+   "memorizar": "1 máscara, 3 router, 5 nombres, 6 dominio."
+  },
+  "SYBEX-CH11-RQ08": {
+   "idea": [
+    "Los archivos locales los usa pam_unix.so."
+   ],
+   "otras": {
+    "A": "pam_ldap.so usa un directorio LDAP de red.",
+    "B": "pam_userdb.so usa una base de datos.",
+    "D": "pam_sss.so usa el SSSD para directorios remotos."
+   },
+   "memorizar": "unix = /etc/passwd y /etc/shadow, en local."
+  },
+  "SYBEX-CH11-RQ09": {
+   "idea": [
+    "Para autenticar contra un directorio de red: pam_ldap.so."
+   ],
+   "otras": {
+    "A": "pam_unix.so usa el archivo local /etc/passwd.",
+    "C": "pam_userdb.so usa una base de datos local.",
+    "D": "pam_access.so da inicios de sesión anónimos para FTP."
+   },
+   "memorizar": "directorio de red = LDAP."
+  },
+  "SYBEX-CH11-RQ10": {
+   "idea": [
+    "pam_cracklib.so comprueba si las contraseñas son débiles."
+   ],
+   "otras": {
+    "A": "pam_limits.so limita recursos, como archivos abiertos o tiempo de CPU.",
+    "B": "pam_unix.so solo hace la autenticación estándar.",
+    "D": "pam_userdb.so autentica contra una base de datos local."
+   },
+   "memorizar": "crack en el nombre: intenta romper tu contraseña."
+  },
+  "SYBEX-CH11-RQ11": {
+   "idea": [
+    "Con un solo archivo, PAM usa /etc/pam.conf."
+   ],
+   "otras": {
+    "A": "/etc/pam.d es una carpeta, no un archivo.",
+    "C": "/etc/pam.d/pam.conf mezcla los dos métodos y no existe.",
+    "D": "/etc/pamd.conf no existe."
+   },
+   "memorizar": "archivo único pam.conf; carpeta pam.d."
+  },
+  "SYBEX-CH11-RQ12": {
+   "idea": [
+    "Un archivo por aplicación: la carpeta /etc/pam.d."
+   ],
+   "otras": {
+    "B": "/etc/pam.conf es el método del archivo único.",
+    "C": "/etc/pam.d/pam.conf no existe.",
+    "D": "/etc/pamd.conf tampoco."
+   },
+   "memorizar": "la d de pam.d es de directorio."
+  },
+  "SYBEX-CH11-RQ13": {
+   "idea": [
+    "El que corta en seco al fallar es requisite.",
+    "Si falla, no se mira ninguna entrada más."
+   ],
+   "analogia": "required suspende pero deja acabar el examen; requisite te echa del aula.",
+   "otras": {
+    "A": "sufficient da por buena la autenticación si acierta, pero no corta si falla.",
+    "B": "required marca el fallo y sigue comprobando.",
+    "D": "optional ni siquiera bloquea lo siguiente."
+   },
+   "memorizar": "requisite corta al fallar; required apunta y sigue."
+  },
+  "SYBEX-CH11-RQ14": {
+   "idea": [
+    "Quien registra los intentos es el tipo session."
+   ],
+   "otras": {
+    "A": "account solo verifica la cuenta.",
+    "C": "password gestiona contraseñas.",
+    "D": "auth autentica, pero no anota."
+   },
+   "memorizar": "session abre y cierra sesión, y lo apunta."
+  },
+  "SYBEX-CH11-RQ15": {
+   "idea": [
+    "La plantilla de atributos es la clase de objeto."
+   ],
+   "otras": {
+    "A": "el ID de objeto identifica, pero no es plantilla.",
+    "B": "el esquema define la estructura de la base de datos.",
+    "C": "el árbol LDAP contiene los objetos reales."
+   },
+   "memorizar": "clase = plantilla; atributos = contenido."
+  },
+  "SYBEX-CH11-RQ16": {
+   "idea": [
+    "Los datos guardados de un objeto son sus atributos."
+   ],
+   "otras": {
+    "B": "la clase de objeto es la plantilla, no los valores.",
+    "C": "el ID de objeto es un número único.",
+    "D": "el esquema define objetos y sus relaciones."
+   },
+   "memorizar": "los atributos son los valores de verdad."
+  },
+  "SYBEX-CH11-RQ17": {
+   "idea": [
+    "El nombre único de cada objeto es el nombre distinguido.",
+    "Lleva a la vez su nombre y su sitio en el árbol."
+   ],
+   "otras": {
+    "A": "el ID de objeto es único, pero no es un nombre.",
+    "B": "los atributos no son únicos.",
+    "C": "la clase de objeto la comparten muchos objetos."
+   },
+   "memorizar": "nombre distinguido = nombre más ruta."
+  },
+  "SYBEX-CH11-RQ18": {
+   "idea": [
+    "El servidor de OpenLDAP es slapd."
+   ],
+   "otras": {
+    "A": "slurpd solo interviene al replicar servidores.",
+    "C": "slapadd añade objetos.",
+    "D": "slapindex reindexa."
+   },
+   "memorizar": "la d final: slapd es el demonio."
+  },
+  "SYBEX-CH11-RQ19": {
+   "idea": [
+    "Desde el servidor se añaden objetos con slapadd."
+   ],
+   "otras": {
+    "A": "ldapadd es un cliente.",
+    "B": "slapindex solo reindexa lo que ya existe.",
+    "D": "ldapmodify también es un cliente."
+   },
+   "memorizar": "slap… servidor; ldap… cliente."
+  },
+  "SYBEX-CH11-RQ20": {
+   "idea": [
+    "Desde el cliente se añaden objetos con ldapadd."
+   ],
+   "otras": {
+    "A": "slapadd añade, pero desde el servidor, tocando los archivos.",
+    "C": "ldapmodify es cliente, pero solo modifica lo existente.",
+    "D": "slapindex reindexa desde el servidor."
+   },
+   "memorizar": "ldapadd desde fuera; slapadd desde dentro."
+  },
+  "SYBEX-CH12-RQ01": {
+   "idea": [
+    "Cualquier vía de entrada para un atacante es un vector de ataque."
+   ],
+   "otras": {
+    "B": "un puerto abierto es solo un tipo de vulnerabilidad.",
+    "C": "una aplicación abierta también.",
+    "D": "una comunicación no segura también."
+   },
+   "memorizar": "vector de ataque = por dónde entran."
+  },
+  "SYBEX-CH12-RQ02": {
+   "idea": [
+    "Los puertos y sus aplicaciones están en /etc/services."
+   ],
+   "otras": {
+    "A": "/etc/ssh/sshd_conf configura OpenSSH.",
+    "B": "/etc/openvpn configura OpenVPN.",
+    "D": "/proc/sys/net/ipv4 son ajustes de la pila IPv4 del kernel."
+   },
+   "memorizar": "qué puerto es qué → /etc/services."
+  },
+  "SYBEX-CH12-RQ03": {
+   "idea": [
+    "Primero la dirección y luego el puerto: telnet dirección puerto."
+   ],
+   "otras": {
+    "A": "el orden está cambiado.",
+    "C": "los dos puntos no son el formato de telnet.",
+    "D": "telnet acepta cualquier puerto, no solo el 23."
+   },
+   "memorizar": "telnet dirección puerto, en ese orden."
+  },
+  "SYBEX-CH12-RQ04": {
+   "idea": [
+    "Los puertos a la escucha se listan con netstat."
+   ],
+   "otras": {
+    "A": "telnet prueba un puerto cada vez.",
+    "B": "iptables filtra paquetes en el kernel.",
+    "C": "ssh solo se conecta al puerto 22."
+   },
+   "memorizar": "¿quién escucha aquí? → netstat."
+  },
+  "SYBEX-CH12-RQ05": {
+   "idea": [
+    "Escanear varios puertos con netcat es -z."
+   ],
+   "otras": {
+    "A": "-v solo da más detalle.",
+    "C": "-l pone netcat a escuchar.",
+    "D": "-6 usa direcciones IPv6."
+   },
+   "memorizar": "-z escanea; -l escucha."
+  },
+  "SYBEX-CH12-RQ06": {
+   "idea": [
+    "La huella del sistema remoto se pide con -A."
+   ],
+   "otras": {
+    "B": "-sT escanea puertos TCP.",
+    "C": "-sU escanea puertos UDP.",
+    "D": "-p indica el rango de puertos."
+   },
+   "memorizar": "-A lo averigua todo, incluida la huella."
+  },
+  "SYBEX-CH12-RQ07": {
+   "idea": [
+    "Los ataques los simulan los Network Vulnerability Tests.",
+    "Vienen con OpenVAS y reproducen ataques conocidos."
+   ],
+   "otras": {
+    "A": "la NVD define vulnerabilidades, pero no las simula.",
+    "B": "el repositorio de software no guarda vulnerabilidades.",
+    "D": "la interfaz web solo sirve para manejar OpenVAS."
+   },
+   "memorizar": "los NVT son los ataques de mentira."
+  },
+  "SYBEX-CH12-RQ08": {
+   "idea": [
+    "Avisar de un ataque en marcha es cosa de un IDS."
+   ],
+   "otras": {
+    "A": "un escáner de puertos enseña vías abiertas, no ataques.",
+    "B": "un NVT simula ataques, no los detecta.",
+    "C": "una VPN cifra la conexión."
+   },
+   "memorizar": "escáner busca puertas; IDS ve a quien entra."
+  },
+  "SYBEX-CH12-RQ09": {
+   "idea": [
+    "Las reglas de fail2ban están en jail.conf, dentro de /etc/fail2ban.",
+    "Ahí se define qué eventos hay que vigilar."
+   ],
+   "otras": {
+    "A": "fail2ban.conf no es donde están las reglas.",
+    "C": "pwdfail no es ese archivo.",
+    "D": "error.log tampoco."
+   },
+   "memorizar": "jail.conf = la cárcel y sus normas."
+  },
+  "SYBEX-CH12-RQ10": {
+   "idea": [
+    "El que vigila la red es Snort."
+   ],
+   "otras": {
+    "B": "OpenVPN hace un túnel cifrado.",
+    "C": "OpenSSH da un canal seguro con un servidor.",
+    "D": "OpenVAS busca vulnerabilidades, pero no vigila paquetes."
+   },
+   "memorizar": "Snort olfatea la red."
+  },
+  "SYBEX-CH12-RQ11": {
+   "idea": [
+    "Ver los paquetes en pantalla es el modo analizador."
+   ],
+   "otras": {
+    "A": "el modo de registro los guarda en un archivo.",
+    "B": "el modo NIDS solo informa de eventos de vulnerabilidad.",
+    "D": "el modo de línea de comandos no los muestra por defecto."
+   },
+   "memorizar": "sniffer mira; logging apunta; NIDS avisa."
+  },
+  "SYBEX-CH12-RQ12": {
+   "idea": [
+    "HOME_NET son las direcciones de casa, las que hay que vigilar."
+   ],
+   "otras": {
+    "A": "las remotas son EXTERNAL_NET.",
+    "B": "no es la dirección del propio host.",
+    "D": "tampoco es una carpeta."
+   },
+   "memorizar": "HOME_NET es lo de dentro; EXTERNAL_NET, lo de fuera."
+  },
+  "SYBEX-CH12-RQ13": {
+   "idea": [
+    "La flecha marca el sentido: 10.0.0.1 -> 10.0.0.2."
+   ],
+   "otras": {
+    "A": "<- va al revés.",
+    "B": "también está del revés.",
+    "C": "<> vale para los dos sentidos."
+   },
+   "memorizar": "-> un sentido; <> los dos."
+  },
+  "SYBEX-CH12-RQ14": {
+   "idea": [
+    "IPv4 tiene tres rangos privados.",
+    "Los de 10, los de 172.16 a 172.31 y los de 192.168."
+   ],
+   "otras": {
+    "A": "dos se queda corto.",
+    "C": "cuatro se pasa.",
+    "D": "haberlos, haylos."
+   },
+   "memorizar": "privados: 10.0.0.0, 172.16.0.0 y 192.168.0.0."
+  },
+  "SYBEX-CH12-RQ15": {
+   "idea": [
+    "Las de enlace local empiezan por fe80.",
+    "El resto suele salir de la dirección MAC."
+   ],
+   "otras": {
+    "B": "ff02 es multidifusión para routers.",
+    "C": "ff05 es multidifusión para servidores DHCP.",
+    "D": "aabb no está reservado."
+   },
+   "memorizar": "fe80 = enlace local; ff = multidifusión."
+  },
+  "SYBEX-CH12-RQ16": {
+   "idea": [
+    "Salir a Internet con direcciones privadas se hace con NAT."
+   ],
+   "otras": {
+    "A": "SSH cifra la conexión.",
+    "B": "telnet va en texto plano.",
+    "D": "un IDS detecta atacantes, no conecta."
+   },
+   "memorizar": "NAT traduce privada a pública."
+  },
+  "SYBEX-CH12-RQ17": {
+   "idea": [
+    "Las reglas del cortafuegos se escriben con iptables."
+   ],
+   "otras": {
+    "A": "nc solo comunica.",
+    "C": "netstat mira el estado de los puertos.",
+    "D": "nmap también solo mira."
+   },
+   "memorizar": "el cortafuegos se toca con iptables."
+  },
+  "SYBEX-CH12-RQ18": {
+   "idea": [
+    "Añadir una regla es -A."
+   ],
+   "otras": {
+    "A": "-L lista las que hay.",
+    "B": "-F las vacía.",
+    "D": "-j dice qué hacer con el paquete."
+   },
+   "memorizar": "-A añade, -L lista, -F limpia."
+  },
+  "SYBEX-CH12-RQ19": {
+   "idea": [
+    "REJECT descarta y además avisa al origen con un ICMP."
+   ],
+   "analogia": "DROP es no abrir la puerta; REJECT es abrir y decir que no.",
+   "otras": {
+    "B": "DROP descarta en silencio.",
+    "C": "ACCEPT deja pasar.",
+    "D": "LOG deja pasar y además apunta."
+   },
+   "memorizar": "REJECT contesta; DROP calla."
+  },
+  "SYBEX-CH12-RQ20": {
+   "idea": [
+    "La política por defecto de una cadena se pone con -P."
+   ],
+   "otras": {
+    "B": "-j es la acción de una regla concreta.",
+    "C": "-L solo lista.",
+    "D": "-F borra todas las reglas."
+   },
+   "memorizar": "-P de política; -j de salto."
+  },
+  "ENI-CH01-Q01": {
+   "idea": [
+    "Sin sistema de archivos, el disco es una tira de bytes sin sentido.",
+    "Él es quien organiza: lleva los nombres y sabe dónde está cada cosa."
+   ],
+   "analogia": "Una cinta magnética es el ejemplo contrario: todo seguido y sin poder cambiar un archivo; hay que borrar y reescribir.",
+   "memorizar": "el sistema de archivos pone nombres y orden."
+  },
+  "ENI-CH01-Q02": {
+   "idea": [
+    "Ninguno.",
+    "No existen físicamente: viven en memoria y se montan sobre un directorio del sistema de archivos real."
+   ],
+   "memorizar": "pseudosistema de archivos = memoria, no disco."
+  },
+  "ENI-CH01-Q03": {
+   "idea": [
+    "El azar.",
+    "Se asignan solos al crear el sistema de archivos, y su única garantía son 128 bits aleatorios."
+   ],
+   "memorizar": "el UUID es único por probabilidad, no por registro."
+  },
+  "ENI-CH01-Q04": {
+   "idea": [
+    "Con escritura asíncrona.",
+    "Los datos pasan primero por memoria y luego bajan al disco.",
+    "Es lo normal en un montaje, pero si se corta la corriente se pierde lo que quedara en memoria."
+   ],
+   "memorizar": "asíncrono va rápido, pero arriesga lo pendiente."
+  },
+  "ENI-CH01-Q05": {
+   "idea": [
+    "Porque comprobar exige desmontar, y la raíz no se deja.",
+    "Tiene programas en ejecución, a menudo hasta los propios comandos de comprobación.",
+    "La salida es forzarla en el reinicio: con e2fsck o con shutdown y su opción -F."
+   ],
+   "memorizar": "la raíz se comprueba al arrancar, no en caliente."
+  },
+  "ENI-CH01-Q06": {
+   "idea": [
+    "lsdev no sabe nada por sí mismo.",
+    "Lee lo que necesita de /proc/interrupts, /proc/ioports y /proc/dma."
+   ],
+   "memorizar": "muchos comandos solo leen los pseudosistemas de archivos."
+  },
+  "ENI-CH01-Q07": {
+   "idea": [
+    "Porque comprimido, una pérdida parcial estropea mucho más.",
+    "En cinta, sin comprimir solo se pierden los archivos de la zona dañada."
+   ],
+   "memorizar": "comprimir concentra el daño."
+  },
+  "ENI-CH01-Q08": {
+   "idea": [
+    "No hace falta montarlo.",
+    "dd copia bloques y trata con el hardware, no con archivos.",
+    "Montar solo hace falta si quieres copiar archivos concretos."
+   ],
+   "memorizar": "dd copia bloques; montar es para archivos."
+  },
+  "ENI-CH01-Q09": {
+   "idea": [
+    "Tres como mínimo.",
+    "Dos para datos y uno para la paridad.",
+    "Si añades un disco de recambio, cuatro."
+   ],
+   "memorizar": "RAID 5: tres discos; con recambio, cuatro."
+  },
+  "ENI-CH01-Q10": {
+   "idea": [
+    "En el uso diario, ninguna diferencia.",
+    "Los dos llevan sistema de archivos y se montan en un directorio.",
+    "La diferencia es que el volumen lógico se agranda con lvextend.",
+    "Y luego hay que estirar el sistema de archivos aparte, con resize2fs."
+   ],
+   "memorizar": "el volumen lógico crece; la partición, no."
+  },
+  "ENI-CH02-Q01": {
+   "idea": [
+    "Daemon y servicio son la misma cosa, en dos idiomas.",
+    "Es un programa residente esperando eventos del sistema.",
+    "Un nivel de ejecución describe qué servicios deben estar en marcha o parados."
+   ],
+   "memorizar": "daemon = servicio; el nivel dice cuáles corren."
+  },
+  "ENI-CH02-Q02": {
+   "idea": [
+    "reload gasta menos.",
+    "restart equivale a un stop seguido de un start: mata los procesos y los levanta.",
+    "reload los deja vivos y les hace releer su configuración, normalmente con un signal 1 (hup)."
+   ],
+   "memorizar": "reload relee; restart mata y revive."
+  },
+  "ENI-CH02-Q03": {
+   "idea": [
+    "El script rc.local.",
+    "Se ejecuta en el arranque después de todos los del nivel de ejecución actual."
+   ],
+   "memorizar": "rc.local va siempre el último."
+  },
+  "ENI-CH02-Q04": {
+   "idea": [
+    "Todos los mensajes que el kernel lleva generando desde que arrancó.",
+    "Al principio no tiene ni terminal ni archivo, así que los guarda en el kernel ring buffer.",
+    "dmesg vuelca ese contenido por la salida estándar."
+   ],
+   "memorizar": "dmesg es la memoria de mensajes del kernel."
+  },
+  "ENI-CH02-Q05": {
+   "idea": [
+    "Con un enlace simbólico.",
+    "El enlace duro no vale: no puede apuntar fuera de su propio sistema de archivos.",
+    "Y esos dos archivos no siempre están en el mismo."
+   ],
+   "memorizar": "para cruzar sistemas de archivos, enlace simbólico."
+  },
+  "ENI-CH02-Q06": {
+   "idea": [
+    "En el Master Boot Record.",
+    "Está antes de la tabla de particiones y es lo primero que lee la BIOS."
+   ],
+   "memorizar": "el gestor de arranque va en el MBR."
+  },
+  "ENI-CH02-Q07": {
+   "idea": [
+    "Para poder diagnosticar sin estropear más.",
+    "Si esa partición tiene problemas, en sólo lectura las herramientas no dañan lo que tocan."
+   ],
+   "memorizar": "ro protege mientras se diagnostica."
+  },
+  "ENI-CH02-Q08": {
+   "idea": [
+    "El parámetro init=.",
+    "Dice qué ejecutable arranca justo después de cargar el kernel.",
+    "Si ahí pones un shell, entras sin ningún servicio; también sirve si has perdido la contraseña."
+   ],
+   "memorizar": "init= elige el primer programa del sistema."
+  },
+  "ENI-CH02-Q09": {
+   "idea": [
+    "Hay que tocar el archivo inittab.",
+    "Tiene una línea con la palabra clave initdefault."
+   ],
+   "memorizar": "initdefault fija el nivel de arranque."
+  },
+  "ENI-CH02-Q10": {
+   "idea": [
+    "Porque el gestor de arranque no está dentro de ninguna partición.",
+    "Vive fuera, así que las herramientas de archivos no lo copian."
+   ],
+   "memorizar": "copiar archivos no copia el gestor de arranque."
+  },
+  "ENI-CH03-Q01": {
+   "idea": [
+    "El comando ifconfig.",
+    "Según los parámetros pone la dirección IP principal, la máscara, la dirección MAC o una IP secundaria."
+   ],
+   "memorizar": "ifconfig también añade direcciones secundarias."
+  },
+  "ENI-CH03-Q02": {
+   "idea": [
+    "No.",
+    "La tabla de enrutamiento es única e independiente de las interfaces.",
+    "Si defines dos, los scripts las leen una tras otra y solo se queda la última."
+   ],
+   "memorizar": "puerta de enlace predeterminada: una sola para todo el sistema."
+  },
+  "ENI-CH03-Q03": {
+   "idea": [
+    "Te ahorras las peticiones ARP: el sistema ya conoce la asociación.",
+    "En rendimiento apenas se nota: las peticiones ARP son pequeñas y rápidas.",
+    "Lo que sí ganas es discreción, porque evitas esos broadcasts."
+   ],
+   "memorizar": "/etc/ethers ahorra ruido, no tiempo."
+  },
+  "ENI-CH03-Q04": {
+   "idea": [
+    "Gana la opción más restrictiva, así que se ignora hosts.deny.",
+    "Lo normal es tener solo uno de los dos archivos."
+   ],
+   "memorizar": "en conflicto manda hosts.allow."
+  },
+  "ENI-CH03-Q05": {
+   "idea": [
+    "En realidad, no.",
+    "Ve la interfaz, pero no dice nada del SSID, la calidad de la señal ni el cifrado.",
+    "Para eso está iwconfig, que además permite configurarla."
+   ],
+   "memorizar": "ifconfig lo de red; iwconfig lo inalámbrico."
+  },
+  "ENI-CH03-Q06": {
+   "idea": [
+    "Porque evita las resoluciones de nombre inversas.",
+    "Si la dirección no tiene registro DNS, el comando se queda esperando al timeout del resolver.",
+    "Con -n no busca nombres y contesta al momento."
+   ],
+   "memorizar": "-n = sin nombres y sin esperas."
+  },
+  "ENI-CH03-Q07": {
+   "idea": [
+    "Con el comando lsof.",
+    "Devuelve el archivo abierto, el proceso responsable y el usuario dueño de ese proceso."
+   ],
+   "memorizar": "¿quién tiene esto abierto? → lsof."
+  },
+  "ENI-CH03-Q08": {
+   "idea": [
+    "Para capturar tramas.",
+    "La usan tcpdump y wireshark, entre otros.",
+    "Al compartir librería comparten formato: capturas con uno y miras con otro."
+   ],
+   "memorizar": "libpcap es el formato común de las capturas."
+  },
+  "ENI-CH03-Q09": {
+   "idea": [
+    "Porque el cliente todavía no tiene dirección IP.",
+    "Y para enviar un unicast hace falta una dirección de destino."
+   ],
+   "memorizar": "sin dirección no hay unicast posible."
+  },
+  "ENI-CH03-Q10": {
+   "idea": [
+    "El de la subnet.",
+    "Los parámetros generales valen para todos, salvo que haya algo más concreto en su sección."
+   ],
+   "memorizar": "lo específico gana a lo general."
+  },
+  "ENI-CH04-Q01": {
+   "idea": [
+    "Porque /etc/passwd lo puede leer cualquier usuario.",
+    "Al crecer la potencia de cálculo se podían encriptar diccionarios y combinaciones hasta dar con la que coincidía.",
+    "Por eso las contraseñas se movieron a /etc/shadow, sin acceso para los usuarios."
+   ],
+   "memorizar": "passwd lo lee todo el mundo; shadow, no."
+  },
+  "ENI-CH04-Q02": {
+   "idea": [
+    "Porque ahí se decide en qué orden se resuelven los nombres.",
+    "Primero el archivo local, con el parámetro files, y después el servicio dns si está configurado."
+   ],
+   "memorizar": "nsswitch.conf marca el orden de búsqueda."
+  },
+  "ENI-CH04-Q03": {
+   "idea": [
+    "Porque basta con hacer la aplicación compatible con PAM.",
+    "Si cambian las técnicas de autentificación, se toca la configuración PAM y no la aplicación."
+   ],
+   "memorizar": "PAM separa la aplicación del método de autentificación."
+  },
+  "ENI-CH04-Q04": {
+   "idea": [
+    "Permite encadenar varios módulos en una sola autentificación.",
+    "Puedes aceptar por LDAP o en local, o exigir biometría además de contraseña.",
+    "Y de paso ejecutar otras cosas, como cargar variables con pam_env o cortar accesos con pam_nologin."
+   ],
+   "memorizar": "la pila combina métodos y añade tareas."
+  },
+  "ENI-CH04-Q05": {
+   "idea": [
+    "Si antes ha fallado un módulo llamado con required o requisite."
+   ],
+   "memorizar": "sufficient no rescata un required ya fallado."
+  },
+  "ENI-CH04-Q06": {
+   "idea": [
+    "required = tiene que aprobar, pero la pila sigue.",
+    "Aunque salga bien, se ejecutan los demás módulos de la pila."
+   ],
+   "analogia": "Una prueba obligatoria dentro de una cadena: aprobarla no termina el examen, solo deja seguir.",
+   "memorizar": "required = obligatorio, pero continúa."
+  },
+  "ENI-CH04-Q07": {
+   "idea": [
+    "Es muy difícil.",
+    "LDIF va pegado al esquema, y dos directorios casi nunca tienen el mismo.",
+    "Como mucho se exporta lo común a los dos; el resto exige reformatear, el mapeo de atributos."
+   ],
+   "memorizar": "LDIF depende del esquema: no es portable."
+  },
+  "ENI-CH04-Q08": {
+   "idea": [
+    "Porque ldapmodify escribiría la contraseña sin encriptar.",
+    "ldappasswd gestiona de forma nativa varios algoritmos de encriptación."
+   ],
+   "memorizar": "ldappasswd encripta; ldapmodify escribe tal cual."
+  },
+  "ENI-CH04-Q09": {
+   "idea": [
+    "Sí: la variable LDAPBASE.",
+    "El inconveniente es que las variables son volátiles.",
+    "Hay que declararla en el entorno desde el que se lanzan los comandos cliente."
+   ],
+   "memorizar": "BASE en ldap.conf, o la variable LDAPBASE."
+  },
+  "ENI-CH04-Q10": {
+   "idea": [
+    "Para poder seguir entrando si el directorio LDAP no está disponible.",
+    "Los controles de comportamiento de los módulos LDAP permiten justo eso: un método alternativo en caso de error."
+   ],
+   "memorizar": "LDAP primero; los archivos locales, de red de seguridad."
+  },
+  "ENI-CH05-Q01": {
+   "idea": [
+    "Montándola.",
+    "El directorio compartido se monta en un directorio local.",
+    "Ojo: aunque el comando mount sea el mismo, hay que tener instalado el software cliente."
+   ],
+   "memorizar": "NFS o Samba, se accede montando."
+  },
+  "ENI-CH05-Q02": {
+   "idea": [
+    "Sí, con exportfs -a."
+   ],
+   "memorizar": "exportfs -a comparte sin arrancar el servicio."
+  },
+  "ENI-CH05-Q03": {
+   "idea": [
+    "Porque el control de acceso va por identificador de usuario.",
+    "La cuenta root siempre tiene el identificador 0, y root_squash le quita los privilegios.",
+    "Se puede desactivar al montar la compartición, con no_root_squash."
+   ],
+   "memorizar": "root_squash: root entra, pero sin ser root."
+  },
+  "ENI-CH05-Q04": {
+   "idea": [
+    "NFS depende de tres procesos: portmapd, nfsd y mountd.",
+    "El nombre del script cambia con la distribución: nfs en Red Hat, nfk-kernel-server en Debian."
+   ],
+   "memorizar": "NFS son tres procesos, no uno."
+  },
+  "ENI-CH05-Q05": {
+   "idea": [
+    "La opción de montaje sync.",
+    "Prohíbe la caché en escritura, así que no hay escrituras asíncronas.",
+    "El cliente no da por buena una escritura hasta que está físicamente en disco."
+   ],
+   "memorizar": "sync = no te fío nada hasta que esté escrito."
+  },
+  "ENI-CH05-Q06": {
+   "idea": [
+    "Sí, con testparm.",
+    "Comprueba el archivo y saca por pantalla las comparticiones activas.",
+    "Los valores por defecto solo se ven si lo llamas con -v."
+   ],
+   "memorizar": "testparm revisa sin arrancar nada."
+  },
+  "ENI-CH05-Q07": {
+   "idea": [
+    "Con el parámetro browseable en la definición de esa compartición.",
+    "Es el que decide si los clientes la ven."
+   ],
+   "memorizar": "browseable decide si se ve, no si se entra."
+  },
+  "ENI-CH05-Q08": {
+   "idea": [
+    "No se puede.",
+    "La contraseña Unix se encripta con MD5, que es irreversible.",
+    "Y las contraseñas SMB necesitan MD4, así que no se pueden sacar de ahí."
+   ],
+   "memorizar": "MD5 y MD4 no se convierten entre sí."
+  },
+  "ENI-CH05-Q09": {
+   "idea": [
+    "Sí, con la directiva unix passwd sync = yes.",
+    "Solo funciona cuando la contraseña Samba viaja sin encriptar.",
+    "Entonces se encripta dos veces: en MD5 para Unix y en MD4 para Samba."
+   ],
+   "memorizar": "sincronizar exige tener la contraseña en claro."
+  },
+  "ENI-CH05-Q10": {
+   "idea": [
+    "Porque en activo la conexión de datos la abre el servidor.",
+    "Y los cortafuegos ven eso como una amenaza.",
+    "En pasivo abre el cliente las dos sesiones, la de comandos y la de datos."
+   ],
+   "memorizar": "pasivo = todo lo abre el cliente; menos problemas."
+  },
+  "ENI-CH06-Q01": {
+   "idea": [
+    "Para guardar información de distinto tipo.",
+    "Así un cliente puede preguntar algo concreto: quién es el maestro de esta zona, o qué servidores DNS tiene."
+   ],
+   "memorizar": "cada tipo de registro responde a una pregunta distinta."
+  },
+  "ENI-CH06-Q02": {
+   "idea": [
+    "Los registros MX son los que apuntan al servicio de correo del dominio.",
+    "Un servidor de correo perfecto no recibe nada de fuera si su registro MX está mal."
+   ],
+   "memorizar": "sin MX correcto no entra correo."
+  },
+  "ENI-CH06-Q03": {
+   "idea": [
+    "Guarda en memoria las resoluciones ya hechas y responde al instante.",
+    "Y como casi todos los clientes piden los mismos nombres comunes, se aprovecha mucho.",
+    "El servidor se ahorra repetir la resolución pública."
+   ],
+   "memorizar": "la caché responde sin volver a preguntar fuera."
+  },
+  "ENI-CH06-Q04": {
+   "idea": [
+    "No hay que instalarlo.",
+    "El resolver forma parte de la pila IP en todas las distribuciones."
+   ],
+   "memorizar": "el resolver ya viene puesto."
+  },
+  "ENI-CH06-Q05": {
+   "idea": [
+    "Sí, se puede prescindir.",
+    "include sirve para trocear la configuración en varios archivos.",
+    "Si lo metes todo en named.conf funciona igual, solo que queda largo."
+   ],
+   "memorizar": "include ordena; no es obligatorio."
+  },
+  "ENI-CH06-Q06": {
+   "idea": [
+    "Declarando una redirección hacia él con la directiva forwarders.",
+    "Resuelve él las zonas locales y manda todo lo demás al servidor del proveedor."
+   ],
+   "memorizar": "forwarders = lo que no sé, se lo paso a otro."
+  },
+  "ENI-CH06-Q07": {
+   "idea": [
+    "Con el comando de control rndc.",
+    "Aplica cambios de configuración o de una sola zona sin recargar el servicio entero."
+   ],
+   "memorizar": "rndc recarga por partes."
+  },
+  "ENI-CH06-Q08": {
+   "idea": [
+    "El comando dig.",
+    "Es la herramienta de referencia para diagnosticar DNS, aunque mucha gente siga usando nslookup."
+   ],
+   "memorizar": "para el detalle de verdad, dig."
+  },
+  "ENI-CH06-Q09": {
+   "idea": [
+    "Con dos técnicas que suelen ir juntas.",
+    "Encerrar el proceso named en una prisión chroot, con copia de lo que necesite para funcionar.",
+    "Y ejecutarlo con una cuenta de servicio de privilegios limitados."
+   ],
+   "analogia": "La jaula limita hasta dónde puede mirar y la cuenta limitada, qué puede tocar.",
+   "memorizar": "jaula chroot más cuenta sin privilegios."
+  },
+  "ENI-CH06-Q10": {
+   "idea": [
+    "Porque delegar es mandar las peticiones al servidor de la zona hija.",
+    "Todo lo que llegue al padre sobre esa zona se redirige allí.",
+    "Sin comunicación, esa redirección es imposible."
+   ],
+   "memorizar": "delegar solo funciona si los dos se hablan."
+  },
+  "ENI-CH07-Q01": {
+   "idea": [
+    "Cargar solo los módulos que hacen falta.",
+    "Apache soporta decenas de funciones y así el ejecutable queda más ligero."
+   ],
+   "memorizar": "modular = cargas solo lo que usas."
+  },
+  "ENI-CH07-Q02": {
+   "idea": [
+    "Con el comando apache y la opción -t."
+   ],
+   "memorizar": "-t de test: revisa sin arrancar."
+  },
+  "ENI-CH07-Q03": {
+   "idea": [
+    "El sitio de documentación oficial de Apache.",
+    "Hay más de 400 directivas y más de cien módulos, y todo eso cambia sin parar."
+   ],
+   "memorizar": "con Apache, la documentación oficial no es opcional."
+  },
+  "ENI-CH07-Q04": {
+   "idea": [
+    "Mira el nombre que el cliente ha usado en la url.",
+    "Es lo habitual en alojamientos que meten decenas de sitios en un solo servidor."
+   ],
+   "memorizar": "el host virtual se elige por el nombre pedido."
+  },
+  "ENI-CH07-Q05": {
+   "idea": [
+    "El comando htpasswd.",
+    "Crea, modifica y elimina cuentas para la autentificación local sencilla.",
+    "Es solo una de las formas de autentificación que admite Apache."
+   ],
+   "memorizar": "cuentas locales de Apache → htpasswd."
+  },
+  "ENI-CH07-Q06": {
+   "idea": [
+    "Las mismas directivas que irían en un contexto Directory.",
+    "La diferencia es que quedan junto a los datos y no en el archivo de configuración."
+   ],
+   "memorizar": ".htaccess = un Directory que vive con los archivos."
+  },
+  "ENI-CH07-Q07": {
+   "idea": [
+    "Porque sin AllowOverride, Apache no va buscando archivos sueltos por cada directorio.",
+    "Esa directiva es la que le dice que acepte configuración adicional y la busque."
+   ],
+   "memorizar": "sin AllowOverride, .htaccess ni se mira."
+  },
+  "ENI-CH07-Q08": {
+   "idea": [
+    "Asocia una identidad con una clave pública.",
+    "Esa asociación la firma una autoridad de certificación en la que todos confían."
+   ],
+   "analogia": "Es un carné: une un nombre con una foto, y lo firma la jefatura de policía.",
+   "memorizar": "certificado = identidad + clave pública, con firma de confianza."
+  },
+  "ENI-CH07-Q09": {
+   "idea": [
+    "Porque no hay un solo flujo, sino dos.",
+    "Uno del cliente al proxy y otro del proxy al servidor, en nombre del cliente.",
+    "Ese corte es lo que le permite filtrar, hacer estadísticas o guardar en caché."
+   ],
+   "memorizar": "el proxy corta el tráfico en dos y aprovecha el corte."
+  },
+  "ENI-CH07-Q10": {
+   "idea": [
+    "Sí.",
+    "La directiva acl puede llevar el parámetro directamente o señalar un archivo que lo contenga."
+   ],
+   "memorizar": "una acl puede apuntar a un archivo."
+  },
+  "ENI-CH08-Q01": {
+   "idea": [
+    "Asociar una identidad con una cuenta que ya existe.",
+    "Así el webmaster no tiene que mirar dos buzones: lo que llegue al alias cae en su cuenta."
+   ],
+   "memorizar": "alias = otro nombre para el mismo buzón."
+  },
+  "ENI-CH08-Q02": {
+   "idea": [
+    "Cuando tu dirección IP pública está en una blacklist.",
+    "Si los MTA de destino la rechazan, sale mejor que envíe tu proveedor por ti.",
+    "Es la alternativa a pelearte para salir de esas listas."
+   ],
+   "memorizar": "relayhost = que envíe otro por ti."
+  },
+  "ENI-CH08-Q03": {
+   "idea": [
+    "Sí, con la directiva myorigin.",
+    "Es lo típico cuando una empresa cambia de nombre."
+   ],
+   "memorizar": "myorigin = el nombre con el que sales al exterior."
+  },
+  "ENI-CH08-Q04": {
+   "idea": [
+    "Compara el dominio del destinatario con lo que haya en mydestination.",
+    "Es lo que va detrás de la arroba.",
+    "Si coincide, el mensaje es suyo; si no, lo reenvía."
+   ],
+   "memorizar": "mydestination = los dominios que son míos."
+  },
+  "ENI-CH08-Q05": {
+   "idea": [
+    "Sí, con postfix check.",
+    "Y con postconf -n ves los parámetros que están de verdad en uso."
+   ],
+   "memorizar": "check revisa; postconf -n enseña lo que hay."
+  },
+  "ENI-CH08-Q06": {
+   "idea": [
+    "Con una línea que tenga solo un punto.",
+    "El punto tiene que ir solo en la línea y validarse con un retorno de carro."
+   ],
+   "memorizar": "un punto solo en su línea cierra el mensaje."
+  },
+  "ENI-CH08-Q07": {
+   "idea": [
+    "Llamando a procmail.",
+    "Hay que referenciarlo en la configuración de postfix y tener su archivo de reglas."
+   ],
+   "memorizar": "procmail procesa lo que entra, según sus reglas."
+  },
+  "ENI-CH08-Q08": {
+   "idea": [
+    "Sí, el comando wall.",
+    "Manda el mensaje a todos los usuarios conectados.",
+    "Se usa mucho antes de reiniciar o de parar un servicio."
+   ],
+   "memorizar": "aviso urgente a todos → wall."
+  },
+  "ENI-CH08-Q09": {
+   "idea": [
+    "/etc/issue se ve antes de abrir sesión y /etc/motd después.",
+    "Por eso el primero lo ve todo el mundo y el segundo solo quien entra."
+   ],
+   "memorizar": "issue antes de entrar; motd una vez dentro."
+  },
+  "ENI-CH08-Q10": {
+   "idea": [
+    "Sí, con el comando authtest.",
+    "No garantiza que todo funcione en producción, pero confirma que las librerías de autentificación están puestas y bien configuradas."
+   ],
+   "memorizar": "authtest prueba la autentificación de courier."
+  },
+  "ENI-CH09-Q01": {
+   "idea": [
+    "Sí, pero viene desactivado.",
+    "Se activa poniendo un 1 en /proc/sys/net/ipv4/ip_forward."
+   ],
+   "memorizar": "para enrutar, ip_forward a 1."
+  },
+  "ENI-CH09-Q02": {
+   "idea": [
+    "Coges la ruta dentro de /proc/sys y cambias las barras por puntos.",
+    "Para que aguante reinicios, va en /etc/sysctl.conf, que se relee al arrancar."
+   ],
+   "memorizar": "la ruta de /proc/sys, con puntos en vez de barras."
+  },
+  "ENI-CH09-Q03": {
+   "idea": [
+    "Sí, siempre.",
+    "Cualquier sistema IP tiene la suya, aunque no sea un router.",
+    "Como mínimo trae la red local y la ruta por defecto."
+   ],
+   "memorizar": "hasta con una tarjeta hay tabla de enrutamiento."
+  },
+  "ENI-CH09-Q04": {
+   "idea": [
+    "La tabla filter.",
+    "Es la que casi siempre quieres ver, y por eso muchos ni saben que existe la tabla nat.",
+    "Esa se mira con iptables -t nat -L."
+   ],
+   "memorizar": "iptables -L enseña filter; nat hay que pedirla."
+  },
+  "ENI-CH09-Q05": {
+   "idea": [
+    "Con cadenas distintas.",
+    "INPUT es el tráfico dirigido al propio sistema.",
+    "FORWARD es el que solo pasa a través de él."
+   ],
+   "memorizar": "INPUT para mí; FORWARD de paso."
+  },
+  "ENI-CH09-Q06": {
+   "idea": [
+    "Se aplica la regla por defecto de esa cadena.",
+    "Son las políticas, que se definen con -P; hay una por cadena."
+   ],
+   "memorizar": "si nada encaja, manda la política."
+  },
+  "ENI-CH09-Q07": {
+   "idea": [
+    "Porque las direcciones privadas no pasan del router NAT.",
+    "Se sustituyen por la pública, así que la red interna queda discreta.",
+    "Y desde fuera no hay ruta: las privadas no se enrutan en Internet."
+   ],
+   "memorizar": "NAT esconde y además corta el camino de vuelta."
+  },
+  "ENI-CH09-Q08": {
+   "idea": [
+    "Con el programa fail2ban.",
+    "Crea reglas sobre la marcha, como bloquear a quien falle tres veces al abrir sesión SSH."
+   ],
+   "memorizar": "fail2ban escribe las reglas por ti."
+  },
+  "ENI-CH09-Q09": {
+   "idea": [
+    "Organismos de investigación y vigilancia de la seguridad.",
+    "Publican los anuncios y los datos técnicos de las vulnerabilidades descubiertas."
+   ],
+   "memorizar": "publican vulnerabilidades; no las explotan."
+  },
+  "ENI-CH09-Q10": {
+   "idea": [
+    "Por su arquitectura cliente/servidor.",
+    "La configuración y la administración se centralizan en un servidor.",
+    "Y los componentes cliente se instalan en cada máquina del parque."
+   ],
+   "memorizar": "un servidor central, un cliente por máquina."
+  },
+  "ENI-CH10-Q01": {
+   "idea": [
+    "Sí: autentificación por contraseña.",
+    "Lo que no tiene es control de integridad serio ni encriptación.",
+    "Y la contraseña viaja sin encriptar, así que interceptarla es fácil."
+   ],
+   "memorizar": "telnet autentica, pero en texto claro."
+  },
+  "ENI-CH10-Q02": {
+   "idea": [
+    "SSH guarda las huellas de servidores en ~/.ssh/known_hosts.",
+    "Ahí anota cada servidor al que te has conectado.",
+    "Importa porque suplantar un servidor con su nombre y su dirección IP es relativamente fácil."
+   ],
+   "analogia": "Es la lista de caras conocidas: si la huella cambia, quien está enfrente no es quien dice ser.",
+   "memorizar": "las huellas de servidores viven en known_hosts."
+  },
+  "ENI-CH10-Q03": {
+   "idea": [
+    "Ni una ni otra: se crean a la vez.",
+    "El par sale junto, aunque la documentación cuente una antes que la otra.",
+    "De una no se puede deducir la otra."
+   ],
+   "memorizar": "ssh-keygen genera siempre el par entero."
+  },
+  "ENI-CH10-Q04": {
+   "idea": [
+    "El comando ssh-agent.",
+    "Guarda las claves privadas en memoria y se le añaden con ssh-add.",
+    "Las claves se habían creado antes con ssh-keygen."
+   ],
+   "memorizar": "keygen crea, add entrega, agent recuerda."
+  },
+  "ENI-CH10-Q05": {
+   "idea": [
+    "Solo necesita el servicio SSH en la máquina remota.",
+    "El mismo que se usa para las sesiones remotas."
+   ],
+   "memorizar": "scp viaja sobre SSH, sin nada más."
+  },
+  "ENI-CH10-Q06": {
+   "idea": [
+    "Se llama túnel SSH.",
+    "Las aplicaciones no cambian: lo único que cambia es el transporte."
+   ],
+   "memorizar": "túnel SSH: mismo tráfico, otro camino."
+  },
+  "ENI-CH10-Q07": {
+   "idea": [
+    "Sí, pero hay que permitirlo.",
+    "Se pone X11Forwarding con valor yes en el sshd_config del servidor."
+   ],
+   "memorizar": "X11Forwarding yes, y en el servidor."
+  },
+  "ENI-CH10-Q08": {
+   "idea": [
+    "Punto a punto une dos máquinas, y solo ellas.",
+    "Sitio a sitio da las mismas garantías, pero se comunican todos los hosts de ambas redes."
+   ],
+   "memorizar": "punto a punto: dos máquinas; sitio a sitio: dos redes."
+  },
+  "ENI-CH10-Q09": {
+   "idea": [
+    "Sí, con el modo puente.",
+    "El túnel conecta las dos máquinas dentro de la misma subred.",
+    "Es un modo poco frecuente."
+   ],
+   "memorizar": "modo puente: misma subred, sin enrutar."
+  },
+  "ENI-CH10-Q10": {
+   "idea": [
+    "Mirando la red con ifconfig.",
+    "Debe aparecer una interfaz virtual, normalmente tun0, con su dirección IP.",
+    "Que esté no garantiza que funcione, pero sin ella no funciona."
+   ],
+   "memorizar": "si hay túnel, hay interfaz tun0."
+  },
+  "ENI-CH11-Q01": {
+   "idea": [
+    "Porque el compilado ya lleva instrucciones que el procesador entiende.",
+    "El interpretado necesita otro programa traduciendo cada acción sobre la marcha.",
+    "A cambio, el compilado va atado a un juego de instrucciones y es menos portable."
+   ],
+   "memorizar": "compilar traduce una vez; interpretar, cada vez."
+  },
+  "ENI-CH11-Q02": {
+   "idea": [
+    "Comprueba que el entorno de compilación vale y genera el Makefile.",
+    "Ese Makefile es el que usará el compilador.",
+    "A veces no se publica, cuando el desarrollador no quiere que personalices el programa."
+   ],
+   "memorizar": "configure prepara el Makefile."
+  },
+  "ENI-CH11-Q03": {
+   "idea": [
+    "make clean borra lo que salió de compilar.",
+    "make mrproper borra además lo que no pertenece a las fuentes, configuración incluida.",
+    "Te deja como recién extraído el tar, y no siempre está disponible."
+   ],
+   "memorizar": "clean limpia; mrproper deja como nuevo."
+  },
+  "ENI-CH11-Q04": {
+   "idea": [
+    "De las librerías compartidas.",
+    "Hoy es muy raro compilar con librerías estáticas.",
+    "Se gana espacio en disco y se pierde independencia del entorno."
+   ],
+   "memorizar": "dinámico = depende de las librerías del sistema."
+  },
+  "ENI-CH11-Q05": {
+   "idea": [
+    "Consultando /etc/ld.so.conf.",
+    "Ahí está la lista de directorios que debe analizar."
+   ],
+   "memorizar": "ld.so.conf dice dónde buscar las librerías."
+  },
+  "ENI-CH11-Q06": {
+   "idea": [
+    "El objetivo oldconfig.",
+    "Reaprovecha el .config anterior y solo pregunta por lo nuevo."
+   ],
+   "memorizar": "oldconfig pregunta solo lo que no sabía."
+  },
+  "ENI-CH11-Q07": {
+   "idea": [
+    "Porque la segunda cifra impar indica kernel en desarrollo.",
+    "Las versiones de producción van de la 2.4 a la 2.6."
+   ],
+   "memorizar": "segunda cifra impar = en desarrollo."
+  },
+  "ENI-CH11-Q08": {
+   "idea": [
+    "Si no hace falta.",
+    "O porque gestiona un hardware que no está, o porque ninguna función lo invoca."
+   ],
+   "memorizar": "si nadie lo necesita, no se carga."
+  },
+  "ENI-CH11-Q09": {
+   "idea": [
+    "Es un archivo cpio comprimido en gzip.",
+    "Como no lleva extensión estándar, se identifica con file.",
+    "Para verlo hay que renombrarlo con extensión gz y extraerlo con cpio."
+   ],
+   "memorizar": "el ramdisk es un cpio dentro de un gzip."
+  },
+  "ENI-CH11-Q10": {
+   "idea": [
+    "Porque initrd se apoya en devfs y no en el udev moderno.",
+    "Y además no sabe manejar discos sata, que es un problema en equipos recientes."
+   ],
+   "memorizar": "initrd se quedó en devfs y sin sata."
+  }
+ }
+}

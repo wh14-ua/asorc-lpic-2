@@ -1,0 +1,179 @@
+### SYBEX-CH08-RQ01  [multiple_choice]  tema: DNS
+P: El dominio .edu se considera ¿de qué tipo de dominio? (Elija la mejor respuesta.)
+   A. Dominio raíz
+  *B. TLD
+   C. Dominio de primer nivel
+   D. ICANN
+   E. Dominio de segundo nivel
+LIBRO: La opción B es correcta, porque el dominio .edu es un dominio de nivel superior (TLD), como .gov o .us. El dominio raíz, opción A, se representa con un solo punto (.) y, en la estructura de árbol de la base de datos DNS, está un nivel por debajo de los TLD. Por tanto, la opción A es incorrecta. Un dominio de primer nivel es un subdominio de un TLD, así que la opción C es errónea. ICANN, opción D, es incorrecta, porque ICANN es la organización responsable de seleccionar a los gestores de los TLD. La opción E también es errónea, porque un dominio de segundo nivel estaría dos niveles por encima de un TLD en la estructura de árbol de la base de datos DNS.
+
+### SYBEX-CH08-RQ02  [multiple_response]  tema: DNS
+P: El espacio de nombres de dominio se divide en distintas zonas. ¿Cuál de las siguientes podría ser una de esas zonas? (Elija todas las que correspondan.)
+  *A. La zona de pistas (hint zone)
+  *B. Un dominio de primer nivel y todos sus subdominios
+  *C. Un dominio de primer nivel y una parte de sus subdominios
+   D. Un servidor raíz
+  *E. La zona raíz
+LIBRO: Un servidor raíz es un servidor que ayuda a gestionar la zona raíz, así que la opción D es errónea. Las opciones B y C son correctas, porque una zona puede ser un dominio de primer nivel con todos sus subdominios, o un dominio de primer nivel con una parte de sus subdominios. Una zona puede ser la zona raíz, que es una zona especial gestionada por los servidores raíz y que abarca el dominio raíz, así que la opción E es correcta. La opción A también es correcta, porque la zona de pistas (hint zone) es otro nombre para la zona raíz.
+
+### SYBEX-CH08-RQ03  [multiple_response]  tema: DNS
+P: ¿Cuáles de las siguientes combinaciones de servidores podrían ser los dos servidores de nombres mínimos exigidos para una zona? (Elija todas las que correspondan.)
+  *A. Servidor primario y servidor secundario
+   B. Servidor secundario y servidor de reenvío
+  *C. Servidor primario y servidor de reenvío
+   D. Servidor secundario y servidor de caché
+  *E. Servidor primario y servidor de caché
+LIBRO: Las opciones A, C y E cumplen el requisito de dos servidores por zona, porque uno de ellos debe ser un servidor primario (maestro) y el otro uno de los siguientes: servidor secundario, servidor de caché o servidor de reenvío. Las opciones B y D son tipos de servidor reales, pero les falta el servidor primario en su configuración, así que son incorrectas.
+
+### SYBEX-CH08-RQ04  [multiple_choice]  tema: DNS
+P: ¿Cómo se llama el programa o rutina de biblioteca que crea una consulta DNS, busca la respuesta en su propia caché y, si no la encuentra allí, envía la consulta a otro servidor de nombres? (Elija la mejor respuesta.)
+   A. Servidor de nombres
+   B. Caché
+   C. Resolución de nombres
+  *D. Resolutor (resolver)
+   E. Zona
+LIBRO: La opción D es la elección correcta, porque un resolutor (resolver) es un programa o rutina de biblioteca que crea una consulta DNS, busca la respuesta en su propia caché y, si no la encuentra allí, envía la consulta a otro servidor de nombres. La opción A es incorrecta, porque un servidor de nombres no es un programa ni una biblioteca, sino un servidor que o bien tiene los datos de resolución para responder a una consulta DNS, o bien contiene un resolutor para obtener la respuesta. La caché es una ubicación que normalmente se consulta para obtener la respuesta a una consulta DNS, y no es un programa ni una rutina de biblioteca, así que la opción B es errónea. La opción C es incorrecta, porque la resolución de nombres es el proceso de traducir un FQDN a una dirección IP (consulta y respuesta DNS). Por último, la opción E también es incorrecta, porque una zona es una porción del espacio de nombres de dominio y no un programa ni una rutina de biblioteca.
+
+### SYBEX-CH08-RQ05  [multiple_response]  tema: DNS
+P: ¿Cuál de los siguientes programas proporciona una implementación total o parcial del protocolo DNS? (Elija todas las que correspondan.)
+  *A. BIND
+  *B. dnsmasq
+  *C. pdnsd
+  *D. Bundy
+  *E. PowerDNS
+LIBRO: Las opciones A, B, C, D y E se consideran todas software que proporciona una implementación total o parcial del protocolo DNS. La opción D es la más engañosa, porque originalmente se llamaba BIND 10 y ha pasado a llamarse Bundy, mantenido por el Bundy-Project en lugar de por ICANN.
+
+### SYBEX-CH08-RQ06  [multiple_choice]  tema: DNS
+P: El demonio BIND es ¿cuál de los programas del directorio /usr/sbin/? (Elija la mejor respuesta.)
+   A. bind9
+   B. bind
+  *C. named
+   D. named.conf
+   E. bindutils
+LIBRO: La opción C es correcta, porque /usr/sbin/named es el demonio BIND. La opción A es incorrecta, aunque bind9 es el nombre del paquete BIND en las distribuciones Ubuntu. La opción B es errónea, aunque bind es el nombre del paquete BIND en las distribuciones CentOS. El archivo named.conf es un archivo de configuración de BIND, no el demonio, así que la opción D es errónea. La opción E es incorrecta, porque bindutils es el nombre del paquete de utilidades de BIND en las distribuciones CentOS, no el demonio BIND.
+
+### SYBEX-CH08-RQ07  [multiple_response]  tema: DNS
+P: ¿Cuáles de las siguientes son agrupaciones (cláusulas) legítimas del archivo de configuración principal de BIND, named.conf? (Elija todas las que correspondan.)
+  *A. options
+  *B. logging
+  *C. include
+   D. named-checkconf
+  *E. comments
+LIBRO: Las opciones A, B, C y E son todas agrupaciones (cláusulas) legítimas del archivo de configuración principal de BIND, named.conf. La opción D es una utilidad que permite comprobar la sintaxis del archivo named.conf, y es la única elección incorrecta.
+
+### SYBEX-CH08-RQ08  [multiple_response]  tema: DNS
+P: Al configurar un servidor DNS local de solo caché, ¿qué directivas deberían establecerse o modificarse en el archivo named.conf? (Elija todas las que correspondan.)
+  *A. acl
+  *B. allow-query
+   C. logging
+  *D. listen-on
+  *E. recursion yes
+LIBRO: Las opciones A, B, D y E deben establecerse o modificarse al configurar un servidor DNS local de solo caché. La directiva acl de la opción A permite crear una lista de control de acceso con los hosts autorizados a usar este servidor de solo caché. El allow-query de la opción B puede usar la acl definida para permitir que el host designado consulte este servidor de solo caché. La directiva listen-on de la opción D establece el puerto de escucha, así como la acl desde la que atender las consultas DNS de los hosts permitidos. El recursion yes de la opción E se modifica, si hace falta, para que los hosts permitidos puedan usar este servidor de solo caché. La opción C es incorrecta, porque no es obligatorio tener configurado el registro (logging) de BIND para usar un servidor DNS de solo caché (aunque sería buena idea establecer también esa directiva).
+
+### SYBEX-CH08-RQ09  [multiple_response]  tema: DNS
+P: Ignorando las diferencias entre distribuciones y suponiendo que tiene los privilegios adecuados, ¿cuáles de los siguientes comandos detendrán el servicio BIND? (Elija todas las que correspondan.)
+   A. rndc flush
+  *B. service bind9 stop
+  *C. kill -s SIGTERM BIND_PID
+  *D. rndc stop
+  *E. systemctl stop named
+LIBRO: Las opciones B, C, D y E son todas métodos para detener el servicio BIND. Naturalmente, los métodos que funcionarán en un servidor concreto dependen de la distribución que tenga instalada. La opción A es incorrecta, porque rndc flush vacía todas las cachés del servidor pero no detiene el servicio BIND.
+
+### SYBEX-CH08-RQ10  [multiple_choice]  tema: DNS
+P: ¿Qué determina una directiva category de logging? (Elija la mejor respuesta.)
+   A. Dónde se registran los mensajes DNS
+  *B. Los tipos de mensaje DNS que se registran
+   C. Cómo reiniciar BIND para cargar el registro
+   D. Cómo se filtran los mensajes DNS
+   E. Los tamaños de los registros de canal DNS
+LIBRO: La opción B es correcta, porque una directiva category define los tipos de mensaje DNS que se van a registrar. La directiva channel define dónde se registran los mensajes DNS (opción A) y cómo se filtran (opción D), así que las opciones A y D son incorrectas. El «cómo reiniciar BIND para cargar el registro» de la opción C no tiene nada que ver con la directiva category, así que es una respuesta errónea. Además, los tamaños de los registros de canal DNS no los fija la directiva category, así que la opción E también es incorrecta.
+
+### SYBEX-CH08-RQ11  [multiple_response]  tema: DNS
+P: ¿Cuáles de las siguientes son directivas de tipo de zona válidas? (Elija todas las que correspondan.)
+  *A. master
+   B. secondary
+  *C. hint
+   D. delegation
+   E. root
+LIBRO: Las opciones A y C son correctas. La directiva type master indica que este es el servidor de nombres primario de una zona, y la directiva type hint especifica que se trata de la zona de pistas o zona raíz, que es una lista de los servidores raíz actuales. La opción B es errónea, porque la directiva que indica que este es el servidor de nombres secundario de una zona es type slave y no type secondary. La opción D es incorrecta, porque para indicar que esta zona debe aplicar el estado delegation-only de una zona raíz hay que usar la directiva type delegation-only. Por último, la opción E es incorrecta, porque no existe la directiva type root.
+
+### SYBEX-CH08-RQ12  [multiple_response]  tema: DNS
+P: ¿Cuáles de las siguientes son clases válidas en una sentencia de zona? (Elija todas las que correspondan.)
+  *A. CH
+   B. DN
+  *C. HS
+  *D. IN
+   E. IS
+LIBRO: Las opciones A, C y D son correctas. La clase de una sentencia de zona puede ser IN (Internet), CH (protocolo de red Chaosnet) o HS (software de red Hesiod). Las opciones B y E son clases inventadas, así que son incorrectas.
+
+### SYBEX-CH08-RQ13  [multiple_response]  tema: DNS
+P: ¿Por qué podría copiarse la información autoritativa de zona desde las bases de datos del servidor de nombres primario al secundario (lo que se llama transferencia de zona)? (Elija todas las que correspondan.)
+   A. El demonio BIND del servidor primario se ha reiniciado.
+  *B. El demonio BIND del servidor secundario ha arrancado.
+  *C. Se ha usado la utilidad rndc en el servidor secundario y se ha solicitado una actualización manual de los datos de zona.
+  *D. Ha expirado el tiempo de refresco de los datos de zona del servidor secundario.
+   E. Se detuvo el demonio BIND del servidor secundario y se eliminaron sus archivos de configuración.
+LIBRO: Las opciones B, C y D son correctas: en esos casos se producirá una transferencia de zona. La opción A es incorrecta, porque una transferencia de zona no se inicia porque se reinicie el demonio BIND del servidor primario. La opción E también es incorrecta, porque en la práctica esa opción apaga y elimina el servicio BIND del servidor secundario.
+
+### SYBEX-CH08-RQ14  [multiple_response]  tema: DNS
+P: Las bases de datos de zona predeterminadas suelen guardarse en ¿qué directorios? (Elija las dos mejores respuestas.)
+   A. directorio /etc/named/
+   B. directorio /var/bind/
+  *C. directorio /var/named/
+   D. directorio /etc/bind9/
+  *E. directorio /etc/bind/
+LIBRO: Normalmente las bases de datos de zona predeterminadas se encuentran en el directorio /var/named/ o en el directorio /etc/bind/, según la distribución del servidor. Por tanto, las opciones C y E son correctas. Los demás directorios están inventados, así que las opciones A, B y D son incorrectas.
+
+### SYBEX-CH08-RQ15  [multiple_choice]  tema: DNS
+P: Una base de datos de zona tiene registros de recursos de varios tipos. Uno de esos registros identifica el inicio de autoridad de la zona e incluye sus datos autoritativos. ¿Cuál de los siguientes es ese tipo de registro de recurso? (Elija la mejor respuesta.)
+   A. CNAME
+   B. A
+   C. PTR
+   D. NS
+  *E. SOA
+LIBRO: La opción E es correcta, porque el SOA (start of authority, inicio de autoridad) es el tipo de registro de recurso de zona que identifica el inicio de una zona de autoridad e incluye sus datos autoritativos. El tipo de registro CNAME (nombre canónico) asocia un nombre alias a un nombre de host, así que la opción A es incorrecta. El tipo de registro A de la opción B es un registro de dirección de host para direcciones IPv4. Un registro de tipo PTR apunta a otra ubicación del espacio de nombres de dominio y se usa normalmente en búsquedas inversas, así que la opción C es errónea. El tipo de registro NS de la opción D especifica el servidor de nombres autoritativo de la zona, así que es incorrecta.
+
+### SYBEX-CH08-RQ16  [multiple_choice]  tema: DNS
+P: ¿Cuál de las siguientes describe mejor una zona inversa (Reverse Zone)? (Elija la mejor respuesta.)
+   A. Un registro usado en la delegación de zonas, que proporciona la dirección IP del servidor de nombres maestro de una zona hija
+   B. El proceso de copiar información autoritativa de zona a un servidor de nombres
+  *C. Una zona especial que proporciona una correspondencia de una dirección IP a un FQDN
+   D. Una directiva de zona situada normalmente en el archivo named.conf, con un ajuste type hint
+   E. Una porción del espacio de nombres de dominio que delimita sobre qué tiene autoridad un servidor de nombres
+LIBRO: La opción C es correcta, porque una zona inversa es una zona especial que proporciona una correspondencia de una dirección IP a un FQDN (lo contrario de las correspondencias DNS habituales). La opción A es errónea, porque describe un registro de pegamento (glue record). La opción B es una transferencia de zona, así que es una respuesta incorrecta. La opción D es errónea, porque describe una zona de pistas (Hint Zone), y la opción E también es incorrecta porque es la definición de una zona.
+
+### SYBEX-CH08-RQ17  [multiple_response]  tema: DNS
+P: ¿Cuáles de los siguientes son métodos para asegurar sus servicios DNS? (Elija todas las que correspondan.)
+  *A. Ejecutar únicamente servicios BIND en el servidor.
+  *B. Ejecutar el demonio BIND con un usuario no root.
+  *C. Implementar un servidor de doble horizonte (Dual Horizon).
+   D. Actualizar el software BIND una vez al año.
+  *E. Ocultar la información de versión de BIND.
+LIBRO: Las opciones A, B, C y E son correctas. Solo la opción D es incorrecta. La actualización del software BIND no depende del calendario: debido a la amenaza constante de ataques maliciosos, BIND debe actualizarse en cuanto haya una nueva versión disponible.
+
+### SYBEX-CH08-RQ18  [multiple_response]  tema: DNS
+P: Al configurar una jaula chroot, el nuevo directorio raíz suele ser ¿cuál de los siguientes? (Elija dos respuestas.)
+   A. /etc/bind/
+   B. /etc/named/
+   C. /var/bind/
+  *D. /chroot/named/
+  *E. /chroot/bind/
+LIBRO: Al configurar una jaula chroot se suele usar /chroot/named (opción D) o /chroot/bind (opción E) como nuevo directorio raíz (/), según la distribución. Los demás directorios también pueden usarse en la configuración de BIND, pero no como nuevo directorio raíz (/) de una jaula chroot. Por tanto, las opciones A, B y C son incorrectas.
+
+### SYBEX-CH08-RQ19  [multiple_choice]  tema: DNS
+P: En la extensión de seguridad DNSSEC de BIND, ¿cómo se llama la clave de cifrado que se usa para firmar digitalmente los registros de recursos de una zona concreta? (Elija la mejor respuesta.)
+   A. Firma digital
+   B. Clave de firma de claves (key signing key)
+  *C. Clave de firma de zona (zone signing key)
+   D. Cadena de confianza
+   E. DNSKEY
+LIBRO: La clave de firma de zona (ZSK) es la clave de cifrado que se usa para firmar digitalmente los registros de recursos de una zona concreta, así que la opción C es correcta. La firma digital de la opción A se produce cuando se usa la ZSK para firmar los registros de la zona, así que la opción A es incorrecta. Una clave de firma de claves (KSK) es la clave de cifrado que se usa para firmar la ZSK de una zona concreta, así que la opción B es errónea. En la opción D, la cadena de confianza hace que la clave de una zona superior firme la de una zona inferior, creando una cadena de confianza con un ancla de confianza, así que es una elección incorrecta. Por último, el DNSKEY de la opción E es donde se guarda la KSK, así que también es una elección incorrecta.
+
+### SYBEX-CH08-RQ20  [multiple_choice]  tema: DNS
+P: ¿Qué utilidad se usa para crear claves TSIG o DNSSEC? (Elija la mejor respuesta.)
+  *A. dnssec-keygen
+   B. dnssec-signzone
+   C. dnssec-dsfromkey
+   D. dnssec-tsig-keygen
+   E. tsig-keygen
+LIBRO: La utilidad dnssec-keygen de la opción A puede generar claves TSIG o DNSSEC, según las opciones que se usen, así que es la elección correcta. La utilidad dnssec-signzone se usa en sistemas que tienen generadas las claves TSIG pero no configuran la firma automática mediante las directivas autodnssec e inline-signing del archivo named.conf, para firmar la zona manualmente. Por tanto, la opción B es errónea. La utilidad dnssec-dsfromkey se usa para crear un registro para la zona padre en la cadena de confianza, así que la opción C también es errónea. Las opciones D y E contienen utilidades inventadas, así que son elecciones incorrectas.

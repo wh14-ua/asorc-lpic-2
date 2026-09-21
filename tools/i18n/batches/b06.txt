@@ -1,0 +1,89 @@
+### SYBEX-CH02-RQ01  [multiple_response]
+Q: Which of the following commands will allow a message to be sent to any tty terminals with write access allowed? (Choose all that apply.)
+A: mesg
+B: write
+C: echo
+D: mail
+E: wall
+X: Option B, the write command, and option E, the wall command, will allow a message to be sent to any tty terminals with write access allowed. Option A is incorrect, because the mesg command checks whether write access to the terminal is allowed, and it also can set the access. Option C, the echo command, simply displays whatever follows it to the current terminal’s standard output. Option D, if implemented on your system, allows the user to send and read email, not terminal messages.
+
+### SYBEX-CH02-RQ02  [multiple_choice]
+Q: To shut down your system without sending a message to users, use which of the following /sbin/shutdown options?
+A: -c
+B: -k
+C: --no-wall
+D: --wall
+E: None of the above
+X: The ––no-wall option allows a shutdown to proceed with no wall messages to the terminal users. Only the super user issuing the command will receive a message. Option A is incorrect, because the -c option cancels a shutdown. Option B is also incorrect, because the -k option does not bring down the system but disables logins and sends out shutdown messages. The ––wall option shown in option D is made up.
+
+### SYBEX-CH02-RQ03  [multiple_choice]
+Q: Your company’s legal department has decided that a login notification is needed on a Linux system that you manage, warning that unauthorized system use is prohibited. Which method is the best one for deploying this legal notification?
+A: Edit the /etc/issue file, and place the notification there.
+B: Edit the /etc/motd file, and place the notification there.
+C: Use the notify-send command to send the notification to users.
+D: Edit the ∼./bashrc file, and place the notification there.
+E: None of the above.
+X: Option A is the best choice. By editing the /etc/issue file, the legal notification will display to anyone before attempting to log into the system via a terminal. It would also be worthwhile to put the notice in the /etc/issue.net file for users connecting over the network, as well as in a login banner, if you have GUI users. Option B is not a good choice, because the notice would not be displayed until after a user is logged into the system. Option C is also not a good choice, because it would send a one-time-only message only to GUI users. Option D is not a good choice, because the ~./bashrc file is a login environment script.
+
+### SYBEX-CH02-RQ04  [multiple_choice]
+Q: Assume that money is plentiful, and you want the fastest media to use for your company’s backups. Based on that information, which is the best backup media choice?
+A: Magnetic tapes
+B: Optical discs
+C: HDD
+D: SSD
+E: NAS
+X: Currently, SSDs can be expensive, but if you have the money, they provide the fastest media for backups. Option A, magnetic tapes, is one of the slowest choices for backups. Optical discs, option B, have limited capacity, so you have to change them out more often, and they are also slower than SSDs. Hard disk drives, option C, are faster than tape but slower than SSDs. Finally, with option E, you cannot tell what media type is network attached; therefore it is not the best answer.
+
+### SYBEX-CH02-RQ05  [multiple_response]
+Q: Your co-worker, also a system administrator, hands you an SSD and says, “This has all the files on it that were created and/or modified since the system’s last full backup.” Which of the following backup types can this backup be? (Choose all that apply.)
+A: Full
+B: Incremental
+C: Differential
+D: None of the above
+E: All of the above
+X: An incremental backup, option B, is a copy of all data that has been added or modified since the last backup. Therefore, it doesn’t matter whether the last backup was a full one or not; the SSD can contain this backup type. Also, the differential backup, option C, is a copy of all data that has been added or modified since the last full backup. Since the last backup was a full backup, it’s possible that the SSD contains this backup type. Option A doesn’t work, because a full backup copies all data.
+
+### SYBEX-CH02-RQ06  [multiple_response]
+Q: Which of the following Linux directories should be included in a backup when you plan on using the backup data in full system restores? (Choose all that apply.)
+A: /bin/
+B: /home/
+C: /run/
+D: /tmp/
+E: All of the above
+X: The /bin/ directory, option A, contains utility programs that will be needed in a full system restore situation, so they should be included in the backup. The /home/ directory, option B, typically has system user files. They should also be included in the backup. Option C, /run/, and option D, /tmp/, both contain temporary data and do not need to be included in any data backups.
+
+### SYBEX-CH02-RQ07  [multiple_response]
+Q: Which of the following software packages are GUI and/or web-based backup solutions? (Choose all that apply.)
+A: Amanda
+B: Duplicity
+C: Nagios
+D: Bacula
+E: connectd
+X: Amanda, Duplicity, and Bacula are all GUI and/or web-based backup solutions that you can employ to assist in system backups. Option C, Nagios, and option E, connectd, are both utilities used in resource monitoring.
+
+### SYBEX-CH02-RQ08  [multiple_response]
+Q: Which of the following tar command options would employ gzip compression for creating a backup tarball? (Choose all that apply.)
+A: -g
+B: --gzip
+C: -z
+D: g
+E: z
+X: The options that cause tar to use gzip compression when creating a tarball include the ––gzip option, which is a long-style option; the -z option, which is a short-style option; and the z option, which is an old-style option. The -g (option A) and g (option D) are used by tar for incremental backups, not compression.
+
+### SYBEX-CH02-RQ09  [multiple_choice]
+Q: When using the tar command for an incremental backup, a snapshot file is created. This snapshot file should have which of the following file extensions as part of its name?
+A: .tar
+B: .tgz
+C: .tar.snap
+D: .snap
+E: .snar
+X: The snapshot file can have any name you desire and can be located anywhere within the filesystem, however, it needs the .snar file extension to indicate that it is a tar archive snapshot file. Option A, .tar, indicates that the file is a tar archive file. Option B, .tgz, indicates that the file is a tarball compressed with gzip. Options C and D, .tar.snap and .snap, are made-up file extensions.
+
+### SYBEX-CH02-RQ10  [multiple_response]
+Q: To verify a tar backup immediately after it is created, you use which of the following tar command options? (Choose all that apply.)
+A: --compare
+B: --diff
+C: -d
+D: -W
+E: -J
+X: The ––compare and ––diff (options A and B) are long-style options of -d (option C). These three options compare a tar archive file’s members with external files and list the differences. Option D, the -W option (long style is ––verify), automatically verifies a tar archive as soon as it is created. However, it cannot be used with tarballs, only tar archives. Option E, -J, is a tar option that causes the tar command to employ xz compression.

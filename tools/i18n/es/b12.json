@@ -1,0 +1,55 @@
+[
+{"id":"SYBEX-CH05-RQ01",
+ "q":"¿Cuáles de las siguientes estructuras de array RAID se consideran tolerantes a fallos? (Elija todas las que correspondan.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"Las respuestas B, C, D y E se consideran todas tolerantes a fallos por su estructura. Solo RAID 0 no es tolerante a fallos, porque usa distribución por bandas (striping). Por tanto, la opción A es la única elección incorrecta."},
+
+{"id":"SYBEX-CH05-RQ02",
+ "q":"¿Cuál de las siguientes estructuras RAID se denomina también distribución por bandas con doble paridad? (Elija la mejor respuesta.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"RAID 6 se denomina también distribución por bandas con doble paridad, así que la opción E es la respuesta correcta. RAID 0 se llama distribución por bandas (striping), así que la opción A es incorrecta. La opción B es incorrecta, porque RAID 1 se llama también duplicación en espejo (mirroring). La opción C también es errónea, porque RAID 10 se llama duplicación en espejo con distribución por bandas. RAID 5 se llama distribución por bandas con paridad (no con doble paridad) y, por tanto, la opción D también es incorrecta."},
+
+{"id":"SYBEX-CH05-RQ03",
+ "q":"Después de ejecutar el comando modprobe raid6 con privilegios de superusuario en su sistema, ¿qué archivo debería consultar para determinar si su sistema soporta RAID por software? (Elija la mejor respuesta.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"El archivo /proc/mdstat indicará si ese nivel de RAID está soportado y, por tanto, si potencialmente hay soporte de RAID por software, así que la opción A es correcta. La opción B es incorrecta porque /dev/md0 es un archivo de dispositivo que representa un array RAID. La tabla de sistemas de archivos, /etc/fstab, puede tener un registro para montar un array RAID en el arranque, pero no es el indicador que se busca y, por tanto, la opción C también es incorrecta. La opción D es errónea porque /etc/mdadm/mdadm.conf es un archivo de configuración de RAID, no un archivo de estado. Por último, /dev/mapper de la opción E es el directorio que contiene los archivos de Device Mapper de LVM y RAID, y tampoco es un archivo de estado que indique soporte de RAID por software, así que es una elección incorrecta."},
+
+{"id":"SYBEX-CH05-RQ04",
+ "q":"¿Cuál de los siguientes no es un modo de comando de mdadm? (Elija la mejor respuesta.)",
+ "o":{"A":"Modo grow (crecimiento)","B":"=","C":"Modo delete (borrado)","D":"=","E":"Modo miscellaneous (misceláneo)"},
+ "e":"La opción C, el modo delete, es un modo de comando de mdadm inventado y, por tanto, es la elección correcta. El modo grow de la opción A es un modo legítimo, que hace crecer, reduce o reconfigura un array RAID. El --follow de la opción B es una opción que indica el modo follow, que monitoriza unidades md y, si se produce un evento o alerta, ejecuta una acción determinada. El --manage de la opción D es una opción que indica el modo manage. En modo manage, la utilidad mdadm puede gestionar los miembros del array RAID, por ejemplo añadir una nueva unidad de reserva. El modo miscellaneous de la opción E es un modo para operaciones sobre arrays RAID que no encajan en ninguna otra categoría, como borrar el superbloque de una unidad."},
+
+{"id":"SYBEX-CH05-RQ05",
+ "q":"¿Cuál de las siguientes opciones del comando mdadm selecciona el modo para crear un array RAID? (Elija la mejor respuesta.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"La opción D es correcta, porque la opción -C selecciona el modo create, con el que puede crearse un array RAID. La opción ––create hace lo mismo. La opción A selecciona el modo grow, la opción B el modo follow/monitor y la opción E el modo miscellaneous. Aunque son modos legítimos, no crean arrays RAID y por tanto son elecciones incorrectas. La respuesta de la opción C está inventada y, por tanto, también es incorrecta."},
+
+{"id":"SYBEX-CH05-RQ06",
+ "q":"¿En qué archivo se guarda el estado actual de los arrays RAID? (Elija la mejor respuesta.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"El estado actual de los arrays RAID se encuentra en el archivo /proc/mdstat de la opción D y, por tanto, es la respuesta correcta. Las opciones A y B son incorrectas porque mdadm.conf es un archivo de configuración de RAID, no de estado, y puede estar en el directorio /etc/ o en /etc/mdadm/, según la distribución. El archivo /etc/fstab no guarda el estado del RAID, así que la opción C es errónea. Por último, el archivo /etc/sysctl.conf es un archivo de configuración del comando sysctl y, por tanto, es una elección incorrecta."},
+
+{"id":"SYBEX-CH05-RQ07",
+ "q":"¿Cuál de las siguientes opciones de mdadm mostraría el array RAID del que forma parte la unidad /dev/sdc1? (Elija la mejor respuesta.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"Ninguna de las anteriores"},
+ "e":"La opción B es la mejor respuesta, porque con esas opciones de mdadm se mostrará cualquier array RAID al que pueda pertenecer la unidad. La opción A se acerca, pero si la unidad /dev/sdc1 no es miembro del array /dev/md0, no se sabrá a qué array RAID pertenece. Por tanto, la opción A es incorrecta. La opción C también se acerca y sin embargo es incorrecta, porque de nuevo, si la unidad /dev/sdc1 no es miembro del array /dev/md0, no se sabrá a qué array RAID pertenece. La opción D es incorrecta, porque solo muestra las distintas opciones disponibles en modo monitor. Como la opción B es correcta, la opción E es incorrecta."},
+
+{"id":"SYBEX-CH05-RQ08",
+ "q":"Para eliminar un array RAID desmontado, ¿qué debe hacer? (Elija todas las que correspondan.)",
+ "o":{"A":"Detener el array RAID.",
+      "B":"Reducir el array RAID.",
+      "C":"Monitorizar el array RAID.",
+      "D":"Borrar los superbloques de las unidades del array RAID.",
+      "E":"Borrar los datos y los superbloques de las unidades del array RAID."},
+ "e":"Las opciones A y D son correctas, porque primero hay que detener el array RAID y después borrar los superbloques de cada una de sus unidades. No hace falta borrar los datos de las unidades, así que la opción E es incorrecta. Además, no es necesario ni reducir el array RAID ni monitorizarlo para eliminarlo, así que las opciones B y C son ambas incorrectas."},
+
+{"id":"SYBEX-CH05-RQ09",
+ "q":"¿Sobre cuáles de los siguientes tipos de unidad puede usarse la utilidad hdparm? (Elija todas las que correspondan.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"Todas las anteriores"},
+ "e":"La utilidad hdparm puede consultar, probar y, si hace falta, modificar diversos ajustes de unidades PATA, ATAPI, SATA y SCSI. Por tanto, la opción E es correcta. Sin embargo, solo puede trabajar con dispositivos SCSI que soporten SCSI-ATA Command Translation (SAT), y sobre ellos solo pueden usarse algunas opciones de hdparm."},
+
+{"id":"SYBEX-CH05-RQ10",
+ "q":"¿Cuál de las siguientes opciones del comando sdparm mostrará todos los parámetros de modo comunes de un dispositivo determinado? (Elija la mejor respuesta.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"Ninguna de las anteriores"},
+ "e":"Si no se incluye ninguna opción junto al comando sdparm, este mostrará todos los parámetros de modo comunes del dispositivo indicado. Por tanto, la opción E es correcta. La opción A mostrará toda la información reconocida para ese tipo de dispositivo, la opción C mostrará las páginas VPD del dispositivo en hexadecimal y la opción D mostrará el código hexadecimal asociado a cada una de esas páginas VPD. Por tanto, todas esas opciones son incorrectas. La opción B es una opción válida, pero sus parámetros correctos son stop, sync, start y load, no show. Así pues, la opción B también es incorrecta."}
+]

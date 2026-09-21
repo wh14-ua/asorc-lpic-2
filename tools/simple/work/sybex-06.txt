@@ -1,0 +1,178 @@
+### SYBEX-CH06-RQ01  [multiple_choice]  tema: Servicios de red
+P: ¿Qué capa de red utiliza el cifrado Wi-Fi Protected Access (WPA)?
+   A. Red
+  *B. Física
+   C. Transporte
+   D. Aplicación
+LIBRO: El protocolo de cifrado Wi-Fi Protected Access protege el acceso a los puntos de acceso inalámbricos. La red inalámbrica opera en la capa física, así que la opción B es correcta. La capa de red usa protocolos de direccionamiento, como IP, para enviar datos entre sistemas de la red, pero no interactúa con la señal inalámbrica, así que la respuesta A es incorrecta. La capa de transporte usa puertos para dirigir el tráfico de red a aplicaciones concretas que se ejecutan en la capa de aplicación, así que las opciones C y D son ambas incorrectas.
+
+### SYBEX-CH06-RQ02  [multiple_choice]  tema: Servicios de red
+P: ¿Qué parámetro de la capa de red define la red a la que está conectado el sistema?
+   A. Dirección IP
+   B. Router predeterminado
+   C. Nombre de host (hostname)
+  *D. Máscara de red (netmask)
+   E. Servidor DNS
+LIBRO: El valor de la máscara de red determina la parte de red de la dirección IP, que identifica a qué red está conectado el sistema. Así pues, la opción D es correcta. El router predeterminado es otra dirección IP de la red, pero no indica la parte de red de la dirección, así que no puede usarse para determinar la dirección de red y la opción B es incorrecta. La dirección IP por sí sola no define la dirección de red sin la máscara, así que la opción A es incorrecta. El nombre de host no indica la dirección de red, así que la opción C es incorrecta. El servidor DNS asocia nombres de host con direcciones IP, pero si solo se conoce la dirección IP sigue sin saberse la parte de red de la dirección, así que la opción E es incorrecta.
+
+### SYBEX-CH06-RQ03  [multiple_choice]  tema: Servicios de red
+P: ¿Cuál de los siguientes es un valor de máscara de red correcto?
+  *A. 255.255.255.0
+   B. 255.255.0.255
+   C. 192.168.1.0
+   D. 192.168.0.1
+   E. 0.255.255.255
+LIBRO: El valor de la máscara de red pone a 1 los bits de la parte de red de la dirección IP y a 0 los de la parte de host. Por tanto, el valor de la máscara debe tener unos consecutivos al principio. La opción A, 255.255.255.0, indica que los primeros 24 bits de la dirección son unos, así que representa un valor de máscara correcto y es la opción acertada. En la opción B los unos no son consecutivos, así que no es un valor de máscara válido y es incorrecta. La opción C muestra una dirección de red, no una máscara, mientras que la opción D muestra una dirección de host, no una máscara, así que ambas son incorrectas. La opción E muestra una dirección con unos consecutivos, pero están al final y no al principio, así que es incorrecta.
+
+### SYBEX-CH06-RQ04  [multiple_choice]  tema: Servicios de red
+P: ¿De qué dos partes se compone una dirección IP?
+   A. Dirección de host y router
+   B. Máscara de red y dirección de host
+   C. Máscara de red y router
+   D. Dirección de host y nombre de host
+  *E. Dirección de red y dirección de host
+LIBRO: Una dirección IP se compone de la dirección de red y de una dirección de host única, así que la opción E es correcta. La dirección de host y la del router no indican la dirección de red, así que la opción A es incorrecta. Con la máscara de red y la dirección de host no se obtiene la dirección de red, así que la opción B es incorrecta. Del mismo modo, la máscara de red y la dirección del router determinan la dirección de red, pero no la dirección de host del sistema, así que la opción C es incorrecta. El nombre de host no forma parte de la dirección IP, así que la opción D también es incorrecta.
+
+### SYBEX-CH06-RQ05  [multiple_choice]  tema: Servicios de red
+P: ¿Cuántos bits tiene una dirección IPv6?
+   A. 32
+   B. 64
+  *C. 128
+   D. 256
+   E. 8
+LIBRO: La versión 6 de IP usa 128 bits separados en ocho grupos de cuatro valores hexadecimales, así que la opción C es correcta. Las direcciones originales de IP versión 4 usan 32 bits, pero no IPv6, así que la opción A es incorrecta. Muchas redes IPv6 usan una dirección de red de 64 bits y una de host de 64 bits, pero la dirección IPv6 completa es de 128 bits, así que la opción B es incorrecta. Actualmente no existe ninguna versión de IP que use 256 ni 8 bits, así que las opciones D y E son incorrectas.
+
+### SYBEX-CH06-RQ06  [multiple_choice]  tema: Servicios de red
+P: ¿Qué parámetro de red define el dispositivo que encamina los paquetes destinados a hosts de redes remotas?
+  *A. Router predeterminado
+   B. Máscara de red (netmask)
+   C. Nombre de host (hostname)
+   D. Dirección IP
+   E. Servidor DNS
+LIBRO: El router predeterminado se usa para enviar paquetes desde la red local a redes remotas, así que para comunicarse con un host remoto hay que definir la dirección del router predeterminado, lo que hace correcta la opción A. La máscara de red solo define la red local; no define qué hacer con los paquetes destinados a hosts remotos, así que la opción B es incorrecta. El nombre de host y la dirección IP solo definen características del host local, así que las opciones C y D son incorrectas, mientras que el servidor DNS define cómo obtener la dirección IP de un host a partir de su nombre de dominio, así que la opción E es incorrecta.
+
+### SYBEX-CH06-RQ07  [multiple_choice]  tema: Servicios de red
+P: ¿Qué parámetro del dispositivo define un host que asocia un nombre de host a una dirección IP?
+   A. Router predeterminado
+   B. Máscara de red (netmask)
+   C. Nombre de host (hostname)
+   D. Dirección IP
+  *E. Servidor DNS
+LIBRO: El servidor DNS asocia el nombre de host a una dirección IP, así que hay que tener un servidor DNS definido en la configuración de red para poder usar nombres de host en las aplicaciones. Por tanto, la opción E es correcta. El router predeterminado solo define cómo enviar paquetes a hosts remotos; no asocia el nombre de host con la dirección IP, así que la opción A es incorrecta. El valor de la máscara de red define la red local, pero no cómo asociar nombres de host a direcciones IP, así que la opción B es incorrecta. El nombre de host y la dirección IP definen características del host local, así que las opciones C y D son incorrectas.
+
+### SYBEX-CH06-RQ08  [multiple_choice]  tema: Servicios de red
+P: ¿Qué se usa para asignar automáticamente una dirección IP a un cliente?
+   A. Router predeterminado
+  *B. DHCP
+   C. Tabla ARP
+   D. Máscara de red (netmask)
+   E. ifconfig
+LIBRO: El Dynamic Host Configuration Protocol (DHCP) se usa para asignar direcciones IP dinámicas a las estaciones de trabajo cliente de una red, así que la opción B es correcta. El router predeterminado no puede asignar direcciones a los dispositivos, así que la opción A es incorrecta. La tabla ARP asocia la dirección hardware de la tarjeta de red con direcciones IP, pero no asigna las direcciones IP, así que la opción C es incorrecta. El valor de la máscara de red determina la dirección de red, pero no la dirección IP del host, así que la opción D es incorrecta. El comando ifconfig puede fijar la dirección IP estática del host, pero no la asigna automáticamente, así que la opción E es incorrecta.
+
+### SYBEX-CH06-RQ09  [multiple_choice]  tema: Servicios de red
+P: ¿Qué tipo de dirección se usa para que las aplicaciones locales puedan comunicarse entre sí mediante protocolos de red?
+   A. Dirección dinámica
+  *B. Dirección de bucle local (loopback)
+   C. Dirección estática
+   D. Nombre de host (hostname)
+   E. Dirección MAC
+LIBRO: La dirección de bucle local (loopback) es una dirección especial asignada a la interfaz de loopback, que permite que las aplicaciones locales se comuniquen entre sí, lo que hace que la opción B sea la respuesta correcta. Las direcciones IP dinámicas y estáticas se asignan a interfaces de red, que interactúan con sistemas remotos, no con aplicaciones locales, así que las opciones A y C son incorrectas. El nombre de host identifica al host local para conexiones remotas, no para aplicaciones locales, así que la opción D es incorrecta. La dirección MAC identifica la dirección hardware de la tarjeta de red, pero no la usan las aplicaciones locales, así que la opción E es incorrecta.
+
+### SYBEX-CH06-RQ10  [multiple_choice]  tema: Servicios de red
+P: ¿Qué protocolo de la capa de transporte garantiza la entrega de paquetes?
+  *A. TCP
+   B. UDP
+   C. ICMP
+   D. DNS
+   E. DHCP
+LIBRO: TCP garantiza la entrega de paquetes entre aplicaciones, así que la opción A es correcta. UDP es más rápido, pero no garantiza la entrega, así que la opción B es incorrecta. ICMP se usa para enviar mensajes de control entre aplicaciones, pero no están garantizados, así que la opción C es incorrecta. DNS y DHCP no son protocolos de la capa de transporte, así que las opciones D y E son incorrectas.
+
+### SYBEX-CH06-RQ11  [multiple_choice]  tema: Servicios de red
+P: ¿Qué formato del comando nc escucha conexiones HTTP entrantes para simular un servidor web?
+   A. nc 192.168.1.77 80
+  *B. nc –l 80
+   C. nc 192.168.1.77
+   D. nc 80 192.168.1.77
+   E. nc –l 22
+LIBRO: Las conexiones HTTP usan el puerto TCP 80 y, para escuchar en el puerto TCP 80, se usaría la opción –l 80 del comando nc, lo que hace que la opción B sea el formato correcto. La opción A muestra el comando nc para conectarse al servidor web que se ejecuta en el host 192.168.1.77, así que es incorrecta. La opción E escucha en el puerto TCP 22, así que es incorrecta. Las opciones C y D no tienen el formato adecuado para el comando nc, así que ambas son incorrectas.
+
+### SYBEX-CH06-RQ12  [multiple_choice]  tema: Servicios de red
+P: ¿Qué carpeta usan los sistemas basados en Red Hat para guardar los archivos de configuración de red?
+  *A. /etc/sysconfig/network-scripts
+   B. /etc/network
+   C. /etc/ifcfg-eth0
+   D. /etc/ifconfig
+   E. /etc/iwconfig
+LIBRO: Los sistemas basados en Red Hat usan archivos separados para guardar la dirección IP y la información del router. Esos archivos se guardan en la carpeta /etc/sysconfig/network-scripts, lo que hace correcta la opción A. La opción B es donde los sistemas basados en Debian guardan el archivo interfaces, que contiene los ajustes de configuración de red. El ifcfg-eth0 es un archivo usado para guardar la configuración, no una carpeta, así que la opción C es incorrecta. ifconfig e iwconfig son comandos y no carpetas, así que las opciones D y E son incorrectas.
+
+### SYBEX-CH06-RQ13  [multiple_choice]  tema: Servicios de red
+P: ¿Qué línea de configuración establece una dirección IP dinámica en un sistema Debian?
+   A. iface eth0 inet static
+  *B. iface eth0 inet dhcp
+   C. auto eth0
+   D. iface eth0 inet6 auto
+   E. BOOTPROTO=dynamic
+LIBRO: La opción B es el formato correcto para establecer una dirección IP dinámica en la interfaz. El sistema Debian usa el ajuste iface para configurar características de una interfaz, así que las opciones C y E son incorrectas. La opción A establece una dirección IP estática en la interfaz y no una dinámica, así que es incorrecta. La opción D establece una dirección IPv6 de enlace local y no una dirección IP dinámica, así que es incorrecta.
+
+### SYBEX-CH06-RQ14  [multiple_choice]  tema: Servicios de red
+P: ¿Qué archivo contiene una lista de servidores DNS que el sistema Linux puede usar para resolver nombres de host?
+   A. /etc/hosts.allow
+  *B. /etc/resolv.conf
+   C. /etc/inetd.conf
+   D. /etc/network/interfaces
+   E. /etc/host.deny
+LIBRO: Los servidores DNS se listan en el archivo de configuración /etc/resolv.conf mediante el ajuste nameserver, así que la opción B es correcta. Las opciones A, C y E listan archivos que se usan en el programa tcp_wrappers, no en el sistema DNS, así que todas son incorrectas. La opción D indica el archivo que se usa para definir la mayoría de los ajustes de red en un sistema basado en Debian, pero los servidores DNS no se especifican en ese archivo, así que es incorrecta.
+
+### SYBEX-CH06-RQ15  [multiple_choice]  tema: Servicios de red
+P: ¿Qué formato de ifconfig asigna correctamente una dirección IP y una máscara de red a la interfaz eth0?
+  *A. ifconfig eth0 down 192.168.1.50 netmask 255.255.255.0
+   B. ifconfig eth0 255.255.255.0 192.168.1.50
+   C. ifconfig up 192.168.1.50 netmask 255.255.255.0
+   D. ifconfig up
+   E. ifconfig down
+LIBRO: El comando ifconfig debe indicar la interfaz de red, la dirección IP y después la opción netmask antes de la dirección de máscara. Puede usarse la opción up o down para dejar la tarjeta de red en estado activo o inactivo por defecto, pero no es obligatorio. La opción A es la única que usa los valores correctos en el orden correcto. La opción C se acerca, pero no indica la interfaz de red. La opción B no tiene el formato correcto, y las opciones D y E no incluyen los ajustes de configuración necesarios.
+
+### SYBEX-CH06-RQ16  [multiple_choice]  tema: Servicios de red
+P: ¿Qué comando muestra todas las redes inalámbricas disponibles en su zona?
+  *A. iwlist
+   B. iwconfig
+   C. ifconfig
+   D. ip
+   E. arp
+LIBRO: El comando iwlist muestra todos los puntos de acceso inalámbricos disponibles detectados por la tarjeta de red inalámbrica, así que la opción A es correcta. El comando iwconfig configura la tarjeta de red para conectarse a un punto de acceso concreto, pero no lista todos los puntos de acceso detectados, lo que hace incorrecta la opción B. La opción C indica el comando ifconfig, que se usa para asignar una dirección IP a una tarjeta de red inalámbrica, pero no lista los puntos de acceso. El comando ip de la opción D también puede usarse para fijar la dirección IP de la tarjeta, pero no lista los puntos de acceso. La opción E, el comando arp, asocia direcciones hardware con direcciones IP para poder encontrar direcciones IP duplicadas en la red, pero no lista los puntos de acceso inalámbricos.
+
+### SYBEX-CH06-RQ17  [multiple_choice]  tema: Servicios de red
+P: ¿Qué opción establece el nombre del punto de acceso inalámbrico en el comando iwconfig?
+   A. key
+   B. netmask
+   C. address
+  *D. essid
+   E. channel
+LIBRO: El valor SSID define el nombre del punto de acceso y se establece con la opción essid del comando iwconfig, lo que hace que la opción D sea la respuesta correcta. La clave (key) indica la clave de cifrado necesaria para conectarse al punto de acceso, pero no su nombre, lo que hace incorrecta la opción A. Los valores netmask y address no se establecen con el comando iwconfig, así que las opciones B y C son incorrectas. El canal (channel) define la radiofrecuencia que usa el punto de acceso, no su nombre, así que la opción E también es incorrecta.
+
+### SYBEX-CH06-RQ18  [multiple_choice]  tema: Servicios de red
+P: ¿Qué comando puede usarse tanto para mostrar como para establecer la dirección IP, la máscara de red y el router predeterminado?
+   A. ifconfig
+   B. iwconfig
+   C. router
+   D. ifup
+  *E. ip
+LIBRO: El comando ip permite tanto mostrar como establecer la dirección IP, la máscara de red y el router predeterminado de una interfaz de red, así que la opción E es correcta. El comando ifconfig puede establecer la dirección IP y la máscara, pero no el router predeterminado. El comando iwconfig se usa para configurar los ajustes del punto de acceso inalámbrico, y el comando router se usa para establecer el router predeterminado, pero no la dirección IP ni la máscara. El comando ifup solo activa la interfaz de red; no puede establecer los valores de dirección.
+
+### SYBEX-CH06-RQ19  [multiple_choice]  tema: Servicios de red
+P: ¿Qué herramienta permite enviar mensajes ICMP a un host remoto para comprobar la conectividad de red?
+   A. netstat
+   B. nmap
+  *C. ping
+   D. nc
+   E. tcpdump
+LIBRO: El comando ping envía paquetes ICMP a un host remoto concreto y espera respuesta, lo que hace que la opción C sea la respuesta correcta. El comando netstat muestra estadísticas de la interfaz de red, así que es incorrecta. El comando nmap puede escanear hosts remotos en busca de puertos abiertos, pero no envía paquetes ICMP, lo que hace incorrecta la opción B. El comando nc permite simular un servidor o un cliente con conexiones TCP o UDP, pero no maneja paquetes ICMP, lo que hace incorrecta la opción D. El programa tcpdump captura paquetes de red pero no los envía, así que la opción E también es incorrecta.
+
+### SYBEX-CH06-RQ20  [multiple_choice]  tema: Servicios de red
+P: ¿Qué comando permite ver los paquetes de red?
+   A. dig
+  *B. tcpdump
+   C. ping
+   D. netstat
+   E. nc
+LIBRO: El comando tcpdump captura paquetes de la interfaz de red y los muestra o los guarda en un archivo, así que la opción B es correcta. El comando netstat solo muestra estadísticas de la interfaz de red; no captura paquetes, así que la opción D es incorrecta. El comando dig se usa para obtener información DNS sobre redes, el comando ping envía paquetes ICMP a hosts remotos y el comando nc envía o recibe paquetes para simular un cliente y un servidor, así que las opciones A, C y E son todas incorrectas.

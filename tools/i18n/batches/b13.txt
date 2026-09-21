@@ -1,0 +1,89 @@
+### SYBEX-CH05-RQ11  [multiple_choice]
+Q: What number designates both an iSCSI target server and an iSCSI disk being offered by that target? (Choose the best answer.)
+A: WWID
+B: WWN
+C: IQN
+D: LUN
+E: scsi_id
+X: Option C is correct, because the IQN designates both the iSCSI target server as well as an iSCSI disk it is offering. A WWID is the same as a WWN, and while they may uniquely identify an iSCSI disk, they do not identify an iSCSI target, so options A and B are incorrect. A LUN can also uniquely identify an iSCSI disk, but it does not identify an iSCSI target, so option D is also incorrect. Option E is a command that you can use to create a unique iSCSI number, so it is incorrect as well.
+
+### SYBEX-CH05-RQ12  [multiple_response]
+Q: Where are iSCSI discovery records stored? (Choose all that apply.)
+A: /etc/iscsi/iscsid.conf
+B: /lib/udev/scsi_id
+C: /var/lib/iscsi/nodes
+D: /var/lib/iscsi/send_targets
+E: /var/log/iscsi.conf
+X: During the discovery process, two records are created by the iscsiadm tool: a discovered node record stored in the /var/lib/iscsi/nodes database file (option C) and the target server’s IP address record stored in the /var/lib/iscsi/send_targets file (option D). Therefore, options C and D are correct. Option A is the iscsiadm tool’s configuration file, so it is incorrect. Option B is the scsi_id command’s directory location, so it also is incorrect. Option E is a made-up file, so it is a wrong choice.
+
+### SYBEX-CH05-RQ13  [multiple_response]
+Q: Which of the following allows multiple partitions or whole disks to be grouped together and used as a single drive? (Choose all that apply.)
+A: PATA
+B: RAID
+C: iSCSI
+D: Logical volume management
+E: Storage fabric
+X: Both RAID and logical volume management or Logical Volume Manager (LVM) allow multiple partitions to be grouped together and used as a single partition for formatting, mounting on the Linux virtual directory structure, storing data, and so on. Thus, options B and D are correct. PATA is drive interface technology, so option A is incorrect. Option C is incorrect, because iSCSI is a storage network transport protocol, which makes a target server’s iSCSI disk appear as a locally attached disk, but no grouping is involved. Finally, option E’s storage fabric is an incorrect choice, because it is any hardware that connects SAN storage devices to systems.
+
+### SYBEX-CH05-RQ14  [multiple_choice]
+Q: Which is a designated unused disk partition or drive that can be used by LVM? (Choose the best answer.)
+A: PV
+B: VG
+C: LV
+D: SATA
+E: Backstore
+X: Option A is correct, because a physical volume (PV) is a designated unused disk partition (or whole drive) to be used by LVM. A volume group (VG) has PVs in its storage pool and feeds logical volumes (LVs), which consist of storage space chunks (logical extents). Therefore, options B and C are incorrect. Option D’s SATA is incorrect, because SATA is a drive interface technology. Option E is incorrect, because a backstore is a data accessing method that points and allows access to a physical storage medium in a storage fabric SAN.
+
+### SYBEX-CH05-RQ15  [multiple_choice]
+Q: Which of the following is not true concerning PEs? (Choose the best answer.)
+A: PE stands for “physical extent.”
+B: A PE is the smallest block size that can be allocated on a PV.
+C: PE block size is set during the process of designating a PV.
+D: The default PE block size is 4 MiB.
+E: A PE block size setting can be chosen.
+X: The PE block size is actually set during the process of adding a PV to a VG. Therefore, option C is the correct answer, because it is not true. Options A, B, D, and E are all correct statements concerning PEs and are therefore incorrect choices.
+
+### SYBEX-CH05-RQ16  [multiple_choice]
+Q: Which of the following is true concerning LEs? (Choose the best answer.)
+A: LEs are made up of LVs.
+B: LEs are mapped to VG physical extents.
+C: LE mapping provides a way to block data access.
+D: LE mappings occur during PV designation.
+E: None of the above.
+X: Option B is true, because logical extents (LEs) are mapped to VG physical extents. Option A is not true, because LVs are made up of logical extents (LEs), and therefore it is an incorrect choice. Option C is not true, because the mapping provides a way to access the data, not block the data. Therefore, option C is a wrong choice. Option D is incorrect, because LE mapping does not occur during PV designation. Finally, option E is incorrect, because option B is true.
+
+### SYBEX-CH05-RQ17  [multiple_choice]
+Q: Which of the following LVM utilities will designate a partition as a PV? (Choose the best answer.)
+A: pvdisplay
+B: vgcreate
+C: lvcreate
+D: pvcreate
+E: pvscan
+X: Option D is the correct answer, because the pvcreate utility can designate a partition as a PV. The pvdisplay utility displays PV attributes. Option B is incorrect, because vgcreate adds a single PV or more to a VG pool. Option C is incorrect, because lvcreate either creates an LV from a VG pool or creates snapshots. Option E is also incorrect, because the pvscan utility lists all of the various PVs on a system.
+
+### SYBEX-CH05-RQ18  [multiple_choice]
+Q: You’ve just finished creating vg01. What utility would be the best one to check it? (Choose the best answer.)
+A: pvdisplay
+B: vgcreate
+C: pvscan
+D: vgdisplay
+E: lvdisplay
+X: Option D is the correct answer, because the vgdisplay utility displays a VG’s attributes, and vg01 is a VG. Option A is incorrect, because pvdisplay displays PV attributes. Option B is incorrect, because vgcreate adds a single PV or more to a VG pool. Option C is incorrect, because the pvscan utility lists all of the various PVs on a system and vg01 is a VG. Option E is also incorrect, because lvdisplay displays an LV’s attributes.
+
+### SYBEX-CH05-RQ19  [multiple_response]
+Q: Which of the following are true about LV snapshots? (Choose all that apply.)
+A: LV snapshots are LVs themselves.
+B: LV snapshots are read-only.
+C: LV snapshots can be mounted to the directory.
+D: LV snapshots contain copies of the original LV data.
+E: LV snapshots are created using the vgcreate command.
+X: Options A and C are true and therefore correct. Option B is not true and is incorrect, because an LV snapshot has both read and write access. Option D is incorrect, because the original data is not copied to a LV snapshot. Option E is also not true, because LV snapshots are created with the lvcreate command.
+
+### SYBEX-CH05-RQ20  [multiple_choice]
+Q: To rename an LV, which utility should you use? (Choose the best answer.)
+A: lvrename
+B: lvremove
+C: lvconvert
+D: lvs
+E: lvmchange
+X: Option A is correct, because the lvrename command allows an LV’s name to be changed. Option B is incorrect, because the lvremove deletes a LV. The lvconvert utility changes an LV’s layout, and therefore option C is an incorrect answer. Option D’s lvs is incorrect, because it displays information about LVs on a system. Finally, option E is incorrect because lvmchange is an obsolete command.

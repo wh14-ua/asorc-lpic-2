@@ -1,0 +1,63 @@
+[
+{"id":"SYBEX-CH08-RQ11",
+ "q":"¿Cuáles de las siguientes son directivas de tipo de zona válidas? (Elija todas las que correspondan.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"Las opciones A y C son correctas. La directiva type master indica que este es el servidor de nombres primario de una zona, y la directiva type hint especifica que se trata de la zona de pistas o zona raíz, que es una lista de los servidores raíz actuales. La opción B es errónea, porque la directiva que indica que este es el servidor de nombres secundario de una zona es type slave y no type secondary. La opción D es incorrecta, porque para indicar que esta zona debe aplicar el estado delegation-only de una zona raíz hay que usar la directiva type delegation-only. Por último, la opción E es incorrecta, porque no existe la directiva type root."},
+
+{"id":"SYBEX-CH08-RQ12",
+ "q":"¿Cuáles de las siguientes son clases válidas en una sentencia de zona? (Elija todas las que correspondan.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"Las opciones A, C y D son correctas. La clase de una sentencia de zona puede ser IN (Internet), CH (protocolo de red Chaosnet) o HS (software de red Hesiod). Las opciones B y E son clases inventadas, así que son incorrectas."},
+
+{"id":"SYBEX-CH08-RQ13",
+ "q":"¿Por qué podría copiarse la información autoritativa de zona desde las bases de datos del servidor de nombres primario al secundario (lo que se llama transferencia de zona)? (Elija todas las que correspondan.)",
+ "o":{"A":"El demonio BIND del servidor primario se ha reiniciado.",
+      "B":"El demonio BIND del servidor secundario ha arrancado.",
+      "C":"Se ha usado la utilidad rndc en el servidor secundario y se ha solicitado una actualización manual de los datos de zona.",
+      "D":"Ha expirado el tiempo de refresco de los datos de zona del servidor secundario.",
+      "E":"Se detuvo el demonio BIND del servidor secundario y se eliminaron sus archivos de configuración."},
+ "e":"Las opciones B, C y D son correctas: en esos casos se producirá una transferencia de zona. La opción A es incorrecta, porque una transferencia de zona no se inicia porque se reinicie el demonio BIND del servidor primario. La opción E también es incorrecta, porque en la práctica esa opción apaga y elimina el servicio BIND del servidor secundario."},
+
+{"id":"SYBEX-CH08-RQ14",
+ "q":"Las bases de datos de zona predeterminadas suelen guardarse en ¿qué directorios? (Elija las dos mejores respuestas.)",
+ "o":{"A":"directorio /etc/named/","B":"directorio /var/bind/","C":"directorio /var/named/","D":"directorio /etc/bind9/","E":"directorio /etc/bind/"},
+ "e":"Normalmente las bases de datos de zona predeterminadas se encuentran en el directorio /var/named/ o en el directorio /etc/bind/, según la distribución del servidor. Por tanto, las opciones C y E son correctas. Los demás directorios están inventados, así que las opciones A, B y D son incorrectas."},
+
+{"id":"SYBEX-CH08-RQ15",
+ "q":"Una base de datos de zona tiene registros de recursos de varios tipos. Uno de esos registros identifica el inicio de autoridad de la zona e incluye sus datos autoritativos. ¿Cuál de los siguientes es ese tipo de registro de recurso? (Elija la mejor respuesta.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"La opción E es correcta, porque el SOA (start of authority, inicio de autoridad) es el tipo de registro de recurso de zona que identifica el inicio de una zona de autoridad e incluye sus datos autoritativos. El tipo de registro CNAME (nombre canónico) asocia un nombre alias a un nombre de host, así que la opción A es incorrecta. El tipo de registro A de la opción B es un registro de dirección de host para direcciones IPv4. Un registro de tipo PTR apunta a otra ubicación del espacio de nombres de dominio y se usa normalmente en búsquedas inversas, así que la opción C es errónea. El tipo de registro NS de la opción D especifica el servidor de nombres autoritativo de la zona, así que es incorrecta."},
+
+{"id":"SYBEX-CH08-RQ16",
+ "q":"¿Cuál de las siguientes describe mejor una zona inversa (Reverse Zone)? (Elija la mejor respuesta.)",
+ "o":{"A":"Un registro usado en la delegación de zonas, que proporciona la dirección IP del servidor de nombres maestro de una zona hija",
+      "B":"El proceso de copiar información autoritativa de zona a un servidor de nombres",
+      "C":"Una zona especial que proporciona una correspondencia de una dirección IP a un FQDN",
+      "D":"Una directiva de zona situada normalmente en el archivo named.conf, con un ajuste type hint",
+      "E":"Una porción del espacio de nombres de dominio que delimita sobre qué tiene autoridad un servidor de nombres"},
+ "e":"La opción C es correcta, porque una zona inversa es una zona especial que proporciona una correspondencia de una dirección IP a un FQDN (lo contrario de las correspondencias DNS habituales). La opción A es errónea, porque describe un registro de pegamento (glue record). La opción B es una transferencia de zona, así que es una respuesta incorrecta. La opción D es errónea, porque describe una zona de pistas (Hint Zone), y la opción E también es incorrecta porque es la definición de una zona."},
+
+{"id":"SYBEX-CH08-RQ17",
+ "q":"¿Cuáles de los siguientes son métodos para asegurar sus servicios DNS? (Elija todas las que correspondan.)",
+ "o":{"A":"Ejecutar únicamente servicios BIND en el servidor.",
+      "B":"Ejecutar el demonio BIND con un usuario no root.",
+      "C":"Implementar un servidor de doble horizonte (Dual Horizon).",
+      "D":"Actualizar el software BIND una vez al año.",
+      "E":"Ocultar la información de versión de BIND."},
+ "e":"Las opciones A, B, C y E son correctas. Solo la opción D es incorrecta. La actualización del software BIND no depende del calendario: debido a la amenaza constante de ataques maliciosos, BIND debe actualizarse en cuanto haya una nueva versión disponible."},
+
+{"id":"SYBEX-CH08-RQ18",
+ "q":"Al configurar una jaula chroot, el nuevo directorio raíz suele ser ¿cuál de los siguientes? (Elija dos respuestas.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"Al configurar una jaula chroot se suele usar /chroot/named (opción D) o /chroot/bind (opción E) como nuevo directorio raíz (/), según la distribución. Los demás directorios también pueden usarse en la configuración de BIND, pero no como nuevo directorio raíz (/) de una jaula chroot. Por tanto, las opciones A, B y C son incorrectas."},
+
+{"id":"SYBEX-CH08-RQ19",
+ "q":"En la extensión de seguridad DNSSEC de BIND, ¿cómo se llama la clave de cifrado que se usa para firmar digitalmente los registros de recursos de una zona concreta? (Elija la mejor respuesta.)",
+ "o":{"A":"Firma digital","B":"Clave de firma de claves (key signing key)","C":"Clave de firma de zona (zone signing key)","D":"Cadena de confianza","E":"="},
+ "e":"La clave de firma de zona (ZSK) es la clave de cifrado que se usa para firmar digitalmente los registros de recursos de una zona concreta, así que la opción C es correcta. La firma digital de la opción A se produce cuando se usa la ZSK para firmar los registros de la zona, así que la opción A es incorrecta. Una clave de firma de claves (KSK) es la clave de cifrado que se usa para firmar la ZSK de una zona concreta, así que la opción B es errónea. En la opción D, la cadena de confianza hace que la clave de una zona superior firme la de una zona inferior, creando una cadena de confianza con un ancla de confianza, así que es una elección incorrecta. Por último, el DNSKEY de la opción E es donde se guarda la KSK, así que también es una elección incorrecta."},
+
+{"id":"SYBEX-CH08-RQ20",
+ "q":"¿Qué utilidad se usa para crear claves TSIG o DNSSEC? (Elija la mejor respuesta.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"La utilidad dnssec-keygen de la opción A puede generar claves TSIG o DNSSEC, según las opciones que se usen, así que es la elección correcta. La utilidad dnssec-signzone se usa en sistemas que tienen generadas las claves TSIG pero no configuran la firma automática mediante las directivas autodnssec e inline-signing del archivo named.conf, para firmar la zona manualmente. Por tanto, la opción B es errónea. La utilidad dnssec-dsfromkey se usa para crear un registro para la zona padre en la cadena de confianza, así que la opción C también es errónea. Las opciones D y E contienen utilidades inventadas, así que son elecciones incorrectas."}
+]

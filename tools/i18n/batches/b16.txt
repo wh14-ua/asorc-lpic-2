@@ -1,0 +1,86 @@
+### SYBEX-CH07-RQ01  [multiple_choice]
+Q: Where are the Postfix configuration files located?
+A: /var/spool/postfix
+B: /etc/postfix
+C: /var/spool/mail
+D: /var/log
+E: /etc/mail
+X: The Postfix package installs the configuration files in the /etc/postfix directory, so option B is correct. The /var/spool/postfix directory contains the email processing directories and files but not the configuration files, so answer A is incorrect. The /var/spool/ mail directory contains local user mailboxes but not configuration files, so answer C is incorrect. The /var/log directory contains log files but not configuration files, so answer D is incorrect. The /etc/mail directory is not part of the Postfix setup, so answer E is incorrect.
+
+### SYBEX-CH07-RQ02  [multiple_choice]
+Q: What is the name of the main Postfix process?
+A: qmgr
+B: pickup
+C: master
+D: cleanup
+E: smtp
+X: The master process in Postfix controls which Postfix programs are started for processing messages, so option C is correct. The qmgr, pickup, cleanup, and smtp processes handle email messages in the mail queue but don’t control the other processes, so options A, B, D, and E are all incorrect.
+
+### SYBEX-CH07-RQ03  [multiple_choice]
+Q: What is the Postfix configuration file that manages when Postfix processes start and stop?
+A: master.cf
+B: main.cf
+C: install.cf
+D: /var/spool/postfix
+E: /var/log/maillog
+X: The master.cf configuration file contains settings that define when the Postfix processes start and stop, so option A is correct. The main.cf configuration file controls how Postfix handles email messages but not the individual processes, so option B is incorrect. The install.cf configuration file controls what features Postfix installs and enables, but it doesn’t control the individual processes, so option C is incorrect. The /var/spool/ postfix and /var/log/maillog options are not Postfix configuration files, so they are both incorrect.
+
+### SYBEX-CH07-RQ04  [multiple_choice]
+Q: What is the Postfix configuration file that controls mail processing?
+A: master.cf
+B: /etc/sendmail.cf
+C: /etc/aliases
+D: main.cf
+E: /var/log/maillog
+X: The main.cf configuration file contains settings that control how Postfix processes email messages, so option D is correct. The master.cf configuration file contains settings that control how Postfix manages processes but not how it processes email messages, so option A is incorrect. The sendmail.cf configuration file is used by sendmail, not Postfix, so option B is incorrect. The /etc/aliases file contains alias names and local user mailbox names for forwarding email messages, but it doesn’t control how Postfix processes the email messages, so option C is incorrect. The /var/log/maillog file contains log entries from Postfix; it is not a configuration file, so option E is incorrect.
+
+### SYBEX-CH07-RQ05  [multiple_choice]
+Q: What directory does Postfix use for storing email messages as it processes them?
+A: /var/spool/mail
+B: /var/spool/postfix
+C: /etc/postfix
+D: /etc/mail
+X: The /var/spool/postfix directory contains subdirectories where Postfix stores messages as they are being processed, so option B is correct. The /var/spool/mail directory contains mailbox files for storing delivered email but not as the messages are processed, so option A is incorrect. The /etc/postfix directory contains the Postfix configuration files but not messages as they’re processed, so option C is incorrect. The /etc/mail directory is not used by Postfix, so option D is incorrect.
+
+### SYBEX-CH07-RQ06  [multiple_choice]
+Q: What sendmail emulation command in Postfix allows you to check on the number of messages waiting in the mail queue to be delivered?
+A: newaliases
+B: master
+C: pickup
+D: smtp
+E: mailq
+X: The mailq command shows the number of email messages waiting in the mail queue to be delivered, so option E is correct. The master, pickup, and smtp programs are part of the Postfix email process and aren’t used from the command line, so options B, C, and D are incorrect. The newaliases command creates a new alias database file from a text alias file, but it doesn’t display the number of messages in the mail queue, so option A is incorrect.
+
+### SYBEX-CH07-RQ07  [multiple_choice]
+Q: Which sendmail emulation command converts the text alias entries into the binary aliases database file?
+A: newaliases
+B: master
+C: pickup
+D: smtp
+E: mailq
+X: The newaliases command converts the text alias entries to the aliases database file for processing, so option A is correct. The master, pickup, and smtp commands are part of the Postfix email processing system, but they don’t process aliases, so options B, C, and D are all incorrect. The mailq command displays the number of email messages waiting in the queue to be sent, so option E is incorrect.
+
+### SYBEX-CH07-RQ08  [multiple_choice]
+Q: What text file does the newaliases command read to create the aliases database?
+A: /etc/aliases
+B: /etc/postfix/master.cf
+C: /etc/postfix/main.cf
+D: /etc/postfix/install.cf
+X: The /etc/aliases file contains alias names and the local user accounts to which they point. The newaliases command reads this file to generate the binary aliases database used by Postfix when delivering messages, so option A is correct. The master.cf, main.cf, and install.cf files are Postfix configuration files, but they don’t specify alias mappings, so options B, C, and D are incorrect.
+
+### SYBEX-CH07-RQ09  [multiple_choice]
+Q: What log file does Postfix use to store system messages?
+A: /var/spool/mail
+B: /var/log/maillog
+C: /var/spool/postfix
+D: /var/log/messages
+X: Postfix writes system messages to the /var/log/maillog file by default, so option B is correct. The /var/spool/mail file is where Postfix stores mbox-style mail messages, so option A is incorrect. The /var/spool/postfix directory is where Postfix stores messages as it processes them, so option C is incorrect. The /var/log/messages file is where the kernel stores system messages, but that is not used by Postfix, so option D is incorrect.
+
+### SYBEX-CH07-RQ10  [multiple_choice]
+Q: Where do individual users store procmail recipes to apply to their own email messages?
+A: /etc/postfix
+B: /etc/procmailrc
+C: $HOME/.procmailrc
+D: /etc/aliases
+E: /users/.procmailrc
+X: Each user on the system can create personalized recipes and store them in the .procmailrc file in their $HOME directory, so option C is correct. The /etc/postfix directory is not part of the procmail setup, so option A is incorrect. The /etc/procmailrc file defines recipes applied to all email messages for all user accounts, so option B is incorrect. The /etc/ aliases file defines alias mappings to local user accounts, not procmail recipes, so option D is incorrect. The .procmailrc file must be located in the user’s $HOME directory so that they can access it; since the /users folder doesn’t relate to a specific user account, option E is incorrect.

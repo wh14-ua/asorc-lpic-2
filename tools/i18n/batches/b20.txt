@@ -1,0 +1,79 @@
+### SYBEX-CH09-RQ01  [multiple_choice]
+Q: What protocol defines how a web server responds to client requests?
+A: HTML
+B: SSL
+C: HTTP
+D: TLS
+X: HTTP defines the client requests and server responses required to transfer a data file from a web server, so option C is correct. HTML (option A) defines the format of a web document but not the transfer protocol. SSL (option B) and TLS (option D) define encryption protocols, and they aren’t used in the actual file transfer protocol, so both are incorrect.
+
+### SYBEX-CH09-RQ02  [multiple_choice]
+Q: What standard defines how a client formats the content contained in a web page?
+A: HTML
+B: SSL
+C: HTTP
+D: TLS
+X: The HTML standard defines formatting rules for creating web pages, so option A is correct. HTTP (option C) defines the protocol used to transfer the document from the web server to the client browser but not how to format the document itself, so option C is incorrect. SSL and TLS are encryption protocols and don’t format any content in the actual data, so options B and D are incorrect.
+
+### SYBEX-CH09-RQ03  [multiple_choice]
+Q: What HTTP server response code indicates that the file requested by the client was not found?
+A: 200
+B: 403
+C: 500
+D: 404
+X: The 404 response code in HTTP indicates that the file requested by the client was not found on the web server, so option D is correct. The 200 status code (option A) indicates that the request was successful, so option A is incorrect. The 403 status code indicates that the client does not have permission to retrieve the requested file, so option B is incorrect. The 500 status code indicates that there is a server problem preventing the file from being downloaded, so option C is incorrect.
+
+### SYBEX-CH09-RQ04  [multiple_choice]
+Q: What utility allows you to stop the Apache web server gracefully?
+A: systemctl
+B: apache2ctl
+C: httpd
+D: apache2
+X: The apache2ctl utility allows you to issue a graceful shutdown request to the Apache web server, preserving any existing connections to the server, so option B is correct. The systemctl is used by some Linux distributions to stop or start processes, but it doesn’t shut down the Apache web server gracefully, so option A is incorrect. The httpd and apache2 programs are the actual web server and don’t have options to stop the server gracefully, so options C and D are incorrect.
+
+### SYBEX-CH09-RQ05  [multiple_choice]
+Q: What utility allows you to test an Apache web server configuration before actually starting the server?
+A: systemctl
+B: apache2ctl
+C: httpd
+D: apache2
+X: The apache2ctl utility can also parse the Apache configuration files and note any syntax issues, so option B is correct. The systemctl utility is used by some Linux distributions to stop or start processes, but it doesn’t parse configuration files, so option A is incorrect. The httpd and apache2 programs are the main Apache web server, and they don’t have the option to parse the configuration files, so options C and D are incorrect.
+
+### SYBEX-CH09-RQ06  [multiple_choice]
+Q: What directive defines the location on the server that will be shared with clients?
+A: DocumentRoot
+B: ServerRoot
+C: Listen
+D: DirectoryIndex
+X: The DocumentRoot directive defines the folder from which the web server allows clients to request files, so option A is correct. The ServerRoot directive defines the location of the configuration files for the server, so option B is incorrect. The Listen directive defines the IP addresses and ports the Apache server uses to listen for incoming requests, so option C is incorrect. The DirectoryIndex directive defines the default files to look for when a client requests a folder name instead of a filename, so option D is incorrect.
+
+### SYBEX-CH09-RQ07  [multiple_choice]
+Q: What configuration feature allows you to apply directives to specific folders in the filesystem?
+A: <VirtualHost>
+B: <IfDefined>
+C: <Directory>
+D: <IfModule>
+X: The <Directory> feature allows you to create a block of directives that apply to a specific folder location, so option C is correct. The <VirtualHost> feature allows you to create a block of directives that apply to a specific virtual host but not a directory, so option A is incorrect. The <IfDefined> feature allows you to create a block of directives to apply only when an environment variable is defined but not apply it only to a specific directory, so option B is incorrect. The <IfModule> feature allows you to create a block of directives to apply only when a module is loaded but not apply it to a specific directory, so option D is incorrect.
+
+### SYBEX-CH09-RQ08  [multiple_choice]
+Q: What configuration directive defines what information appears in the Apache log file?
+A: ErrorLog
+B: LogFormat
+C: ErrorDocument
+D: DocumentRoot
+X: The LogFormat directive defines the format of the log file entries, allowing you to decide what information is stored in the log file, thus option B is correct. The ErrorLog directive defines where the error logs are located but not what they contain, so option A is incorrect. The ErrorDocument directive defines how error messages sent to the clients are defined but not how the error logs are formatted, so option C is incorrect. The DocumentRoot directive defines the folder from which to serve files but not the format of the error log, so option D is incorrect.
+
+### SYBEX-CH09-RQ09  [multiple_choice]
+Q: Which Apache log file contains information about what web page requests were made by clients?
+A: error.log
+B: apache2.conf
+C: access.log
+D: httpd.conf
+X: The access.log file logs all client requests to the web server, so option C is correct. The error.log file contains only errors, not valid requests, so option A is incorrect. The apache2.conf and httpd.conf files are configuration files for the Apache web server, not log files, so options B and D are both incorrect.
+
+### SYBEX-CH09-RQ10  [multiple_choice]
+Q: What directive should you use to allow system users to create their own web folders?
+A: AuthUserFile
+B: UserDir
+C: DocumentRoot
+D: LoadModule
+X: The UserDir directive defines the folder name that users can create in their HOME folders to offer files on the web server, so option B is correct. The AuthUserFile defines the location of a user authentication file, so option A is incorrect. The DocumentRoot directive defines the server folder to offer to web clients, not the name of individual user folders, so option C is incorrect. The LoadModule directive loads feature modules into the Apache server; it doesn’t specify the location of the user web files folder, so option D is incorrect.

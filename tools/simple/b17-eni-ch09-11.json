@@ -1,0 +1,169 @@
+{
+"ENI-CH09-Q01": {
+  "idea": ["Sí, pero viene desactivado.",
+           "Se activa poniendo un 1 en /proc/sys/net/ipv4/ip_forward."],
+  "memorizar": "para enrutar, ip_forward a 1."
+},
+"ENI-CH09-Q02": {
+  "idea": ["Coges la ruta dentro de /proc/sys y cambias las barras por puntos.",
+           "Para que aguante reinicios, va en /etc/sysctl.conf, que se relee al arrancar."],
+  "memorizar": "la ruta de /proc/sys, con puntos en vez de barras."
+},
+"ENI-CH09-Q03": {
+  "idea": ["Sí, siempre.",
+           "Cualquier sistema IP tiene la suya, aunque no sea un router.",
+           "Como mínimo trae la red local y la ruta por defecto."],
+  "memorizar": "hasta con una tarjeta hay tabla de enrutamiento."
+},
+"ENI-CH09-Q04": {
+  "idea": ["La tabla filter.",
+           "Es la que casi siempre quieres ver, y por eso muchos ni saben que existe la tabla nat.",
+           "Esa se mira con iptables -t nat -L."],
+  "memorizar": "iptables -L enseña filter; nat hay que pedirla."
+},
+"ENI-CH09-Q05": {
+  "idea": ["Con cadenas distintas.",
+           "INPUT es el tráfico dirigido al propio sistema.",
+           "FORWARD es el que solo pasa a través de él."],
+  "memorizar": "INPUT para mí; FORWARD de paso."
+},
+"ENI-CH09-Q06": {
+  "idea": ["Se aplica la regla por defecto de esa cadena.",
+           "Son las políticas, que se definen con -P; hay una por cadena."],
+  "memorizar": "si nada encaja, manda la política."
+},
+"ENI-CH09-Q07": {
+  "idea": ["Porque las direcciones privadas no pasan del router NAT.",
+           "Se sustituyen por la pública, así que la red interna queda discreta.",
+           "Y desde fuera no hay ruta: las privadas no se enrutan en Internet."],
+  "memorizar": "NAT esconde y además corta el camino de vuelta."
+},
+"ENI-CH09-Q08": {
+  "idea": ["Con el programa fail2ban.",
+           "Crea reglas sobre la marcha, como bloquear a quien falle tres veces al abrir sesión SSH."],
+  "memorizar": "fail2ban escribe las reglas por ti."
+},
+"ENI-CH09-Q09": {
+  "idea": ["Organismos de investigación y vigilancia de la seguridad.",
+           "Publican los anuncios y los datos técnicos de las vulnerabilidades descubiertas."],
+  "memorizar": "publican vulnerabilidades; no las explotan."
+},
+"ENI-CH09-Q10": {
+  "idea": ["Por su arquitectura cliente/servidor.",
+           "La configuración y la administración se centralizan en un servidor.",
+           "Y los componentes cliente se instalan en cada máquina del parque."],
+  "memorizar": "un servidor central, un cliente por máquina."
+},
+"ENI-CH10-Q01": {
+  "idea": ["Sí: autentificación por contraseña.",
+           "Lo que no tiene es control de integridad serio ni encriptación.",
+           "Y la contraseña viaja sin encriptar, así que interceptarla es fácil."],
+  "memorizar": "telnet autentica, pero en texto claro."
+},
+"ENI-CH10-Q02": {
+  "idea": ["SSH guarda las huellas de servidores en ~/.ssh/known_hosts.",
+           "Ahí anota cada servidor al que te has conectado.",
+           "Importa porque suplantar un servidor con su nombre y su dirección IP es relativamente fácil."],
+  "analogia": "Es la lista de caras conocidas: si la huella cambia, quien está enfrente no es quien dice ser.",
+  "memorizar": "las huellas de servidores viven en known_hosts."
+},
+"ENI-CH10-Q03": {
+  "idea": ["Ni una ni otra: se crean a la vez.",
+           "El par sale junto, aunque la documentación cuente una antes que la otra.",
+           "De una no se puede deducir la otra."],
+  "memorizar": "ssh-keygen genera siempre el par entero."
+},
+"ENI-CH10-Q04": {
+  "idea": ["El comando ssh-agent.",
+           "Guarda las claves privadas en memoria y se le añaden con ssh-add.",
+           "Las claves se habían creado antes con ssh-keygen."],
+  "memorizar": "keygen crea, add entrega, agent recuerda."
+},
+"ENI-CH10-Q05": {
+  "idea": ["Solo necesita el servicio SSH en la máquina remota.",
+           "El mismo que se usa para las sesiones remotas."],
+  "memorizar": "scp viaja sobre SSH, sin nada más."
+},
+"ENI-CH10-Q06": {
+  "idea": ["Se llama túnel SSH.",
+           "Las aplicaciones no cambian: lo único que cambia es el transporte."],
+  "memorizar": "túnel SSH: mismo tráfico, otro camino."
+},
+"ENI-CH10-Q07": {
+  "idea": ["Sí, pero hay que permitirlo.",
+           "Se pone X11Forwarding con valor yes en el sshd_config del servidor."],
+  "memorizar": "X11Forwarding yes, y en el servidor."
+},
+"ENI-CH10-Q08": {
+  "idea": ["Punto a punto une dos máquinas, y solo ellas.",
+           "Sitio a sitio da las mismas garantías, pero se comunican todos los hosts de ambas redes."],
+  "memorizar": "punto a punto: dos máquinas; sitio a sitio: dos redes."
+},
+"ENI-CH10-Q09": {
+  "idea": ["Sí, con el modo puente.",
+           "El túnel conecta las dos máquinas dentro de la misma subred.",
+           "Es un modo poco frecuente."],
+  "memorizar": "modo puente: misma subred, sin enrutar."
+},
+"ENI-CH10-Q10": {
+  "idea": ["Mirando la red con ifconfig.",
+           "Debe aparecer una interfaz virtual, normalmente tun0, con su dirección IP.",
+           "Que esté no garantiza que funcione, pero sin ella no funciona."],
+  "memorizar": "si hay túnel, hay interfaz tun0."
+},
+"ENI-CH11-Q01": {
+  "idea": ["Porque el compilado ya lleva instrucciones que el procesador entiende.",
+           "El interpretado necesita otro programa traduciendo cada acción sobre la marcha.",
+           "A cambio, el compilado va atado a un juego de instrucciones y es menos portable."],
+  "memorizar": "compilar traduce una vez; interpretar, cada vez."
+},
+"ENI-CH11-Q02": {
+  "idea": ["Comprueba que el entorno de compilación vale y genera el Makefile.",
+           "Ese Makefile es el que usará el compilador.",
+           "A veces no se publica, cuando el desarrollador no quiere que personalices el programa."],
+  "memorizar": "configure prepara el Makefile."
+},
+"ENI-CH11-Q03": {
+  "idea": ["make clean borra lo que salió de compilar.",
+           "make mrproper borra además lo que no pertenece a las fuentes, configuración incluida.",
+           "Te deja como recién extraído el tar, y no siempre está disponible."],
+  "memorizar": "clean limpia; mrproper deja como nuevo."
+},
+"ENI-CH11-Q04": {
+  "idea": ["De las librerías compartidas.",
+           "Hoy es muy raro compilar con librerías estáticas.",
+           "Se gana espacio en disco y se pierde independencia del entorno."],
+  "memorizar": "dinámico = depende de las librerías del sistema."
+},
+"ENI-CH11-Q05": {
+  "idea": ["Consultando /etc/ld.so.conf.",
+           "Ahí está la lista de directorios que debe analizar."],
+  "memorizar": "ld.so.conf dice dónde buscar las librerías."
+},
+"ENI-CH11-Q06": {
+  "idea": ["El objetivo oldconfig.",
+           "Reaprovecha el .config anterior y solo pregunta por lo nuevo."],
+  "memorizar": "oldconfig pregunta solo lo que no sabía."
+},
+"ENI-CH11-Q07": {
+  "idea": ["Porque la segunda cifra impar indica kernel en desarrollo.",
+           "Las versiones de producción van de la 2.4 a la 2.6."],
+  "memorizar": "segunda cifra impar = en desarrollo."
+},
+"ENI-CH11-Q08": {
+  "idea": ["Si no hace falta.",
+           "O porque gestiona un hardware que no está, o porque ninguna función lo invoca."],
+  "memorizar": "si nadie lo necesita, no se carga."
+},
+"ENI-CH11-Q09": {
+  "idea": ["Es un archivo cpio comprimido en gzip.",
+           "Como no lleva extensión estándar, se identifica con file.",
+           "Para verlo hay que renombrarlo con extensión gz y extraerlo con cpio."],
+  "memorizar": "el ramdisk es un cpio dentro de un gzip."
+},
+"ENI-CH11-Q10": {
+  "idea": ["Porque initrd se apoya en devfs y no en el udev moderno.",
+           "Y además no sabe manejar discos sata, que es un problema en equipos recientes."],
+  "memorizar": "initrd se quedó en devfs y sin sata."
+}
+}

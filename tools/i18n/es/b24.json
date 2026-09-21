@@ -1,0 +1,51 @@
+[
+{"id":"SYBEX-CH11-RQ01",
+ "q":"¿Qué usa la aplicación DHCPd como archivo de configuración?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"La aplicación DHCPd guarda su configuración en el archivo de texto /etc/dhcp/dhcpd.conf, así que la opción B es correcta. Algunas aplicaciones usan una carpeta para guardar varios archivos de configuración, pero DHCPd no lo hace, así que la opción A es incorrecta. isc-dhcp-server es el nombre del paquete de software en Debian, no el archivo de configuración, así que la opción C es incorrecta. El archivo /etc/services contiene una lista de puertos TCP y UDP válidos definidos para el servidor, no el archivo de configuración de DHCPd, así que la opción D es incorrecta."},
+
+{"id":"SYBEX-CH11-RQ02",
+ "q":"¿Qué ajuste de opción de DHCPd se usa para definir el router predeterminado de los clientes de la red?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"La opción router define el router predeterminado asignado a los clientes de la red, así que la opción C es correcta. La opción smtp-server define un servidor de correo predeterminado para los clientes, así que la opción A es incorrecta. La opción broadcast-address define la dirección usada para enviar difusiones en la red, así que es incorrecta. La opción range define el conjunto de direcciones IP asignadas a los clientes de la red, así que también es incorrecta."},
+
+{"id":"SYBEX-CH11-RQ03",
+ "q":"¿Qué ajuste de opción de configuración de DHCPd se usa para definir el conjunto de direcciones IP que se asignarán a los clientes de la red?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"El ajuste range define un rango de direcciones IP desde el que el servidor DHCP puede asignar una dirección IP a los clientes de la red; por tanto, la opción D es correcta. La opción smtp-server define un servidor de correo predeterminado, así que la opción A es incorrecta. La opción broadcast-address define la dirección usada para enviar mensajes de difusión local en la red, así que la opción B es incorrecta. La opción router se usa para definir un router predeterminado para la red, así que la opción C es incorrecta."},
+
+{"id":"SYBEX-CH11-RQ04",
+ "q":"¿Qué archivo se usa para llevar el control de las direcciones IP asignadas en ese momento por DHCPd?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"Las direcciones IP asignadas a los clientes de la red se llaman concesiones (leases), y el archivo que registra las direcciones IP concedidas en ese momento es dhcpd.leases, guardado en la carpeta /var/lib/dhcp; por tanto, la opción A es correcta. El archivo /etc/dhcp/dhcpd.conf es el archivo de configuración estándar de DHCPd, pero no guarda la información de las concesiones actuales, así que la opción B es incorrecta. El archivo dhcpd.leases no se guarda en la carpeta /etc/dhcp, así que la opción C es incorrecta. Las concesiones de direcciones IP no se guardan en el archivo de configuración dhcpd.conf, así que la opción D también es incorrecta."},
+
+{"id":"SYBEX-CH11-RQ05",
+ "q":"¿Qué ajuste de configuración de DHCPd define la dirección MAC de un dispositivo para poder asignarle una dirección IP estática?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"El ajuste hardware define la dirección Ethernet (MAC) de un cliente para asignarle una dirección IP estática, así que la opción D es correcta. El ajuste range define un conjunto de direcciones IP para asignar a los clientes de la red, no una dirección IP estática, así que la opción A es incorrecta. El ajuste fixed-address define una dirección IP fija para asignar a un cliente, pero no define su dirección MAC, así que la opción B es incorrecta. La opción host-name define el nombre de host local que se asigna al cliente, pero no la dirección MAC, así que la opción C es incorrecta."},
+
+{"id":"SYBEX-CH11-RQ06",
+ "q":"¿Qué elemento de configuración de DHCP agrupa los ajustes asignados a un cliente concreto?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"El elemento host permite agrupar varios ajustes y opciones de configuración para asignarlos a un dispositivo concreto de la red, así que la opción A es correcta. El elemento group es similar, pero agrupa opciones y ajustes para varios hosts de la red, así que la opción B es incorrecta. El ajuste range define un conjunto de direcciones IP asignadas a todos los clientes, no a uno concreto, así que la opción C es incorrecta. El ajuste fixed-address define una dirección IP fija para asignar a un cliente concreto, pero no agrupa varios ajustes y opciones de configuración para ese cliente, así que la opción D es incorrecta."},
+
+{"id":"SYBEX-CH11-RQ07",
+ "q":"¿Qué número de opción de DHCP define la máscara de subred asignada a un cliente?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"La opción 1 de DHCP define la máscara de subred asignada al cliente de la red, así que la opción A es correcta. La opción 3 de DHCP define el router predeterminado, así que la opción B es incorrecta. La opción 5 de DHCP define el servidor de nombres de la red, así que la opción C es incorrecta, y la opción 6 de DHCP define el servidor de dominio de la red, así que la opción D es incorrecta."},
+
+{"id":"SYBEX-CH11-RQ08",
+ "q":"¿Qué módulo PAM permite usar los archivos estándar /etc/passwd y /etc/shadow para la autenticación?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"El módulo pam_unix.so usa los archivos estándar de Linux /etc/passwd y /etc/shadow para autenticar usuarios, así que la opción C es correcta. El módulo pam_ldap.so usa un directorio de red LDAP para autenticar usuarios, así que la opción A es incorrecta. El módulo pam_userdb.so usa una base de datos para autenticar cuentas de usuario, así que la opción B es incorrecta, y el módulo pam_sss.so usa el método System Security Services Daemon (SSSD) para autenticar usuarios en directorios remotos, no los archivos locales /etc/passwd y /etc/shadow, así que la opción D es incorrecta."},
+
+{"id":"SYBEX-CH11-RQ09",
+ "q":"¿Qué módulo PAM permite usar un directorio de red para autenticar usuarios?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"El módulo pam_ldap.so usa un servidor LDAP para autenticar usuarios mediante un directorio de red, así que la opción B es correcta. El módulo pam_unix.so autentica usuarios con el archivo estándar /etc/passwd, así que la opción A es incorrecta. El módulo pam_userdb.so autentica usuarios con un archivo de base de datos local, así que la opción C es incorrecta. El módulo pam_access.so proporciona inicios de sesión anónimos para servidores FTP; no autentica usuarios con un directorio de red, así que la opción D es incorrecta."},
+
+{"id":"SYBEX-CH11-RQ10",
+ "q":"¿Qué módulo PAM impone restricciones a las contraseñas de los usuarios?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"El módulo pam_cracklib.so comprueba si las contraseñas son débiles, así que la opción C es correcta. El módulo pam_limits.so impone límites de recursos, como el número de archivos abiertos o el tiempo de CPU, pero no restringe las contraseñas, así que la opción A es incorrecta. El módulo pam_unix.so solo realiza la autenticación estándar con el archivo /etc/passwd; no supervisa las contraseñas de los usuarios, así que la opción B es incorrecta. El módulo pam_userdb.so autentica usuarios contra una base de datos local, pero tampoco impone restricciones de contraseña, así que la opción D es incorrecta."}
+]

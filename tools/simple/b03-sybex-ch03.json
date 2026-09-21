@@ -1,0 +1,230 @@
+{
+ "SYBEX-CH03-RQ01": {
+  "idea": [
+   "De la memoria se ocupa el kernel.",
+   "Es su trabajo, junto con el resto del hardware."
+  ],
+  "otras": {
+   "A": "las utilidades GNU manipulan archivos y datos.",
+   "C": "el escritorio gráfico gestiona la pantalla.",
+   "D": "las aplicaciones piden memoria, pero no la gestionan."
+  },
+  "memorizar": "quien reparte la memoria es el kernel."
+ },
+ "SYBEX-CH03-RQ02": {
+  "idea": [
+   "El disco que hace de memoria es el espacio de intercambio.",
+   "También se le llama swap."
+  ],
+  "otras": {
+   "B": "la memoria virtual es la suma de RAM más disco, no solo el disco.",
+   "C": "el sistema de archivos guarda datos, no páginas de memoria.",
+   "D": "la memoria física es la RAM de verdad."
+  },
+  "memorizar": "swap = la parte del disco que hace de RAM."
+ },
+ "SYBEX-CH03-RQ03": {
+  "idea": [
+   "Los controladores entran en el kernel como módulos."
+  ],
+  "otras": {
+   "A": "los DLL son de Windows.",
+   "B": "la memoria virtual amplía la memoria, no carga controladores.",
+   "D": "el cargador de arranque mete el kernel en memoria, no los controladores."
+  },
+  "memorizar": "controlador en Linux = módulo."
+ },
+ "SYBEX-CH03-RQ04": {
+  "idea": [
+   "Para arrancar se carga el binario del kernel.",
+   "Sale de compilar el código fuente."
+  ],
+  "otras": {
+   "B": "los módulos se cargan después, con el sistema ya arrancado.",
+   "C": "un parche es texto para el fuente, no se carga en memoria.",
+   "D": "el código fuente tampoco se carga en memoria."
+  },
+  "memorizar": "arranca el binario; el fuente hay que compilarlo antes."
+ },
+ "SYBEX-CH03-RQ05": {
+  "idea": [
+   "Para saltar de una versión a la siguiente se aplica un parche."
+  ],
+  "otras": {
+   "B": "los módulos cargan controladores.",
+   "C": "los binarios son el kernel ya compilado.",
+   "D": "una publicación de desarrollo es el fuente completo, no una actualización."
+  },
+  "memorizar": "actualizar el fuente del kernel → parche."
+ },
+ "SYBEX-CH03-RQ06": {
+  "idea": [
+   "El que pregunta en texto es make config."
+  ],
+  "otras": {
+   "A": "xconfig saca menús gráficos.",
+   "B": "mrproper borra configuraciones y objetos antiguos.",
+   "C": "clean también borra lo anterior."
+  },
+  "memorizar": "config pregunta en texto; xconfig y gconfig, en ventanas."
+ },
+ "SYBEX-CH03-RQ07": {
+  "idea": [
+   "El gráfico es make gconfig, que usa la biblioteca de GNOME."
+  ],
+  "otras": {
+   "A": "config pregunta en texto.",
+   "B": "mrproper borra lo anterior.",
+   "D": "clean también."
+  },
+  "memorizar": "gconfig = configuración con ventanas."
+ },
+ "SYBEX-CH03-RQ08": {
+  "idea": [
+   "Para dejarlo todo limpio de compilaciones viejas: make mrproper.",
+   "Borra los archivos objeto y también los ajustes anteriores."
+  ],
+  "otras": {
+   "A": "gconfig crea configuración nueva.",
+   "C": "bzImage compila el binario.",
+   "D": "oldconfig reaprovecha la configuración antigua, pero no borra objetos."
+  },
+  "memorizar": "empezar de cero → mrproper."
+ },
+ "SYBEX-CH03-RQ09": {
+  "idea": [
+   "El binario comprimido del kernel sale de make bzImage.",
+   "zImage hace lo mismo."
+  ],
+  "otras": {
+   "B": "kernel no es un objetivo válido: da error.",
+   "C": "config solo crea el archivo de configuración.",
+   "D": "clean borra lo anterior."
+  },
+  "memorizar": "compilar el kernel → bzImage."
+ },
+ "SYBEX-CH03-RQ10": {
+  "idea": [
+   "En Debian el disco RAM inicial lo crea mkinitramfs."
+  ],
+  "otras": {
+   "A": "mkinitrd es el de Red Hat.",
+   "B": "make bzImage compila el kernel.",
+   "D": "no existe un objetivo de make para el disco RAM."
+  },
+  "memorizar": "Debian → mkinitramfs; Red Hat → mkinitrd."
+ },
+ "SYBEX-CH03-RQ11": {
+  "idea": [
+   "Para ver todos los módulos cargados: lsmod."
+  ],
+  "otras": {
+   "A": "modinfo enseña los datos de un módulo suelto.",
+   "B": "insmod inserta un módulo.",
+   "C": "rmmod lo quita."
+  },
+  "memorizar": "ls… lista; ins… mete; rm… quita."
+ },
+ "SYBEX-CH03-RQ12": {
+  "idea": [
+   "modprobe funciona con el nombre del módulo; insmod necesita la ruta del archivo."
+  ],
+  "otras": {
+   "A": "insmod exige saber el nombre de archivo.",
+   "B": "rmmod elimina un módulo.",
+   "D": "lsmod solo lista."
+  },
+  "memorizar": "sin saber el archivo → modprobe."
+ },
+ "SYBEX-CH03-RQ13": {
+  "idea": [
+   "Para ver los dispositivos USB: lsusb."
+  ],
+  "otras": {
+   "B": "lspci lista tarjetas PCI.",
+   "C": "lsmod lista módulos; si un controlador va dentro del kernel, no lo verás.",
+   "D": "lsdev muestra puertos de E/S e interrupciones de todo el hardware."
+  },
+  "memorizar": "USB → lsusb; PCI → lspci."
+ },
+ "SYBEX-CH03-RQ14": {
+  "idea": [
+   "El detalle se pide con -v, de verbose."
+  ],
+  "otras": {
+   "A": "-d filtra por ID de fabricante.",
+   "B": "-s filtra por bus.",
+   "C": "-t lo pinta en árbol: enseña dependencias, no detalle."
+  },
+  "memorizar": "-v = verbose = todo el detalle."
+ },
+ "SYBEX-CH03-RQ15": {
+  "idea": [
+   "Los que se enchufan en marcha son los hotplug, como el USB."
+  ],
+  "otras": {
+   "A": "coldplug es justo lo contrario: con el equipo apagado.",
+   "C": "las tarjetas PCI se ponen con el equipo apagado.",
+   "D": "las PCIe también."
+  },
+  "memorizar": "hot = en caliente, con el equipo encendido."
+ },
+ "SYBEX-CH03-RQ16": {
+  "idea": [
+   "Quien detecta lo que enchufas y carga su módulo es udevd.",
+   "Escucha los eventos del kernel y aplica sus reglas."
+  ],
+  "otras": {
+   "A": "lsusb solo lista.",
+   "C": "modprobe instala a mano.",
+   "D": "insmod también a mano."
+  },
+  "memorizar": "enchufar algo y que funcione solo → udevd."
+ },
+ "SYBEX-CH03-RQ17": {
+  "idea": [
+   "La configuración de udevd está en /etc/udev/udev.conf."
+  ],
+  "otras": {
+   "A": "/lib/modules guarda archivos de módulos.",
+   "B": "/boot guarda el binario del kernel.",
+   "C": "/etc/udev/rules.d guarda las reglas, no la configuración."
+  },
+  "memorizar": "udev.conf = cómo se comporta udevd."
+ },
+ "SYBEX-CH03-RQ18": {
+  "idea": [
+   "Las reglas de udevd están en /etc/udev/rules.d."
+  ],
+  "otras": {
+   "A": "/etc/udev/udevd.conf son los ajustes de udevd.",
+   "C": "/boot guarda el binario del kernel.",
+   "D": "/lib/modules guarda archivos de módulos."
+  },
+  "memorizar": "rules.d = las reglas; udevd.conf = los ajustes."
+ },
+ "SYBEX-CH03-RQ19": {
+  "idea": [
+   "El kernel se expone a sí mismo en /proc.",
+   "Ahí se leen y se escriben sus ajustes y sus estadísticas."
+  ],
+  "analogia": "No es un disco: es una ventana al kernel con forma de carpeta.",
+  "otras": {
+   "A": "/etc/kernel no es una carpeta válida.",
+   "B": "/boot/kernel tampoco.",
+   "D": "/usr/src/linux guarda el código fuente del kernel."
+  },
+  "memorizar": "el kernel se asoma por /proc."
+ },
+ "SYBEX-CH03-RQ20": {
+  "idea": [
+   "sysctl cambia ajustes del kernel con el sistema en marcha."
+  ],
+  "otras": {
+   "B": "lsmod lista módulos.",
+   "C": "modprobe mete y saca módulos, pero no toca sus ajustes.",
+   "D": "lsdev muestra información de dispositivos."
+  },
+  "memorizar": "tocar el kernel en caliente → sysctl."
+ }
+}

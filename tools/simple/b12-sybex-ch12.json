@@ -1,0 +1,227 @@
+{
+ "SYBEX-CH12-RQ01": {
+  "idea": [
+   "Cualquier vía de entrada para un atacante es un vector de ataque."
+  ],
+  "otras": {
+   "B": "un puerto abierto es solo un tipo de vulnerabilidad.",
+   "C": "una aplicación abierta también.",
+   "D": "una comunicación no segura también."
+  },
+  "memorizar": "vector de ataque = por dónde entran."
+ },
+ "SYBEX-CH12-RQ02": {
+  "idea": [
+   "Los puertos y sus aplicaciones están en /etc/services."
+  ],
+  "otras": {
+   "A": "/etc/ssh/sshd_conf configura OpenSSH.",
+   "B": "/etc/openvpn configura OpenVPN.",
+   "D": "/proc/sys/net/ipv4 son ajustes de la pila IPv4 del kernel."
+  },
+  "memorizar": "qué puerto es qué → /etc/services."
+ },
+ "SYBEX-CH12-RQ03": {
+  "idea": [
+   "Primero la dirección y luego el puerto: telnet dirección puerto."
+  ],
+  "otras": {
+   "A": "el orden está cambiado.",
+   "C": "los dos puntos no son el formato de telnet.",
+   "D": "telnet acepta cualquier puerto, no solo el 23."
+  },
+  "memorizar": "telnet dirección puerto, en ese orden."
+ },
+ "SYBEX-CH12-RQ04": {
+  "idea": [
+   "Los puertos a la escucha se listan con netstat."
+  ],
+  "otras": {
+   "A": "telnet prueba un puerto cada vez.",
+   "B": "iptables filtra paquetes en el kernel.",
+   "C": "ssh solo se conecta al puerto 22."
+  },
+  "memorizar": "¿quién escucha aquí? → netstat."
+ },
+ "SYBEX-CH12-RQ05": {
+  "idea": [
+   "Escanear varios puertos con netcat es -z."
+  ],
+  "otras": {
+   "A": "-v solo da más detalle.",
+   "C": "-l pone netcat a escuchar.",
+   "D": "-6 usa direcciones IPv6."
+  },
+  "memorizar": "-z escanea; -l escucha."
+ },
+ "SYBEX-CH12-RQ06": {
+  "idea": [
+   "La huella del sistema remoto se pide con -A."
+  ],
+  "otras": {
+   "B": "-sT escanea puertos TCP.",
+   "C": "-sU escanea puertos UDP.",
+   "D": "-p indica el rango de puertos."
+  },
+  "memorizar": "-A lo averigua todo, incluida la huella."
+ },
+ "SYBEX-CH12-RQ07": {
+  "idea": [
+   "Los ataques los simulan los Network Vulnerability Tests.",
+   "Vienen con OpenVAS y reproducen ataques conocidos."
+  ],
+  "otras": {
+   "A": "la NVD define vulnerabilidades, pero no las simula.",
+   "B": "el repositorio de software no guarda vulnerabilidades.",
+   "D": "la interfaz web solo sirve para manejar OpenVAS."
+  },
+  "memorizar": "los NVT son los ataques de mentira."
+ },
+ "SYBEX-CH12-RQ08": {
+  "idea": [
+   "Avisar de un ataque en marcha es cosa de un IDS."
+  ],
+  "otras": {
+   "A": "un escáner de puertos enseña vías abiertas, no ataques.",
+   "B": "un NVT simula ataques, no los detecta.",
+   "C": "una VPN cifra la conexión."
+  },
+  "memorizar": "escáner busca puertas; IDS ve a quien entra."
+ },
+ "SYBEX-CH12-RQ09": {
+  "idea": [
+   "Las reglas de fail2ban están en jail.conf, dentro de /etc/fail2ban.",
+   "Ahí se define qué eventos hay que vigilar."
+  ],
+  "otras": {
+   "A": "fail2ban.conf no es donde están las reglas.",
+   "C": "pwdfail no es ese archivo.",
+   "D": "error.log tampoco."
+  },
+  "memorizar": "jail.conf = la cárcel y sus normas."
+ },
+ "SYBEX-CH12-RQ10": {
+  "idea": [
+   "El que vigila la red es Snort."
+  ],
+  "otras": {
+   "B": "OpenVPN hace un túnel cifrado.",
+   "C": "OpenSSH da un canal seguro con un servidor.",
+   "D": "OpenVAS busca vulnerabilidades, pero no vigila paquetes."
+  },
+  "memorizar": "Snort olfatea la red."
+ },
+ "SYBEX-CH12-RQ11": {
+  "idea": [
+   "Ver los paquetes en pantalla es el modo analizador."
+  ],
+  "otras": {
+   "A": "el modo de registro los guarda en un archivo.",
+   "B": "el modo NIDS solo informa de eventos de vulnerabilidad.",
+   "D": "el modo de línea de comandos no los muestra por defecto."
+  },
+  "memorizar": "sniffer mira; logging apunta; NIDS avisa."
+ },
+ "SYBEX-CH12-RQ12": {
+  "idea": [
+   "HOME_NET son las direcciones de casa, las que hay que vigilar."
+  ],
+  "otras": {
+   "A": "las remotas son EXTERNAL_NET.",
+   "B": "no es la dirección del propio host.",
+   "D": "tampoco es una carpeta."
+  },
+  "memorizar": "HOME_NET es lo de dentro; EXTERNAL_NET, lo de fuera."
+ },
+ "SYBEX-CH12-RQ13": {
+  "idea": [
+   "La flecha marca el sentido: 10.0.0.1 -> 10.0.0.2."
+  ],
+  "otras": {
+   "A": "<- va al revés.",
+   "B": "también está del revés.",
+   "C": "<> vale para los dos sentidos."
+  },
+  "memorizar": "-> un sentido; <> los dos."
+ },
+ "SYBEX-CH12-RQ14": {
+  "idea": [
+   "IPv4 tiene tres rangos privados.",
+   "Los de 10, los de 172.16 a 172.31 y los de 192.168."
+  ],
+  "otras": {
+   "A": "dos se queda corto.",
+   "C": "cuatro se pasa.",
+   "D": "haberlos, haylos."
+  },
+  "memorizar": "privados: 10.0.0.0, 172.16.0.0 y 192.168.0.0."
+ },
+ "SYBEX-CH12-RQ15": {
+  "idea": [
+   "Las de enlace local empiezan por fe80.",
+   "El resto suele salir de la dirección MAC."
+  ],
+  "otras": {
+   "B": "ff02 es multidifusión para routers.",
+   "C": "ff05 es multidifusión para servidores DHCP.",
+   "D": "aabb no está reservado."
+  },
+  "memorizar": "fe80 = enlace local; ff = multidifusión."
+ },
+ "SYBEX-CH12-RQ16": {
+  "idea": [
+   "Salir a Internet con direcciones privadas se hace con NAT."
+  ],
+  "otras": {
+   "A": "SSH cifra la conexión.",
+   "B": "telnet va en texto plano.",
+   "D": "un IDS detecta atacantes, no conecta."
+  },
+  "memorizar": "NAT traduce privada a pública."
+ },
+ "SYBEX-CH12-RQ17": {
+  "idea": [
+   "Las reglas del cortafuegos se escriben con iptables."
+  ],
+  "otras": {
+   "A": "nc solo comunica.",
+   "C": "netstat mira el estado de los puertos.",
+   "D": "nmap también solo mira."
+  },
+  "memorizar": "el cortafuegos se toca con iptables."
+ },
+ "SYBEX-CH12-RQ18": {
+  "idea": [
+   "Añadir una regla es -A."
+  ],
+  "otras": {
+   "A": "-L lista las que hay.",
+   "B": "-F las vacía.",
+   "D": "-j dice qué hacer con el paquete."
+  },
+  "memorizar": "-A añade, -L lista, -F limpia."
+ },
+ "SYBEX-CH12-RQ19": {
+  "idea": [
+   "REJECT descarta y además avisa al origen con un ICMP."
+  ],
+  "analogia": "DROP es no abrir la puerta; REJECT es abrir y decir que no.",
+  "otras": {
+   "B": "DROP descarta en silencio.",
+   "C": "ACCEPT deja pasar.",
+   "D": "LOG deja pasar y además apunta."
+  },
+  "memorizar": "REJECT contesta; DROP calla."
+ },
+ "SYBEX-CH12-RQ20": {
+  "idea": [
+   "La política por defecto de una cadena se pone con -P."
+  ],
+  "otras": {
+   "B": "-j es la acción de una regla concreta.",
+   "C": "-L solo lista.",
+   "D": "-F borra todas las reglas."
+  },
+  "memorizar": "-P de política; -j de salto."
+ }
+}

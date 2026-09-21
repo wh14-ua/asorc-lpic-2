@@ -1,0 +1,352 @@
+{
+ "SYBEX-AT-01": {
+  "idea": [
+   "lsof, pstree, netstat y pmap dicen algo sobre procesos.",
+   "lsof: qué archivos y conexiones tiene abiertos.",
+   "pstree: el árbol de quién lanzó a quién.",
+   "netstat: qué proceso escucha en cada puerto.",
+   "pmap: su mapa de memoria."
+  ],
+  "otras": {
+   "B": "iostat resume la carga de E/S por dispositivo: mira discos, no procesos."
+  },
+  "memorizar": "iostat mira discos; los otros cuatro, procesos."
+ },
+ "SYBEX-AT-02": {
+  "idea": [
+   "La palabra es modules: módulos del kernel.",
+   "Un módulo es un controlador en un archivo aparte que se enchufa y se quita del kernel en caliente.",
+   "Por eso se añade un controlador sin recompilar."
+  ],
+  "analogia": "Es el enchufe del kernel: lo conectas cuando usas el dispositivo y lo quitas al terminar.",
+  "memorizar": "módulo = controlador que entra y sale sin recompilar."
+ },
+ "SYBEX-AT-03": {
+  "idea": [
+   "La configuración del kernel vive en /usr/src/linux/.config.",
+   "Es un archivo oculto dentro del código fuente del kernel."
+  ],
+  "otras": {
+   "A": "/usr/src/linux/arch/x86/boot es donde queda bzImage tras compilar.",
+   "B": "/usr/src/linux/kernel.config está inventado.",
+   "C": "/boot/grub/grub.conf configura GRUB Legacy.",
+   "D": "/etc/modules.conf configura los módulos, no el kernel."
+  },
+  "memorizar": "configuración del kernel → .config, en el fuente."
+ },
+ "SYBEX-AT-04": {
+  "idea": [
+   "/proc/sys/kernel es un directorio y dentro está el archivo version.",
+   "Ahí se lee la versión del kernel."
+  ],
+  "otras": {
+   "A": "/proc/kernel está inventado.",
+   "C": "/proc/ioports son los puertos de E/S del hardware.",
+   "D": "/proc/dma son los canales DMA.",
+   "E": "/etc/sysctl.d guarda ajustes de parámetros del kernel."
+  },
+  "memorizar": "versión del kernel → /proc/sys/kernel, archivo version."
+ },
+ "SYBEX-AT-05": {
+  "idea": [
+   "update-rc.d hace lo mismo que chkconfig.",
+   "Cambia la distribución: chkconfig en las de tipo Red Hat, update-rc.d en las basadas en Debian."
+  ],
+  "otras": {
+   "A": "inittab es un archivo (/etc/inittab), no un comando.",
+   "B": "rc es un script que lanza los de un nivel de ejecución.",
+   "D": "init cambia el nivel de ejecución.",
+   "E": "telinit hace lo mismo que init, no que chkconfig."
+  },
+  "memorizar": "chkconfig (Red Hat) = update-rc.d (Debian)."
+ },
+ "SYBEX-AT-06": {
+  "idea": [
+   "GRUB Legacy trae menú y también una consola interactiva, el shell de grub.",
+   "Dentro de su configuración, initrd señala el archivo que el kernel monta como disco RAM al arrancar."
+  ],
+  "otras": {
+   "A": "GRUB Legacy nació en 1999 para mejorar LILO, no por UEFI.",
+   "E": "/boot/grub/grub.cfg es de GRUB2."
+  },
+  "memorizar": "GRUB Legacy: menú, shell e initrd."
+ },
+ "SYBEX-AT-07": {
+  "idea": [
+   "SYSLINUX, EXTLINUX, ISOLINUX y PXELINUX son cargadores de arranque.",
+   "TFTP no arranca nada: es el protocolo con el que PXELINUX se trae la imagen por red."
+  ],
+  "otras": {
+   "E": "TFTP transporta el archivo de arranque, pero no arranca."
+  },
+  "memorizar": "SYSLINUX, EXTLINUX, ISOLINUX y PXELINUX arrancan; TFTP transporta."
+ },
+ "SYBEX-AT-08": {
+  "idea": [
+   "mount a secas lee /etc/mtab y enseña lo que está montado ahora mismo."
+  ],
+  "analogia": "fstab es la lista de la compra y mtab el ticket: uno dice qué hay que montar, el otro qué se montó.",
+  "otras": {
+   "A": "/etc/fstab dice qué montar al arrancar o con mount -a.",
+   "C": "/proc/mounts tiene casi lo mismo, pero mount no lee de ahí.",
+   "D": "/proc/filesystems lista los sistemas de archivos que soporta el kernel.",
+   "E": "blkid es un comando: muestra dispositivos de bloques y sus atributos."
+  },
+  "memorizar": "fstab = lo que se montará; mtab = lo que está montado."
+ },
+ "SYBEX-AT-09": {
+  "idea": [
+   "El archivo es smartd.conf.",
+   "Según la distribución está en /etc/smartd.conf o en /etc/smartmontools/smartd.conf."
+  ],
+  "memorizar": "demonio smartd → smartd.conf."
+ },
+ "SYBEX-AT-10": {
+  "idea": [
+   "mdadm --detail /dev/md1 enseña los detalles del array; poner --misc sobra.",
+   "Y cat /proc/mdstat enseña de golpe el estado de los arrays en marcha."
+  ],
+  "otras": {
+   "C": "/etc/mdadm.conf es la configuración de mdadm, no su estado.",
+   "E": "mdadm no tiene opción --show."
+  },
+  "memorizar": "estado RAID: mdadm --detail o /proc/mdstat."
+ },
+ "SYBEX-AT-11": {
+  "idea": [
+   "vgcreate crea el grupo de volúmenes y vgextend lo agranda.",
+   "Los dos empiezan por vg, que es justo lo que se está tocando."
+  ],
+  "otras": {
+   "A": "mdadm gestiona arrays RAID, no volúmenes lógicos.",
+   "C": "pvcreate marca una partición como volumen físico.",
+   "E": "lvcreate saca un volumen lógico del grupo, pero no crea el grupo."
+  },
+  "memorizar": "pv = físico, vg = grupo, lv = lógico."
+ },
+ "SYBEX-AT-12": {
+  "idea": [
+   "Para ver la tabla ARP el comando es arp, sin más."
+  ],
+  "otras": {
+   "A": "ifconfig -arp activa o desactiva ARP en la interfaz.",
+   "B": "ip arp show no existe; el parecido real es ip addr show.",
+   "D": "route -n muestra la tabla de encaminamiento.",
+   "E": "iwlist escanea redes inalámbricas y espera un dispositivo como wlan0."
+  },
+  "memorizar": "tabla ARP → arp."
+ },
+ "SYBEX-AT-13": {
+  "idea": [
+   "nc hace de servidor y de cliente a la vez.",
+   "Por eso puede simular una transferencia de datos de verdad por la red."
+  ],
+  "otras": {
+   "A": "tcpdump captura y describe paquetes, pero no los genera.",
+   "B": "ping y ping6 solo comprueban que hay conexión.",
+   "C": "traceroute y traceroute6 listan los saltos hasta el destino.",
+   "D": "nmap dice qué aplicaciones escuchan en qué puertos."
+  },
+  "memorizar": "simular tráfico entre dos puntos → nc."
+ },
+ "SYBEX-AT-14": {
+  "idea": [
+   "Primero mira cómo está la interfaz con ifconfig eth2.",
+   "Si eso no aclara nada, sospecha del módulo de la tarjeta.",
+   "Eso se ve en dmesg o, si ya se volcó a disco, en los archivos de /var/log/."
+  ],
+  "otras": {
+   "B": "ping desde otro equipo no añade nada: ya sabes que no pasan paquetes.",
+   "C": "tcpdump tampoco: si no hay paquetes, no hay nada que capturar."
+  },
+  "memorizar": "sin red: primero la configuración, luego dmesg."
+ },
+ "SYBEX-AT-15": {
+  "idea": [
+   "Rebobinan solas las cintas /dev/st* (SCSI) y /dev/ht* (PATA).",
+   "Si el nombre lleva una n delante, no rebobina."
+  ],
+  "otras": {
+   "C": "/dev/sdt1 no es una cinta, es una partición.",
+   "D": "/dev/nst0 es SCSI sin rebobinado.",
+   "E": "/dev/nht0 es PATA sin rebobinado."
+  },
+  "memorizar": "la n de nst y nht = no rebobina."
+ },
+ "SYBEX-AT-16": {
+  "idea": [
+   "rndc maneja BIND cuando ya está en marcha.",
+   "Lo para y le hace recargar la configuración y los archivos de zona.",
+   "Lo que no hace es arrancarlo."
+  ],
+  "otras": {
+   "A": "rndc no arranca el demonio BIND.",
+   "E": "rndc sí tiene que ver con BIND."
+  },
+  "memorizar": "rndc controla BIND en marcha; no lo arranca."
+ },
+ "SYBEX-AT-17": {
+  "idea": [
+   "En una zona de BIND, type acepta hint, forward y stub.",
+   "hint es la lista de servidores raíz, forward reenvía la zona y stub define una zona stub."
+  ],
+  "otras": {
+   "B": "primary no existe: el primario se declara con type master.",
+   "C": "secondary tampoco: el secundario es type slave."
+  },
+  "memorizar": "en BIND se dice master y slave, no primary y secondary."
+ },
+ "SYBEX-AT-18": {
+  "idea": [
+   "apache2ctl acepta restart, graceful, fullstatus y status.",
+   "restart corta las conexiones abiertas y graceful reinicia sin cortarlas.",
+   "fullstatus da el informe completo y status el breve."
+  ],
+  "otras": {
+   "A": "force-stop está inventado."
+  },
+  "memorizar": "graceful = reiniciar sin cortar a nadie."
+ },
+ "SYBEX-AT-19": {
+  "idea": [
+   "Nginx no abre un hilo por cliente.",
+   "Usa una arquitectura asíncrona y crea los hilos de cliente dentro del programa principal según hacen falta.",
+   "Escucha en el puerto TCP 80 y puede repartir entre varios servidores de backend como proxy inverso."
+  ],
+  "otras": {
+   "A": "Nginx no usa un hilo de programa independiente por cliente.",
+   "D": "Nginx no está obsoleto."
+  },
+  "memorizar": "Nginx: asíncrono, puerto 80, proxy inverso."
+ },
+ "SYBEX-AT-20": {
+  "idea": [
+   "Las cuentas de Samba se guardan en smbpasswd, tdbsam o ldapsam.",
+   "Esas tres son bases de datos; las otras dos opciones son comandos."
+  ],
+  "otras": {
+   "C": "net es un comando: une el servidor Samba a un dominio o a un Active Directory.",
+   "D": "smbclient es un comando para conectarse y listar recursos compartidos."
+  },
+  "memorizar": "cuentas Samba: smbpasswd, tdbsam, ldapsam."
+ },
+ "SYBEX-AT-21": {
+  "idea": [
+   "exportfs sin opciones lista las exportaciones NFS.",
+   "Y al arrancar el servicio NFS es quien lee /etc/exports y exporta lo que toca."
+  ],
+  "otras": {
+   "A": "rpcinfo informa de los servicios RPC.",
+   "B": "nfsstat da estadísticas de cliente y servidor NFS.",
+   "C": "showmount dice quién monta qué, pero no lee la tabla al arrancar.",
+   "E": "mountstats da estadísticas por montaje en el cliente."
+  },
+  "memorizar": "exportfs = listar y aplicar /etc/exports."
+ },
+ "SYBEX-AT-22": {
+  "idea": [
+   "DHCPd no tiene un registro propio: escribe en el registro estándar del sistema.",
+   "Con syslog eso es /var/log/messages; en distribuciones actuales, el diario de systemd."
+  ],
+  "otras": {
+   "A": "pump es un cliente DHCP, no un archivo de registro.",
+   "C": "BOOTP es un protocolo, no un diario.",
+   "D": "dhcpd.log no existe; sí existen dhcpd.conf y dhcpd.leases."
+  },
+  "memorizar": "DHCPd registra donde registre el sistema."
+ },
+ "SYBEX-AT-23": {
+  "idea": [
+   "pam_sss.so es el módulo que habla con el Security Services Daemon.",
+   "El sss del nombre es la pista."
+  ],
+  "otras": {
+   "B": "pam_unix.so usa /etc/passwd y /etc/shadow.",
+   "C": "pam_nis.so usa un servidor NIS.",
+   "D": "pam_krb5.so usa Kerberos 5.",
+   "E": "pam_ldap.so usa un servidor LDAP."
+  },
+  "memorizar": "el nombre del módulo PAM dice contra qué autentica."
+ },
+ "SYBEX-AT-24": {
+  "idea": [
+   "ldapmodify añade objetos a la base LDAP y además los modifica.",
+   "ldapadd es un enlace a ldapmodify, pensado para meter los objetos de un archivo LDIF."
+  ],
+  "otras": {
+   "A": "ldappasswd cambia la contraseña de la cuenta LDAP con la que has entrado.",
+   "D": "ldapsearch consulta, no añade.",
+   "E": "ldapobject está inventado."
+  },
+  "memorizar": "añadir en LDAP: ldapadd o ldapmodify."
+ },
+ "SYBEX-AT-25": {
+  "idea": [
+   "El método de un solo archivo de texto es slapd.conf.",
+   "El otro método, slapd-conf, reparte la configuración en varios archivos LDIF."
+  ],
+  "otras": {
+   "A": "/etc/ldap.conf no es el método por el que pregunta el enunciado.",
+   "B": "slapd-conf se apoya en archivos LDIF, no en uno solo.",
+   "C": "LDIF son los archivos que define slapd-conf, no un método de archivo único.",
+   "E": "/etc/ldap es un directorio que usa el método slapd-conf."
+  },
+  "memorizar": "un solo archivo → slapd.conf."
+ },
+ "SYBEX-AT-26": {
+  "idea": [
+   "Postfix imita tres comandos de sendmail: sendmail, mailq y newaliases.",
+   "sendmail redirige al programa de Postfix, mailq lista la cola de salida y newaliases inicializa la base de alias."
+  ],
+  "otras": {
+   "B": "procmail no viene de sendmail: filtra el correo con recetas de cada usuario.",
+   "D": "mbox es un tipo de buzón, un archivo por cuenta."
+  },
+  "memorizar": "emulación de sendmail: sendmail, mailq, newaliases."
+ },
+ "SYBEX-AT-27": {
+  "idea": [
+   "Los pseudoarchivos que controlan el encaminamiento están en /proc/sys/net/.",
+   "Sobre todo en sus subdirectorios ipv4 e ipv6."
+  ],
+  "otras": {
+   "A": "/proc/sys/vm/ es la memoria virtual.",
+   "C": "/proc/sys/dev/ son parámetros de dispositivos.",
+   "D": "/srv/ guarda datos servidos, como páginas web o recursos de Samba.",
+   "E": "/proc/sys/iptables/ está inventado."
+  },
+  "memorizar": "red dentro de /proc → /proc/sys/net/."
+ },
+ "SYBEX-AT-28": {
+  "idea": [
+   "El archivo es vsftpd.conf.",
+   "Está en /etc/ o en /etc/vsftpd/ según la distribución, y viene comentado por dentro."
+  ],
+  "memorizar": "Very Secure FTP → vsftpd.conf."
+ },
+ "SYBEX-AT-29": {
+  "idea": [
+   "La opción que fija el nivel de protocolo soportado es Protocol."
+  ],
+  "otras": {
+   "A": "PermitRootLogin deja entrar a root directamente, o no.",
+   "B": "PubKeyAuthentication activa la autenticación por clave pública.",
+   "C": "AllowUsers es la lista de usuarios con permiso para entrar.",
+   "D": "PasswordAuthentication activa la autenticación por contraseña."
+  },
+  "memorizar": "nivel de protocolo → Protocol."
+ },
+ "SYBEX-AT-30": {
+  "idea": [
+   "fail2ban es el único que toca el cortafuegos él solo.",
+   "Vigila los registros y, si una IP falla al entrar varias veces, la banea."
+  ],
+  "otras": {
+   "B": "Snort avisa de actividad sospechosa; tocaría el cortafuegos solo si le añades scripts.",
+   "C": "Bugtraq es una lista de correo de seguridad.",
+   "D": "nmap audita puertos, pero no toca el cortafuegos.",
+   "E": "nc audita la red, pero tampoco lo modifica."
+  },
+  "memorizar": "fail2ban es el único que banea por su cuenta."
+ }
+}

@@ -1,0 +1,51 @@
+[
+{"id":"SYBEX-CH01-RQ11",
+ "q":"¿Dónde se guardan los archivos de configuración de GRUB2? (Elija todas las que correspondan.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"El cargador de arranque GRUB2 guarda archivos de configuración tanto en el directorio /boot/grub como en el directorio /etc/grub.d, así que las opciones B y C son correctas. Linux usa el directorio /proc para ofrecer datos dinámicos de ejecución del kernel, no archivos de configuración, así que la opción A es incorrecta. La opción D, /boot/efi, guarda los archivos del cargador de arranque UEFI, no la configuración de GRUB2, así que también es incorrecta. La opción E, /var, se usa para guardar archivos variables, como los de registro, y no archivos de configuración, así que es incorrecta."},
+
+{"id":"SYBEX-CH01-RQ12",
+ "q":"¿Qué comando hay que ejecutar para generar el archivo de configuración grub.cfg de GRUB2?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"El comando grub-mkconfig combina las configuraciones definidas en el archivo /etc/default/grub y en todos los archivos de la carpeta /etc/grub.d en un único archivo de configuración grub.cfg. El comando chkconfig (opción A) sirve para consultar y cambiar los niveles de ejecución de los programas, así que es incorrecto. Del mismo modo, el comando update-rc.d (opción B) también sirve para cambiar los niveles de ejecución de los programas en sistemas Debian, así que también es incorrecto. El programa grub-install lo usa el cargador GRUB Legacy para instalar el cargador en el MBR o en una partición de arranque, pero no se usa para generar los archivos de configuración de GRUB2 y, por tanto, es incorrecto. La opción E es el programa init, que arranca programas en segundo plano a partir de los scripts de init del sistema Linux y es una respuesta incorrecta para esta pregunta."},
+
+{"id":"SYBEX-CH01-RQ13",
+ "q":"¿Qué programa usa el kernel para arrancar otros programas?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"El kernel arranca el programa init, que a su vez usa los scripts de init para arrancar y detener otros programas según el nivel de ejecución predeterminado del sistema, así que la opción D es correcta. El programa GRUB2 es un cargador de arranque, que lo inicia el firmware de la estación de trabajo, no el kernel, así que la opción A es incorrecta. La opción B, el programa systemctl, sirve para controlar programas en el método de arranque systemd, pero no lo arranca el kernel, así que es incorrecta. La opción C, el programa telinit, puede usarse para cambiar el nivel de ejecución actual, pero el kernel no lo usa para arrancar programas, así que también es incorrecta. La opción E, la BIOS, es el firmware de la estación de trabajo que inicia el proceso de arranque, así que no puede arrancarla el kernel."},
+
+{"id":"SYBEX-CH01-RQ14",
+ "q":"¿Qué archivo de configuración contiene el nivel de ejecución predeterminado de SysV?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"El archivo /etc/inittab contiene el ajuste initdefault, que define el nivel de ejecución predeterminado del sistema Linux. Las carpetas /etc/init.d y /etc/rc.d contienen los scripts de arranque que usa el programa init para arrancar y detener programas, pero no definen el nivel de ejecución predeterminado, así que las opciones A y D son incorrectas. La opción C, el directorio /etc/grub.d, y la opción E, el archivo /boot/grub.cfg, contienen ambos los ajustes de configuración del cargador GRUB2, pero no controlan el nivel de ejecución predeterminado."},
+
+{"id":"SYBEX-CH01-RQ15",
+ "q":"¿Cuál es el nivel de ejecución predeterminado en los sistemas basados en Debian?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"Los sistemas basados en Debian usan el nivel de ejecución 2 para arrancar todas las aplicaciones necesarias para la actividad multiusuario del sistema, así que la opción E es correcta. La opción A, el nivel 0, apaga el sistema, y la opción C, el nivel 6, lo reinicia, así que ninguna de las dos puede mantener aplicaciones en ejecución. La opción B, el nivel 1, indica el modo monousuario y no se usa normalmente en entornos de escritorio ni de servidor, sino en modos de diagnóstico y mantenimiento. La opción D, el nivel 5, lo usan las distribuciones basadas en Red Hat como nivel predeterminado para estaciones de trabajo gráficas, pero no lo usan los sistemas basados en Debian."},
+
+{"id":"SYBEX-CH01-RQ16",
+ "q":"¿Qué comando usaría para cambiar el nivel de ejecución actual? (Elija todas las que correspondan.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"Tanto el comando init como telinit sirven para cambiar el nivel de ejecución actual de un sistema Linux, así que las opciones A y D son correctas. El comando chkconfig sirve para cambiar los niveles de ejecución de arranque y parada de un programa concreto, pero no del sistema en marcha, así que la opción B es incorrecta. Del mismo modo, el comando update-rc.d se usa en sistemas basados en Debian para cambiar los niveles de arranque y parada de un programa concreto, no del sistema en marcha. La opción E, el comando dmesg, muestra los mensajes de arranque y no influye en el nivel de ejecución del sistema, así que es incorrecta."},
+
+{"id":"SYBEX-CH01-RQ17",
+ "q":"¿Qué comando muestra los niveles de ejecución en los que se arrancará un programa?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"El comando chkconfig muestra el estado del programa en los siete niveles de ejecución, así que es la respuesta correcta. El comando update-rc.d de la opción D sirve para controlar los niveles de ejecución en los que un programa arranca y se detiene, pero no muestra el estado de los niveles y, por tanto, es incorrecto. Los comandos init (opción B) y telinit (opción E) pueden cambiar el nivel de ejecución de todo el sistema, pero no muestran los niveles asociados a un programa concreto, así que son incorrectos. La opción C, el comando dmesg, no tiene relación con los niveles de ejecución; simplemente muestra los mensajes de arranque más recientes del sistema."},
+
+{"id":"SYBEX-CH01-RQ18",
+ "q":"¿Qué comando usan los sistemas Debian para establecer los niveles de ejecución de los programas?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"Los sistemas basados en Debian usan el comando update-rc.d para cambiar los niveles de ejecución asignados a programas concretos. Por lo general no usan el programa chkconfig, que sí usan los sistemas basados en Red Hat, así que la opción A es incorrecta. Los programas init (opción C) y telinit (opción D) sirven para modificar el nivel de ejecución de todo el sistema, pero no pueden usarse para cambiar los niveles de programas concretos. El programa dmesg (opción E) es incorrecto porque solo muestra los mensajes de arranque y no puede modificar los niveles de ejecución."},
+
+{"id":"SYBEX-CH01-RQ19",
+ "q":"¿Qué programa permite reparar particiones de disco duro dañadas?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"El programa fsck puede realizar una comprobación y reparación de varios tipos de sistemas de archivos en particiones. Debe usarse en cualquier partición que no pueda montarse por errores. El programa mount (opción A) sirve para acoplar una partición a un directorio virtual; no puede corregir una partición con errores (y normalmente se negará a montarla). El comando umount (opción B) también es incorrecto: sirve para retirar una partición montada del directorio virtual. Las opciones D (el comando init) y E (el comando telinit) sirven para cambiar el nivel de ejecución actual del sistema Linux, no para reparar discos dañados."},
+
+{"id":"SYBEX-CH01-RQ20",
+ "q":"¿Qué comando permite acoplar una partición al directorio virtual en un sistema Linux en marcha?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"El comando mount permite indicar tanto la partición como la ubicación del directorio virtual donde se quieren acoplar los archivos y carpetas de la partición. Los archivos y carpetas que contiene la partición aparecen entonces en esa ubicación del directorio virtual. El comando umount (opción B) sirve para retirar una partición montada. La opción C, el comando fsck, sirve para reparar un disco duro dañado que no puede montarse; en realidad no monta la unidad. El comando dmesg de la opción D sirve para ver los mensajes de arranque del sistema, que pueden indicar dónde se ha acoplado un disco duro al directorio virtual, pero no realiza el acoplamiento. La opción E, el comando init, controla el nivel de ejecución del sistema Linux y no se ocupa directamente de montar discos duros en el directorio virtual."}
+]

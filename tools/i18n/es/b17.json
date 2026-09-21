@@ -1,0 +1,55 @@
+[
+{"id":"SYBEX-CH07-RQ11",
+ "q":"¿Qué archivos usa el administrador de correo para guardar recetas que se apliquen a todos los mensajes entrantes?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"Procmail aplica las recetas definidas en el archivo /etc/procmailrc a todos los mensajes de correo entrantes, así que la opción B es correcta. Procmail aplica el archivo $HOME/.procmailrc solo a los mensajes entrantes de esa cuenta de usuario concreta, así que la opción C es incorrecta. Las opciones A, D y E no son ubicaciones válidas para recetas de procmail."},
+
+{"id":"SYBEX-CH07-RQ12",
+ "q":"¿Qué le hace a los mensajes de correo entrantes la siguiente receta de procmail? :0 c messages",
+ "o":{"A":"El sistema rechaza todos los mensajes entrantes.",
+      "B":"El sistema reenvía todos los mensajes a una cuenta de alias.",
+      "C":"El sistema copia todos los mensajes entrantes al directorio messages.",
+      "D":"El sistema mueve todos los mensajes entrantes al directorio messages.",
+      "E":"El sistema borra todos los mensajes entrantes."},
+ "e":"La receta :0 c coincide con todos los mensajes de correo entrantes, y la opción c copia los mensajes al directorio indicado, así que la opción C es correcta."},
+
+{"id":"SYBEX-CH07-RQ13",
+ "q":"¿Qué programa MDA se usa habitualmente para reenviar mensajes de correo a los buzones locales?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"El programa procmail es el único de la lista que es un programa MDA usado para procesar los mensajes de correo entrantes, así que la opción B es la única respuesta correcta."},
+
+{"id":"SYBEX-CH07-RQ14",
+ "q":"¿Qué ajuste de configuración de Postfix hay que cambiar para reenviar todos los mensajes entrantes a procmail?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"El ajuste mailbox_command define un programa al que Postfix envía todos los mensajes locales entrantes, así que la opción A es correcta. El ajuste mydestination define las direcciones para las que Postfix aceptará mensajes entrantes, así que la opción B es incorrecta. El ajuste myhost define el nombre de host del servidor local, así que la opción C es incorrecta. El ajuste relayhost define un host al que enviar todos los mensajes salientes, así que la opción D es incorrecta."},
+
+{"id":"SYBEX-CH07-RQ15",
+ "q":"¿Qué estilo de buzón guarda todos los mensajes de un usuario en un único archivo?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"El estilo de buzón mbox guarda todos los mensajes de un usuario en un único archivo, bien en el directorio /var/spool/mail o bien en el directorio $HOME del usuario, así que la opción D es correcta. Sendmail, Courier y exim son nombres de aplicaciones y no estilos de buzón, así que las opciones A, B y E son incorrectas. El estilo de buzón maildir usa un directorio para guardar los mensajes, así que la opción C es incorrecta."},
+
+{"id":"SYBEX-CH07-RQ16",
+ "q":"¿Qué estilo de buzón usa archivos separados para guardar cada mensaje de cada usuario?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"El estilo de buzón maildir crea archivos separados para cada mensaje de correo guardado en una carpeta común, así que la opción C es correcta. Sendmail, Courier y exim son nombres de aplicaciones y no estilos de buzón, así que las opciones A, B y E son incorrectas. El estilo de buzón mbox usa un único archivo para guardar todos los mensajes de un usuario, así que la opción D es incorrecta."},
+
+{"id":"SYBEX-CH07-RQ17",
+ "q":"¿Dónde se encuentran los archivos de configuración de Courier?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"El programa Courier usa la carpeta /etc/courier para guardar los archivos de configuración que definen su funcionamiento, así que la opción C es correcta. Las carpetas /var/spool/mail y /var/spool/postfix guardan mensajes de correo, no archivos de configuración, así que las opciones A y B son incorrectas. El directorio /var/log guarda archivos de registro y no de configuración, así que la opción E es incorrecta. Courier no usa el directorio /etc/mail, así que la opción D es incorrecta."},
+
+{"id":"SYBEX-CH07-RQ18",
+ "q":"¿Qué ajuste de configuración de Courier determina cuántos clientes remotos pueden conectarse al mismo tiempo?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"El ajuste MAXDAEMONS determina cuántas copias del programa Courier pueden ejecutarse a la vez, lo que controla cuántos clientes pueden conectarse, así que la opción A es correcta. El ajuste MAILDIRPATH define la ubicación del directorio de buzones, así que la opción B es incorrecta. El ajuste ADDRESS define la interfaz o interfaces en las que escuchar conexiones entrantes, así que la opción C es incorrecta. El ajuste MAXPERIP define el número de conexiones desde un mismo cliente, pero no el número total de clientes que pueden conectarse, así que la opción D es incorrecta. El ajuste PORT define el puerto TCP en el que escuchar conexiones entrantes, así que la opción E es incorrecta."},
+
+{"id":"SYBEX-CH07-RQ19",
+ "q":"¿Dónde guarda Dovecot sus ajustes de configuración? (Elija dos.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"Algunas distribuciones de Linux guardan los ajustes de configuración de Dovecot en el archivo de configuración dovecot.conf, mientras que otras crean varios archivos dentro del directorio /etc/dovecot, así que las opciones A y D son ambas correctas. Dovecot no usa ninguno de los archivos ni carpetas de Postfix, así que las opciones B, C y E son todas incorrectas."},
+
+{"id":"SYBEX-CH07-RQ20",
+ "q":"¿Qué ajuste de Dovecot especifica los métodos de autenticación que soporta el servidor?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"El ajuste mechanisms lista los métodos de autenticación que soporta el servidor, así que la opción B es correcta. El ajuste mail_location define la ubicación del buzón, así que la opción A es incorrecta. El ajuste listen define el puerto TCP en el que Dovecot escucha las conexiones entrantes de clientes, así que la opción C es incorrecta. Los ajustes login_max_connections definen cuántos usuarios pueden conectarse a la vez, así que la opción D es incorrecta. El ajuste protocols define qué protocolos de correo soporta el servidor, así que la opción E es incorrecta."}
+]

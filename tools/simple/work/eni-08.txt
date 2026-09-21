@@ -1,0 +1,39 @@
+### ENI-CH08-Q01  [open]  tema: Correo electrónico
+P: En el funcionamiento de un servidor de correo de tipo MTA, ¿a qué se llama generalmente un alias?
+LIBRO: Es la asociación de una identidad con una cuenta existente. Por ejemplo, generalmente se debe poder enviar un mensaje a la dirección de servicio webmaster@sitio.com. Para que el webmaster no tenga que consultar su cuenta personal y la de webmaster, se crea un alias entre ambas identidades.
+
+### ENI-CH08-Q02  [open]  tema: Correo electrónico
+P: Postfix soporta el parámetro relayhost. ¿En qué circunstancias se requiere usarlo?
+LIBRO: La generalización del spam ha complicado un poco el envío de mensajes por Internet con el protocolo SMTP. Si la dirección IP pública asignada a una organización por su proveedor de servicios de Internet tiene un dudoso pasado, puede que la dirección en cuestión esté en una blacklist y, por tanto, los MTA correspondientes la rechazarán. Traspasar todo mensaje saliente a su proveedor de servicios de Internet para que se encargue de enviarlo es una solución interesante si no desea iniciar un procedimiento para eliminar la dirección IP de las blacklists.
+
+### ENI-CH08-Q03  [open]  tema: Correo electrónico
+P: ¿Se puede gestionar con postfix un dominio de correo en una red local pero presentarlo al exterior con otro nombre más adecuado?
+LIBRO: Sí, para ello hay que informar la directiva myorigin en el archivo de configuración de postfix. Es un comportamiento común, por ejemplo cuando una empresa cambia de nombre.
+
+### ENI-CH08-Q04  [open]  tema: Correo electrónico
+P: Cuando un servidor postfix recibe un mensaje, ¿cómo sabe que debe tratarlo personalmente y no reenviarlo?
+LIBRO: Compara el dominio de destino anunciado (los caracteres escritos a continuación de la arroba) con los definidos por la directiva mydestination en el archivo de configuración de postfix. Si son idénticos, el servidor postfix sabe que es el responsable de tratar el mensaje.
+
+### ENI-CH08-Q05  [open]  tema: Correo electrónico
+P: ¿Se puede comprobar la validez de la configuración de un servidor postfix sin tener que iniciar el servicio?
+LIBRO: Sí, con el comando postfix check. También se pueden visualizar los parámetros reales de la configuración con el comando postconf -n.
+
+### ENI-CH08-Q06  [open]  tema: Correo electrónico
+P: En la sintaxis SMTP o cuando se envía un correo con el comando mail, ¿cómo se indica que se ha terminado la redacción del mensaje?
+LIBRO: Escribiendo una línea que consista únicamente en un punto. El punto tiene que ser el carácter único en la línea, validado inmediatamente con un retorno de carro.
+
+### ENI-CH08-Q07  [open]  tema: Correo electrónico
+P: ¿Cómo se puede automatizar un procesado en los mensajes entrantes en un MTA?
+LIBRO: Llamando al comando de gestión de procmail. Se tiene que hacer referencia a procmail en el archivo de configuración postfix y poseer también su propio archivo de reglas.
+
+### ENI-CH08-Q08  [open]  tema: Correo electrónico
+P: Si un administrador quiere enviar un mensaje urgente a todos los usuarios conectados en modo consola (local, telnet o ssh), ¿dispone de alguna alternativa al envío de un mensaje con SMTP?
+LIBRO: Sí, el antiguo comando wall se creó para ello. Envía un mensaje a todos los usuarios conectados. Se emplea frecuentemente antes de reiniciar el sistema o detener un servicio.
+
+### ENI-CH08-Q09  [open]  tema: Correo electrónico
+P: ¿Qué diferencia hay entre el contenido del archivo /etc/issue y el del archivo /etc/motd?
+LIBRO: Los dos se muestran a los usuarios que se conecten al sistema, pero /etc/issue se muestra antes de la apertura de sesión -y por tanto todos los usuarios lo pueden ver-mientras que el contenido del archivo /etc/motd sólo es visible a través de una apertura de sesión con éxito.
+
+### ENI-CH08-Q10  [open]  tema: Correo electrónico
+P: ¿Se puede comprobar la autentificación a través de los servidores courier (Courier-POP y Courier-IMAP) sin tener que configurar un cliente de correo?
+LIBRO: Sí, el comando authtest realiza esta comprobación. No determina un éxito funcional completo en producción, pero por lo menos comprueba que las librerías de autentificación de courier están instaladas y configuradas correctamente.

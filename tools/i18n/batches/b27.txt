@@ -1,0 +1,79 @@
+### SYBEX-CH12-RQ11  [multiple_choice]
+Q: Which Snort mode dumps packets to the display for viewing?
+A: Logging mode
+B: NIDS mode
+C: Sniffer mode
+D: Command-line mode
+X: The sniffer mode of Snort displays a brief description of each packet received, so option C is correct. Option A is the logging mode, which logs packets to a file instead of displaying them, so option A is incorrect. The NIDS mode only reports vulnerability events, so option B is incorrect. By default, the Snort command-line mode doesn’t display the packets, so option D is also incorrect.
+
+### SYBEX-CH12-RQ12  [multiple_choice]
+Q: What does the HOME_NET variable define in the Snort configuration?
+A: The remote addresses to monitor
+B: The address of the local host
+C: The local addresses to monitor
+D: The default configuration folder
+X: The HOME_NET variable defines the local addresses for Snort to monitor, so option C is correct. The EXTERNAL_NET variable defines remote addresses, so option A is incorrect. Snort doesn’t need to define local addresses or point to the configuration folder name, so options B and D are both incorrect.
+
+### SYBEX-CH12-RQ13  [multiple_choice]
+Q: Which rule address format tells Snort only to look for packets going from the 10.0.0.1 address to the 10.0.0.2 address?
+A: 10.0.0.1 <- 10.0.0.2
+B: 10.0.0.2 -> 10.0.0.1
+C: 10.0.0.1 <> 10.0.0.2
+D: 10.0.0.1 -> 10.0.0.2
+X: The arrow indicates the traffic flow, so 10.0.0.1 -> 10.0.0.2 defines the traffic flow we are looking for, and option D is correct. The <- indicator shows that the traffic is coming from the .2 address to the .1 address, which is wrong, so option A is incorrect. Option B also shows the traffic going the wrong way, so option B is incorrect. Option C uses the <> bidirectional operator, so it too is incorrect.
+
+### SYBEX-CH12-RQ14  [multiple_choice]
+Q: How many private network address ranges does IPv4 support?
+A: Two
+B: Three
+C: Four
+D: None
+X: The IPv4 specifications use the 10.0.0.0 through 10.255.255.255, 172.16.0.0 through 172.31.255.255, and 192.168.0.0 through 192.168.255.255 network address ranges; thus option B is correct. Options A, C, and D all have the incorrect number of address ranges, so they are all incorrect.
+
+### SYBEX-CH12-RQ15  [multiple_choice]
+Q: What value do IPv6 link local addresses start with?
+A: fe80
+B: ff02
+C: ff05
+D: aabb
+X: The fe80 value identifies the starting address for link local addresses in IPv6. The remainder of the address is usually derived from the Ethernet MAC address to ensure it’s unique on the network. The ff02 value is the multicast address for routers, and ff05 is the multicast address for DHCP servers, so option C is incorrect. The aabb value isn’t a reserved number in IPv6, so option D is incorrect.
+
+### SYBEX-CH12-RQ16  [multiple_choice]
+Q: What system allows you to connect clients on a private network address to outside servers?
+A: SSH
+B: Telnet
+C: NAT
+D: IDS
+X: Network Address Translation (NAT) allows a client on a private network address to have its address translated to a public address before leaving the network, so option C is correct. SSH provides an encrypted network connection, so option A is incorrect. The telnet command provides plaintext communication, so option B is incorrect. The IDS software detects attackers; it doesn’t provide connection support, so option D is incorrect.
+
+### SYBEX-CH12-RQ17  [multiple_choice]
+Q: What Linux command do you use to create firewall rules on the system?
+A: nc
+B: iptables
+C: netstat
+D: nmap
+X: The iptables command allows you to manipulate the rules defined in the kernel chains and tables to filter the network traffic, so option B is correct. The nc command provides only network communication, so option A is incorrect. The netstat and nmap commands allow you to view only network port status, so options C and D are both incorrect.
+
+### SYBEX-CH12-RQ18  [multiple_choice]
+Q: Which iptables option adds a new rule to a chain?
+A: -L
+B: -F
+C: -A
+D: -j
+X: The –A option is used to add new rules to a chain or table, so option C is correct. The –L option lists the existing rules, so option A is incorrect. The –F option flushes the rules cache, so option B is incorrect. The –j option specifies a default action; it does not add a new rule, so option D is incorrect.
+
+### SYBEX-CH12-RQ19  [multiple_choice]
+Q: Which iptables policy is used to send a return packet back to the source indicating that the packet was dropped?
+A: REJECT
+B: DROP
+C: ACCEPT
+D: LOG
+X: The REJECT policy drops the packet but sends an ICMP message back to the source IP address indicating the failure; thus option A is correct. The DROP policy drops the packet silently, so option B is incorrect. The ACCEPT and LOG policies accept all packets, while the LOG policy stores packet information in a log file, so options C and D are incorrect.
+
+### SYBEX-CH12-RQ20  [multiple_choice]
+Q: Which iptables option defines the default policy for a chain?
+A: -P
+B: -j
+C: -L
+D: -F
+X: The –P option defines the chain and policy to use as the default. The –j option defines the action for a rule, so option B is incorrect. The –L option only lists chains and tables; it doesn’t modify them, so option C is incorrect. The –F option flushes all rules out from the chain, so option D is incorrect.

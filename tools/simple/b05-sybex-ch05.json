@@ -1,0 +1,240 @@
+{
+ "SYBEX-CH05-RQ01": {
+  "idea": [
+   "Todos aguantan un fallo menos RAID 0.",
+   "RAID 0 solo reparte por bandas: no guarda nada de más, así que no tiene de dónde recuperar."
+  ],
+  "otras": {
+   "A": "RAID 0 es distribución por bandas, sin tolerancia a fallos."
+  },
+  "memorizar": "el 0 no protege; el resto, sí."
+ },
+ "SYBEX-CH05-RQ02": {
+  "idea": [
+   "Doble paridad es RAID 6."
+  ],
+  "otras": {
+   "A": "RAID 0 es distribución por bandas a secas.",
+   "B": "RAID 1 es duplicación en espejo.",
+   "C": "RAID 10 es espejo con bandas.",
+   "D": "RAID 5 es bandas con paridad simple."
+  },
+  "memorizar": "5 = una paridad; 6 = dos."
+ },
+ "SYBEX-CH05-RQ03": {
+  "idea": [
+   "Si el nivel de RAID está soportado, se ve en /proc/mdstat."
+  ],
+  "otras": {
+   "B": "/dev/md0 es el dispositivo de un array, no un estado.",
+   "C": "/etc/fstab puede montar el array al arrancar, pero no dice esto.",
+   "D": "/etc/mdadm/mdadm.conf es configuración, no estado.",
+   "E": "/dev/mapper son los archivos de Device Mapper de LVM y RAID."
+  },
+  "memorizar": "estado del RAID → /proc/mdstat."
+ },
+ "SYBEX-CH05-RQ04": {
+  "idea": [
+   "El modo delete no existe en mdadm.",
+   "Para deshacer un array se usa el modo misceláneo, que borra el superbloque."
+  ],
+  "otras": {
+   "A": "grow hace crecer, reduce o reconfigura un array.",
+   "B": "--follow vigila unidades md y reacciona a los eventos.",
+   "D": "--manage toca los miembros del array, por ejemplo añadir una reserva.",
+   "E": "el misceláneo es el cajón de lo que no encaja en los demás."
+  },
+  "memorizar": "mdadm no borra: detiene y limpia superbloques."
+ },
+ "SYBEX-CH05-RQ05": {
+  "idea": [
+   "Crear un array es -C, o su forma larga --create."
+  ],
+  "otras": {
+   "A": "--grow es el modo grow.",
+   "B": "-F es follow o monitor.",
+   "C": "--make está inventada.",
+   "E": "--misc es el modo misceláneo."
+  },
+  "memorizar": "-C de create."
+ },
+ "SYBEX-CH05-RQ06": {
+  "idea": [
+   "El estado de los arrays está en /proc/mdstat."
+  ],
+  "otras": {
+   "A": "/etc/mdadm/mdadm.conf es configuración.",
+   "B": "/etc/mdadm.conf es la misma configuración en otra distribución.",
+   "C": "/etc/fstab no guarda estado de RAID.",
+   "E": "/etc/sysctl.conf es la configuración de sysctl."
+  },
+  "memorizar": "conf configura; mdstat informa."
+ },
+ "SYBEX-CH05-RQ07": {
+  "idea": [
+   "Se pregunta por la unidad, no por el array: --misc --examine /dev/sdc1.",
+   "Así te dice a qué array pertenece, sea el que sea."
+  ],
+  "otras": {
+   "A": "--detail /dev/md0 solo sirve si resulta que es ese array.",
+   "C": "--detail --scan /dev/md0 tiene el mismo problema.",
+   "D": "--monitor --help solo enseña las opciones del modo monitor.",
+   "E": "sí hay una respuesta buena."
+  },
+  "memorizar": "examinar la unidad para saber su array → --examine."
+ },
+ "SYBEX-CH05-RQ08": {
+  "idea": [
+   "Primero se detiene el array.",
+   "Después se borran los superbloques de cada una de sus unidades."
+  ],
+  "otras": {
+   "B": "reducirlo no hace falta.",
+   "C": "monitorizarlo tampoco.",
+   "E": "los datos no hay que borrarlos."
+  },
+  "memorizar": "detener y limpiar superbloques; los datos dan igual."
+ },
+ "SYBEX-CH05-RQ09": {
+  "idea": [
+   "hdparm vale para PATA, ATAPI, SATA y SCSI.",
+   "En SCSI solo si el dispositivo soporta SAT, y solo algunas opciones."
+  ],
+  "memorizar": "hdparm con todas, pero con SCSI a medias."
+ },
+ "SYBEX-CH05-RQ10": {
+  "idea": [
+   "sdparm sin nada detrás ya enseña los parámetros de modo comunes."
+  ],
+  "otras": {
+   "A": "--all da toda la información reconocida del tipo de dispositivo.",
+   "B": "--command existe, pero sus parámetros son stop, sync, start y load.",
+   "C": "--hex enseña las páginas VPD en hexadecimal.",
+   "D": "--page enseña el código de esas páginas."
+  },
+  "memorizar": "sdparm a secas = los parámetros comunes."
+ },
+ "SYBEX-CH05-RQ11": {
+  "idea": [
+   "El IQN nombra las dos cosas.",
+   "Identifica el destino iSCSI y también el disco que ese destino ofrece."
+  ],
+  "otras": {
+   "A": "WWID identifica el disco, no el destino.",
+   "B": "WWN es lo mismo que WWID.",
+   "D": "LUN también identifica el disco, no el destino.",
+   "E": "scsi_id es un comando para generar un número único."
+  },
+  "memorizar": "IQN nombra destino y disco; los demás, solo el disco."
+ },
+ "SYBEX-CH05-RQ12": {
+  "idea": [
+   "El descubrimiento deja dos registros en /var/lib/iscsi/.",
+   "nodes guarda el nodo descubierto y send_targets la dirección IP del destino."
+  ],
+  "otras": {
+   "A": "/etc/iscsi/iscsid.conf es la configuración de iscsiadm.",
+   "B": "/lib/udev/scsi_id es donde vive el comando scsi_id.",
+   "E": "/var/log/iscsi.conf está inventado."
+  },
+  "memorizar": "descubrimiento → /var/lib/iscsi/nodes y send_targets."
+ },
+ "SYBEX-CH05-RQ13": {
+  "idea": [
+   "Agrupan varios discos en uno solo RAID y LVM."
+  ],
+  "otras": {
+   "A": "PATA es una interfaz de unidades.",
+   "C": "iSCSI trae un disco de red, pero no agrupa nada.",
+   "E": "el tejido de almacenamiento es el hardware que conecta una SAN."
+  },
+  "memorizar": "agrupar discos: RAID o LVM."
+ },
+ "SYBEX-CH05-RQ14": {
+  "idea": [
+   "Una partición libre entregada a LVM es un volumen físico, el PV."
+  ],
+  "analogia": "PV es el ladrillo, VG el montón de ladrillos y LV lo que construyes con ellos.",
+  "otras": {
+   "B": "VG es el grupo que reúne varios PV.",
+   "C": "LV es lo que se saca del grupo.",
+   "D": "SATA es una interfaz de unidades.",
+   "E": "un backstore da acceso a un medio físico en una SAN."
+  },
+  "memorizar": "PV = la materia prima de LVM."
+ },
+ "SYBEX-CH05-RQ15": {
+  "idea": [
+   "Lo falso es lo de designar el PV.",
+   "El tamaño del PE se fija al meter ese PV en un grupo de volúmenes."
+  ],
+  "otras": {
+   "A": "PE sí significa extent físico.",
+   "B": "sí es el bloque más pequeño que se asigna en un PV.",
+   "D": "el tamaño por defecto sí es 4 MiB.",
+   "E": "y sí se puede elegir."
+  },
+  "memorizar": "el tamaño del PE se decide al entrar en el VG."
+ },
+ "SYBEX-CH05-RQ16": {
+  "idea": [
+   "Cada extent lógico apunta a un extent físico del grupo."
+  ],
+  "analogia": "Es un índice: el extent lógico es la entrada y el físico, el trozo real de disco.",
+  "otras": {
+   "A": "al revés: son los LV los que se componen de LE.",
+   "C": "el mapeo da acceso a los datos, no los bloquea.",
+   "D": "no ocurre al designar el PV.",
+   "E": "sí hay una afirmación cierta."
+  },
+  "memorizar": "LE apunta a extent físico: lógico → físico."
+ },
+ "SYBEX-CH05-RQ17": {
+  "idea": [
+   "Marcar una partición como PV es cosa de pvcreate."
+  ],
+  "otras": {
+   "A": "pvdisplay enseña los atributos de un PV.",
+   "B": "vgcreate mete PV en un grupo.",
+   "C": "lvcreate saca un LV del grupo.",
+   "E": "pvscan lista los PV del sistema."
+  },
+  "memorizar": "…create crea, …display enseña, …scan lista."
+ },
+ "SYBEX-CH05-RQ18": {
+  "idea": [
+   "vg01 es un grupo de volúmenes, así que se mira con vgdisplay."
+  ],
+  "otras": {
+   "A": "pvdisplay es para volúmenes físicos.",
+   "B": "vgcreate crea, no comprueba.",
+   "C": "pvscan lista volúmenes físicos.",
+   "E": "lvdisplay es para volúmenes lógicos."
+  },
+  "memorizar": "el prefijo manda: pv, vg o lv."
+ },
+ "SYBEX-CH05-RQ19": {
+  "idea": [
+   "Una instantánea es un LV más, y como tal se puede montar.",
+   "Se crea con lvcreate y se puede leer y escribir."
+  ],
+  "otras": {
+   "B": "no es de solo lectura.",
+   "D": "no copia los datos originales.",
+   "E": "no se crea con vgcreate, sino con lvcreate."
+  },
+  "memorizar": "la instantánea es un LV normal y corriente."
+ },
+ "SYBEX-CH05-RQ20": {
+  "idea": [
+   "Renombrar un LV es lvrename."
+  ],
+  "otras": {
+   "B": "lvremove lo elimina.",
+   "C": "lvconvert cambia su disposición.",
+   "D": "lvs muestra información de los LV.",
+   "E": "lvmchange está obsoleto."
+  },
+  "memorizar": "lvrename cambia el nombre, nada más."
+ }
+}

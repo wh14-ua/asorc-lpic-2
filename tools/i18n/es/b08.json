@@ -1,0 +1,51 @@
+[
+{"id":"SYBEX-CH03-RQ01",
+ "q":"¿Qué parte de un sistema Linux gestiona la memoria del sistema?",
+ "o":{"A":"Las utilidades GNU","B":"El kernel","C":"El escritorio gráfico","D":"El software de aplicación"},
+ "e":"El kernel gestiona la memoria del sistema en Linux, así que la respuesta B es correcta. Las utilidades GNU proporcionan programas que imitan a los programas Unix habituales para manipular archivos y datos, pero no gestionan la memoria del sistema, así que la respuesta A es incorrecta. El escritorio gráfico gestiona el entorno gráfico de la pantalla, pero no la memoria, así que la respuesta C es incorrecta. El software de aplicación no gestiona la memoria del sistema, así que la respuesta D es incorrecta."},
+
+{"id":"SYBEX-CH03-RQ02",
+ "q":"¿Cómo se llama la zona del disco duro que se usa como almacenamiento de memoria?",
+ "o":{"A":"Espacio de intercambio (swap space)","B":"Memoria virtual","C":"Sistema de archivos","D":"Memoria física"},
+ "e":"El espacio de intercambio (swap space) es la zona del disco duro que se usa para guardar páginas de memoria dentro de la memoria virtual, así que la respuesta A es correcta. La memoria física son las posiciones de memoria almacenadas en la RAM real del sistema, así que la respuesta D es incorrecta. La memoria virtual es la combinación de la memoria RAM y la memoria en disco duro, así que la respuesta B es incorrecta. El sistema de archivos guarda datos en el disco, no posiciones de memoria, así que la respuesta C es incorrecta."},
+
+{"id":"SYBEX-CH03-RQ03",
+ "q":"¿Qué método usa Linux para cargar controladores de dispositivo en el kernel?",
+ "o":{"A":"Archivos DLL","B":"Memoria virtual","C":"Módulos","D":"Cargador de arranque"},
+ "e":"Linux usa módulos para cargar controladores de dispositivo en el kernel, así que la respuesta C es correcta. Los archivos DLL se usan para cargar controladores en el mundo de Microsoft Windows, pero no se usan en Linux, así que la respuesta A es incorrecta. La memoria virtual amplía la memoria física que usa el sistema Linux mediante un espacio de intercambio en el disco duro, pero no ayuda a cargar controladores, así que la respuesta B es incorrecta. El cargador de arranque carga el software del kernel en memoria, pero no carga controladores en el kernel, así que la respuesta D es incorrecta."},
+
+{"id":"SYBEX-CH03-RQ04",
+ "q":"¿Qué tipo de archivo del kernel se usa para arrancar el sistema Linux?",
+ "o":{"A":"Archivo binario","B":"Módulos","C":"Archivo de parche","D":"Código fuente"},
+ "e":"Al compilar el código fuente del kernel se produce un archivo binario que se carga en memoria, así que la respuesta A es correcta. Los archivos de código fuente del kernel no pueden cargarse en memoria, así que la respuesta D es incorrecta. Del mismo modo, los archivos de parche del código fuente tampoco pueden cargarse en memoria, así que la respuesta C también es incorrecta. Los módulos se cargan en el kernel después de que el sistema arranque, así que no se usan directamente para arrancar el sistema Linux y la respuesta B es incorrecta."},
+
+{"id":"SYBEX-CH03-RQ05",
+ "q":"¿Qué tipo de publicación puede usarse para actualizar un kernel existente a una versión más reciente?",
+ "o":{"A":"Publicación de parche (patch release)","B":"Módulos","C":"Archivos binarios","D":"Publicación de desarrollo"},
+ "e":"Los desarrolladores del kernel de Linux publican parches para actualizar fácilmente el código fuente de una versión a la siguiente, así que la respuesta A es correcta. Los módulos sirven para cargar software de controladores de dispositivo en el kernel, así que la respuesta B es incorrecta. Los archivos binarios sirven para cargar el kernel en memoria y ejecutarlo, así que la respuesta C es incorrecta. Las publicaciones de desarrollo son entregas completas de código fuente y no se usan para actualizar un kernel existente, así que la respuesta D es incorrecta."},
+
+{"id":"SYBEX-CH03-RQ06",
+ "q":"¿Qué objetivo (target) de la utilidad make usa preguntas en modo texto para configurar el kernel?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"El objetivo config plantea preguntas en la consola de Linux que hay que responder para determinar los ajustes de configuración del kernel; por tanto, la respuesta D es correcta. El objetivo xconfig produce un sistema de menús gráfico, que no es en modo texto, así que la respuesta A es incorrecta. Los objetivos mrproper y clean sirven para eliminar ajustes de configuración anteriores, no para crear ajustes nuevos, así que las respuestas B y C son incorrectas."},
+
+{"id":"SYBEX-CH03-RQ07",
+ "q":"¿Qué objetivo (target) de la utilidad make usa una interfaz gráfica para configurar el kernel?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"El objetivo gconfig usa la biblioteca del escritorio GNOME para producir un menú gráfico con el que determinar los ajustes de configuración, así que la respuesta C es correcta. El objetivo config usa preguntas de texto para determinar los ajustes, así que la respuesta A es incorrecta. Los objetivos mrproper y clean eliminan ajustes de configuración anteriores, no crean ajustes nuevos, así que las respuestas B y D son incorrectas."},
+
+{"id":"SYBEX-CH03-RQ08",
+ "q":"¿Qué objetivo (target) de la utilidad make debería usar para eliminar los archivos objeto antiguos de una compilación anterior?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"El objetivo mrproper elimina todos los ajustes de configuración y archivos objeto antiguos de las carpetas del código fuente, permitiendo empezar con una configuración nueva; por tanto, la respuesta B es correcta. Los objetivos gconfig y bzImage sirven para crear un archivo de configuración nuevo, pero no eliminan los archivos objeto anteriores, así que las respuestas A y C son incorrectas. El objetivo oldconfig usa el archivo de configuración antiguo, pero no elimina archivos objeto antiguos, así que la respuesta D es incorrecta."},
+
+{"id":"SYBEX-CH03-RQ09",
+ "q":"¿Qué objetivo (target) de la utilidad make se usa habitualmente para generar un archivo binario comprimido del kernel?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"Los objetivos zImage y bzImage crean un archivo binario comprimido del kernel a partir del código fuente, así que la respuesta A es correcta. El objetivo kernel no es válido y producirá un mensaje de error, así que la respuesta B es incorrecta. El objetivo config crea un archivo de configuración, pero no compila el binario del kernel, así que la respuesta C es incorrecta. El objetivo clean elimina los ajustes de configuración anteriores, pero no compila el binario del kernel, así que la respuesta D es incorrecta."},
+
+{"id":"SYBEX-CH03-RQ10",
+ "q":"¿Qué programa debería usar para crear un disco RAM inicial en un sistema basado en Debian?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"Los sistemas basados en Debian usan el programa mkinitramfs para crear el disco RAM inicial que se emplea en el arranque, así que la respuesta C es correcta. El programa mkinitrd lo usan los sistemas basados en Red Hat, pero no está disponible en los basados en Debian, así que la respuesta A es incorrecta. No existe ningún objetivo de make para crear un disco RAM inicial, así que las respuestas B y D son incorrectas."}
+]

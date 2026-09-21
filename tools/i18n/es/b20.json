@@ -1,0 +1,51 @@
+[
+{"id":"SYBEX-CH09-RQ01",
+ "q":"¿Qué protocolo define cómo responde un servidor web a las peticiones de los clientes?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"HTTP define las peticiones del cliente y las respuestas del servidor necesarias para transferir un archivo de datos desde un servidor web, así que la opción C es correcta. HTML (opción A) define el formato de un documento web, pero no el protocolo de transferencia. SSL (opción B) y TLS (opción D) definen protocolos de cifrado y no se usan en el protocolo de transferencia de archivos propiamente dicho, así que ambas son incorrectas."},
+
+{"id":"SYBEX-CH09-RQ02",
+ "q":"¿Qué estándar define cómo da formato el cliente al contenido de una página web?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"El estándar HTML define las reglas de formato para crear páginas web, así que la opción A es correcta. HTTP (opción C) define el protocolo usado para transferir el documento del servidor web al navegador cliente, pero no cómo dar formato al documento en sí, así que la opción C es incorrecta. SSL y TLS son protocolos de cifrado y no dan formato al contenido de los datos, así que las opciones B y D son incorrectas."},
+
+{"id":"SYBEX-CH09-RQ03",
+ "q":"¿Qué código de respuesta HTTP del servidor indica que no se encontró el archivo solicitado por el cliente?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"El código de respuesta 404 de HTTP indica que el archivo solicitado por el cliente no se encontró en el servidor web, así que la opción D es correcta. El código de estado 200 (opción A) indica que la petición tuvo éxito, así que la opción A es incorrecta. El código 403 indica que el cliente no tiene permiso para obtener el archivo solicitado, así que la opción B es incorrecta. El código 500 indica que hay un problema en el servidor que impide descargar el archivo, así que la opción C es incorrecta."},
+
+{"id":"SYBEX-CH09-RQ04",
+ "q":"¿Qué utilidad permite detener el servidor web Apache de forma ordenada (graceful)?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"La utilidad apache2ctl permite enviar una petición de parada ordenada al servidor web Apache, preservando las conexiones existentes, así que la opción B es correcta. systemctl lo usan algunas distribuciones de Linux para detener o arrancar procesos, pero no detiene Apache de forma ordenada, así que la opción A es incorrecta. Los programas httpd y apache2 son el propio servidor web y no tienen opciones para detenerlo de forma ordenada, así que las opciones C y D son incorrectas."},
+
+{"id":"SYBEX-CH09-RQ05",
+ "q":"¿Qué utilidad permite comprobar la configuración de un servidor web Apache antes de arrancarlo?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"La utilidad apache2ctl también puede analizar los archivos de configuración de Apache y señalar cualquier problema de sintaxis, así que la opción B es correcta. La utilidad systemctl la usan algunas distribuciones de Linux para detener o arrancar procesos, pero no analiza archivos de configuración, así que la opción A es incorrecta. Los programas httpd y apache2 son el servidor web Apache principal y no tienen la opción de analizar los archivos de configuración, así que las opciones C y D son incorrectas."},
+
+{"id":"SYBEX-CH09-RQ06",
+ "q":"¿Qué directiva define la ubicación del servidor que se compartirá con los clientes?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"La directiva DocumentRoot define la carpeta desde la que el servidor web permite que los clientes soliciten archivos, así que la opción A es correcta. La directiva ServerRoot define la ubicación de los archivos de configuración del servidor, así que la opción B es incorrecta. La directiva Listen define las direcciones IP y los puertos que usa el servidor Apache para escuchar peticiones entrantes, así que la opción C es incorrecta. La directiva DirectoryIndex define los archivos predeterminados que se buscan cuando un cliente solicita un nombre de carpeta en lugar de un nombre de archivo, así que la opción D es incorrecta."},
+
+{"id":"SYBEX-CH09-RQ07",
+ "q":"¿Qué elemento de configuración permite aplicar directivas a carpetas concretas del sistema de archivos?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"El elemento <Directory> permite crear un bloque de directivas que se aplican a una ubicación de carpeta concreta, así que la opción C es correcta. El elemento <VirtualHost> permite crear un bloque de directivas que se aplican a un host virtual concreto, pero no a un directorio, así que la opción A es incorrecta. El elemento <IfDefined> permite crear un bloque de directivas que se aplican solo cuando está definida una variable de entorno, pero no solo a un directorio concreto, así que la opción B es incorrecta. El elemento <IfModule> permite crear un bloque de directivas que se aplican solo cuando hay un módulo cargado, pero no a un directorio concreto, así que la opción D es incorrecta."},
+
+{"id":"SYBEX-CH09-RQ08",
+ "q":"¿Qué directiva de configuración define qué información aparece en el archivo de registro de Apache?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"La directiva LogFormat define el formato de las entradas del archivo de registro, permitiendo decidir qué información se guarda en él; por tanto, la opción B es correcta. La directiva ErrorLog define dónde se encuentran los registros de errores, pero no qué contienen, así que la opción A es incorrecta. La directiva ErrorDocument define cómo se definen los mensajes de error enviados a los clientes, pero no el formato de los registros de errores, así que la opción C es incorrecta. La directiva DocumentRoot define la carpeta desde la que se sirven archivos, pero no el formato del registro de errores, así que la opción D es incorrecta."},
+
+{"id":"SYBEX-CH09-RQ09",
+ "q":"¿Qué archivo de registro de Apache contiene información sobre qué páginas web solicitaron los clientes?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"El archivo access.log registra todas las peticiones de los clientes al servidor web, así que la opción C es correcta. El archivo error.log contiene solo errores, no peticiones válidas, así que la opción A es incorrecta. Los archivos apache2.conf y httpd.conf son archivos de configuración del servidor web Apache, no de registro, así que las opciones B y D son ambas incorrectas."},
+
+{"id":"SYBEX-CH09-RQ10",
+ "q":"¿Qué directiva debería usar para permitir que los usuarios del sistema creen sus propias carpetas web?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"La directiva UserDir define el nombre de la carpeta que los usuarios pueden crear en sus directorios HOME para ofrecer archivos en el servidor web, así que la opción B es correcta. AuthUserFile define la ubicación de un archivo de autenticación de usuarios, así que la opción A es incorrecta. La directiva DocumentRoot define la carpeta del servidor que se ofrece a los clientes web, no el nombre de las carpetas individuales de los usuarios, así que la opción C es incorrecta. La directiva LoadModule carga módulos de funcionalidad en el servidor Apache; no especifica la ubicación de la carpeta web de los usuarios, así que la opción D es incorrecta."}
+]

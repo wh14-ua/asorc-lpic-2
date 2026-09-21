@@ -1,0 +1,250 @@
+{
+ "SYBEX-CH06-RQ01": {
+  "idea": [
+   "El WPA protege la señal inalámbrica.",
+   "Y lo inalámbrico ocurre en la capa física."
+  ],
+  "otras": {
+   "A": "la capa de red direcciona con IP, sin tocar la señal.",
+   "C": "la de transporte reparte por puertos.",
+   "D": "la de aplicación es donde corren los programas."
+  },
+  "memorizar": "el Wi-Fi es señal, o sea capa física."
+ },
+ "SYBEX-CH06-RQ02": {
+  "idea": [
+   "Qué parte de la IP es la red lo dice la máscara."
+  ],
+  "otras": {
+   "A": "la dirección IP sola no lo dice sin la máscara.",
+   "B": "el router predeterminado es otra IP más.",
+   "C": "el nombre de host no habla de direcciones.",
+   "E": "el servidor DNS traduce nombres a IP, nada más."
+  },
+  "memorizar": "la máscara parte la IP en red y host."
+ },
+ "SYBEX-CH06-RQ03": {
+  "idea": [
+   "Una máscara son unos seguidos al principio y ceros después.",
+   "255.255.255.0 son 24 unos: vale."
+  ],
+  "otras": {
+   "B": "255.255.0.255 tiene los unos cortados.",
+   "C": "192.168.1.0 es una dirección de red.",
+   "D": "192.168.0.1 es una dirección de host.",
+   "E": "0.255.255.255 tiene los unos al final."
+  },
+  "memorizar": "máscara = unos seguidos, y siempre delante."
+ },
+ "SYBEX-CH06-RQ04": {
+  "idea": [
+   "Una IP son dos cosas: dirección de red y dirección de host."
+  ],
+  "otras": {
+   "A": "el router no forma parte de tu IP.",
+   "B": "la máscara no está dentro de la IP: la interpreta.",
+   "C": "esos dos dan la red, pero no tu host.",
+   "D": "el nombre de host no forma parte de la IP."
+  },
+  "memorizar": "IP = red + host."
+ },
+ "SYBEX-CH06-RQ05": {
+  "idea": [
+   "IPv6 usa 128 bits.",
+   "Son ocho grupos de cuatro valores hexadecimales."
+  ],
+  "otras": {
+   "A": "32 bits es IPv4.",
+   "B": "64 suele ser solo la parte de red.",
+   "D": "256 no existe.",
+   "E": "8 tampoco."
+  },
+  "memorizar": "IPv4 32 bits, IPv6 128."
+ },
+ "SYBEX-CH06-RQ06": {
+  "idea": [
+   "Lo que sale de tu red pasa por el router predeterminado."
+  ],
+  "otras": {
+   "B": "la máscara define solo la red local.",
+   "C": "el nombre de host es cosa tuya, local.",
+   "D": "la dirección IP también.",
+   "E": "el servidor DNS traduce nombres, no encamina."
+  },
+  "memorizar": "salir de la red local → router predeterminado."
+ },
+ "SYBEX-CH06-RQ07": {
+  "idea": [
+   "Quien convierte un nombre en una IP es el servidor DNS."
+  ],
+  "otras": {
+   "A": "el router predeterminado manda paquetes fuera.",
+   "B": "la máscara define la red local.",
+   "C": "el nombre de host describe tu propia máquina.",
+   "D": "la dirección IP también."
+  },
+  "memorizar": "nombre → IP lo hace el DNS."
+ },
+ "SYBEX-CH06-RQ08": {
+  "idea": [
+   "Las IP se reparten solas con DHCP."
+  ],
+  "otras": {
+   "A": "el router predeterminado no reparte direcciones.",
+   "C": "la tabla ARP une IP con dirección hardware, pero no asigna.",
+   "D": "la máscara da la red, no tu dirección.",
+   "E": "ifconfig pone una IP fija a mano."
+  },
+  "memorizar": "IP automática → DHCP."
+ },
+ "SYBEX-CH06-RQ09": {
+  "idea": [
+   "Para hablar consigo misma, la máquina usa el bucle local.",
+   "Es la dirección de la interfaz de loopback."
+  ],
+  "otras": {
+   "A": "una dirección dinámica es para hablar con fuera.",
+   "C": "una estática también.",
+   "D": "el nombre de host identifica la máquina hacia fuera.",
+   "E": "la MAC es la dirección hardware de la tarjeta."
+  },
+  "memorizar": "loopback = red consigo mismo."
+ },
+ "SYBEX-CH06-RQ10": {
+  "idea": [
+   "El que garantiza la entrega es TCP."
+  ],
+  "analogia": "TCP es carta certificada y UDP es echarla al buzón: más rápido, sin acuse de recibo.",
+  "otras": {
+   "B": "UDP es más rápido, pero no garantiza nada.",
+   "C": "ICMP manda mensajes de control, sin garantía.",
+   "D": "DNS no es de la capa de transporte.",
+   "E": "DHCP tampoco."
+  },
+  "memorizar": "TCP asegura; UDP corre."
+ },
+ "SYBEX-CH06-RQ11": {
+  "idea": [
+   "Escuchar es -l y HTTP es el puerto 80.",
+   "De ahí, nc -l 80."
+  ],
+  "otras": {
+   "A": "sin -l se conecta al 80 de esa máquina en vez de escuchar.",
+   "C": "le falta el puerto.",
+   "D": "el orden está cambiado.",
+   "E": "-l 22 escucha, pero en otro puerto."
+  },
+  "memorizar": "-l de listen; 80 es HTTP."
+ },
+ "SYBEX-CH06-RQ12": {
+  "idea": [
+   "En Red Hat la red está en /etc/sysconfig/network-scripts."
+  ],
+  "otras": {
+   "B": "/etc/network es lo de Debian, con su archivo interfaces.",
+   "C": "ifcfg-eth0 es un archivo, no una carpeta.",
+   "D": "ifconfig es un comando.",
+   "E": "iwconfig también."
+  },
+  "memorizar": "Red Hat: network-scripts; Debian: /etc/network."
+ },
+ "SYBEX-CH06-RQ13": {
+  "idea": [
+   "En Debian, IP automática es iface eth0 inet dhcp."
+  ],
+  "otras": {
+   "A": "static es justo lo contrario: dirección fija.",
+   "C": "auto eth0 solo dice que se levante al arrancar.",
+   "D": "inet6 auto es una dirección IPv6 de enlace local.",
+   "E": "BOOTPROTO no es de Debian."
+  },
+  "memorizar": "en Debian se configura con iface; dhcp = automática."
+ },
+ "SYBEX-CH06-RQ14": {
+  "idea": [
+   "Los servidores DNS se listan en /etc/resolv.conf.",
+   "Cada uno va en una línea nameserver."
+  ],
+  "otras": {
+   "A": "/etc/hosts.allow es de tcp_wrappers.",
+   "C": "/etc/inetd.conf también.",
+   "D": "/etc/network/interfaces configura la red en Debian, pero no el DNS.",
+   "E": "/etc/host.deny también es de tcp_wrappers."
+  },
+  "memorizar": "a quién preguntar los nombres → /etc/resolv.conf."
+ },
+ "SYBEX-CH06-RQ15": {
+  "idea": [
+   "El orden manda: interfaz, dirección y luego netmask con su máscara.",
+   "up o down se pueden poner, pero no son obligatorios."
+  ],
+  "otras": {
+   "B": "aquí falta netmask y el orden está cambiado.",
+   "C": "se ha olvidado la interfaz.",
+   "D": "no configura nada.",
+   "E": "tampoco."
+  },
+  "memorizar": "ifconfig interfaz IP netmask máscara."
+ },
+ "SYBEX-CH06-RQ16": {
+  "idea": [
+   "Ver qué redes inalámbricas hay alrededor: iwlist."
+  ],
+  "otras": {
+   "B": "iwconfig te conecta a un punto concreto, pero no los lista.",
+   "C": "ifconfig pone la dirección IP.",
+   "D": "ip también.",
+   "E": "arp relaciona IP con direcciones hardware."
+  },
+  "memorizar": "list de iwlist: listar redes."
+ },
+ "SYBEX-CH06-RQ17": {
+  "idea": [
+   "El nombre del punto de acceso, el SSID, se pone con essid."
+  ],
+  "otras": {
+   "A": "key es la clave de cifrado.",
+   "B": "netmask no se toca con iwconfig.",
+   "C": "address tampoco.",
+   "E": "channel es la radiofrecuencia."
+  },
+  "memorizar": "essid = el nombre de la red inalámbrica."
+ },
+ "SYBEX-CH06-RQ18": {
+  "idea": [
+   "El único que hace las tres cosas es ip."
+  ],
+  "otras": {
+   "A": "ifconfig llega a la dirección y la máscara, pero no al router.",
+   "B": "iwconfig es de redes inalámbricas.",
+   "C": "router pone el router predeterminado, y nada más.",
+   "D": "ifup solo levanta la interfaz."
+  },
+  "memorizar": "ip lo hace todo; ifconfig se queda corto."
+ },
+ "SYBEX-CH06-RQ19": {
+  "idea": [
+   "Mandar ICMP y esperar respuesta es ping."
+  ],
+  "otras": {
+   "A": "netstat da estadísticas de la interfaz.",
+   "B": "nmap busca puertos abiertos.",
+   "D": "nc simula cliente o servidor con TCP o UDP.",
+   "E": "tcpdump captura, no envía."
+  },
+  "memorizar": "¿llego? → ping."
+ },
+ "SYBEX-CH06-RQ20": {
+  "idea": [
+   "Ver los paquetes que pasan: tcpdump.",
+   "Los enseña por pantalla o los guarda en un archivo."
+  ],
+  "otras": {
+   "A": "dig consulta el DNS.",
+   "C": "ping manda paquetes ICMP.",
+   "D": "netstat da estadísticas, no paquetes.",
+   "E": "nc simula un cliente o un servidor."
+  },
+  "memorizar": "mirar el tráfico → tcpdump."
+ }
+}

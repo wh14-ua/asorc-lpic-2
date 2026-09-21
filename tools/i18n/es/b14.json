@@ -1,0 +1,51 @@
+[
+{"id":"SYBEX-CH06-RQ01",
+ "q":"¿Qué capa de red utiliza el cifrado Wi-Fi Protected Access (WPA)?",
+ "o":{"A":"Red","B":"Física","C":"Transporte","D":"Aplicación"},
+ "e":"El protocolo de cifrado Wi-Fi Protected Access protege el acceso a los puntos de acceso inalámbricos. La red inalámbrica opera en la capa física, así que la opción B es correcta. La capa de red usa protocolos de direccionamiento, como IP, para enviar datos entre sistemas de la red, pero no interactúa con la señal inalámbrica, así que la respuesta A es incorrecta. La capa de transporte usa puertos para dirigir el tráfico de red a aplicaciones concretas que se ejecutan en la capa de aplicación, así que las opciones C y D son ambas incorrectas."},
+
+{"id":"SYBEX-CH06-RQ02",
+ "q":"¿Qué parámetro de la capa de red define la red a la que está conectado el sistema?",
+ "o":{"A":"Dirección IP","B":"Router predeterminado","C":"Nombre de host (hostname)","D":"Máscara de red (netmask)","E":"Servidor DNS"},
+ "e":"El valor de la máscara de red determina la parte de red de la dirección IP, que identifica a qué red está conectado el sistema. Así pues, la opción D es correcta. El router predeterminado es otra dirección IP de la red, pero no indica la parte de red de la dirección, así que no puede usarse para determinar la dirección de red y la opción B es incorrecta. La dirección IP por sí sola no define la dirección de red sin la máscara, así que la opción A es incorrecta. El nombre de host no indica la dirección de red, así que la opción C es incorrecta. El servidor DNS asocia nombres de host con direcciones IP, pero si solo se conoce la dirección IP sigue sin saberse la parte de red de la dirección, así que la opción E es incorrecta."},
+
+{"id":"SYBEX-CH06-RQ03",
+ "q":"¿Cuál de los siguientes es un valor de máscara de red correcto?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"El valor de la máscara de red pone a 1 los bits de la parte de red de la dirección IP y a 0 los de la parte de host. Por tanto, el valor de la máscara debe tener unos consecutivos al principio. La opción A, 255.255.255.0, indica que los primeros 24 bits de la dirección son unos, así que representa un valor de máscara correcto y es la opción acertada. En la opción B los unos no son consecutivos, así que no es un valor de máscara válido y es incorrecta. La opción C muestra una dirección de red, no una máscara, mientras que la opción D muestra una dirección de host, no una máscara, así que ambas son incorrectas. La opción E muestra una dirección con unos consecutivos, pero están al final y no al principio, así que es incorrecta."},
+
+{"id":"SYBEX-CH06-RQ04",
+ "q":"¿De qué dos partes se compone una dirección IP?",
+ "o":{"A":"Dirección de host y router","B":"Máscara de red y dirección de host","C":"Máscara de red y router","D":"Dirección de host y nombre de host","E":"Dirección de red y dirección de host"},
+ "e":"Una dirección IP se compone de la dirección de red y de una dirección de host única, así que la opción E es correcta. La dirección de host y la del router no indican la dirección de red, así que la opción A es incorrecta. Con la máscara de red y la dirección de host no se obtiene la dirección de red, así que la opción B es incorrecta. Del mismo modo, la máscara de red y la dirección del router determinan la dirección de red, pero no la dirección de host del sistema, así que la opción C es incorrecta. El nombre de host no forma parte de la dirección IP, así que la opción D también es incorrecta."},
+
+{"id":"SYBEX-CH06-RQ05",
+ "q":"¿Cuántos bits tiene una dirección IPv6?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"La versión 6 de IP usa 128 bits separados en ocho grupos de cuatro valores hexadecimales, así que la opción C es correcta. Las direcciones originales de IP versión 4 usan 32 bits, pero no IPv6, así que la opción A es incorrecta. Muchas redes IPv6 usan una dirección de red de 64 bits y una de host de 64 bits, pero la dirección IPv6 completa es de 128 bits, así que la opción B es incorrecta. Actualmente no existe ninguna versión de IP que use 256 ni 8 bits, así que las opciones D y E son incorrectas."},
+
+{"id":"SYBEX-CH06-RQ06",
+ "q":"¿Qué parámetro de red define el dispositivo que encamina los paquetes destinados a hosts de redes remotas?",
+ "o":{"A":"Router predeterminado","B":"Máscara de red (netmask)","C":"Nombre de host (hostname)","D":"Dirección IP","E":"Servidor DNS"},
+ "e":"El router predeterminado se usa para enviar paquetes desde la red local a redes remotas, así que para comunicarse con un host remoto hay que definir la dirección del router predeterminado, lo que hace correcta la opción A. La máscara de red solo define la red local; no define qué hacer con los paquetes destinados a hosts remotos, así que la opción B es incorrecta. El nombre de host y la dirección IP solo definen características del host local, así que las opciones C y D son incorrectas, mientras que el servidor DNS define cómo obtener la dirección IP de un host a partir de su nombre de dominio, así que la opción E es incorrecta."},
+
+{"id":"SYBEX-CH06-RQ07",
+ "q":"¿Qué parámetro del dispositivo define un host que asocia un nombre de host a una dirección IP?",
+ "o":{"A":"Router predeterminado","B":"Máscara de red (netmask)","C":"Nombre de host (hostname)","D":"Dirección IP","E":"Servidor DNS"},
+ "e":"El servidor DNS asocia el nombre de host a una dirección IP, así que hay que tener un servidor DNS definido en la configuración de red para poder usar nombres de host en las aplicaciones. Por tanto, la opción E es correcta. El router predeterminado solo define cómo enviar paquetes a hosts remotos; no asocia el nombre de host con la dirección IP, así que la opción A es incorrecta. El valor de la máscara de red define la red local, pero no cómo asociar nombres de host a direcciones IP, así que la opción B es incorrecta. El nombre de host y la dirección IP definen características del host local, así que las opciones C y D son incorrectas."},
+
+{"id":"SYBEX-CH06-RQ08",
+ "q":"¿Qué se usa para asignar automáticamente una dirección IP a un cliente?",
+ "o":{"A":"Router predeterminado","B":"=","C":"Tabla ARP","D":"Máscara de red (netmask)","E":"="},
+ "e":"El Dynamic Host Configuration Protocol (DHCP) se usa para asignar direcciones IP dinámicas a las estaciones de trabajo cliente de una red, así que la opción B es correcta. El router predeterminado no puede asignar direcciones a los dispositivos, así que la opción A es incorrecta. La tabla ARP asocia la dirección hardware de la tarjeta de red con direcciones IP, pero no asigna las direcciones IP, así que la opción C es incorrecta. El valor de la máscara de red determina la dirección de red, pero no la dirección IP del host, así que la opción D es incorrecta. El comando ifconfig puede fijar la dirección IP estática del host, pero no la asigna automáticamente, así que la opción E es incorrecta."},
+
+{"id":"SYBEX-CH06-RQ09",
+ "q":"¿Qué tipo de dirección se usa para que las aplicaciones locales puedan comunicarse entre sí mediante protocolos de red?",
+ "o":{"A":"Dirección dinámica","B":"Dirección de bucle local (loopback)","C":"Dirección estática","D":"Nombre de host (hostname)","E":"Dirección MAC"},
+ "e":"La dirección de bucle local (loopback) es una dirección especial asignada a la interfaz de loopback, que permite que las aplicaciones locales se comuniquen entre sí, lo que hace que la opción B sea la respuesta correcta. Las direcciones IP dinámicas y estáticas se asignan a interfaces de red, que interactúan con sistemas remotos, no con aplicaciones locales, así que las opciones A y C son incorrectas. El nombre de host identifica al host local para conexiones remotas, no para aplicaciones locales, así que la opción D es incorrecta. La dirección MAC identifica la dirección hardware de la tarjeta de red, pero no la usan las aplicaciones locales, así que la opción E es incorrecta."},
+
+{"id":"SYBEX-CH06-RQ10",
+ "q":"¿Qué protocolo de la capa de transporte garantiza la entrega de paquetes?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"TCP garantiza la entrega de paquetes entre aplicaciones, así que la opción A es correcta. UDP es más rápido, pero no garantiza la entrega, así que la opción B es incorrecta. ICMP se usa para enviar mensajes de control entre aplicaciones, pero no están garantizados, así que la opción C es incorrecta. DNS y DHCP no son protocolos de la capa de transporte, así que las opciones D y E son incorrectas."}
+]

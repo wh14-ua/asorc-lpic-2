@@ -1,0 +1,39 @@
+### ENI-CH05-Q01  [open]  tema: Compartición de archivos
+P: ¿Cómo acceden los clientes de línea de comandos a los datos de una compartición, ya sea del tipo NFS o Samba?
+LIBRO: Mediante una operación de montaje. El directorio compartido se monta en un directorio local. Cuidado: aunque se use el comando universal mount, los elementos software cliente deben haberse instalado en el sistema para que la operación de montaje tenga éxito.
+
+### ENI-CH05-Q02  [open]  tema: Compartición de archivos
+P: ¿Se pueden compartir los directorios a los que hace referencia el archivo /etc/exports sin haber iniciado el servicio NFS?
+LIBRO: Sí, con el comando exportfs, llamado con el parámetro -a.
+
+### ENI-CH05-Q03  [open]  tema: Compartición de archivos
+P: ¿Por qué la opción root_squash se aplica por defecto a una compartición NFS?
+LIBRO: Porque el control de acceso a las comparticiones NFS se basa en el identificador (uid) de los clientes que se conectan. La cuenta root tiene siempre el identificador 0 y la opción root_squash hace que sus privilegios desaparezcan de manera que el usuario root no tenga plenos derechos en una compartición NFS. Sin embargo, este comportamiento se puede modificar con la opción no_root_squash en la carga de la compartición.
+
+### ENI-CH05-Q04  [open]  tema: Compartición de archivos
+P: ¿Qué proceso inicia la carga de un script de gestión del servicio NFS?
+LIBRO: NFS, de hecho, depende de tres procesos: portmapd, nfsd y mountd. El nombre del script de inicio del servicio varía según la distribución (nfs para Red Hat, nfk-kernel-server para Debian).
+
+### ENI-CH05-Q05  [open]  tema: Compartición de archivos
+P: En una conexión a un servidor NFS no fiable, ¿qué opción sería la adecuada para asegurar a un cliente NFS que las operaciones de escritura se realizan formalmente?
+LIBRO: La opción de montaje sync impide que se produzcan escrituras asíncronas. De este modo, el servidor prohíbe que se use la caché en escritura. El cliente no será informado del éxito de una operación de escritura hasta que ésta se haya producido físicamente.
+
+### ENI-CH05-Q06  [open]  tema: Compartición de archivos
+P: ¿Se puede comprobar la validez de un archivo de configuración Samba sin cargar el servicio?
+LIBRO: Sí, con el comando testparm. El comando testparm comprueba la validez del archivo de configuración y muestra las comparticiones activas por la salida estándar. Cabe decir que los comandos por defecto no se muestran a no ser que se invoque con la opción -v.
+
+### ENI-CH05-Q07  [open]  tema: Compartición de archivos
+P: ¿Cómo se impide a los usuarios que vean una compartición Samba en el Entorno de Red?
+LIBRO: El parámetro browseable en la definición de una compartición en el archivo de configuración permite gestionar la visibilidad de una compartición para los clientes.
+
+### ENI-CH05-Q08  [open]  tema: Compartición de archivos
+P: ¿Cómo se crea una contraseña a partir de la contraseña unix de una cuenta previamente existente en el sistema?
+LIBRO: No se puede. La contraseña de una cuenta Unix se encripta con el algoritmo de hash MD5, irreversible por definición. Las contraseñas SMB tienen que encriptarse con el algoritmo MD4, no se puede crear esta contraseña a partir de los datos encriptados presentes en el sistema.
+
+### ENI-CH05-Q09  [open]  tema: Compartición de archivos
+P: ¿Se puede sincronizar las contraseñas Unix con las contraseñas Samba?
+LIBRO: Sí, incluyendo la directiva "unix passwd sync = yes" en el archivo de configuración. Atención: los algoritmos de hash son distintos, esta sincronización sólo se podrá realizar cuando la contraseña Samba se exprese sin encriptar. Entonces se producen dos operaciones de encriptación: una en MD5 para la base de datos de cuentas Unix y otra en MD4 para la base de datos de cuentas Samba.
+
+### ENI-CH05-Q10  [open]  tema: Compartición de archivos
+P: ¿Por qué el modo activo ha ido cayendo en desuso en beneficio del modo pasivo en los clientes FTP?
+LIBRO: Porque el modo activo utilizado tradicionalmente usa un número de puerto para los datos iniciado por el servidor hacia el cliente y generalmente los cortafuegos ven esta acción como una amenaza. Con el modo pasivo, el cliente inicia tanto las sesiones de comandos como las de datos, evitando que salten las alarmas de los cortafuegos.

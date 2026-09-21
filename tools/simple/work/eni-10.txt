@@ -1,0 +1,39 @@
+### ENI-CH10-Q01  [open]  tema: Seguridad de las comunicaciones
+P: Los conceptos de seguridad principales son la autentificación, la confidencialidad y el control de la integridad. El servicio telnet se describe por su ausencia de seguridad, ¿pero dispone sin embargo de algún mecanismo de seguridad?
+LIBRO: Sí, el que se estimaba suficiente en la época de creación del protocolo. Telnet no ofrece ni un control de integridad serio ni una encriptación de datos que proporcione algún tipo de confidencialidad en las comunicaciones. En cambio, el protocolo telnet soporta una autentificación por contraseña. El fallo de esta autentificación es que la transmisión de esta contraseña se realiza sin encriptar, haciendo su intercepción relativamente fácil.
+
+### ENI-CH10-Q02  [open]  tema: Seguridad de las comunicaciones
+P: ¿Cómo conserva un cliente SSH el registro de los servidores a los que ya se ha conectado?
+LIBRO: Los clientes guardan un registro de cada conexión establecida con servidores SSH y almacenan una huella digital de los servidores en el archivo known_hosts, situado en el directorio oculto .ssh del directorio personal del usuario. Es importante que no haya dudas acerca de la validez del servidor: la encritptación utilizada por SSH permite escaparse de todo intento de lectura realizado con medios razonables, pero es relativamente fácil suplantar la identidad de un servidor usando su nombre y su dirección IP por ejemplo. En esta situación, el usuario teclearía con total confianza comandos que el atacante podría recuperar fácilmente.
+
+### ENI-CH10-Q03  [open]  tema: Seguridad de las comunicaciones
+P: ¿ssh-keygen se adapta mejor a la creación de claves públicas o privadas?
+LIBRO: La creación de claves públicas y privadas requiere que se haga conjuntamente. Cualquier comando que crea una debe obligatoriamente crear la otra al mismo tiempo. A veces el manual o la documentación presentan una operación antes de la otra, pero en realidad el par de claves se crea a la vez. Es imposible a partir de la clave pública determinar la clave privada asociada y viceversa.
+
+### ENI-CH10-Q04  [open]  tema: Seguridad de las comunicaciones
+P: ¿Qué mecanismo permite conservar en memoria las claves privadas utilizadas en las autentificaciones permitiendo de este modo un uso más cómodo?
+LIBRO: El comando ssh-agent permite que las claves privadas se almacenen de forma cómoda. Las claves privadas (y las públicas) se crean inicialmente con el comando ssh-keygen y se facilitan al agente con el comando ssh-add. Este agente se carga con el comando ssh-agent. El agente SSH es un programa residente y los programas que requieran autentificaciones son los clientes.
+
+### ENI-CH10-Q05  [open]  tema: Seguridad de las comunicaciones
+P: ¿En qué servicio se basa el comando scp en la máquina remota para copiar archivos de forma segura?
+LIBRO: El comando scp sólo necesita el servicio SSH en la máquina remota, también utilizado para las sesiones remotas.
+
+### ENI-CH10-Q06  [open]  tema: Seguridad de las comunicaciones
+P: ¿Cómo se llama el funcionamiento en el que el tráfico se transporta por SSH y, por lo tanto, queda protegido gracias a las funciones nativas de seguridad de este protocolo?
+LIBRO: Se llama túnel SSH. Las aplicaciones no requieren modificaciones para este uso, sólo el transporte se ve afectado.
+
+### ENI-CH10-Q07  [open]  tema: Seguridad de las comunicaciones
+P: ¿Se pueden reenviar sesiones gráficas X11 en un túnel SSH?
+LIBRO: Sí, pero para ello hay que autorizar este uso informando la directiva X11Forwarding con el valor yes en el archivo de configuración sshd_config del servidor SSH.
+
+### ENI-CH10-Q08  [open]  tema: Seguridad de las comunicaciones
+P: ¿Qué diferencia hay entre un túnel vpn sitio a sitio y un túnel vpn punto a punto?
+LIBRO: Un túnel punto a punto conecta dos máquinas entre ellas de forma segura. Se garantizan todas las funciones de seguridad (autentificación, confidencialidad, integridad), pero solamente entre ambas máquinas. Usando el modo sitio a sitio, se aplican las mismas funciones al túnel, pero todos los hosts de ambas redes conectadas pueden comunicarse entre ellos mediante el túnel.
+
+### ENI-CH10-Q09  [open]  tema: Seguridad de las comunicaciones
+P: ¿OpenVPN puede conectar dos máquinas remotas sin proporcionar enrutamiento entre las dos máquinas?
+LIBRO: Sí, usando el modo puente en el que el túnel conecta directamente ambas máquinas que se encuentran en la misma subred. Este modo de uso es poco frecuente.
+
+### ENI-CH10-Q10  [open]  tema: Seguridad de las comunicaciones
+P: ¿Cómo puede un usuario visualizar si un túnel Open VPN se ha montado, a priori, en su máquina?
+LIBRO: Consultando la configuración de red con el comando ifconfig. Una interfaz virtual, generalmente llamada tun0, debe mostrarse con la dirección IP asociada a esta interfaz. La presencia de esta interfaz virtual no asegura el correcto funcionamiento del túnel, pero es necesaria para su funcionamiento.

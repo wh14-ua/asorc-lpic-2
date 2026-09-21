@@ -1,0 +1,39 @@
+### ENI-CH03-Q01  [open]  tema: Servicios de red
+P: ¿Qué comando permite añadir una dirección IP secundaria a una interfaz?
+LIBRO: El comando ifconfig que, según los parámetros usados, puede asignar entre otros la dirección IP principal, la máscara de subred, la dirección MAC y una dirección IP secundaria si fuera necesario.
+
+### ENI-CH03-Q02  [open]  tema: Servicios de red
+P: Si una máquina tiene dos interfaces de red, ¿hay que configurar una segunda puerta de enlace predeterminada?
+LIBRO: Por supuesto que no. Si se definen dos puertas de enlace predeterminadas en los archivos de configuración de las interfaces los scripts de inicialización de la red, que leen estos dos parámetros uno tras otro, sólo recordarán el último. De todas formas, como su nombre indica, la puerta de enlace predeterminada se utiliza en última instancia cuando el destino se encuentra en una red de la que no se conoce la ruta. Sin embargo, la tabla de enrutamiento es única e independiente de las interfaces: la puerta de enlace predeterminada, por tanto, debe ser un parámetro único e independiente de las interfaces.
+
+### ENI-CH03-Q03  [open]  tema: Servicios de red
+P: ¿Qué interés puede haber en informar el archivo /etc/ethers que asocia direcciones MAC con direcciones IP y cargarlo mediante el comando arp -f?
+LIBRO: Si el archivo /etc/ethers se informa y se usa, el sistema aprende todas las asociaciones entre las direcciones MAC y las direcciones IP introducidas. Por consiguiente, toda comunicación con las mencionadas direcciones IP puede realizarse de forma directa, sin pasar previamente por una petición ARP. El beneficio neto es mínimo, las peticiones ARP son rápidas, pequeñas y en volumen insignificantes en comparación con el conjunto de las comunicaciones. Puede tener interés en términos de seguridad, ya que se evitan los broadcasts relacionados con estas peticiones haciendo que la red sea más discreta.
+
+### ENI-CH03-Q04  [open]  tema: Servicios de red
+P: En el contexto de uso de los TCP Wrappers y del daemon tcpd, ¿cómo se resuelven los eventuales conflictos entre el archivo hosts.deny y el archivo hosts.allow?
+LIBRO: En principio, solamente uno de estos archivos debería existir. Si es hosts.allow, solamente los hosts mencionados en este archivo estarán autorizados, y si es hosts.deny, todos los hosts estarán autorizados salvo los que figuen en el archivo. En caso de conflicto, la solución más restrictiva es la que se aplica. Por lo tanto, el archivo hosts.deny se ignorará.
+
+### ENI-CH03-Q05  [open]  tema: Servicios de red
+P: ¿El comando ifconfig devuelve información acerca de una conexión WiFi?
+LIBRO: En realidad, no. El comando ifconfig proporciona información sobre todas las interfaces del sistema, incluyendo las interfaces WiFi. Sin embargo, no proporciona ningún tipo de información relativa al funcionamiento inalámbrico: SSID, la calidad del señal o el tipo de cifrado. En cambio, el comando iwconfig es útil en este aspecto. Muestra la información relativa a una conexión WiFi e incluso permite configurarla.
+
+### ENI-CH03-Q06  [open]  tema: Servicios de red
+P: ¿Por qué el parámetro -n se usa con frecuencia con los comandos arp, route o netstat?
+LIBRO: Porque evita que el comando realice resoluciones de nombre inversas: estos comandos obtienen en principio datos numéricos sin tratar (direcciones IP, direcciones MAC y números de puerto). Sin embargo, por motivos estéticos, muestran por defecto los nombres correspondientes a estos datos numéricos, especialmente el nombre DNS que puede estar asociado a una dirección IP tratada. Pero si no existe ningún registro DNS para la dirección en cuestión, el comando intentará de todos modos realizar la resolución y no parará hasta que venza el timeout del resolver DNS. Por lo tanto, para un dudoso elemento de confort (no es seguro que el usuario prefiera los nombres a las direcciones), el comando pierde bastantes segundos intentando resolver las direcciones sin esperanzas. El uso de la opción -n evita que el comando realice estas tediosas búsquedas y, por tanto, disminuye el tiempo de respuesta.
+
+### ENI-CH03-Q07  [open]  tema: Servicios de red
+P: Si un archivo abierto impide el desmontaje de un sistema de archivos, ¿cómo se puede encontrar el nombre del archivo en cuestión y el usuario que lo ha abierto?
+LIBRO: Con el comando lsof, que devuelve los archivos abiertos, el nombre y el número del proceso responsable y el nombre del usuario propietario del proceso.
+
+### ENI-CH03-Q08  [open]  tema: Servicios de red
+P: ¿Para qué uso se ha impuesto la librería software libpcap?
+LIBRO: Para la captura de tramas. Son muchas las aplicaciones que la utilizan, entre las que se pueden citar especialmente tcpdump y wireshark. Una librería de código abierto permite a distintos programas utilizar el mismo formato de datos. Por tanto, se puede utilizar tcpdump para capturar la comunicación entre dos máquinas, wireshark para observarla detalladamente y un software de análisis para identificar las trazas características de un virus, por ejemplo.
+
+### ENI-CH03-Q09  [open]  tema: Servicios de red
+P: La petición DHCP de un cliente se envía en forma de broadcast ya que el cliente no sabe la dirección del servidor DHCP. ¿Por qué la respuesta del servidor también se genera en broadcast?
+LIBRO: Simplemente porque el cliente todavía no tiene una dirección IP y para enviar un mensaje unicast es necesaria una dirección de destino.
+
+### ENI-CH03-Q10  [open]  tema: Servicios de red
+P: Si se publica un servidor DNS en la configuración general de un servidor DHCP y hay otro servidor DNS publicado en una sección subnet, ¿qué servidor(es) DNS obtiene(n) los clientes de la subnet?
+LIBRO: El de la subnet. Los parámetros generales se usan para todos los clientes, excepto si hay otra información más concreta en una sección de la red.

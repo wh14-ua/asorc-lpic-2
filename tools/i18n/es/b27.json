@@ -1,0 +1,51 @@
+[
+{"id":"SYBEX-CH12-RQ11",
+ "q":"¿Qué modo de Snort vuelca los paquetes a la pantalla para poder verlos?",
+ "o":{"A":"Modo de registro (logging)","B":"Modo NIDS","C":"Modo analizador (sniffer)","D":"Modo de línea de comandos"},
+ "e":"El modo analizador (sniffer) de Snort muestra una breve descripción de cada paquete recibido, así que la opción C es correcta. La opción A es el modo de registro, que guarda los paquetes en un archivo en lugar de mostrarlos, así que la opción A es incorrecta. El modo NIDS solo informa de eventos de vulnerabilidad, así que la opción B es incorrecta. Por defecto, el modo de línea de comandos de Snort no muestra los paquetes, así que la opción D también es incorrecta."},
+
+{"id":"SYBEX-CH12-RQ12",
+ "q":"¿Qué define la variable HOME_NET en la configuración de Snort?",
+ "o":{"A":"Las direcciones remotas que hay que vigilar","B":"La dirección del host local","C":"Las direcciones locales que hay que vigilar","D":"La carpeta de configuración predeterminada"},
+ "e":"La variable HOME_NET define las direcciones locales que Snort debe vigilar, así que la opción C es correcta. La variable EXTERNAL_NET define las direcciones remotas, así que la opción A es incorrecta. Snort no necesita definir direcciones locales ni apuntar al nombre de la carpeta de configuración, así que las opciones B y D son ambas incorrectas."},
+
+{"id":"SYBEX-CH12-RQ13",
+ "q":"¿Qué formato de dirección en una regla indica a Snort que busque únicamente paquetes que van de la dirección 10.0.0.1 a la 10.0.0.2?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"La flecha indica el sentido del tráfico, así que 10.0.0.1 -> 10.0.0.2 define el flujo de tráfico que se busca, y la opción D es correcta. El indicador <- muestra que el tráfico viene de la dirección .2 hacia la .1, lo que es incorrecto, así que la opción A es incorrecta. La opción B también muestra el tráfico en sentido equivocado, así que es incorrecta. La opción C usa el operador bidireccional <>, así que también es incorrecta."},
+
+{"id":"SYBEX-CH12-RQ14",
+ "q":"¿Cuántos rangos de direcciones de red privadas admite IPv4?",
+ "o":{"A":"Dos","B":"Tres","C":"Cuatro","D":"Ninguno"},
+ "e":"Las especificaciones de IPv4 usan los rangos de direcciones de red 10.0.0.0 a 10.255.255.255, 172.16.0.0 a 172.31.255.255 y 192.168.0.0 a 192.168.255.255; por tanto, la opción B es correcta. Las opciones A, C y D indican un número incorrecto de rangos de direcciones, así que todas son incorrectas."},
+
+{"id":"SYBEX-CH12-RQ15",
+ "q":"¿Con qué valor empiezan las direcciones IPv6 de enlace local?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"El valor fe80 identifica la dirección inicial de las direcciones de enlace local en IPv6. El resto de la dirección suele derivarse de la dirección MAC Ethernet para garantizar que sea única en la red. El valor ff02 es la dirección de multidifusión para routers y ff05 es la dirección de multidifusión para servidores DHCP, así que la opción C es incorrecta. El valor aabb no es un número reservado en IPv6, así que la opción D es incorrecta."},
+
+{"id":"SYBEX-CH12-RQ16",
+ "q":"¿Qué sistema permite conectar clientes con dirección de red privada a servidores externos?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"La traducción de direcciones de red (NAT) permite que la dirección de un cliente de una red privada se traduzca a una dirección pública antes de salir de la red, así que la opción C es correcta. SSH proporciona una conexión de red cifrada, así que la opción A es incorrecta. El comando telnet ofrece comunicación en texto plano, así que la opción B es incorrecta. El software IDS detecta atacantes; no proporciona soporte de conexión, así que la opción D es incorrecta."},
+
+{"id":"SYBEX-CH12-RQ17",
+ "q":"¿Qué comando de Linux se usa para crear reglas de cortafuegos en el sistema?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"El comando iptables permite manipular las reglas definidas en las cadenas y tablas del kernel para filtrar el tráfico de red, así que la opción B es correcta. El comando nc solo proporciona comunicación de red, así que la opción A es incorrecta. Los comandos netstat y nmap solo permiten ver el estado de los puertos de red, así que las opciones C y D son ambas incorrectas."},
+
+{"id":"SYBEX-CH12-RQ18",
+ "q":"¿Qué opción de iptables añade una nueva regla a una cadena?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"La opción –A se usa para añadir nuevas reglas a una cadena o tabla, así que la opción C es correcta. La opción –L lista las reglas existentes, así que la opción A es incorrecta. La opción –F vacía la caché de reglas, así que la opción B es incorrecta. La opción –j especifica una acción predeterminada; no añade una regla nueva, así que la opción D es incorrecta."},
+
+{"id":"SYBEX-CH12-RQ19",
+ "q":"¿Qué política de iptables se usa para devolver un paquete al origen indicando que el paquete fue descartado?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"La política REJECT descarta el paquete pero envía un mensaje ICMP de vuelta a la dirección IP de origen indicando el fallo; por tanto, la opción A es correcta. La política DROP descarta el paquete de forma silenciosa, así que la opción B es incorrecta. Las políticas ACCEPT y LOG aceptan todos los paquetes, y la política LOG además guarda información del paquete en un archivo de registro, así que las opciones C y D son incorrectas."},
+
+{"id":"SYBEX-CH12-RQ20",
+ "q":"¿Qué opción de iptables define la política predeterminada de una cadena?",
+ "o":{"A":"=","B":"=","C":"=","D":"="},
+ "e":"La opción –P define la cadena y la política que se usará por defecto. La opción –j define la acción de una regla, así que la opción B es incorrecta. La opción –L solo lista cadenas y tablas; no las modifica, así que la opción C es incorrecta. La opción –F elimina todas las reglas de la cadena, así que la opción D es incorrecta."}
+]

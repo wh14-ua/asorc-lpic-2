@@ -1,0 +1,81 @@
+### SYBEX-AT-01  [multiple_response]
+Q: Which of the following commands will display process information? (Choose all that apply.)
+A: lsof
+B: iostat
+C: pstree
+D: netstat
+E: pmap
+X: Option A is correct, because lsof shows open files and network connections by process. The pstree command shows current processes in a tree format, so it also is a correct choice. While its focus is primarily on network and routing information, you can determine which process (via its PID) is listening on a particular port using the netstat utility. Thus option D is also a correct answer. Option E is correct, because the pmap command shows a processes map for the designated PID. The iostat utility displays device I/O loading summary broken down per device, so option B is the only incorrect choice.
+
+### SYBEX-AT-02  [open]
+Q: Programmers developed the concept of kernel ______ to allow you to insert device driver code into a running kernel without having to recompile the kernel. (Fill in the best answer.)
+FILL: modules
+X: modules. Programmers developed the concept of kernel modules to allow you to insert device driver code into a running kernel without having to recompile the kernel. A module is a self-contained driver library file that can be dynamically linked and unlinked with the kernel. This means that a kernel module can be removed from the kernel when the device is finished being used, something that can’t be done with compiled kernel drivers.
+
+### SYBEX-AT-03  [multiple_choice]
+Q: The Linux kernel configuration file is which file? (Choose the best answer.)
+A: /usr/src/linux/arch/x86/boot
+B: /usr/src/linux/kernel.config
+C: /boot/grub/grub.conf
+D: /etc/modules.conf
+E: /usr/src/linux/.config
+X: Option E is correct, because the Linux kernel configuration is stored in the /usr/src/ linux/.config file. Option A is a directory that holds the final kernel binary, bzImage, after a compilation process, so it is an incorrect choice. Option B is a made-up filename, so it is wrong. The /boot/grub/grub.conf file is a GRUB Legacy configuration file, so option C is an incorrect choice. Option D’s /etc/modules.conf file is a configuration file for kernel modules, so it is also a wrong choice.
+
+### SYBEX-AT-04  [multiple_choice]
+Q: Which of the following contains a file or is a file that you can view to see Linux kernel version information? (Choose the best answer.)
+A: /proc/kernel
+B: /proc/sys/kernel
+C: /proc/ioports
+D: /proc/dma
+E: /etc/sysctl.d
+X: The /proc/sys/kernel is a directory that contains the version file. This file contains Linux kernel version information, so option B is the correct choice. Option A is made up, so it is an incorrect choice. Option C’s /proc/ioports is a file containing hardware I/O port information, so it is also an incorrect choice. The /proc/dma file contains Direct Memory Access (DMA) channel information, so option C is a wrong choice. Finally, /etc/ sysctl.d is a directory that contains multiple kernel parameter setting files, so it also is an incorrect choice.
+
+### SYBEX-AT-05  [multiple_choice]
+Q: Which command(s) could be considered chkconfig equivalents? (Choose all that apply.)
+A: inittab
+B: rc
+C: update-rc.d
+D: init
+E: telinit
+X: There is only one correct answer and that is option C. The update-rc.d command is an equivalent command to the chkconfig command. However, it is typically available on Debian-based distributions, while chkconfig is available on Red Hat–based distros. Option A’s inittab (/etc/inittab) does define which applications start at which run level; however, it is a file and not a command, so it is a wrong choice. The rc in option B is a script (/etc/rc.d/rc) that runs all the scripts with a specified run level, so it is an incorrect choice. The init (option D) and telinit (option E) commands are essentially equivalent commands but to each other (you can change the current run level of your Linux system using either of them), so they are incorrect choices.
+
+### SYBEX-AT-06  [multiple_response]
+Q: Which of the following are true statements concerning GRUB Legacy? (Choose all that apply.)
+A: GRUB Legacy was written to replace LILO due to UEFI.
+B: GRUB Legacy uses a menu interface.
+C: GRUB Legacy uses an interactive shell.
+D: GRUB Legacy uses the initrd command.
+E: GRUB Legacy uses the /boot/grub/grub.cfg configuration file.
+X: GRUB Legacy uses both a menu interface and an interactive shell (grub shell), so options B and C are correct. Option D is also correct, because within the GRUB Legacy configuration file, the initrd command is employed to define a file that’s mounted by the kernel at boot time as a RAM disk. Option A is incorrect, because although LILO does not work with UEFI systems, GRUB Legacy was created in 1999 to provide a more robust and configurable bootloader than LILO, not due to UEFI. Also, option E is incorrect, because the /boot/grub/grub.cfg is a GRUB2 configuration file, not a GRUB Legacy file.
+
+### SYBEX-AT-07  [multiple_response]
+Q: Which of the following are Linux boot loaders? (Choose all that apply.)
+A: SYSLINUX
+B: EXTLINUX
+C: ISOLINUX
+D: PXELINUX
+E: TFTP
+X: Options A, B, C, and D are all alternative Linux bootloaders, so they are correct answers. Option E is Trivial File Transfer Protocol (TFTP), which is employed by the PXELINUX bootloader to transfer the boot image file to the workstation over the network. However, TFTP is not a bootloader, so option E is incorrect.
+
+### SYBEX-AT-08  [multiple_choice]
+Q: When used with no options or parameters, which file does the mount command pull data from? (Choose all that apply.)
+A: /etc/fstab
+B: /etc/mtab
+C: /proc/mounts
+D: /proc/filesystems
+E: blkid
+X: There is only one correct choice. When used with no options or parameters, the mount command pulls data from the /etc/mtab file, which has a list of all currently mounted filesystems, and displays it. Thus, option B is correct. Option A is incorrect, because the /etc/fstab is the Filesystem Table, and it has a record for each filesystem to be mounted at either system boot time or when the mount -a command is issued. While the data in the /etc/mtab and /proc/mounts files is nearly identical, the mount command does not pull its data from the /proc/mounts file, so option C is wrong. Option D’s /proc/filesystems file is incorrect, because this file contains filesystems support by the system’s Linux kernel. Option E is also wrong, because blkid is not a file but a command, which displays various block devices and their attributes.
+
+### SYBEX-AT-09  [open]
+Q: The smartd daemon is configured via its configuration file, which is named ______. (Fill in the filename only with no directory references.)
+FILL: smartd.conf
+X: smartd.conf. The smartd daemon’s configuration file is either /etc/smartd.conf or /etc/smartmontools/smartd.conf (depending on your distribution).
+
+### SYBEX-AT-10  [multiple_response]
+Q: Which of the following will allow you to check a software-controlled RAID array, /dev/ md1, on a Linux system? (Choose all that apply.)
+A: mdadm --misc --detail /dev/md1
+B: mdadm --detail /dev/md1
+C: cat /etc/mdadm.conf
+D: cat /proc/mdstat
+E: mdadm --show /dev/md1
+X: Options A and B are the same command (the --misc option does not need to be included in the command) and they both show details on the specified RAID array, so those options are correct. Option D is also correct, because the /proc/mdstat file contains any running RAID array’s current status. Option C is an incorrect choice, because /etc/ mdadm.conf is the mdadm configuration file (though it may be located in /etc/mdadm/, depending on your distribution). Option E is a wrong choice, because there is no –show option for the mdadm command.

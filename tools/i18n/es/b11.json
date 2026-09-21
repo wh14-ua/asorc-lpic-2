@@ -1,0 +1,55 @@
+[
+{"id":"SYBEX-CH04-RQ11",
+ "q":"Acaba de crear una nueva partición de disco, /dev/sde3, y quiere prepararla como espacio de intercambio. ¿Qué comando usa? (Elija la mejor respuesta.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"La opción B es correcta, porque el comando mkswap realiza los preparativos necesarios para dejar una partición lista para usarse como espacio de intercambio. La opción A es incorrecta, porque el comando mkfs no tiene una opción -t swapon. La opción C también es incorrecta: aunque con ese comando se puede activar el espacio de intercambio en /dev/sde3, no es el comando que prepara dicho espacio. La opción D es errónea, porque el comando swapoff desactiva el espacio de intercambio indicado. El comando swapon -s es útil para mostrar estadísticas actuales de intercambio, pero no para preparar el espacio de intercambio, así que la opción E también es incorrecta."},
+
+{"id":"SYBEX-CH04-RQ12",
+ "q":"¿Cuáles de los siguientes tipos de mapa pueden encontrarse en el archivo /etc/auto.master? (Elija todas las que correspondan.)",
+ "o":{"A":"Integrado (built-in)","B":"Directo","C":"Indirecto","D":"=","E":"De carretera (road)"},
+ "e":"Las opciones A, B y C son todas tipos de mapa que pueden aparecer en el archivo de mapa maestro de AutoFS, /etc/auto.master. El SMART de la opción D se refiere a los dispositivos con tecnología Self-Monitoring Analysis and Reporting Technology, no a tipos de mapa de AutoFS. Por tanto, la opción D es incorrecta. La opción E es incorrecta, porque un mapa de carreteras sirve para orientarse conduciendo o caminando y no es un tipo de mapa conocido de AutoFS."},
+
+{"id":"SYBEX-CH04-RQ13",
+ "q":"Quiere cambiar el mapa maestro del servicio AutoFS a un archivo de configuración distinto de /etc/auto.master. ¿Qué archivo de configuración podría editar para conseguirlo, según su distribución? (Elija la mejor respuesta.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"El archivo /etc/sysconfig/autofs, que aparece en la opción E, es un archivo de configuración correcto para modificar. Según la distribución, el archivo puede llamarse /etc/default/autofs. El archivo de la opción A es un archivo de mapa directo y, por tanto, es incorrecto. Las opciones B y D muestran dos posibles archivos de tipo mapa indirecto y también son incorrectas. En la opción C se muestra un antiguo archivo de script de AutoFS, /etc/autofs.net, que puede encontrarse en distribuciones antiguas, pero también es incorrecto."},
+
+{"id":"SYBEX-CH04-RQ14",
+ "q":"¿Cuál de los siguientes sistemas de archivos cifrados es un sistema de archivos por capas? (Elija la mejor respuesta.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"El sistema de archivos eCryptfs es un pseudosistema de archivos que se superpone a otro sistema de archivos y proporciona cifrado archivo por archivo. Por tanto, la opción C es correcta. Las opciones B y D muestran sistemas de archivos cifrados, pero no se consideran sistemas de archivos por capas, así que son incorrectas. El sistema de archivos XFS de la opción A no está cifrado, y tampoco el btrfs de la opción E, así que también son incorrectas."},
+
+{"id":"SYBEX-CH04-RQ15",
+ "q":"¿Cuál de las siguientes no es una utilidad para ajustar los sistemas de archivos ext2, ext3 y ext4? (Elija la mejor respuesta.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"La utilidad uuidgen sirve para generar nuevos números UUID que pueden asignarse a sistemas de archivos. No ajusta ningún sistema de archivos y, por tanto, la opción D es la respuesta correcta. Los comandos de las opciones A, B, C y E ajustan todos sistemas de archivos extendidos y, por tanto, son respuestas incorrectas."},
+
+{"id":"SYBEX-CH04-RQ16",
+ "q":"Ha generado un nuevo UUID y quiere asignarlo a un sistema de archivos ext4 desmontado. ¿Qué utilidad usa? (Elija la mejor respuesta.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"El comando tune2fs de la opción E puede usar el UUID generado y cambiar el UUID del sistema de archivos, así que es la respuesta correcta. Los comandos de las opciones A, B y C también ajustan sistemas de archivos extendidos, pero no el número UUID, y por tanto son respuestas incorrectas. El comando blkid de la opción D puede mostrar el UUID de un dispositivo, pero no cambiarlo, así que también es una respuesta incorrecta."},
+
+{"id":"SYBEX-CH04-RQ17",
+ "q":"Tiene privilegios de superusuario y escribe el comando fsck.xfs para comprobar un sistema de archivos XFS. ¿Qué ocurrirá? (Elija la mejor respuesta.)",
+ "o":{"A":"Corrompe el sistema de archivos, porque no lo desmontó antes.",
+      "B":"Solo recibe un informe del estado del sistema de archivos.",
+      "C":"No se muestra información, pero si se encuentran errores se le pregunta si quiere intentar repararlos.",
+      "D":"Solo recibe un informe del estado del sistema de archivos y, si se encuentran errores, se le pregunta si quiere intentar repararlos.",
+      "E":"Nada."},
+ "e":"Como los sistemas de archivos XFS (y también btrfs) tienen sus propias utilidades de reparación y no funcionan igual que los sistemas de archivos extendidos, la utilidad fsck.xfs no hace nada. Por tanto, la opción E es correcta. En los sistemas de archivos extendidos sí podrían producirse las acciones de las opciones A, B, C y D, según las opciones del comando y las acciones previas a su ejecución. Sin embargo, en este caso las opciones A, B, C y D son incorrectas."},
+
+{"id":"SYBEX-CH04-RQ18",
+ "q":"Tiene un sistema de archivos Btrfs que ha funcionado bien durante mucho tiempo. Sin embargo, por algún motivo ha sufrido un problema catastrófico y necesita restaurar archivos. ¿Qué utilidad debería usar? (Elija la mejor respuesta.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"La opción D, btrfs restore, es el comando más potente para restaurar los datos de un sistema de archivos btrfs y es la mejor elección. Las opciones A y C también pueden ayudar, pero no son tan potentes como la opción D, así que no son las respuestas correctas. Los comandos btrfs de las opciones B y E no hacen reparaciones ni restauraciones, así que esas respuestas también son incorrectas."},
+
+{"id":"SYBEX-CH04-RQ19",
+ "q":"¿Cuál de los siguientes comandos busca inconsistencias pero no realiza ninguna reparación en un sistema de archivos XFS? (Elija la mejor respuesta.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"La opción A es correcta, porque la utilidad xfs_check comprueba la consistencia de un sistema de archivos XFS pero no hace reparaciones. Normalmente ya no se incluye en muchas distribuciones, pero puede usarse el comando xfs_repair -n en su lugar. El xfsdump de la opción B crea una copia de seguridad de los datos y atributos del sistema de archivos, pero no comprueba nada, así que es incorrecta. El comando xfs_info muestra y comprueba información del sistema de archivos, pero no busca inconsistencias, así que la opción C es errónea. El xfs_metadump de la opción D solo copia los metadatos del sistema de archivos a un archivo, así que también es errónea. Por último, el comando xfsrestore restaura los datos y atributos de un sistema de archivos a partir de un volcado de copia de seguridad, así que la opción E es incorrecta."},
+
+{"id":"SYBEX-CH04-RQ20",
+ "q":"Tiene una partición de disco /dev/sdc3 que soporta SMART y lo tiene habilitado. Suponiendo que dispone de privilegios de superusuario, ¿qué comando le mostrará un resumen rápido del estado, incluido si ha superado o no la autoevaluación general de salud? (Elija la mejor respuesta.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"El comando de la opción B muestra un resumen rápido del estado de salud de la unidad, incluido si ha superado o no la autoevaluación general de salud. Por tanto, la opción B es correcta. Los comandos de las opciones A y E realizan pruebas, pero no muestran los resultados, así que son incorrectos. El comando de la opción C muestra información sobre la unidad, como si soporta SMART y si SMART está habilitado. También es incorrecta. El comando de la opción D proporciona la información de salud de la unidad, pero muestra toda la información, no solo un resumen, así que también es una elección incorrecta."}
+]

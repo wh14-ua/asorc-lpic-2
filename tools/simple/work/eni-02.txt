@@ -1,0 +1,39 @@
+### ENI-CH02-Q01  [open]  tema: Arranque del sistema
+P: ¿Cuál es la diferencia entre un servicio, un daemon y un nivel de ejecución?
+LIBRO: Un daemon es el término inglés que representa un servicio. Un servicio es un programa residente que se ejecuta en un servidor, preparado para gestionar eventos en el sistema. Un nivel de ejecución es un estado funcional de un servidor en el que más o menos servicios deben estar en ejecución o parados. Un daemon y un servicio representan por lo tanto el mismo concepto y un nivel de ejecución describe el estado en el que se deben encontrar los servicios disponibles en el sistema.
+
+### ENI-CH02-Q02  [open]  tema: Arranque del sistema
+P: Los scripts de gestión de servicios admiten a menudo los parámetros restart y reload. ¿Cuál de estos dos parámetros consume menos recursos de sistema en su llamada?
+LIBRO: El parámetro restart aplicado a un script de gestión de servicio ejecuta el equivalente de un stop seguido de un start. De este modo, se detienen los procesos y después se vuelven a iniciar realizando las tareas de configuración. El parámetro reload, en cambio, mantiene los procesos en ejecución, pero les obliga a que relean su configuración y se reconfiguren dinámicamente, generalmente enviando al proceso un signal 1 (hup).
+
+### ENI-CH02-Q03  [open]  tema: Arranque del sistema
+P: ¿Qué script independiente de los niveles de ejecución se ejecuta siempre en el arranque de un sistema después de todos los scripts relacionados con el nivel de ejecución actual?
+LIBRO: El script rc.local se ejecuta automáticamente en el arranque, después de todos los scripts asociados al nivel de ejecución actual. El administrador puede incorporar en él cualquier comando para que se ejecute en el arranque independientemente del nivel de ejecución.
+
+### ENI-CH02-Q04  [open]  tema: Arranque del sistema
+P: ¿Cuál es el resultado por pantalla del comando dmesg?
+LIBRO: El comando dmesg muestra todos los mensajes que el kernel ha podido generar desde su arranque si disponía de un terminal activo o de un archivo de registro en un sistema de archivos montado. Ante la ausencia de estos elementos (en el arranque, el kernel no tiene nada de esto a su disposición), el kernel mantiene en memoria su registro de eventos en lo que se llama en inglés el "kernel ring buffer". El comando dmesg también devuelve su contenido por la salida estándar.
+
+### ENI-CH02-Q05  [open]  tema: Arranque del sistema
+P: Para la configuración del gestor de arranque GRUB, las distribuciones inspiradas en Debian usan el archivo /boot/grub/menu.lst, mientras que los sistemas basados en Red Hat prefieren el archivo /etc/grub.conf. ¿Cómo se mantiene la coherencia para que el gestor de arranque GRUB tenga siempre acceso a su configuración en el mismo archivo?
+LIBRO: Mediante un enlace simbólico. La historia de Unix y Linux está llena de particularidades ligadas a una distribución o un desarrollo alternativo. Para permanecer en conformidad con el uso, el pasado o las reglas POSIX, se ha generalizado el uso de enlaces simbólicos. Es mejor el uso de enlaces simbólicos, ya que un enlace duro (del inglés hard link) no es capaz de hacer referencia a un elemento externo a su sistema de archivos y no siempre los archivos favoritos y los archivos normalizados están en el mismo sistema de archivos.
+
+### ENI-CH02-Q06  [open]  tema: Arranque del sistema
+P: ¿Cuál es la ubicación usual para poner el gestor de arranque?
+LIBRO: El Master Boot Record (MBR). Una ubicación del disco situada antes de la tabla de particiones y leída en primer término por la BIOS es el sitio ideal para un gestor de arranque.
+
+### ENI-CH02-Q07  [open]  tema: Arranque del sistema
+P: ¿Qué interés tiene el parámetro ro (read only) generalmente pasado al kernel por el gestor de arranque que indica que la carga del kernel debe hacerse en sólo lectura?
+LIBRO: En caso de haber problemas en la partición que contiene el kernel, las herramientas de diagnóstico pueden ejecutarse sin dañar los elementos accedidos en sólo lectura.
+
+### ENI-CH02-Q08  [open]  tema: Arranque del sistema
+P: ¿Qué parámetro pasado al kernel permite en su arranque acceder al sistema de forma rudimentaria en un equivalente al modo monousuario?
+LIBRO: El parámetro init= permite especificar qué ejecutable debe iniciarse directamente después de la carga del kernel. Si este ejecutable es un shell, entonces el sistema arranca y ejecuta un shell independientemente de cualquier servicio. Ésta es también una forma de acceder a un sistema del que se ha perdido la contraseña.
+
+### ENI-CH02-Q09  [open]  tema: Arranque del sistema
+P: El comando telinit permite cambiar el nivel de ejecución en un sistema en funcionamiento. ¿Qué hay que hacer para que un nivel de ejecución determinado se cargue directamente en el arranque?
+LIBRO: Modificar el archivo inittab. Contiene una línea de definición del nivel de ejecución por defecto anunciada por la palabra clave initdefault.
+
+### ENI-CH02-Q10  [open]  tema: Arranque del sistema
+P: ¿Por qué la copia integral de los archivos de un disco de sistema al disco de otra máquina no basta para que funcione?
+LIBRO: Porque el kernel Linux debe invocarse por un gestor de arranque, el cual se encuentra fuera de cualquier partición de disco y, por lo tanto, no se puede copiar con herramientas de gestión de archivo ordinarias.

@@ -1,0 +1,111 @@
+{
+"ENI-CH03-Q01": {
+  "idea": ["El comando ifconfig.",
+           "Según los parámetros pone la dirección IP principal, la máscara, la dirección MAC o una IP secundaria."],
+  "memorizar": "ifconfig también añade direcciones secundarias."
+},
+"ENI-CH03-Q02": {
+  "idea": ["No.",
+           "La tabla de enrutamiento es única e independiente de las interfaces.",
+           "Si defines dos, los scripts las leen una tras otra y solo se queda la última."],
+  "memorizar": "puerta de enlace predeterminada: una sola para todo el sistema."
+},
+"ENI-CH03-Q03": {
+  "idea": ["Te ahorras las peticiones ARP: el sistema ya conoce la asociación.",
+           "En rendimiento apenas se nota: las peticiones ARP son pequeñas y rápidas.",
+           "Lo que sí ganas es discreción, porque evitas esos broadcasts."],
+  "memorizar": "/etc/ethers ahorra ruido, no tiempo."
+},
+"ENI-CH03-Q04": {
+  "idea": ["Gana la opción más restrictiva, así que se ignora hosts.deny.",
+           "Lo normal es tener solo uno de los dos archivos."],
+  "memorizar": "en conflicto manda hosts.allow."
+},
+"ENI-CH03-Q05": {
+  "idea": ["En realidad, no.",
+           "Ve la interfaz, pero no dice nada del SSID, la calidad de la señal ni el cifrado.",
+           "Para eso está iwconfig, que además permite configurarla."],
+  "memorizar": "ifconfig lo de red; iwconfig lo inalámbrico."
+},
+"ENI-CH03-Q06": {
+  "idea": ["Porque evita las resoluciones de nombre inversas.",
+           "Si la dirección no tiene registro DNS, el comando se queda esperando al timeout del resolver.",
+           "Con -n no busca nombres y contesta al momento."],
+  "memorizar": "-n = sin nombres y sin esperas."
+},
+"ENI-CH03-Q07": {
+  "idea": ["Con el comando lsof.",
+           "Devuelve el archivo abierto, el proceso responsable y el usuario dueño de ese proceso."],
+  "memorizar": "¿quién tiene esto abierto? → lsof."
+},
+"ENI-CH03-Q08": {
+  "idea": ["Para capturar tramas.",
+           "La usan tcpdump y wireshark, entre otros.",
+           "Al compartir librería comparten formato: capturas con uno y miras con otro."],
+  "memorizar": "libpcap es el formato común de las capturas."
+},
+"ENI-CH03-Q09": {
+  "idea": ["Porque el cliente todavía no tiene dirección IP.",
+           "Y para enviar un unicast hace falta una dirección de destino."],
+  "memorizar": "sin dirección no hay unicast posible."
+},
+"ENI-CH03-Q10": {
+  "idea": ["El de la subnet.",
+           "Los parámetros generales valen para todos, salvo que haya algo más concreto en su sección."],
+  "memorizar": "lo específico gana a lo general."
+},
+"ENI-CH04-Q01": {
+  "idea": ["Porque /etc/passwd lo puede leer cualquier usuario.",
+           "Al crecer la potencia de cálculo se podían encriptar diccionarios y combinaciones hasta dar con la que coincidía.",
+           "Por eso las contraseñas se movieron a /etc/shadow, sin acceso para los usuarios."],
+  "memorizar": "passwd lo lee todo el mundo; shadow, no."
+},
+"ENI-CH04-Q02": {
+  "idea": ["Porque ahí se decide en qué orden se resuelven los nombres.",
+           "Primero el archivo local, con el parámetro files, y después el servicio dns si está configurado."],
+  "memorizar": "nsswitch.conf marca el orden de búsqueda."
+},
+"ENI-CH04-Q03": {
+  "idea": ["Porque basta con hacer la aplicación compatible con PAM.",
+           "Si cambian las técnicas de autentificación, se toca la configuración PAM y no la aplicación."],
+  "memorizar": "PAM separa la aplicación del método de autentificación."
+},
+"ENI-CH04-Q04": {
+  "idea": ["Permite encadenar varios módulos en una sola autentificación.",
+           "Puedes aceptar por LDAP o en local, o exigir biometría además de contraseña.",
+           "Y de paso ejecutar otras cosas, como cargar variables con pam_env o cortar accesos con pam_nologin."],
+  "memorizar": "la pila combina métodos y añade tareas."
+},
+"ENI-CH04-Q05": {
+  "idea": ["Si antes ha fallado un módulo llamado con required o requisite."],
+  "memorizar": "sufficient no rescata un required ya fallado."
+},
+"ENI-CH04-Q06": {
+  "idea": ["required = tiene que aprobar, pero la pila sigue.",
+           "Aunque salga bien, se ejecutan los demás módulos de la pila."],
+  "analogia": "Una prueba obligatoria dentro de una cadena: aprobarla no termina el examen, solo deja seguir.",
+  "memorizar": "required = obligatorio, pero continúa."
+},
+"ENI-CH04-Q07": {
+  "idea": ["Es muy difícil.",
+           "LDIF va pegado al esquema, y dos directorios casi nunca tienen el mismo.",
+           "Como mucho se exporta lo común a los dos; el resto exige reformatear, el mapeo de atributos."],
+  "memorizar": "LDIF depende del esquema: no es portable."
+},
+"ENI-CH04-Q08": {
+  "idea": ["Porque ldapmodify escribiría la contraseña sin encriptar.",
+           "ldappasswd gestiona de forma nativa varios algoritmos de encriptación."],
+  "memorizar": "ldappasswd encripta; ldapmodify escribe tal cual."
+},
+"ENI-CH04-Q09": {
+  "idea": ["Sí: la variable LDAPBASE.",
+           "El inconveniente es que las variables son volátiles.",
+           "Hay que declararla en el entorno desde el que se lanzan los comandos cliente."],
+  "memorizar": "BASE en ldap.conf, o la variable LDAPBASE."
+},
+"ENI-CH04-Q10": {
+  "idea": ["Para poder seguir entrando si el directorio LDAP no está disponible.",
+           "Los controles de comportamiento de los módulos LDAP permiten justo eso: un método alternativo en caso de error."],
+  "memorizar": "LDAP primero; los archivos locales, de red de seguridad."
+}
+}

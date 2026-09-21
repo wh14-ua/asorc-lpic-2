@@ -1,0 +1,240 @@
+{
+ "SYBEX-CH04-RQ01": {
+  "idea": [
+   "Valen mkfs -t ext2, mkfs.ext2 y mke2fs: son tres caras del mismo comando."
+  ],
+  "otras": {
+   "B": "extended2 no es un tipo de sistema de archivos.",
+   "D": "mke2fs.ext2 no existe."
+  },
+  "memorizar": "para ext valen mkfs, mkfs.ext2 y mke2fs."
+ },
+ "SYBEX-CH04-RQ02": {
+  "idea": [
+   "Los que el sistema sabe manejar están en /proc/filesystems."
+  ],
+  "otras": {
+   "B": "/etc/mtab enseña lo que está montado ahora.",
+   "C": "/proc/mounts, casi lo mismo.",
+   "D": "/proc/swaps es el espacio de intercambio.",
+   "E": "/proc/cpuinfo son los procesadores."
+  },
+  "memorizar": "soportados ≠ montados: filesystems vs mtab."
+ },
+ "SYBEX-CH04-RQ03": {
+  "idea": [
+   "Para acoplar algo un rato, mount y ya está."
+  ],
+  "otras": {
+   "A": "mkfs formatea, no monta.",
+   "B": "e2label te da la etiqueta, que luego usarías en mount.",
+   "C": "AutoFS hay que configurarlo antes.",
+   "D": "/etc/fstab es para montajes que aguantan reinicios, no temporales."
+  },
+  "memorizar": "temporal → mount; permanente → /etc/fstab."
+ },
+ "SYBEX-CH04-RQ04": {
+  "idea": [
+   "Ese número largo es un UUID.",
+   "A mount se le pasa con -U."
+  ],
+  "otras": {
+   "A": "-o son opciones de montaje.",
+   "B": "-L identifica por etiqueta.",
+   "D": "-a monta todo lo de /etc/fstab que falte.",
+   "E": "-n monta sin actualizar /etc/mtab."
+  },
+  "memorizar": "-U por UUID, -L por etiqueta."
+ },
+ "SYBEX-CH04-RQ05": {
+  "idea": [
+   "sync vacía los búferes y obliga a escribir ya en el disco."
+  ],
+  "otras": {
+   "A": "unmount no es un comando; el bueno es umount.",
+   "B": "fuser sirve para ver quién tiene ocupado el sistema de archivos.",
+   "C": "lsof, lo mismo.",
+   "E": "dmesg enseña el búfer del kernel, no vacía nada."
+  },
+  "memorizar": "escribir ya lo pendiente → sync."
+ },
+ "SYBEX-CH04-RQ06": {
+  "idea": [
+   "Cada línea de /etc/fstab tiene seis campos.",
+   "Nombre, punto de montaje, tipo, opciones, volcado y prioridad de comprobación."
+  ],
+  "otras": {
+   "C": "el campo de volcado es de dump, no de cpio.",
+   "E": "lo que monta AutoFS no debe estar en /etc/fstab."
+  },
+  "memorizar": "fstab: qué, dónde, de qué tipo, cómo, dump y fsck."
+ },
+ "SYBEX-CH04-RQ07": {
+  "idea": [
+   "El UUID lo enseña blkid, junto con los demás atributos del dispositivo."
+  ],
+  "otras": {
+   "A": "findmnt pinta en árbol lo montado, sin UUID.",
+   "C": "e2label da la etiqueta, no el UUID.",
+   "D": "findfs necesita que ya sepas la etiqueta o el UUID.",
+   "E": "mount lista lo montado, sin UUID."
+  },
+  "memorizar": "averiguar el UUID → blkid."
+ },
+ "SYBEX-CH04-RQ08": {
+  "idea": [
+   "Btrfs llega a RAID 0, 1 y 10."
+  ],
+  "otras": {
+   "C": "RAID 5 todavía no.",
+   "D": "RAID 6 tampoco."
+  },
+  "memorizar": "btrfs: 0, 1 y 10; con paridad aún no."
+ },
+ "SYBEX-CH04-RQ09": {
+  "idea": [
+   "Las extensiones de ISO9660 son El Torito, Joliet y Rock Ridge."
+  ],
+  "otras": {
+   "A": "UDF es un estándar aparte, sobre todo para DVD.",
+   "B": "btrfs es un sistema de archivos, no un estándar óptico."
+  },
+  "memorizar": "ISO9660 se amplía con El Torito, Joliet y Rock Ridge."
+ },
+ "SYBEX-CH04-RQ10": {
+  "idea": [
+   "La imagen ISO se crea con mkisofs."
+  ],
+  "otras": {
+   "A": "mkfs crea sistemas de archivos.",
+   "B": "no existe mkfs -t iso.",
+   "D": "cdrecord graba la imagen en el disco, pero no la crea.",
+   "E": "mount -t iso9660 monta un soporte óptico."
+  },
+  "memorizar": "crear ISO → mkisofs; grabarla → cdrecord."
+ },
+ "SYBEX-CH04-RQ11": {
+  "idea": [
+   "Primero se prepara la partición con mkswap.",
+   "Activarla ya es otro paso."
+  ],
+  "otras": {
+   "A": "mkfs no tiene una opción -t swapon.",
+   "C": "swapon activa un swap que ya esté preparado.",
+   "D": "swapoff lo desactiva.",
+   "E": "swapon -s solo enseña estadísticas."
+  },
+  "memorizar": "mkswap prepara; swapon enciende."
+ },
+ "SYBEX-CH04-RQ12": {
+  "idea": [
+   "En /etc/auto.master los mapas son integrados, directos e indirectos."
+  ],
+  "otras": {
+   "D": "SMART es la tecnología de autodiagnóstico de los discos.",
+   "E": "un mapa de carreteras no pinta nada aquí."
+  },
+  "memorizar": "mapas de AutoFS: integrado, directo, indirecto."
+ },
+ "SYBEX-CH04-RQ13": {
+  "idea": [
+   "El mapa maestro se cambia desde /etc/sysconfig/autofs.",
+   "En otras distribuciones el archivo es /etc/default/autofs."
+  ],
+  "otras": {
+   "A": "/etc/auto.direct es un mapa directo.",
+   "B": "/etc/auto.misc es un mapa indirecto.",
+   "C": "/etc/autofs.net es un script antiguo de AutoFS.",
+   "D": "/etc/auto.tmp también es un mapa indirecto."
+  },
+  "memorizar": "los auto.* son mapas; la configuración está en sysconfig."
+ },
+ "SYBEX-CH04-RQ14": {
+  "idea": [
+   "eCryptfs se pone encima de otro sistema de archivos.",
+   "Cifra archivo por archivo, sin ser él mismo el disco."
+  ],
+  "analogia": "No es un disco cifrado, es una capa de cifrado puesta sobre el que ya tienes.",
+  "otras": {
+   "A": "XFS no cifra.",
+   "B": "dm-crypt cifra, pero no es por capas.",
+   "D": "LUKS tampoco es por capas.",
+   "E": "Btrfs no cifra."
+  },
+  "memorizar": "eCryptfs = cifrado por encima de otro sistema de archivos."
+ },
+ "SYBEX-CH04-RQ15": {
+  "idea": [
+   "La que no ajusta nada es uuidgen: solo fabrica números UUID nuevos."
+  ],
+  "otras": {
+   "A": "debugfs ajusta sistemas de archivos extendidos.",
+   "B": "e2label también.",
+   "C": "resize2fs también.",
+   "E": "tune2fs también."
+  },
+  "memorizar": "uuidgen fabrica el UUID; no toca el sistema de archivos."
+ },
+ "SYBEX-CH04-RQ16": {
+  "idea": [
+   "Poner ese UUID en el sistema de archivos es cosa de tune2fs."
+  ],
+  "otras": {
+   "A": "debugfs ajusta otras cosas del sistema de archivos.",
+   "B": "e2label cambia la etiqueta.",
+   "C": "resize2fs cambia el tamaño.",
+   "D": "blkid enseña el UUID, pero no lo cambia."
+  },
+  "memorizar": "uuidgen lo genera, tune2fs lo asigna."
+ },
+ "SYBEX-CH04-RQ17": {
+  "idea": [
+   "No pasa nada: fsck.xfs no hace nada.",
+   "XFS (y btrfs) traen sus propias herramientas de reparación."
+  ],
+  "otras": {
+   "A": "eso podría pasar en un sistema de archivos extendido, no aquí.",
+   "B": "tampoco informa.",
+   "C": "tampoco pregunta.",
+   "D": "ni una cosa ni la otra."
+  },
+  "memorizar": "fsck.xfs existe, pero no hace nada."
+ },
+ "SYBEX-CH04-RQ18": {
+  "idea": [
+   "Para recuperar datos tras un desastre: btrfs restore."
+  ],
+  "otras": {
+   "A": "btrfs check ayuda, pero es menos potente.",
+   "B": "btrfs get property no repara ni restaura.",
+   "C": "btrfs rescue ayuda, pero tampoco llega tan lejos.",
+   "E": "btrfs scrub tampoco restaura."
+  },
+  "memorizar": "datos perdidos en btrfs → btrfs restore."
+ },
+ "SYBEX-CH04-RQ19": {
+  "idea": [
+   "xfs_check mira si hay inconsistencias y no toca nada.",
+   "Donde ya no venga, se usa xfs_repair -n."
+  ],
+  "otras": {
+   "B": "xfsdump hace copia de datos y atributos.",
+   "C": "xfs_info enseña información, pero no busca inconsistencias.",
+   "D": "xfs_metadump solo copia los metadatos a un archivo.",
+   "E": "xfsrestore restaura desde un volcado."
+  },
+  "memorizar": "comprobar sin tocar: xfs_check o xfs_repair -n."
+ },
+ "SYBEX-CH04-RQ20": {
+  "idea": [
+   "El resumen rápido de salud es smartctl -H."
+  ],
+  "otras": {
+   "A": "-t short lanza una prueba, pero no enseña resultados.",
+   "C": "-i informa del disco: si soporta SMART y si está activo.",
+   "D": "-a lo da todo, no un resumen.",
+   "E": "-t long lanza la prueba larga."
+  },
+  "memorizar": "-H de health: el resumen de salud."
+ }
+}

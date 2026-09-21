@@ -1,0 +1,63 @@
+[
+{"id":"SYBEX-CH05-RQ11",
+ "q":"¿Qué número designa tanto a un servidor destino (target) iSCSI como a un disco iSCSI ofrecido por ese destino? (Elija la mejor respuesta.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"La opción C es correcta, porque el IQN designa tanto al servidor destino iSCSI como al disco iSCSI que ofrece. Un WWID es lo mismo que un WWN y, aunque pueden identificar de forma única un disco iSCSI, no identifican un destino iSCSI, así que las opciones A y B son incorrectas. Un LUN también puede identificar de forma única un disco iSCSI, pero no identifica un destino iSCSI, así que la opción D también es incorrecta. La opción E es un comando que puede usarse para crear un número iSCSI único, así que también es incorrecta."},
+
+{"id":"SYBEX-CH05-RQ12",
+ "q":"¿Dónde se guardan los registros de descubrimiento (discovery) de iSCSI? (Elija todas las que correspondan.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"Durante el proceso de descubrimiento, la herramienta iscsiadm crea dos registros: un registro de nodo descubierto que se guarda en el archivo de base de datos /var/lib/iscsi/nodes (opción C) y un registro con la dirección IP del servidor destino que se guarda en el archivo /var/lib/iscsi/send_targets (opción D). Por tanto, las opciones C y D son correctas. La opción A es el archivo de configuración de la herramienta iscsiadm, así que es incorrecta. La opción B es la ubicación del comando scsi_id, así que también es incorrecta. La opción E es un archivo inventado, así que es una elección errónea."},
+
+{"id":"SYBEX-CH05-RQ13",
+ "q":"¿Cuál de los siguientes permite agrupar varias particiones o discos enteros y usarlos como una sola unidad? (Elija todas las que correspondan.)",
+ "o":{"A":"=","B":"=","C":"=","D":"Gestión de volúmenes lógicos","E":"Tejido de almacenamiento (storage fabric)"},
+ "e":"Tanto RAID como la gestión de volúmenes lógicos o Logical Volume Manager (LVM) permiten agrupar varias particiones y usarlas como una sola partición para formatear, montar en la estructura de directorio virtual de Linux, almacenar datos, etc. Así pues, las opciones B y D son correctas. PATA es una tecnología de interfaz de unidades, así que la opción A es incorrecta. La opción C es incorrecta, porque iSCSI es un protocolo de transporte de almacenamiento en red, que hace que el disco iSCSI de un servidor destino aparezca como un disco conectado localmente, pero no hay agrupación de por medio. Por último, el tejido de almacenamiento de la opción E es una elección incorrecta, porque es cualquier hardware que conecta dispositivos de almacenamiento SAN con los sistemas."},
+
+{"id":"SYBEX-CH05-RQ14",
+ "q":"¿Cuál es una partición de disco o unidad sin usar designada para que la utilice LVM? (Elija la mejor respuesta.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"La opción A es correcta, porque un volumen físico (PV) es una partición de disco (o una unidad entera) sin usar designada para que la utilice LVM. Un grupo de volúmenes (VG) tiene PV en su reserva de almacenamiento y alimenta a los volúmenes lógicos (LV), que se componen de bloques de espacio de almacenamiento (extents lógicos). Por tanto, las opciones B y C son incorrectas. El SATA de la opción D es incorrecto, porque SATA es una tecnología de interfaz de unidades. La opción E es incorrecta, porque un backstore es un método de acceso a datos que apunta y permite el acceso a un medio de almacenamiento físico en una SAN con tejido de almacenamiento."},
+
+{"id":"SYBEX-CH05-RQ15",
+ "q":"¿Cuál de las siguientes afirmaciones sobre los PE no es cierta? (Elija la mejor respuesta.)",
+ "o":{"A":"PE significa «physical extent» (extent físico).",
+      "B":"Un PE es el tamaño de bloque más pequeño que puede asignarse en un PV.",
+      "C":"El tamaño de bloque del PE se establece durante el proceso de designar un PV.",
+      "D":"El tamaño de bloque de PE predeterminado es 4 MiB.",
+      "E":"El tamaño de bloque de PE puede elegirse."},
+ "e":"El tamaño de bloque del PE se establece en realidad durante el proceso de añadir un PV a un VG. Por tanto, la opción C es la respuesta correcta, porque no es cierta. Las opciones A, B, D y E son todas afirmaciones correctas sobre los PE y, por tanto, elecciones incorrectas."},
+
+{"id":"SYBEX-CH05-RQ16",
+ "q":"¿Cuál de las siguientes afirmaciones sobre los LE es cierta? (Elija la mejor respuesta.)",
+ "o":{"A":"Los LE se componen de LV.",
+      "B":"Los LE se asocian (mapean) a los extents físicos del VG.",
+      "C":"El mapeo de LE proporciona una forma de bloquear el acceso a los datos.",
+      "D":"El mapeo de LE se produce durante la designación del PV.",
+      "E":"Ninguna de las anteriores."},
+ "e":"La opción B es cierta, porque los extents lógicos (LE) se asocian a los extents físicos del VG. La opción A no es cierta, porque son los LV los que se componen de extents lógicos (LE) y, por tanto, es una elección incorrecta. La opción C no es cierta, porque el mapeo proporciona una forma de acceder a los datos, no de bloquearlos. Por tanto, la opción C es una elección errónea. La opción D es incorrecta, porque el mapeo de LE no se produce durante la designación del PV. Por último, la opción E es incorrecta, porque la opción B sí es cierta."},
+
+{"id":"SYBEX-CH05-RQ17",
+ "q":"¿Cuál de las siguientes utilidades de LVM designará una partición como PV? (Elija la mejor respuesta.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"La opción D es la respuesta correcta, porque la utilidad pvcreate puede designar una partición como PV. La utilidad pvdisplay muestra los atributos de un PV. La opción B es incorrecta, porque vgcreate añade uno o más PV a una reserva VG. La opción C es incorrecta, porque lvcreate crea un LV a partir de una reserva VG o crea instantáneas. La opción E también es incorrecta, porque la utilidad pvscan lista todos los PV del sistema."},
+
+{"id":"SYBEX-CH05-RQ18",
+ "q":"Acaba de terminar de crear vg01. ¿Qué utilidad sería la mejor para comprobarlo? (Elija la mejor respuesta.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"La opción D es la respuesta correcta, porque la utilidad vgdisplay muestra los atributos de un VG, y vg01 es un VG. La opción A es incorrecta, porque pvdisplay muestra atributos de PV. La opción B es incorrecta, porque vgcreate añade uno o más PV a una reserva VG. La opción C es incorrecta, porque la utilidad pvscan lista todos los PV del sistema y vg01 es un VG. La opción E también es incorrecta, porque lvdisplay muestra los atributos de un LV."},
+
+{"id":"SYBEX-CH05-RQ19",
+ "q":"¿Cuáles de las siguientes afirmaciones sobre las instantáneas (snapshots) de LV son ciertas? (Elija todas las que correspondan.)",
+ "o":{"A":"Las instantáneas de LV son a su vez LV.",
+      "B":"Las instantáneas de LV son de solo lectura.",
+      "C":"Las instantáneas de LV pueden montarse en el directorio.",
+      "D":"Las instantáneas de LV contienen copias de los datos del LV original.",
+      "E":"Las instantáneas de LV se crean con el comando vgcreate."},
+ "e":"Las opciones A y C son ciertas y, por tanto, correctas. La opción B no es cierta y es incorrecta, porque una instantánea de LV tiene acceso tanto de lectura como de escritura. La opción D es incorrecta, porque los datos originales no se copian a la instantánea de LV. La opción E tampoco es cierta, porque las instantáneas de LV se crean con el comando lvcreate."},
+
+{"id":"SYBEX-CH05-RQ20",
+ "q":"Para renombrar un LV, ¿qué utilidad debería usar? (Elija la mejor respuesta.)",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"La opción A es correcta, porque el comando lvrename permite cambiar el nombre de un LV. La opción B es incorrecta, porque lvremove elimina un LV. La utilidad lvconvert cambia la disposición de un LV y, por tanto, la opción C es una respuesta incorrecta. El lvs de la opción D es incorrecto, porque muestra información sobre los LV del sistema. Por último, la opción E es incorrecta porque lvmchange es un comando obsoleto."}
+]

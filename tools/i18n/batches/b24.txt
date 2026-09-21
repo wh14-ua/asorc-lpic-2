@@ -1,0 +1,79 @@
+### SYBEX-CH11-RQ01  [multiple_choice]
+Q: What does the DHCPd application use for its configuration file?
+A: /etc/dhcpd.d/
+B: /etc/dhcp/dhcpd.conf
+C: isc-dhcp-server
+D: /etc/services
+X: The DHCPd application stores its configuration in the /etc/dhcp/dhcpd.conf text file, so option B is correct. Some applications use a folder to store multiple configuration files, but DHCPd doesn’t do that, so option A is incorrect. The isc-dhcp-server is the name of the Debian software package, not the configuration file, so option C is incorrect. The /etc/services file contains a list of valid TCP and UDP ports defined for the server, not the DHCPd configuration file, so option D is incorrect.
+
+### SYBEX-CH11-RQ02  [multiple_choice]
+Q: What DHCPd option setting do you use to define the default router for network clients?
+A: smtp-server
+B: broadcast-address
+C: router
+D: range
+X: The router option defines the default router assigned to network clients, so option C is correct. The smtp-server option defines a default mail server for clients, so option A is incorrect. The broadcast-address option defines the address used to send broadcasts on the network, so that is incorrect. The range option defines the pool of IP addresses assigned to clients in the network, so that is also incorrect.
+
+### SYBEX-CH11-RQ03  [multiple_choice]
+Q: What DHCPd configuration option setting do you use to define the pool of IP addresses to assign to network clients?
+A: smtp-server
+B: broadcast-address
+C: router
+D: range
+X: The range option setting defines a range of IP addresses from which the DHCP server can assign an IP address to network clients, thus option D is correct. The smtp-server option defines a default mail server, so option A is incorrect. The broadcast-address option defines the address used to send local broadcast messages on the network, so option B is incorrect. The router option is used to define a default router for the network, so option C is incorrect.
+
+### SYBEX-CH11-RQ04  [multiple_choice]
+Q: What file do you use to track IP addresses currently assigned by DHCPd?
+A: /var/lib/dhcp/dhcpd.leases
+B: /etc/dhcp/dhcpd.conf
+C: /etc/dhcp/dhcpd.leases
+D: /var/lib/dhcp/dhcpd.conf
+X: IP addresses assigned to network clients are called leases, and the file used to track currently leased IP addresses is the dhcpd.leases file, stored in the /var/lib/dhcp folder, thus option A is correct. The /etc/dhcp/dhcpd.conf file is the standard configuration file for DHCPd, but it doesn’t store the current IP address lease information, so option B is incorrect. The dhcpd.leases file is not stored in the /etc/dhcp folder, so option C is incorrect. IP address leases are not stored in the dhcpd.conf configuration file, so option D is also incorrect.
+
+### SYBEX-CH11-RQ05  [multiple_choice]
+Q: What DHCPd configuration setting defines the MAC address of a device so that you can assign it a static IP address?
+A: range
+B: fixed-address
+C: host-name
+D: hardware
+X: The hardware setting defines the Ethernet address (MAC) of a client to assign it a static IP address, so option D is correct. The range setting defines a pool of IP addresses to assign to network clients, not a static IP address, so option A is incorrect. The fixed-address setting defines a fixed IP address to assign to a client but doesn’t define the client’s MAC address, so option B is incorrect. The host-name option defines the local hostname to assign to the client, but not the MAC address, so option C is incorrect.
+
+### SYBEX-CH11-RQ06  [multiple_choice]
+Q: What DHCP configuration feature bundles settings assigned to a specific client?
+A: host
+B: group
+C: range
+D: fixed-address
+X: The host feature allows you to bundle multiple configuration settings and options together to assign to a specific device on the network, so option A is correct. The group feature is similar, but it bundles options and settings for multiple hosts on the network, so option B is incorrect. The range setting defines a pool of IP addresses assigned to all clients, not a specific client, so option C is incorrect. The fixed-address setting defines a fixed IP address to assign to a specific client, but it doesn’t bundle multiple configuration settings and options together for the client, so option D is incorrect.
+
+### SYBEX-CH11-RQ07  [multiple_choice]
+Q: What DHCP option number defines the subnet mask assigned to a client?
+A: 1
+B: 3
+C: 5
+D: 6
+X: DHCP option 1 defines the subnet mask assigned to the network client, so option A is correct. DHCP option 3 defines the default router, so option B is incorrect. DHCP option 5 defines the name server for the network, so option C is incorrect, and DHCP option 6 defines the domain server for the network, so option D is incorrect.
+
+### SYBEX-CH11-RQ08  [multiple_choice]
+Q: Which PAM module supports using the standard /etc/passwd and /etc/shadow files for authentication?
+A: pam_ldap.so
+B: pam_userdb.so
+C: pam_unix.so
+D: pam_sss.so
+X: The pam_unix.so module uses the standard Linux /etc/passwd and /etc/shadow files to authenticate users, so option C is correct. The pam_ldap.so module uses an LDAP network directory to authenticate uses, so option A is incorrect. The pam_userdb.so module uses a database to authenticate user accounts, so option B is incorrect, and the pam_sss.so module uses the System Security Services Daemon (SSSD) method to authenticate users on remote directories, not the local /etc/passwd and /etc/shadow files, so option D is incorrect.
+
+### SYBEX-CH11-RQ09  [multiple_choice]
+Q: Which PAM module supports using a network directory to authenticate users?
+A: pam_unix.so
+B: pam_ldap.so
+C: pam_userdb.so
+D: pam_access.so
+X: The pam_ldap.so module uses an LDAP server to authenticate users using a network directory, so option B is correct. The pam_unix.so module authenticates users using the standard /etc/passwd file, so option A is incorrect. The pam_userdb.so module authenticates users using a local database file, so option C is incorrect. The pam_access.so module provides anonymous logins for FTP servers; it doesn’t authenticate users with a network directory, so option D is incorrect.
+
+### SYBEX-CH11-RQ10  [multiple_choice]
+Q: Which PAM module provides restrictions on user passwords.
+A: pam_limits.so
+B: pam_unix.so
+C: pam_cracklib.so
+D: pam_userdb.so
+X: The pam_cracklib.so module provides checks for weak passwords, so option C is correct. The pam_limits.so module provides resource limits, such as number of files open or CPU time, but it doesn’t restrict passwords, so option A is incorrect. The pam_unix.so module just performs standard authentication using the /etc/passwd file; it doesn’t monitor the user passwords, so option B is incorrect. The pam_userdb.so module authenticates users against a local database, but it also doesn’t enforce any password restrictions, so option D is incorrect.

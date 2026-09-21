@@ -1,0 +1,51 @@
+[
+{"id":"SYBEX-CH06-RQ11",
+ "q":"¿Qué formato del comando nc escucha conexiones HTTP entrantes para simular un servidor web?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"Las conexiones HTTP usan el puerto TCP 80 y, para escuchar en el puerto TCP 80, se usaría la opción –l 80 del comando nc, lo que hace que la opción B sea el formato correcto. La opción A muestra el comando nc para conectarse al servidor web que se ejecuta en el host 192.168.1.77, así que es incorrecta. La opción E escucha en el puerto TCP 22, así que es incorrecta. Las opciones C y D no tienen el formato adecuado para el comando nc, así que ambas son incorrectas."},
+
+{"id":"SYBEX-CH06-RQ12",
+ "q":"¿Qué carpeta usan los sistemas basados en Red Hat para guardar los archivos de configuración de red?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"Los sistemas basados en Red Hat usan archivos separados para guardar la dirección IP y la información del router. Esos archivos se guardan en la carpeta /etc/sysconfig/network-scripts, lo que hace correcta la opción A. La opción B es donde los sistemas basados en Debian guardan el archivo interfaces, que contiene los ajustes de configuración de red. El ifcfg-eth0 es un archivo usado para guardar la configuración, no una carpeta, así que la opción C es incorrecta. ifconfig e iwconfig son comandos y no carpetas, así que las opciones D y E son incorrectas."},
+
+{"id":"SYBEX-CH06-RQ13",
+ "q":"¿Qué línea de configuración establece una dirección IP dinámica en un sistema Debian?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"La opción B es el formato correcto para establecer una dirección IP dinámica en la interfaz. El sistema Debian usa el ajuste iface para configurar características de una interfaz, así que las opciones C y E son incorrectas. La opción A establece una dirección IP estática en la interfaz y no una dinámica, así que es incorrecta. La opción D establece una dirección IPv6 de enlace local y no una dirección IP dinámica, así que es incorrecta."},
+
+{"id":"SYBEX-CH06-RQ14",
+ "q":"¿Qué archivo contiene una lista de servidores DNS que el sistema Linux puede usar para resolver nombres de host?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"Los servidores DNS se listan en el archivo de configuración /etc/resolv.conf mediante el ajuste nameserver, así que la opción B es correcta. Las opciones A, C y E listan archivos que se usan en el programa tcp_wrappers, no en el sistema DNS, así que todas son incorrectas. La opción D indica el archivo que se usa para definir la mayoría de los ajustes de red en un sistema basado en Debian, pero los servidores DNS no se especifican en ese archivo, así que es incorrecta."},
+
+{"id":"SYBEX-CH06-RQ15",
+ "q":"¿Qué formato de ifconfig asigna correctamente una dirección IP y una máscara de red a la interfaz eth0?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"El comando ifconfig debe indicar la interfaz de red, la dirección IP y después la opción netmask antes de la dirección de máscara. Puede usarse la opción up o down para dejar la tarjeta de red en estado activo o inactivo por defecto, pero no es obligatorio. La opción A es la única que usa los valores correctos en el orden correcto. La opción C se acerca, pero no indica la interfaz de red. La opción B no tiene el formato correcto, y las opciones D y E no incluyen los ajustes de configuración necesarios."},
+
+{"id":"SYBEX-CH06-RQ16",
+ "q":"¿Qué comando muestra todas las redes inalámbricas disponibles en su zona?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"El comando iwlist muestra todos los puntos de acceso inalámbricos disponibles detectados por la tarjeta de red inalámbrica, así que la opción A es correcta. El comando iwconfig configura la tarjeta de red para conectarse a un punto de acceso concreto, pero no lista todos los puntos de acceso detectados, lo que hace incorrecta la opción B. La opción C indica el comando ifconfig, que se usa para asignar una dirección IP a una tarjeta de red inalámbrica, pero no lista los puntos de acceso. El comando ip de la opción D también puede usarse para fijar la dirección IP de la tarjeta, pero no lista los puntos de acceso. La opción E, el comando arp, asocia direcciones hardware con direcciones IP para poder encontrar direcciones IP duplicadas en la red, pero no lista los puntos de acceso inalámbricos."},
+
+{"id":"SYBEX-CH06-RQ17",
+ "q":"¿Qué opción establece el nombre del punto de acceso inalámbrico en el comando iwconfig?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"El valor SSID define el nombre del punto de acceso y se establece con la opción essid del comando iwconfig, lo que hace que la opción D sea la respuesta correcta. La clave (key) indica la clave de cifrado necesaria para conectarse al punto de acceso, pero no su nombre, lo que hace incorrecta la opción A. Los valores netmask y address no se establecen con el comando iwconfig, así que las opciones B y C son incorrectas. El canal (channel) define la radiofrecuencia que usa el punto de acceso, no su nombre, así que la opción E también es incorrecta."},
+
+{"id":"SYBEX-CH06-RQ18",
+ "q":"¿Qué comando puede usarse tanto para mostrar como para establecer la dirección IP, la máscara de red y el router predeterminado?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"El comando ip permite tanto mostrar como establecer la dirección IP, la máscara de red y el router predeterminado de una interfaz de red, así que la opción E es correcta. El comando ifconfig puede establecer la dirección IP y la máscara, pero no el router predeterminado. El comando iwconfig se usa para configurar los ajustes del punto de acceso inalámbrico, y el comando router se usa para establecer el router predeterminado, pero no la dirección IP ni la máscara. El comando ifup solo activa la interfaz de red; no puede establecer los valores de dirección."},
+
+{"id":"SYBEX-CH06-RQ19",
+ "q":"¿Qué herramienta permite enviar mensajes ICMP a un host remoto para comprobar la conectividad de red?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"El comando ping envía paquetes ICMP a un host remoto concreto y espera respuesta, lo que hace que la opción C sea la respuesta correcta. El comando netstat muestra estadísticas de la interfaz de red, así que es incorrecta. El comando nmap puede escanear hosts remotos en busca de puertos abiertos, pero no envía paquetes ICMP, lo que hace incorrecta la opción B. El comando nc permite simular un servidor o un cliente con conexiones TCP o UDP, pero no maneja paquetes ICMP, lo que hace incorrecta la opción D. El programa tcpdump captura paquetes de red pero no los envía, así que la opción E también es incorrecta."},
+
+{"id":"SYBEX-CH06-RQ20",
+ "q":"¿Qué comando permite ver los paquetes de red?",
+ "o":{"A":"=","B":"=","C":"=","D":"=","E":"="},
+ "e":"El comando tcpdump captura paquetes de la interfaz de red y los muestra o los guarda en un archivo, así que la opción B es correcta. El comando netstat solo muestra estadísticas de la interfaz de red; no captura paquetes, así que la opción D es incorrecta. El comando dig se usa para obtener información DNS sobre redes, el comando ping envía paquetes ICMP a hosts remotos y el comando nc envía o recibe paquetes para simular un cliente y un servidor, así que las opciones A, C y E son todas incorrectas."}
+]

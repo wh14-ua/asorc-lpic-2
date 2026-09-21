@@ -1,0 +1,39 @@
+### ENI-CH04-Q01  [open]  tema: Clientes de red y autenticación
+P: ¿Por qué las contraseñas de los sistemas actuales ya no se almacenan en el archivo /etc/passwd como se hacía en los sistemas Unix originales?
+LIBRO: Las contraseñas originalmente se almacenaban en el archivo /etc/passwd con el resto de información relacionada con las cuentas de los usuarios. Este archivo debía de estar accesible en modo lectura para todos los usuarios y las contraseñas encriptadas mediante un algoritmo de hash. Con la evolución de la potencia de cálculo de los ordenadores se hizo posible poder adivinar una contraseña encriptando en primer lugar todas las entradas de un diccionario y pasando después todas las combinaciones de caracteres posibles. Encontrar la cadena de caracteres que una vez encriptada fuera la misma que la del archivo suponía encontrar la contraseña. Para evitar esta vulnerabilidad, las contraseñas se retiraron del archivo /etc/passwd y se ubicaron en el archivo /etc/shadow, al que los usuarios no tienen acceso.
+
+### ENI-CH04-Q02  [open]  tema: Clientes de red y autenticación
+P: ¿Por qué hay un parámetros dns en el archivo /etc/nsswitch.conf?
+LIBRO: El archivo nsswitch.conf contiene todos los parámetros de resolución de nombres así como las bases de datos de información necesarias para su resolución. De este modo, generalmente indica que la resolución de nombres de equipos (hosts) debe realizarse en primer lugar mediante un archivo local (parámetro files) y después por un servicio dns si se ha configurado (parámetro dns).
+
+### ENI-CH04-Q03  [open]  tema: Clientes de red y autenticación
+P: ¿En qué aspecto la aparición de PAM ha facilitado el trabajo de los desarrolladores en lo que respecta a las operaciones de autentificación?
+LIBRO: Porque los desarrolladores sólo tienen que hacer sus aplicaciones compatibles con la librería de autentificación PAM. Si las técnicas de autentificación evolucionan, no será necesario modificar la aplicación, sino que lo único que habrá que modificar es su configuración PAM que determinará los nuevos módulos en los que se basa esta autentificación.
+
+### ENI-CH04-Q04  [open]  tema: Clientes de red y autenticación
+P: ¿Cuál es el interés del concepto de pila de módulos PAM?
+LIBRO: El interés de poder englobar en la operación de autentificación la ejecución de varios módulos. Las aplicaciones prácticas son muchas: se puede aceptar un usuario si se produce con éxito una autentificación remota (LDAP) o si la autentificación local tiene éxito. Se puede exigir que una autentificación particular (biométrica por ejemplo) tenga éxito, así como una autentificación tradicional mediante contraseña. Finalmente, algo que también se hace a menudo es aprovechar la etapa de autentificación para ejecutar otras acciones como cargar variables (módulo pam_env) o prohibir ciertos accesos de usuarios (módulo pam_nologin).
+
+### ENI-CH04-Q05  [open]  tema: Clientes de red y autenticación
+P: ¿En qué caso un módulo de autentificación PAM llamado con el control de comportamiento sufficient no conduce al éxito de la autentificación?
+LIBRO: Si un módulo llamado con el control de comportamiento required o requisite ha fallado previamente.
+
+### ENI-CH04-Q06  [open]  tema: Clientes de red y autenticación
+P: ¿Qué sucede después del éxito de un modulo llamado con el control de comportamiento required?
+LIBRO: Se continua. El éxito de un módulo required no provoca la parada del tratamiento de la pila. Los otros módulos de la pila se ejecutarán.
+
+### ENI-CH04-Q07  [open]  tema: Clientes de red y autenticación
+P: ¿Cómo se puede utilizar el formato de intercambio LDIF de los directorios LDAP para exportar los datos de un directorio LDAP como Active Directory a otro directorio LDAP como OpenLDAP?
+LIBRO: Es muy difícil. El formato LDIF está íntimamente ligado al esquema del directorio y dos directorios distintos tienen casi siempre distintos esquemas. Los atributos LDAP, por consiguiente, no serán los mismos por ambos lados y una exportación contendrá seguramente elementos no asimilables por el segundo directorio. Se podría puntualmente tener éxito en algunos intercambios restringiendo los datos exportados e importados a clases de objetos y atributos comunes en los dos directorios. Los servicios funcionales que permiten intercambios completos (metadirectorios) se basan siempre en una fase de reformateo de datos. A menudo se habla de una operación de mapeo de atributos.
+
+### ENI-CH04-Q08  [open]  tema: Clientes de red y autenticación
+P: ¿Por qué es necesario un comando específico (ldappasswd) para modificar la contraseña de una cuenta de usuario openldap cuando el comando ldapmodify ya permite escribir cualquier atributo de objeto en el directorio?
+LIBRO: Porque el comando ldapmodify escribiría el atributo de la contraseña sin encriptar, mientras que el comando ldappasswd gestiona de forma nativa varios algoritmos de encriptación.
+
+### ENI-CH04-Q09  [open]  tema: Clientes de red y autenticación
+P: ¿Existe algún método concreto que permita definir el contexto de búsqueda de los clientes LDAP distinto al de informar la directiva BASE en el archivo ldap.conf?
+LIBRO: Sí, se puede informar la variable LDAPBASE con el contexto de búsqueda que deberán usar los clientes LDAP. Sin embargo, este método sufre el problema de la volatilidad de las variables y la declaración deberá guardarse en el entorno de ejecución de los comandos cliente (la variable se exporta generalmente desde un proceso padre de los comandos cliente).
+
+### ENI-CH04-Q10  [open]  tema: Clientes de red y autenticación
+P: ¿Por qué en una autentificación LDAP de un sistema Linux se conserva casi siempre la autentificación local mediante los archivos de contraseña (/etc/shadow)?
+LIBRO: Para preservar el uso del sistema en caso que el directorio LDAP no esté disponible. Los controles de comportamiento de los módulos LDAP se adaptan a este uso permitiendo la autentificación por directorio LDAP pero valiéndose de un método alternativo en caso de error.

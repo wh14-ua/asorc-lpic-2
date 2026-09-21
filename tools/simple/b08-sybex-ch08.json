@@ -1,0 +1,231 @@
+{
+ "SYBEX-CH08-RQ01": {
+  "idea": [
+   ".edu es un TLD, un dominio de nivel superior.",
+   "Como .gov o .us."
+  ],
+  "otras": {
+   "A": "el dominio raíz es solo un punto, y está por debajo de los TLD.",
+   "C": "un dominio de primer nivel es un subdominio de un TLD.",
+   "D": "ICANN es la organización que elige quién gestiona los TLD.",
+   "E": "un dominio de segundo nivel queda aún más arriba en el árbol."
+  },
+  "memorizar": ".edu, .gov, .us = TLD."
+ },
+ "SYBEX-CH08-RQ02": {
+  "idea": [
+   "Una zona es un trozo del espacio de nombres.",
+   "Vale un dominio de primer nivel con todos sus subdominios o solo con parte.",
+   "También vale la zona raíz, que es la zona de pistas."
+  ],
+  "otras": {
+   "D": "un servidor raíz es una máquina que atiende la zona raíz, no la zona."
+  },
+  "memorizar": "zona = trozo del árbol; servidor = quien lo atiende."
+ },
+ "SYBEX-CH08-RQ03": {
+  "idea": [
+   "Hacen falta dos servidores y uno tiene que ser el primario.",
+   "El segundo puede ser secundario, de caché o de reenvío."
+  ],
+  "otras": {
+   "B": "aquí falta el primario.",
+   "D": "aquí también falta el primario."
+  },
+  "memorizar": "siempre un primario más otro cualquiera."
+ },
+ "SYBEX-CH08-RQ04": {
+  "idea": [
+   "Quien pregunta es el resolutor.",
+   "Mira primero su caché y, si no está, se lo pregunta a otro servidor."
+  ],
+  "otras": {
+   "A": "un servidor de nombres es la máquina que responde.",
+   "B": "la caché es el sitio donde se guardan las respuestas.",
+   "C": "la resolución de nombres es el proceso, no el programa.",
+   "E": "una zona es una porción del espacio de nombres."
+  },
+  "memorizar": "el resolutor pregunta; el servidor responde."
+ },
+ "SYBEX-CH08-RQ05": {
+  "idea": [
+   "Los cinco implementan DNS: BIND, dnsmasq, pdnsd, Bundy y PowerDNS.",
+   "Bundy engaña porque antes se llamaba BIND 10."
+  ],
+  "memorizar": "Bundy = el antiguo BIND 10."
+ },
+ "SYBEX-CH08-RQ06": {
+  "idea": [
+   "El demonio se llama named, en /usr/sbin/."
+  ],
+  "otras": {
+   "A": "bind9 es el nombre del paquete en Ubuntu.",
+   "B": "bind es el nombre del paquete en CentOS.",
+   "D": "named.conf es su archivo de configuración.",
+   "E": "bindutils es el paquete de utilidades en CentOS."
+  },
+  "memorizar": "el paquete es BIND; el demonio, named."
+ },
+ "SYBEX-CH08-RQ07": {
+  "idea": [
+   "En named.conf las cláusulas son options, logging, include y comments."
+  ],
+  "otras": {
+   "D": "named-checkconf es una utilidad que comprueba la sintaxis del archivo."
+  },
+  "memorizar": "checkconf revisa el archivo; no vive dentro de él."
+ },
+ "SYBEX-CH08-RQ08": {
+  "idea": [
+   "Un servidor de solo caché necesita cuatro cosas.",
+   "acl define quién puede usarlo y allow-query aplica esa lista.",
+   "listen-on fija el puerto y recursion yes permite que resuelva por ellos."
+  ],
+  "otras": {
+   "C": "logging conviene, pero no es obligatorio."
+  },
+  "memorizar": "quién, desde dónde, en qué puerto y con recursión."
+ },
+ "SYBEX-CH08-RQ09": {
+  "idea": [
+   "Lo para casi todo menos rndc flush.",
+   "Valen service bind9 stop, rndc stop, systemctl stop named y un kill con SIGTERM.",
+   "Cuál funciona depende de la distribución."
+  ],
+  "otras": {
+   "A": "rndc flush vacía las cachés, pero no para nada."
+  },
+  "memorizar": "flush limpia; stop para."
+ },
+ "SYBEX-CH08-RQ10": {
+  "idea": [
+   "category dice qué mensajes se registran."
+  ],
+  "otras": {
+   "A": "dónde se registran lo dice channel.",
+   "C": "reiniciar BIND no tiene que ver con category.",
+   "D": "el filtrado también es cosa de channel.",
+   "E": "los tamaños tampoco los fija category."
+  },
+  "memorizar": "category = qué; channel = dónde."
+ },
+ "SYBEX-CH08-RQ11": {
+  "idea": [
+   "Como tipo de zona valen master y hint.",
+   "master es el primario y hint es la zona raíz con los servidores raíz."
+  ],
+  "otras": {
+   "B": "el secundario se declara type slave, no secondary.",
+   "D": "la directiva completa es type delegation-only.",
+   "E": "type root no existe."
+  },
+  "memorizar": "master, slave, hint y delegation-only."
+ },
+ "SYBEX-CH08-RQ12": {
+  "idea": [
+   "Las clases válidas son IN, CH y HS.",
+   "IN es Internet, CH es Chaosnet y HS es Hesiod."
+  ],
+  "otras": {
+   "B": "DN está inventada.",
+   "E": "IS también."
+  },
+  "memorizar": "IN, CH y HS; en la práctica siempre IN."
+ },
+ "SYBEX-CH08-RQ13": {
+  "idea": [
+   "La transferencia la pide siempre el secundario.",
+   "Al arrancar, al expirar el tiempo de refresco o si se lo pides con rndc."
+  ],
+  "otras": {
+   "A": "que se reinicie el primario no dispara nada.",
+   "E": "eso es apagar y desmontar el servicio del secundario."
+  },
+  "memorizar": "el secundario tira; el primario no empuja."
+ },
+ "SYBEX-CH08-RQ14": {
+  "idea": [
+   "Según la distribución, las zonas están en /var/named/ o en /etc/bind/."
+  ],
+  "otras": {
+   "A": "/etc/named/ está inventado.",
+   "B": "/var/bind/ también.",
+   "D": "/etc/bind9/ también."
+  },
+  "memorizar": "zonas: /var/named/ o /etc/bind/."
+ },
+ "SYBEX-CH08-RQ15": {
+  "idea": [
+   "El registro que abre la zona es SOA.",
+   "Es el que lleva sus datos de autoridad."
+  ],
+  "otras": {
+   "A": "CNAME es un alias que apunta a otro nombre.",
+   "B": "A da la dirección IPv4 de un host.",
+   "C": "PTR apunta a otro sitio del espacio de nombres, para búsquedas inversas.",
+   "D": "NS dice cuál es el servidor de nombres de la zona."
+  },
+  "memorizar": "SOA = start of authority, el primero de la zona."
+ },
+ "SYBEX-CH08-RQ16": {
+  "idea": [
+   "Una zona inversa va de IP a FQDN.",
+   "Es el camino contrario al habitual."
+  ],
+  "otras": {
+   "A": "eso es un registro de pegamento.",
+   "B": "eso es una transferencia de zona.",
+   "D": "eso es una zona de pistas.",
+   "E": "eso es la definición de zona a secas."
+  },
+  "memorizar": "normal: nombre → IP; inversa: IP → nombre."
+ },
+ "SYBEX-CH08-RQ17": {
+  "idea": [
+   "Cuatro medidas, y ninguna es un calendario.",
+   "Que el servidor solo haga de BIND y que el demonio no corra como root.",
+   "Además, doble horizonte y esconder la versión."
+  ],
+  "otras": {
+   "D": "actualizar una vez al año no vale: hay que hacerlo en cuanto salga la versión."
+  },
+  "memorizar": "actualizar cuando salga, no por calendario."
+ },
+ "SYBEX-CH08-RQ18": {
+  "idea": [
+   "La jaula suele colgar de /chroot/named/ o /chroot/bind/."
+  ],
+  "otras": {
+   "A": "/etc/bind/ se usa en BIND, pero no como raíz de la jaula.",
+   "B": "/etc/named/ tampoco.",
+   "C": "/var/bind/ tampoco."
+  },
+  "memorizar": "la jaula empieza por /chroot/."
+ },
+ "SYBEX-CH08-RQ19": {
+  "idea": [
+   "Los registros los firma la clave de firma de zona.",
+   "Su sigla es ZSK."
+  ],
+  "analogia": "La ZSK firma el contenido y la KSK firma a la ZSK: una cadena de sellos.",
+  "otras": {
+   "A": "la firma digital es el resultado de usar la ZSK.",
+   "B": "la KSK firma la ZSK, no los registros.",
+   "D": "la cadena de confianza encadena zonas de arriba abajo.",
+   "E": "DNSKEY es donde se guarda la KSK."
+  },
+  "memorizar": "ZSK firma la zona; KSK firma la ZSK."
+ },
+ "SYBEX-CH08-RQ20": {
+  "idea": [
+   "Las claves se crean con dnssec-keygen, sean TSIG o DNSSEC."
+  ],
+  "otras": {
+   "B": "dnssec-signzone firma la zona a mano.",
+   "C": "dnssec-dsfromkey crea el registro para la zona padre.",
+   "D": "dnssec-tsig-keygen está inventada.",
+   "E": "tsig-keygen también."
+  },
+  "memorizar": "keygen genera; signzone firma."
+ }
+}
