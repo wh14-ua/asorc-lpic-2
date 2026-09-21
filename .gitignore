@@ -1,0 +1,21 @@
+# --- mis datos de estudio: nunca al repositorio ---
+progress.json
+web_stats.json
+
+# --- credenciales de verdad (web/config.js solo lleva claves públicas) ---
+.env
+.env.*
+config.local.*
+
+# --- material de partida y trabajo intermedio ---
+*.pdf
+tools/_work/
+tools/__pycache__/
+__pycache__/
+*.pyc
+
+# --- binarios y temporales ---
+asorc
+*.tmp
+.playwright-mcp/
+_site/

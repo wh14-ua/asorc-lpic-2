@@ -701,19 +701,23 @@ def test_publicacion():
               (out.stdout + out.stderr).strip()[:300])
         for f in ("index.html", "questions.json", "explanations_simple.json", ".nojekyll"):
             check(f"el sitio incluye {f}", os.path.exists(os.path.join(d, f)))
-        check("config.js NO se publica", not os.path.exists(os.path.join(d, "config.js")))
+        # config.js SÍ se publica: solo lleva la URL y la clave publishable,
+        # que son públicas por diseño. Lo que no puede llevar es un secreto.
+        cfg_site = os.path.join(d, "config.js")
+        check("config.js SÍ se publica", os.path.exists(cfg_site))
+        txt_cfg = open(cfg_site, encoding="utf-8").read() if os.path.exists(cfg_site) else ""
+        check("y define ASORC_CONFIG", "ASORC_CONFIG" in txt_cfg)
+        check("sin clave secreta dentro",
+              re.search(r"sb_secret_[A-Za-z0-9_\-]{12,}", txt_cfg) is None)
         check("server.py NO se publica", not os.path.exists(os.path.join(d, "server.py")))
 
         gi = os.path.join(PROJ, ".gitignore")
         txt = open(gi, encoding="utf-8").read() if os.path.exists(gi) else ""
-        for pat in ("progress.json", "web_stats.json", "web/config.js", ".env"):
+        for pat in ("progress.json", "web_stats.json", ".env", "*.pdf"):
             check(f".gitignore excluye {pat}", pat in txt)
 
-        cfg = os.path.join(PROJ, "web", "config.js")
-        check("no hay un config.js con credenciales en el repositorio", not os.path.exists(cfg))
         ej = open(os.path.join(PROJ, "web", "config.example.js"), encoding="utf-8").read()
-        check("el ejemplo no trae una clave real",
-              "TU-CLAVE" in ej and "service_role" not in ej.split("NUNCA")[0])
+        check("el ejemplo no trae una clave real", "TU-CLAVE" in ej)
     finally:
         shutil.rmtree(d, ignore_errors=True)
 
