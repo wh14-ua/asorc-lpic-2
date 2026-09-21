@@ -294,7 +294,13 @@ python3 tools/build_site.py          # arma _site/ y avisa si queda alguna ruta 
 ```
 
 El sitio se monta copiando `web/` a la raíz más `questions.json` y `explanations_simple.json`,
-que es donde el frontend los busca. `config.js` y `server.py` **no se publican**.
+que es donde el frontend los busca. `server.py` no se publica (es el puente local); `config.js`
+sí, porque solo lleva valores públicos. El build **aborta** si falta algún archivo que el
+navegador necesita, si queda una ruta absoluta o si detecta algo con pinta de secreto.
+
+```bash
+python3 tools/test_site.py           # prueba el artefacto servido bajo /asorc-lpic-2/
+```
 
 Con `.github/workflows/pages.yml` basta con:
 
@@ -316,7 +322,8 @@ Sin configurar, la web dice discretamente *«Sincronización en la nube desactiv
 molesta más. Para activarla:
 
 1. Crea un proyecto en Supabase y ejecuta `supabase/schema.sql` en su editor SQL.
-2. `cp web/config.example.js web/config.js` y pon la **URL** y la **anon/publishable key**.
+2. Pon la **URL** y la **anon/publishable key** en `web/config.js` (está versionado a
+   propósito: esos dos valores son públicos). `web/config.example.js` queda como plantilla.
 3. En la web: **☁ sincronizar** → tu correo → enlace mágico.
 
 **Qué es público y qué no.** La URL y la anon key viajan en el JavaScript: son públicas por
@@ -341,8 +348,9 @@ o más pobre **no borra nada**.
 
 ## Qué NO se sube al repositorio
 
-`.gitignore` excluye `progress.json`, `web_stats.json`, `web/config.js`, `.env*`, los PDF,
-`tools/_work/`, el binario `asorc` y `_site/`. `questions.json` y `explanations_simple.json`
+`.gitignore` excluye `progress.json`, `web_stats.json`, `.env*`, los PDF de los libros,
+`tools/_work/`, el binario `asorc` y `_site/`. `web/config.js` **sí** se versiona: solo
+contiene la URL del proyecto y la clave publishable, que son públicas por diseño. `questions.json` y `explanations_simple.json`
 sí forman parte del proyecto: son el banco y su capa de explicaciones.
 
 ## Compilar y ejecutar
