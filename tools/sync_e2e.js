@@ -5,12 +5,17 @@
  * Lo único simulado es el navegador (localStorage) y la red (una pasarela con
  * interruptor, para poder desenchufarla a mitad).
  */
+const fs = require('fs');
 const path = require('path');
 const { createClient } = require('@supabase/supabase-js');
 
 const WEB = process.argv[2];            // carpeta web/js
 const URL = process.argv[3];            // pasarela con forma de Supabase
 const KEY = process.argv[4];            // JWT de rol anon
+// Fases aparte para el repaso rápido sin su tabla (las lanza test_sync.py
+// después de borrarla y de volver a crearla): «sin-tarjetas» y «vuelve-tabla».
+const FASE = process.argv[5] || 'todo';
+const ESTADO = process.argv[6];         // navegador guardado entre fases
 
 const fallos = [];
 let n = 0;
@@ -28,8 +33,8 @@ Object.defineProperty(globalThis, 'localStorage', {
   configurable: true,
   get() { return ACTIVO.ls; },
 });
-function almacen() {
-  const m = new Map();
+function almacen(inicial) {
+  const m = new Map(inicial || []);
   return {
     getItem: (k) => (m.has(k) ? m.get(k) : null),
     setItem: (k, v) => m.set(k, String(v)),
@@ -41,7 +46,8 @@ function almacen() {
 function nuevoNavegador(nombre) {
   const nav = { nombre, ls: almacen() };
   ACTIVO = nav;
-  for (const f of ['store.js', 'cloud.js']) delete require.cache[require.resolve(path.join(WEB, f))];
+  for (const f of ['micro.js', 'store.js', 'cloud.js']) delete require.cache[require.resolve(path.join(WEB, f))];
+  nav.M = require(path.join(WEB, 'micro.js'));
   nav.S = require(path.join(WEB, 'store.js'));
   nav.store = nav.S.Store;
   nav.cloud = require(path.join(WEB, 'cloud.js'));
@@ -51,6 +57,7 @@ async function usar(nav) {
   ACTIVO = nav;
   globalThis.Store = nav.store;
   globalThis.StoreInternals = nav.S;      // cloud.js lo usa para reconstruir
+  globalThis.Micro = nav.M;               // y esto, para rehacer el mazo de repaso
   return nav;
 }
 async function arranca(nav) {
@@ -72,6 +79,13 @@ async function filasEnBase(tabla) {
   const r = await admin.from(tabla).select('*');
   if (r.error) throw r.error;
   return r.data;
+}
+
+// Un evento del repaso rápido, como lo anota la web: al mazo y a la cola.
+function tarjeta(nav, id, kind) {
+  const e = { question_id: id, kind, at: Date.now() + (++contador) };
+  nav.M.aplica(nav.store.cards, e);
+  nav.store.tarjetaEvento(e);
 }
 
 let contador = 0;
@@ -339,6 +353,48 @@ async function J() {
 }
 
 /* =========================================================================
+ *  L · el repaso rápido viaja: eventos, sin duplicar, a otro navegador
+ * ========================================================================= */
+async function L(a) {
+  console.log('\nL · el repaso rápido viaja entre navegadores');
+  await usar(a);
+  responde(a, 'Q-L1', 'wrong');
+  tarjeta(a, 'Q-L1', 'fallo');
+  tarjeta(a, 'Q-L1', 'nosabia');
+  tarjeta(a, 'Q-L1', 'sabia');
+  const r = await a.cloud.flush();
+  ok(r.ok, 'la tarjeta se envía sola', r.motivo);
+  eq(a.store.outbox.tamano(), 0, 'la cola se vacía');
+  eq((await filasEnBase('asorc_card_events')).filter((f) => f.question_id === 'Q-L1').length, 3,
+     'los tres eventos están en la base');
+
+  // Reenviar lo mismo no puede contar dos veces.
+  const fila = (await filasEnBase('asorc_card_events'))[0];
+  a.store.outbox.anadir('tarjeta', { event_id: fila.event_id, question_id: fila.question_id,
+                                      kind: fila.kind, event_at: fila.event_at });
+  await a.cloud.flush();
+  eq((await filasEnBase('asorc_card_events')).length, 3, 'reenviar un evento no lo duplica');
+
+  // Otro navegador, limpio: recibe la misma tarjeta con las mismas cuentas.
+  const b = await arranca(nuevoNavegador('L2'));
+  const s = await b.cloud.sincronizar(b.store);
+  ok(s.ok, 'el otro navegador sincroniza', s.motivo);
+  const ta = a.store.cards['Q-L1'], tb = b.store.cards['Q-L1'];
+  ok(!!tb, 'y tiene la tarjeta');
+  eq(tb && [tb.fallos, tb.nosabia, tb.sabia, tb.vista], [1, 1, 1, 2], 'con sus estadísticas');
+  eq(tb && tb.proxima, ta.proxima, 'y el mismo «cuándo vuelve»');
+  eq(Object.keys(b.store.cards).filter((k) => k === 'Q-L1').length, 1, 'una sola tarjeta');
+
+  // Lo que se repasa en el segundo llega al primero sin pisar nada.
+  await usar(b);
+  tarjeta(b, 'Q-L1', 'dude');
+  await b.cloud.flush();
+  await usar(a);
+  await a.cloud.sincronizar(a.store);
+  eq([a.store.cards['Q-L1'].dude, a.store.cards['Q-L1'].vista], [1, 3], 'repasar en uno llega al otro');
+}
+
+/* =========================================================================
  *  K · anon no puede romper el histórico
  * ========================================================================= */
 async function K() {
@@ -351,11 +407,74 @@ async function K() {
   const o = await admin.from('asorc_attempts').insert({
     event_id: 'intruso', profile_id: 'otro', question_id: 'X', result: 'correct' });
   ok(!!o.error, 'escribir en otro perfil: denegado (' + (o.error && o.error.code) + ')');
+
+  // El repaso rápido es igual de solo-añadir.
+  const t = (await filasEnBase('asorc_card_events'))[0];
+  const tu = await admin.from('asorc_card_events').update({ kind: 'sabia' }).eq('event_id', t.event_id);
+  const vuelta = (await filasEnBase('asorc_card_events')).find((f) => f.event_id === t.event_id);
+  ok(!!tu.error || vuelta.kind === t.kind, 'modificar un evento del repaso: denegado');
+  const td = await admin.from('asorc_card_events').delete().eq('event_id', t.event_id);
+  ok(!!td.error || (await filasEnBase('asorc_card_events')).some((f) => f.event_id === t.event_id),
+     'borrar un evento del repaso: denegado');
+  const tk = await admin.from('asorc_card_events').insert({
+    event_id: 'raro', question_id: 'X', kind: 'inventado', event_at: new Date().toISOString() });
+  ok(!!tk.error, 'un tipo de evento que no existe: rechazado (' + (tk.error && tk.error.code) + ')');
+}
+
+/* =========================================================================
+ *  M · sin la tabla del repaso (schema.sql sin volver a ejecutar)
+ * ========================================================================= */
+async function M1() {
+  console.log('\nM · falta la tabla del repaso: lo de siempre sigue funcionando');
+  const a = await arranca(nuevoNavegador('M'));
+  responde(a, 'Q-M1', 'wrong');
+  tarjeta(a, 'Q-M1', 'fallo');
+  tarjeta(a, 'Q-M1', 'sabia');
+  const r = await a.cloud.flush();
+  ok(r.ok, 'el envío de lo demás sale bien', r.motivo);
+  ok((await filasEnBase('asorc_attempts')).some((f) => f.question_id === 'Q-M1'),
+     'la respuesta llega a la base');
+  ok(!!a.cloud.sinTarjetas, 'se sabe que falta la tabla: ' + a.cloud.sinTarjetas);
+  ok(a.cloud.estado !== 'error', `la nube no se da por rota (${a.cloud.estado})`);
+  eq(a.store.outbox.lista().filter((e) => e.tipo === 'tarjeta').length, 2,
+     'los eventos del repaso esperan en la cola');
+  eq(a.cloud.pendientes(), 0, 'sin contar como pendientes que no saldrán');
+  const s = await a.cloud.sincronizar(a.store);
+  ok(s.ok, 'y bajar lo de los demás no se bloquea', s.motivo);
+  eq(a.store.cards['Q-M1'].vista, 1, 'el mazo de aquí sigue intacto');
+  fs.writeFileSync(ESTADO, JSON.stringify([...a.ls._m]));
+}
+
+async function M2() {
+  console.log('\nM · con schema.sql otra vez: lo retenido sale solo');
+  const a = nuevoNavegador('M otra vez');
+  a.ls = almacen(JSON.parse(fs.readFileSync(ESTADO, 'utf8')));
+  await arranca(a);
+  eq(a.store.outbox.lista().filter((e) => e.tipo === 'tarjeta').length, 2, 'al volver a abrir siguen en la cola');
+  const r = await a.cloud.flush();
+  ok(r.ok, 'se envían', r.motivo);
+  eq(a.store.outbox.tamano(), 0, 'la cola queda limpia');
+  eq((await filasEnBase('asorc_card_events')).filter((f) => f.question_id === 'Q-M1').length, 2,
+     'y están en la base');
 }
 
 (async function main() {
   try {
     await control({ caido: false, retardo: 0 });
+    if (FASE === 'sin-tarjetas') await M1();
+    else if (FASE === 'vuelve-tabla') await M2();
+    else await todo();
+  } catch (e) {
+    console.log('\n!! se cortó: ' + (e && e.stack || e));
+    fallos.push('excepción');
+  }
+  console.log(`\n${n - fallos.length}/${n} comprobaciones pasan`);
+  if (fallos.length) { console.log('FALLAN: ' + fallos.join(' · ')); process.exit(1); }
+  process.exit(0);
+})();
+
+async function todo() {
+  {
     const a = await A();
     await B(a);
     await C(a);
@@ -366,12 +485,7 @@ async function K() {
     await H(a, b);
     await I(a);
     await J();
+    await L(a);
     await K();
-  } catch (e) {
-    console.log('\n!! se cortó: ' + (e && e.stack || e));
-    fallos.push('excepción');
   }
-  console.log(`\n${n - fallos.length}/${n} comprobaciones pasan`);
-  if (fallos.length) { console.log('FALLAN: ' + fallos.join(' · ')); process.exit(1); }
-  process.exit(0);
-})();
+}

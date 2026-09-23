@@ -71,6 +71,9 @@ PAIRS = [
     ("ámbar de aviso sobre superficie",       "warn",    "surf",   False),
     ("texto sobre tarjeta de acierto",        "ink",     "ok-bg",  False),
     ("texto sobre tarjeta de fallo",          "ink",     "bad-bg", False),
+    # la nota: deltas y totales sobre la tarjeta clara
+    ("verde de acierto sobre superficie",     "ok",      "surf",   False),
+    ("rojo de fallo sobre superficie",        "bad",     "surf",   False),
     # texto grande / interactivo
     ("veredicto grande en verde",             "ok",      "bg",     True),
     ("veredicto grande en rojo",              "bad",     "bg",     True),
@@ -94,6 +97,10 @@ FIXED = [
     ("texto del botón principal sobre terracota", "#ffffff", "v-ink", False),
     ("acento como texto sobre tarjeta", "v-text", "surf", False),
     ("teal como texto sobre el papel", "teal", "bg", False),
+    # repaso rápido: botón principal y comandos resaltados en la respuesta
+    ("texto del botón del repaso rápido", "#ffffff", "teal", False),
+    ("teal sobre la tarjeta del repaso", "teal", "surf", False),
+    ("comando de la respuesta sobre su fondo", "teal", "#eef1eb", False),
 ]
 
 

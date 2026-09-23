@@ -16,7 +16,7 @@ import hashlib
 
 PROJ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 WEB = os.path.join(PROJ, "web")
-DATOS = ["questions.json", "explanations_simple.json"]
+DATOS = ["questions.json", "explanations_simple.json", "microcards.json"]
 # server.py es el puente local: no pinta nada en un sitio estático. config.js
 # SÍ se publica: solo lleva la URL y la clave publishable, que son públicas.
 EXCLUIR = {"server.py", "config.example.js", "__pycache__"}
@@ -52,8 +52,9 @@ def main():
     # que enterarse por la URL publicada.
     OBLIGATORIOS = ["index.html", "styles.css", "config.js",
                     "js/app.js", "js/store.js", "js/dash.js", "js/cloud.js",
-                    "js/logic.js", "js/game.js", "js/fx.js", "js/burst.js",
-                    "questions.json", "explanations_simple.json"]
+                    "js/logic.js", "js/game.js", "js/academic.js", "js/fx.js", "js/burst.js",
+                    "questions.json", "explanations_simple.json", "microcards.json",
+                    "js/micro.js", "js/repaso.js"]
     faltan = [f for f in OBLIGATORIOS if not os.path.exists(os.path.join(dest, f))]
     if faltan:
         sys.exit("el sitio quedaría incompleto, faltan: " + ", ".join(faltan))

@@ -31,6 +31,8 @@ STATS = os.environ.get("ASORC_STATS") or os.path.join(PROJ, "web_stats.json")
 # Explicaciones reescritas en lenguaje llano. Viven aparte: questions.json no
 # se toca. Si el archivo no está, la web enseña el texto del libro y ya.
 SIMPLE = os.environ.get("ASORC_SIMPLE") or os.path.join(PROJ, "explanations_simple.json")
+# Microtarjetas de repaso rápido. También aparte; sin ellas no hay repaso rápido.
+MICRO = os.environ.get("ASORC_MICRO") or os.path.join(PROJ, "microcards.json")
 
 _lock = threading.Lock()
 
@@ -180,6 +182,10 @@ class Handler(BaseHTTPRequestHandler):
             if not os.path.exists(SIMPLE):
                 return self._json(200, {"explicaciones": {}})
             return self._file(SIMPLE)
+        if path in ("/microcards.json", "/api/micro"):
+            if not os.path.exists(MICRO):
+                return self._json(200, {"tarjetas": {}})
+            return self._file(MICRO)
         if path == "/api/questions":
             return self._file(QUESTIONS)
         if path == "/api/simple":

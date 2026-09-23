@@ -41,6 +41,9 @@ navegador
    ├── dash.js    mapa de temas y métricas de progreso
    ├── logic.js   barajado, corrección, resaltado, troceado  (lógica pura)
    ├── game.js    XP, racha, hitos
+   ├── academic.js  la nota: +1 / −1/(k−1) / 0, aparte del XP  (lógica pura)
+   ├── micro.js   repaso rápido: el mazo y cuándo vuelve cada tarjeta  (lógica pura)
+   ├── repaso.js  repaso rápido: sección del inicio y pantalla de tarjetas
    ├── fx.js      sonido y microinteracciones
    ├── burst.js   explicación por fragmentos
    └── app.js     presentación, feed y flujo
@@ -77,6 +80,13 @@ el idioma. En el panel aparece **CONTINUAR SESIÓN · 12 / 50** con el tema, y *
 vuelve al punto exacto sin rebarajar. **DESCARTAR** sí pide confirmación; las respuestas ya
 dadas se conservan igualmente, porque se guardan una a una en el momento.
 
+También se guarda la nota: los puntos, y de cada pregunta contestada su resultado, cuánto
+sumó o restó y el acumulado tras ella. Al reanudar, lo ya contestado vuelve al feed como
+historial —enunciado, tu respuesta, la correcta y su línea de nota, con las mismas letras
+que viste— y el marcador sale idéntico. Una pregunta ya corregida cuenta aunque salgas, cierres
+la pestaña o pulses `Esc` antes de **SIGUIENTE**: al volver se sigue por la próxima, sin
+repetirla ni sumarla dos veces.
+
 Está pensada como un juego de quiz: **pregunta → decisión → impacto → recompensa →
 siguiente**, para que hacer «una más» cueste lo mínimo.
 
@@ -85,8 +95,10 @@ siguiente**, para que hacer «una más» cueste lo mínimo.
 **Responder.** La pantalla es casi toda el reto: enunciado grande y respuestas como tarjetas
 grandes con su letra A/B/C. Arriba, un marcador de videojuego: barra de progreso de 11 px con
 esquinas redondeadas y tres grupos —🔥 racha, ⚡ XP, y posición más tiempo— con las cifras a
-28–34 px y el cronómetro a 33–35 px en peso 800. En portátiles (≤1366 px) y en móvil se
-recortan huecos y relleno, nunca los números, que no bajan de 24 px.
+28–34 px y el cronómetro a 33–35 px en peso 800. Debajo, en su propia fila, la nota:
+`✓ 11  ✗ 6  ○ 2 │ PUNTOS 8,25 / 19 respondidas · neto 43,4%` (ver [La nota](#la-nota)). En
+portátiles (≤1366 px) y en móvil se recortan huecos y relleno, nunca los números; en móvil la
+nota se queda en ✓ ✗ ○ y puntos sobre respondidas.
 
 **Pantalla completa mientras no respondes.** La pregunta activa ocupa el viewport entero por
 debajo del HUD (`min-height: calc(100dvh - var(--hud-h))`) y reparte el alto entre enunciado y
@@ -128,7 +140,13 @@ y la correcta; la explicación queda desplegada en la última y plegada en el re
 **▾ explicación** para abrirla o cerrarla. Una tarjeta completada ocupa unos 200 px, así que
 100 preguntas son unas 26 pantallas y no 100.
 
-La barra de arriba —racha, XP, posición y tiempo— queda anclada mientras recorres la sesión.
+Cada tarjeta contestada lleva arriba a la derecha su línea de nota —`✗ fallada  −0,33  total
+5,67`—, fuera de lo que se pliega: al subir por el feed se leen en columna y se ve pregunta a
+pregunta cómo se ha llegado a la nota actual. El nodo guarda además `data-result`,
+`data-score-delta` y `data-score-after`.
+
+La barra de arriba —racha, XP, posición, tiempo y la fila de la nota— queda anclada mientras
+recorres la sesión.
 
 ### Resaltado de lo que importa
 
@@ -202,6 +220,94 @@ atrás sin perder el hilo.
 | **Hitos** | rachas de 5, 10, 15…, las 25/50/100 preguntas, y récord de precisión o de velocidad (contra tu propio histórico, no contra un límite). Celebración corta, nunca bloquea |
 | **Barra** | avanza con cada respuesta; siempre se ve cuánto queda |
 
+### La nota
+
+La nota académica va **completamente aparte del XP**: otra regla, otro estado en la ronda
+(`run.academic`: puntos y una entrada por pregunta) y otra fila del HUD. Vive en
+`web/js/academic.js`, que es lógica pura y no sabe nada de XP ni de rachas.
+
+**Una respuesta** (con `k` opciones a la vista):
+
+| | Puntos |
+|---|---|
+| correcta | +1 |
+| incorrecta | −1/(k−1) |
+| en blanco | 0 |
+
+Así contestar completamente al azar vale 0 de media: `(1/k)·1 − ((k−1)/k)·1/(k−1) = 0`. La
+`k` es la de las opciones **que se muestran en esa ronda**, no la del libro: el simulacro ASORC
+enseña 3 (**−0,50**, el +1 / −0,5 / 0 de siempre) y el resto de modos 4 (**−0,33**) o 5
+(**−0,25**). No hay una penalización media para todo el test: cada pregunta resta la suya.
+
+La suma es exacta: se lleva sobre una rejilla de 1/2520 (divisible por cualquier `k − 1` hasta
+10), así que una correcta y tres fallos de 4 opciones dan 0,00 y no −0,00.
+
+**Varias respuestas** (65 preguntas, todas de Sybex). No se les aplica −1/(k−1): la respuesta
+es una combinación de opciones y esa fórmula no neutraliza el azar. Conservan su corrección de
+siempre —todo o nada: +1 si marcas justo las correctas, 0 si no, sin penalización— y llevan la
+etiqueta **puntuación múltiple**. Se cuentan aparte para poder cambiarles la fórmula.
+
+**Abiertas.** Se autocalifican: +1 si la das por buena, 0 si no.
+
+**Durante la ronda** se ve `PUNTOS 6,67 / 12 respondidas · neto 55,6%`: puntos, sobre cuántas
+has contestado (en blanco incluidas) y el rendimiento neto. **No** hay nota sobre 10 mientras
+juegas: en la pregunta 3 de 20 saldría artificialmente baja. Al contestar, la tarjeta dice en
+grande *✓ CORRECTA +1,00 · Acumulado después de esta pregunta: 6,67 puntos* y la regla que
+se le aplicó (*4 opciones · acierto +1 · fallo −0,33 · en blanco 0*).
+
+**Al terminar**, el bloque **NOTA**: correctas, falladas y en blanco con lo que suma o resta
+cada grupo, los **puntos netos sobre el total de preguntas** de la ronda y, además, la **nota
+sobre 10** = `max(0, puntos / total · 10)`. Debajo, de dónde sale lo restado
+(*2 × −0,50 (3 opciones) · 1 × −0,33 (4 opciones)*). Si terminas antes con `Esc`, las que no
+llegaste a ver salen como *sin contestar* y cuentan 0, como en un examen.
+
+### Repaso rápido
+
+Muchas preguntas de LPIC-2 se reducen a una asociación: qué comando, qué archivo, qué
+directiva. En vez de releer párrafos, cada pregunta tiene una **microtarjeta**:
+
+```
+NFS: utilidades que muestran los recursos
+↓
+exportfs + showmount
+
+mount.nfs → monta desde el cliente
+rpcinfo → servicios RPC
+smbstatus → conexiones de Samba
+```
+
+**Pista corta → respuesta corta**, no pregunta completa → párrafo. Cada tarjeta tiene `cue`
+(la pista, 2–8 palabras), `answer` (lo que hay que recuperar, una línea), `contrast` (hasta
+cuatro distractores reales en formato `X → Y`, solo si ayudan) y, a veces, `mnemo` cuando el
+propio nombre lo dice (`SOA = start of authority`, `-l = listen`).
+
+**Cuándo entra una tarjeta.** Al fallar una pregunta, dejarla en blanco, autocalificarse
+«mal» o «a medias» en una abierta, o marcarla para repasar. Al final de la explicación sale
+discreto **⚡ Añadida a repaso rápido**, sin interrumpir nada. Lo que ya tenías fallado o
+marcado de antes también entra. **Una pregunta = una tarjeta estable**: el mazo va por
+`question_id`, así que repetirla actualiza sus estadísticas y nunca crea otra.
+
+**⚡ REPASO RÁPIDO**, en el inicio: **10 rápidas**, **20 rápidas**, **todas**, **falladas
+hoy**, **marcadas** y **por tema**. La tarjeta enseña primero solo la pista y un `?`; la
+respuesta y el contraste salen al pulsar o con `Space`. Luego hay que decir cómo te fue —
+**LA SABÍA** (`1`), **DUDÉ** (`2`), **NO LA SABÍA** (`3`)— y eso decide cuándo vuelve:
+
+| Respuesta | Vuelve |
+|---|---|
+| no la sabía | a los 10 minutos, y otra vez en la misma tanda (como mucho dos) |
+| dudé | mañana, sin subir de nivel |
+| la sabía | cada vez más tarde: 3, 7, 16, 35 y 90 días |
+| fallarla en una ronda | ya: vuelve al principio |
+
+Las tandas empiezan por lo que toca, lo más flojo y lo más fallado delante.
+
+**De dónde salen.** Las 380 están escritas de antemano en `tools/micro/*.json` (un lote por
+capítulo, con la guía de estilo en `tools/micro/GUIA.md`) y `tools/micro/merge.py` las une en
+`microcards.json`. La web no las inventa en caliente: así cada pregunta tiene siempre la
+misma. **No se inventa nada**: todo comando, ruta, archivo, directiva, número o sigla de una
+tarjeta está en el material de esa pregunta (enunciado, opciones, explicación del libro o en
+llano), y `tools/test_micro.py` lo comprueba. `questions.json` no se toca.
+
 ### Teclado
 
 | Tecla | Acción |
@@ -215,6 +321,8 @@ atrás sin perder el hilo.
 | `M` | marcar para repasar |
 | `S` | sonido |
 | `Esc` | terminar la ronda |
+| `Space` / `Enter` | repaso rápido: mostrar la respuesta |
+| `1` `2` `3` | repaso rápido: la sabía · dudé · no la sabía |
 
 ### Sonido
 
@@ -224,16 +332,17 @@ preferencia se recuerda.
 
 ### Al terminar
 
-Pantalla de resultado con el marcador grande, el porcentaje, XP, mejor racha y segundos por
+Pantalla de resultado con el marcador grande de aciertos, el bloque **NOTA** (puntos netos
+sobre el total y nota sobre 10, ver [La nota](#la-nota)), XP, mejor racha y segundos por
 pregunta, más la comparación con tu ronda anterior (`↑ 7 % precisión`, `↓ 3,1 s/pregunta`).
 Si has fallado, **REPASAR N FALLOS** lanza al momento una ronda solo con esas. El desglose por
 tema y la comparación con/sin música quedan plegados en «Ver detalle».
 
 ### Dejar en blanco
 
-En el simulacro **ASORC** fallar resta (−0,5) y no contestar no, así que saltar una pregunta es
-una decisión legítima. Aparece un botón secundario discreto bajo las opciones, **DEJAR EN
-BLANCO**, con la tecla `0`.
+Fallar resta en la nota (−0,5 en el simulacro **ASORC**, −1/(k−1) en general) y no contestar
+no, así que saltar una pregunta es una decisión legítima. Aparece un botón secundario discreto
+bajo las opciones, **DEJAR EN BLANCO**, con la tecla `0`.
 
 - Puntúa **0 XP** y no cuenta como fallo.
 - **No rompe la racha:** se queda donde estaba. Tres aciertos, un blanco y otro acierto son
@@ -271,6 +380,9 @@ partículas. Todo es navegable por teclado con foco visible.
 |---|---|
 | `web/js/logic.js` | lógica de quiz pura (barajado, mapeo de letras, frase clave, troceado, corrección) |
 | `web/js/game.js` | XP, combo, hitos y récords |
+| `web/js/academic.js` | la nota: +1 / −1/(k−1) / 0 por pregunta, exacta y aparte del XP |
+| `web/js/micro.js` | repaso rápido: el mazo como eventos, cuándo vuelve cada tarjeta, modos |
+| `web/js/repaso.js` | repaso rápido: sección del inicio, pantalla de tarjetas y teclado |
 | `web/js/fx.js` | sonido y microinteracciones |
 | `web/js/burst.js` | reproductor de la explicación por fragmentos |
 | `web/js/app.js` | presentación, feed y flujo |
@@ -282,6 +394,7 @@ partículas. Todo es navegable por teclado con foco visible.
 |---|---|
 | `progress.json` | **compartido con la app de terminal**, mismo esquema: lo que respondes en la web cuenta en «solo falladas» y «no vistas» del terminal, y al revés |
 | `web_stats.json` | solo de la web: tiempos por pregunta, marcadas y registro de sesiones |
+| `localStorage` · `cards` | el mazo de repaso rápido: por pregunta, su pista, respuesta y contraste, veces vista, sabía / dudé / no sabía, último repaso y cuándo vuelve |
 
 `questions.json` es la fuente de verdad y la web **nunca lo escribe**. Las métricas propias
 van aparte porque la app de terminal reescribe `progress.json` desde su propio modelo y
@@ -293,8 +406,8 @@ descartaría cualquier campo que no conozca.
 python3 tools/build_site.py          # arma _site/ y avisa si queda alguna ruta absoluta
 ```
 
-El sitio se monta copiando `web/` a la raíz más `questions.json` y `explanations_simple.json`,
-que es donde el frontend los busca. `server.py` no se publica (es el puente local); `config.js`
+El sitio se monta copiando `web/` a la raíz más `questions.json`, `explanations_simple.json` y
+`microcards.json`, que es donde el frontend los busca. `server.py` no se publica (es el puente local); `config.js`
 sí, porque solo lleva valores públicos. El build **aborta** si falta algún archivo que el
 navegador necesita, si queda una ruta absoluta o si detecta algo con pinta de secreto.
 
@@ -313,7 +426,7 @@ En el repositorio: **Settings → Pages → Source: GitHub Actions**. Funciona b
 lo comprueba.
 
 **Dónde se guarda el progreso en Pages:** en el `localStorage` del navegador, bajo las claves
-`asorc.v2.progress`, `asorc.v2.stats`, `asorc.v2.session` y `asorc.v2.prefs`. Offline
+`asorc.v2.progress`, `asorc.v2.stats`, `asorc.v2.session`, `asorc.v2.prefs` y `asorc.v2.cards`. Offline
 funciona todo una vez cargada la página.
 
 ## Sincronizar entre dispositivos
@@ -391,7 +504,7 @@ no hay login, ni correos, ni sesiones que caduquen, ni un progreso distinto por 
 
 Aun así los permisos son los mínimos que la web necesita, y eso sí acota el daño:
 
-- RLS **activada** en las cuatro tablas, nunca desactivada como atajo.
+- RLS **activada** en las cinco tablas, nunca desactivada como atajo.
 - Políticas explícitas por operación, atadas al perfil fijo `profile_id = 'default'`.
 - El histórico es de **solo añadir**: con la clave pública no se puede modificar ni borrar un
   intento ya registrado.
@@ -415,6 +528,13 @@ SQL sin romper lo que ya hay. No borra tablas ni datos, y si encuentra el esquem
 | `asorc_marks` | marcas de repaso | `(profile_id, question_id)` |
 | `asorc_sessions` | rondas terminadas | `uid` del cliente |
 | `asorc_pending` | la ronda a medias, una sola fila | `id = 'main'` |
+| `asorc_card_events` | repaso rápido: fallo, marca, sabía, dudé, no sabía; un evento por fila | `event_id` del cliente |
+
+**Si ya tenías la nube montada, vuelve a pegar `schema.sql`** para crear `asorc_card_events`.
+Mientras no lo hagas, todo lo demás se sincroniza igual: los eventos del repaso esperan en la
+cola de este navegador (sin contarse como pendientes que no saldrán) y se envían solos en
+cuanto la tabla existe. El panel de la nube lo avisa. Ojo: al insertar en una tabla que no
+existe, PostgREST 12 contesta 404 **con el cuerpo vacío**, así que se detecta por el estado.
 
 ## Importar progreso anterior
 
@@ -431,8 +551,9 @@ o más pobre **no borra nada**.
 
 `.gitignore` excluye `progress.json`, `web_stats.json`, `.env*`, los PDF de los libros,
 `tools/_work/`, el binario `asorc` y `_site/`. `web/config.js` **sí** se versiona: solo
-contiene la URL del proyecto y la clave publishable, que son públicas por diseño. `questions.json` y `explanations_simple.json`
-sí forman parte del proyecto: son el banco y su capa de explicaciones.
+contiene la URL del proyecto y la clave publishable, que son públicas por diseño.
+`questions.json`, `explanations_simple.json` y `microcards.json` sí forman parte del
+proyecto: son el banco, su capa de explicaciones y sus microtarjetas.
 
 ## Compilar y ejecutar
 
@@ -517,6 +638,8 @@ temas donde más se falla.
 | `asorc-web` | Lanzador de la interfaz web |
 | `web/` | Interfaz web (`server.py`, `index.html`, `styles.css`, `js/`) |
 | `web_stats.json` | Métricas de la web (se crea al usarla) |
+| `explanations_simple.json` | Explicaciones en llano (desde `tools/simple/`) |
+| `microcards.json` | Microtarjetas de repaso rápido, una por pregunta (desde `tools/micro/`) |
 | `extraction_report.md` | Informe de verificación por libro y capítulo |
 | `tools/` | Pipeline de extracción reproducible |
 
@@ -599,6 +722,13 @@ contra la plantilla o contra un `id` real, y que sigan en pie las dos reglas de 
 depende el desplazamiento —el feed sin anclaje automático y las tarjetas completadas sin
 transición de tamaño.
 
+Y la nota: que un fallo reste exactamente −0,50 / −0,33 / −0,25 con 3 / 4 / 5 opciones, que
+una correcta y `k − 1` fallos den **0 exacto** en cualquier orden, que 200 000 respuestas al
+azar (con 3, 4, 5 y mezcladas, y sobre las vistas reales del banco) tengan media ≈ 0, que la
+`k` sea la de las opciones mostradas (3 en ASORC), que las de varias respuestas no resten, que
+guardar y reanudar deje cada delta y cada acumulado idénticos, y que el XP y la nota no se
+toquen entre sí.
+
 ```bash
 python3 tools/test_sync.py
 ```
@@ -611,7 +741,12 @@ Supabase. Comprueba lo que no se puede comprobar de otra forma: que una respuest
 que responder cinco seguidas no espera a la red, que sin red no se pierde nada y la cola
 crece, que al volver la red se vacía sola, que reenviar un evento no duplica, que un segundo
 navegador limpio recibe el progreso sin login, que lo de uno llega al otro, que desmarcar
-viaja, y que con la clave pública no se puede reescribir ni borrar el histórico.
+viaja, y que con la clave pública no se puede reescribir ni borrar el histórico. También el
+repaso rápido: que sus eventos llegan, que reenviarlos no duplica, que otro navegador rehace
+la misma tarjeta con el mismo «cuándo vuelve» y que son de solo añadir. Y el caso de quien
+no ha vuelto a ejecutar `schema.sql`: borra la tabla del repaso a mitad de prueba, comprueba
+que todo lo demás se sigue sincronizando y que, al volver a aplicar el esquema, lo retenido
+sale solo.
 
 Necesita `initdb`, `docker`, `node` y el cliente: `cd tools && npm install @supabase/supabase-js`.
 Si falta algo se salta y lo dice. **Nunca toca el Supabase real ni tu progreso**: todo vive en
@@ -626,6 +761,21 @@ memorización, que no se pase de 5 frases ni de 13 palabras en la primera, que n
 lenguaje de manual («se procede a», «la opción X es correcta»…) y, sobre todo, **que no haya
 contenido inventado**: cada comando, ruta, archivo o sigla de la versión reescrita tiene que
 estar también en el material del libro de esa misma pregunta.
+
+```bash
+python3 tools/test_micro.py
+```
+
+Las microtarjetas: una por pregunta y sin claves repetidas, pista de 8 palabras como mucho,
+respuesta de una línea, contraste en formato `X → Y`, sin citar letras de opción (se
+barajan), sin que la pista ya diga la respuesta y siempre sobre la respuesta correcta. Y
+**nada inventado**: cada comando, ruta, archivo, directiva, número, sigla o nombre propio
+tiene que estar en el material de esa pregunta, y cada palabra corriente en algún sitio del
+banco. Con un lote suelto (`python3 tools/test_micro.py tools/micro/b05-sybex-ch05.json`)
+sirve para escribirlas. `test_web.py` prueba además el mazo: que repetir una pregunta no
+duplica su tarjeta, que conserva la misma pista, cuándo vuelve cada una, los modos (por
+tema, falladas hoy, marcadas, 10 y 20 rápidas), que el mismo conjunto de eventos da el mismo
+mazo en cualquier orden, que fusionar no pierde nada y que tras recargar sigue igual.
 
 ```bash
 python3 tools/test_contrast.py

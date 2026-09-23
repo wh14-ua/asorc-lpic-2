@@ -53,9 +53,10 @@ def main():
             return
 
         exigidos = ["index.html", "styles.css", "config.js", ".nojekyll",
-                    "questions.json", "explanations_simple.json",
+                    "questions.json", "explanations_simple.json", "microcards.json",
                     "js/app.js", "js/store.js", "js/dash.js", "js/cloud.js",
-                    "js/logic.js", "js/game.js", "js/fx.js", "js/burst.js"]
+                    "js/logic.js", "js/game.js", "js/academic.js", "js/fx.js", "js/burst.js",
+                    "js/micro.js", "js/repaso.js"]
         for f in exigidos:
             check(f"_site/{f}", os.path.exists(os.path.join(dest, f)))
         check("server.py NO viaja al sitio", not os.path.exists(os.path.join(dest, "server.py")))
@@ -104,6 +105,12 @@ def main():
         check("explanations_simple.json se sirve", cod == 200, str(cod))
         check("trae las 380 explicaciones",
               len(json.loads(e)["explicaciones"]) == 380)
+
+        cod, m = pide("microcards.json")
+        check("microcards.json se sirve", cod == 200, str(cod))
+        tarjetas = json.loads(m)["tarjetas"] if cod == 200 else {}
+        check("trae una microtarjeta por pregunta",
+              set(tarjetas) == {x["id"] for x in banco}, f"{len(tarjetas)} de {len(banco)}")
 
         cod, c = pide("config.js")
         check("config.js se sirve", cod == 200, str(cod))
