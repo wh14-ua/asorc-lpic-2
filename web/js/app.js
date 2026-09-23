@@ -1,7 +1,8 @@
 /* ASORC · presentación y flujo.
  *
  * Aquí solo vive el pegamento: pintar, temporizar y persistir. La lógica del
- * quiz está en logic.js, la gamificación en game.js y los efectos en fx.js.
+ * quiz está en logic.js, la gamificación en game.js, la nota académica en
+ * academic.js y los efectos en fx.js.
  * questions.json es de solo lectura; progress.json mantiene el esquema de la
  * aplicación de terminal.
  */
@@ -11,6 +12,7 @@
 
 const root = window;
 const L = window.Logic, G = window.Game, FX = window.FX, B = window.Burst;
+const A = window.Academic;
 const ST = window.Store;
 
 /* Todo relativo: la web tiene que funcionar igual servida desde ./asorc-web
@@ -22,12 +24,13 @@ const BASE = './';
  * tarjeta activa. Lo de fuera (HUD, inicio, resultado) sigue siendo por id. */
 const CARD_EL = new Set([
   'q-top', 'q-topic', 'q-kind', 'q-lang', 'q-mark', 'q-res', 'q-text', 'recap', 'fold', 'fold-btn',
+  'ledger', 'ledger-kind', 'ledger-delta', 'ledger-after',
   'opts', 'multi', 'multi-hint', 'btn-confirm', 'skip', 'btn-skip', 'stuck',
-  'learn', 'verdict', 'answer-line',
+  'learn', 'verdict', 'nota-slip', 'answer-line',
   'insight', 'nutshell', 'burst', 'burst-now', 'burst-past', 'burst-dots',
   'burst-toggle', 'burst-prev', 'burst-next', 'burst-speed', 'insight-more',
   'analogy', 'otras', 'memo',
-  'full-expl', 'full-expl-body', 'insight-src', 'selfgrade', 'learn-cta',
+  'full-expl', 'full-expl-body', 'insight-src', 'micro-note', 'selfgrade', 'learn-cta',
   'btn-next', 'btn-mark', 'nudge',
 ]);
 let card = null;                    // tarjeta de la pregunta activa
@@ -77,6 +80,7 @@ const S = {
   blankWhen: 'asorc',
   lastDone: null,             // última tarjeta contestada (la única desplegada)
   simple: {},                 // explicaciones reescritas en llano, por id
+  micro: {},                  // microtarjetas de repaso rápido, por id
   vocab: null,                // términos técnicos, sacados del propio banco
 };
 
@@ -106,6 +110,10 @@ async function loadAll() {
   // Si no están, se enseña el texto del libro: la web funciona igual.
   const simple = await pideJSON(['explanations_simple.json', 'api/simple']);
   if (simple && simple.explicaciones) S.simple = simple.explicaciones;
+
+  // Sin microtarjetas, la web funciona igual; solo falta el repaso rápido.
+  const micro = await pideJSON(['microcards.json', 'api/micro']);
+  if (micro && micro.tarjetas) S.micro = micro.tarjetas;
 
   const ns = new URLSearchParams(location.search).get('ns');
   await ST.init({ base: BASE, ns: ns ? 'asorc.test.' + ns : 'asorc.v2' });
@@ -158,12 +166,13 @@ function eligible(mode, topic) {
  *  Inicio
  * =================================================================== */
 function showScreen(which) {
-  ['home', 'play', 'done'].forEach((s) => { $(s).hidden = s !== which; });
+  ['home', 'play', 'done', 'micro'].forEach((s) => { $(s).hidden = s !== which; });
   window.scrollTo(0, 0);
 }
 
 function renderHome() {
   if (root.Dash) root.Dash.pintar();
+  if (root.Repaso) root.Repaso.pintaInicio();
   const tr = S.bank.filter((q) => q.translated).length;
   $('home-sub').textContent =
     `${S.bank.length} preguntas · ${tr} en español · sin límite de tiempo`;
@@ -270,16 +279,21 @@ function arranca(spec, ids, desde, runGuardado) {
     total: S.queue.length, modeLabel: spec.label, music: S.music, asorc: !!spec.asorc,
   });
   S.run.total = S.queue.length;
+  // La nota vive en la ronda, aparte del XP. Una sesión guardada antes de que
+  // existiera no la trae: empieza en cero.
+  if (!S.run.academic) S.run.academic = A.newState();
 
   $('feed').innerHTML = '';          // ronda nueva, feed nuevo
   card = null;
   S.lastDone = null;
   if (player) { player.stop(); player = null; }
+  if (runGuardado) pintaHistorial();
 
   $('tot-n').textContent = String(S.queue.length);
   $('xp-n').textContent = String(S.run.xp | 0);
   $('combo-n').textContent = String(S.run.combo | 0);
   $('chip-combo').dataset.lvl = '0';
+  pintaNota(null);
   setTrack(S.run.answered / Math.max(1, S.queue.length));
   showScreen('play');
   window.scrollTo({ top: 0, behavior: 'auto' });
@@ -300,6 +314,8 @@ function serializaRun(r) {
     byTopic: [...r.byTopic.entries()],
     modeLabel: r.modeLabel, music: r.music, asorc: r.asorc, total: r.total,
     startedAt: r.startedAt,
+    // puntos, y de cada pregunta su delta y el acumulado tras ella
+    academic: A.serialize(r.academic || A.newState()),
   };
 }
 
@@ -311,6 +327,7 @@ function deserializaRun(o) {
     answerMs: o.answerMs | 0, reviewMs: o.reviewMs | 0,
     marked: new Set(o.marked || []), failed: (o.failed || []).slice(),
     byTopic: new Map(o.byTopic || []), startedAt: o.startedAt || Date.now(),
+    academic: A.restore(o.academic),
   });
   return r;
 }
@@ -335,6 +352,9 @@ function guardarSesion() {
 }
 
 function salir() {
+  // Lo ya corregido cuenta aunque no se haya pulsado SIGUIENTE: al volver se
+  // sigue por la próxima, sin repetirla ni sumarla dos veces al marcador.
+  if (registraActual() && S.i >= S.queue.length) return finishRun();
   stopTick();
   if (player) { player.stop(); player = null; }
   guardarSesion();          // deja apuntado dónde estaba, aquí y en la cola
@@ -443,14 +463,61 @@ function completeCard() {
   ['learn-cta', 'nudge', 'selfgrade', 'multi'].forEach((n) => { inCard(c, n).hidden = true; });
   c.querySelectorAll('button').forEach((b) => { if (!b.dataset.keep) b.disabled = true; });
 
-  const tag = inCard(c, 'q-res');
-  tag.textContent = r === 'correct' ? '✓ correcta'
-    : r === 'partial' ? '≈ a medias'
-    : r === 'blank' ? '○ en blanco' : '✗ fallada';
-  tag.dataset.r = r;
-  tag.hidden = false;
   c.dataset.r = r;
+  if (S.q.nota) pintaLedger(c, S.q.nota);
+  pintaRecap(c, v, S.q.picked, r, lang);
 
+  inCard(c, 'fold-btn').hidden = false;
+  c.classList.add('is-done');
+
+  // Solo la última contestada se queda abierta: 20 preguntas abiertas serían
+  // 20 pantallas de scroll.
+  if (S.lastDone && S.lastDone !== c) foldCard(S.lastDone, false);
+  S.lastDone = c;
+}
+
+const RES = {
+  correct: '✓ correcta', wrong: '✗ fallada', blank: '○ en blanco', partial: '≈ a medias',
+};
+const resTxt = (r) => RES[r] || RES.wrong;
+
+// Cómo puntúa una pregunta, en una línea.
+function reglaDe(n) {
+  if (n.kind === 'multi') {
+    return 'Puntuación múltiple: todo o nada, +1 si marcas justo las correctas y 0 si no. ' +
+           'Fallar no resta (por ahora).';
+  }
+  if (n.kind === 'open') return 'Autocalificada: +1 si la das por buena, 0 si no.';
+  return `${n.k} opciones · acierto +1 · fallo −${A.num(A.penalty(n.k))} · en blanco 0`;
+}
+
+/* Lo que queda de una pregunta al pasar: qué fue, cuánto sumó o restó y cómo
+ * quedó el total. Se pinta en la cabecera, fuera de lo que se pliega, y se
+ * guarda también en el propio nodo: plegar o volver arriba no pierde nada. */
+function pintaLedger(c, n) {
+  const tag = inCard(c, 'q-res');
+  tag.textContent = resTxt(n.result);
+  tag.dataset.r = n.result;
+  const led = inCard(c, 'ledger');
+  led.dataset.sign = A.sign(n.delta);
+  inCard(c, 'ledger-delta').textContent = A.signed(n.delta);
+  const after = inCard(c, 'ledger-after');
+  const tot = document.createElement('b');
+  tot.textContent = A.num(n.after);
+  after.replaceChildren('total ', tot);
+  const kind = inCard(c, 'ledger-kind');
+  kind.hidden = n.kind === 'single';
+  kind.textContent = n.kind === 'multi' ? 'puntuación múltiple' : 'autocalificada';
+  led.title = `${resTxt(n.result)} · ${A.signed(n.delta)} · acumulado después de esta ` +
+              `pregunta: ${A.num(n.after)} puntos\n${reglaDe(n)}`;
+  led.hidden = false;
+  c.dataset.result = n.result;
+  c.dataset.scoreDelta = String(n.delta);
+  c.dataset.scoreAfter = String(n.after);
+}
+
+/* El resumen de una ojeada: lo que marcaste y, si no era, la correcta. */
+function pintaRecap(c, v, picked, r, lang) {
   const rec = inCard(c, 'recap');
   rec.innerHTML = '';
   const row = (kind, label, html) => {
@@ -473,7 +540,7 @@ function completeCard() {
     const word = { correct: 'Bien', partial: 'A medias', wrong: 'Mal', blank: 'Ni idea' }[r];
     row('mine', 'Te has puesto', word || '—');
   } else {
-    const mine = v.shown.filter((o) => S.q.picked.has(o.L));
+    const mine = v.shown.filter((o) => picked.has(o.L));
     row('mine', 'Tu respuesta', mine.length ? list(mine) : 'sin responder');
     if (r !== 'correct') {
       const right = v.shown.filter((o) => v.correctL.includes(o.L));
@@ -481,14 +548,36 @@ function completeCard() {
     }
   }
   rec.hidden = false;
+}
 
-  inCard(c, 'fold-btn').hidden = false;
-  c.classList.add('is-done');
-
-  // Solo la última contestada se queda abierta: 20 preguntas abiertas serían
-  // 20 pantallas de scroll.
-  if (S.lastDone && S.lastDone !== c) foldCard(S.lastDone, false);
-  S.lastDone = c;
+/* Al reanudar, lo ya contestado en la ronda vuelve al feed como historial:
+ * enunciado, tu respuesta, la correcta y lo que sumó o restó, con las mismas
+ * letras que viste. La explicación se quedó en la sesión anterior. */
+function pintaHistorial() {
+  const log = S.run.academic.log;
+  if (!log.length) return;
+  const porId = new Map(S.bank.map((q) => [q.id, q]));
+  const feed = $('feed');
+  log.forEach((e) => {
+    const q = porId.get(e.id);
+    if (!q) return;
+    const v = L.buildView(q, !!(S.run.asorc && q.asorc && q.asorc.eligible), e.order);
+    const picked = new Set((e.picked || []).map((l) => v.origToShown[l]).filter(Boolean));
+    const c = $('card-tpl').content.firstElementChild.cloneNode(true);
+    c.classList.add('is-answered', 'is-done', 'is-history');
+    inCard(c, 'q-topic').textContent = q.topic;
+    inCard(c, 'q-kind').textContent = tipoDe(v);
+    inCard(c, 'q-text').innerHTML = L.highlightTechnicalText(L.stemOf(v, 'es'), { vocab: S.vocab });
+    inCard(c, 'fold').hidden = true;
+    c.dataset.r = e.result;
+    pintaLedger(c, e);
+    pintaRecap(c, v, picked, e.result, 'es');
+    feed.appendChild(c);
+  });
+  const sep = document.createElement('p');
+  sep.className = 'feed-sep';
+  sep.textContent = 'Ronda reanudada · arriba, lo que ya habías contestado';
+  feed.appendChild(sep);
 }
 
 /* --------------------------- scroll del feed --------------------------- */
@@ -544,13 +633,15 @@ function watchActive() {
 }
 
 /* ------------------------------ fase 1 ------------------------------ */
+const tipoDe = (v) => (v.q.type === 'open' ? 'abierta'
+  : v.asorcMode ? 'ASORC' : v.q.type === 'multiple_response' ? 'varias' : 'test');
+
 function renderQuestion() {
   const v = S.q.view, q = v.q;
 
   $('idx-n').textContent = String(S.i + 1);
   $('q-topic').textContent = q.topic;
-  $('q-kind').textContent = q.type === 'open' ? 'abierta'
-    : (v.asorcMode ? 'ASORC' : (q.type === 'multiple_response' ? 'varias' : 'test'));
+  $('q-kind').textContent = tipoDe(v);
   $('q-lang').hidden = S.lang !== 'en';
   $('q-mark').hidden = !S.q.marked;
   $('q-text').innerHTML = L.highlightTechnicalText(L.stemOf(v, S.lang), { vocab: S.vocab });
@@ -721,6 +812,8 @@ function enterLearn() {
 
   const scored = G.score(S.run, S.q.result, S.q.answerMs, v.q.topic, v.q.id);
   S.q.gainedXp = scored.xp;
+  anotaNota();
+  alRepaso(S.q.result);
 
   // Un blanco no es un error: no suena a error.
   if (S.q.result === 'correct') FX.Sound.correct();
@@ -767,6 +860,91 @@ function updateHud(gained) {
   c.dataset.lvl = r.combo >= 10 ? '3' : r.combo >= 5 ? '2' : r.combo >= 2 ? '1' : '0';
   if (r.combo >= 2) FX.replay(c, 'is-pop');
   setTrack(r.answered / Math.max(1, S.queue.length));
+  const n = S.q && S.q.nota;
+  pintaNota(n ? A.snap(n.after - n.delta) : null);
+}
+
+/* Repaso rápido: fallar, dejar en blanco o marcar una pregunta mete su
+ * microtarjeta en el mazo (o la pone al día si ya estaba). Se dice en una
+ * línea discreta al final de la explicación: no interrumpe nada. */
+function alRepaso(r) {
+  if (!root.Repaso || !S.q) return;
+  const kind = r === 'marca' ? 'marca' : (['wrong', 'blank', 'partial'].includes(r) ? 'fallo' : null);
+  if (!kind) return;
+  const hecho = root.Repaso.anota(S.q.view.q.id, kind);
+  const nota = $('micro-note');
+  if (!hecho || !nota) return;
+  nota.textContent = hecho.nueva ? '⚡ Añadida a repaso rápido'
+    : kind === 'fallo' ? '⚡ En repaso rápido: vuelve a tocar ya' : '⚡ Ya está en repaso rápido';
+  nota.hidden = false;
+}
+
+/* La nota de la pregunta recién corregida. Va aparte del XP: su propia regla
+ * (academic.js), su propio estado en la ronda y su propia fila en el HUD.
+ * Se anota con las opciones que se han visto de verdad y en su orden, que es
+ * lo que decide cuánto resta un fallo y lo que permite rehacer el feed. */
+function anotaNota() {
+  const v = S.q.view;
+  S.q.nota = A.record(S.run.academic, Object.assign(A.ruleOf(v), {
+    id: v.q.id,
+    result: S.q.result,
+    picked: etiquetasMarcadas(),
+    order: v.shown.map((o) => o.label),
+  }));
+}
+
+// Lo marcado, con las etiquetas del libro (no las letras de pantalla).
+const etiquetasMarcadas = () => [...S.q.picked].map((l) => {
+  const o = S.q.view.shown.find((x) => x.L === l);
+  return o ? o.label : '';
+}).filter(Boolean);
+
+/* La fila de la nota: ✓ ✗ ○, puntos netos y sobre cuántas respondidas. Aquí
+ * NO hay nota sobre 10: en la pregunta 3 de 20 saldría artificialmente baja.
+ * Esa solo aparece al final, sobre el total de la ronda. */
+function pintaNota(antes) {
+  const t = A.tally(S.run.academic);
+  $('nota-ok').textContent = String(t.ok);
+  $('nota-bad').textContent = String(t.bad);
+  $('nota-blank').textContent = String(t.blank);
+  $('nota-of').textContent = String(t.answered);
+  $('nota-net').textContent = t.answered ? A.pct(t.points / t.answered) : '—';
+  const pts = $('nota-pts');
+  pts.dataset.sign = A.sign(t.points);
+  if (antes == null || antes === t.points) {
+    pts.textContent = A.num(t.points);
+  } else {
+    FX.countUp(pts, antes, t.points, 420, A.num);
+    FX.replay($('nota-main'), 'is-pop');
+  }
+}
+
+/* La nota de esta pregunta mientras lees la explicación, en el formato largo:
+ * ✓ CORRECTA +1,00 · Acumulado después de esta pregunta: 6,67 puntos. */
+function pintaSlip() {
+  const n = S.q.nota, el = $('nota-slip');
+  if (!n) { el.hidden = true; return; }
+  el.dataset.sign = A.sign(n.delta);
+  el.textContent = '';
+  const main = document.createElement('p');
+  main.className = 'slip-main';
+  const res = document.createElement('span');
+  res.className = 'slip-res';
+  res.textContent = resTxt(n.result).toUpperCase();
+  const d = document.createElement('b');
+  d.className = 'slip-delta';
+  d.textContent = A.signed(n.delta);
+  const after = document.createElement('span');
+  after.className = 'slip-after';
+  const tot = document.createElement('b');
+  tot.textContent = A.num(n.after);
+  after.append('Acumulado después de esta pregunta: ', tot, ' puntos');
+  main.append(res, d, after);
+  const rule = document.createElement('p');
+  rule.className = 'slip-rule';
+  rule.textContent = reglaDe(n);
+  el.append(main, rule);
+  el.hidden = false;
 }
 
 /* La explicación se cuenta como la contaría alguien de viva voz: la idea en
@@ -892,6 +1070,7 @@ function renderLearn() {
     xp.textContent = `+${S.q.gainedXp} XP`;
     vd.appendChild(xp);
   }
+  pintaSlip();
 
   // Línea de respuesta correcta: lo primero que hay que ver al fallar.
   const line = $('answer-line');
@@ -975,6 +1154,8 @@ function gradeOpen(grade) {
   S.q.result = grade;
   const scored = G.score(S.run, grade, S.q.answerMs, S.q.view.q.topic, S.q.view.q.id);
   S.q.gainedXp = scored.xp;
+  anotaNota();
+  alRepaso(grade);
   if (grade === 'correct') FX.Sound.correct();
   else if (grade !== 'blank') FX.Sound.wrong();
   updateHud(scored.xp);
@@ -983,9 +1164,13 @@ function gradeOpen(grade) {
 }
 
 /* ------------------------------ avanzar ------------------------------ */
-function advance() {
-  if (!S.q || S.q.phase !== 2 || S.q.done) return;
-  if (S.q.view.q.type === 'open' && !S.q.result) return;   // falta autocalificar
+/* Registra la pregunta ya corregida y la da por pasada. Lo usa SIGUIENTE y
+ * también salir, Esc y cerrar la pestaña: una respuesta corregida cuenta
+ * aunque no se pulse SIGUIENTE. Si no, al reanudar se volvería a preguntar y
+ * el XP y la nota la sumarían dos veces. */
+function registraActual() {
+  if (!S.q || S.q.phase !== 2 || S.q.done) return false;
+  if (!S.q.result) return false;              // abierta sin autocalificar
   S.q.done = true;
   stopTick();
   const reviewMs = Math.round(performance.now() - S.q.reviewT0);
@@ -994,20 +1179,21 @@ function advance() {
   ST.registrar({
     id: S.q.view.q.id,
     result: S.q.result,
-    answer: [...S.q.picked].map((l) => {
-      const o = S.q.view.shown.find((x) => x.L === l);
-      return o ? o.label : '';
-    }).filter(Boolean).join(','),
+    answer: etiquetasMarcadas().join(','),
     answerMs: S.q.answerMs,
     reviewMs,
     marked: S.q.marked,
   });
   if (S.q.marked) S.run.marked.add(S.q.view.q.id);
-
-  // El orden es deliberado: ya está guardado en localStorage (lo hizo
-  // ST.registrar), así que la pantalla puede avanzar sin esperar a nadie.
-  completeCard();
   S.i++;
+  return true;
+}
+
+function advance() {
+  // El orden es deliberado: primero se guarda en localStorage (lo hace
+  // ST.registrar), así que la pantalla puede avanzar sin esperar a nadie.
+  if (!registraActual()) return;
+  completeCard();
   guardarSesion();
   nextQuestion();
 
@@ -1020,6 +1206,7 @@ function advance() {
 function toggleMark() {
   if (!S.q) return;
   S.q.marked = !S.q.marked;
+  if (S.q.marked) alRepaso('marca');
   ST.marcar(S.q.view.q.id, S.q.marked);
   flushNube();
   const b = $('btn-mark');
@@ -1088,6 +1275,7 @@ async function finishRun() {
   $('done-combo').textContent = String(r.bestCombo);
   $('done-sec').textContent = sec ? sec.toFixed(1).replace('.', ',') : '0';
   FX.countUp($('done-xp'), 0, r.xp, 800);
+  pintaNotaFinal(r);
 
   // Comparación con la sesión anterior de la misma etiqueta
   const dl = $('done-deltas');
@@ -1158,6 +1346,51 @@ async function finishRun() {
   }
 }
 
+/* La nota final: recuento, puntos netos sobre el total de la ronda y, además,
+ * la nota sobre 10. Las que no llegaste a ver (terminar con Esc) cuentan 0,
+ * como en un examen. */
+function pintaNotaFinal(r) {
+  const t = A.tally(r.academic || A.newState());
+  const total = S.queue.length || r.total || t.answered;
+  const sinVer = Math.max(0, total - r.answered);
+  const pon = (id, txt, valor) => {
+    const el = $(id);
+    el.textContent = txt;
+    if (valor != null) el.dataset.sign = A.sign(valor);
+  };
+  pon('dn-ok', String(t.ok));
+  pon('dn-ok-p', A.signed(t.plus), t.plus);
+  pon('dn-bad', String(t.bad));
+  pon('dn-bad-p', A.signed(t.minus), t.minus);
+  pon('dn-blank', String(t.blank));
+  pon('dn-skip', String(sinVer));
+  document.querySelectorAll('.nt-skip').forEach((el) => { el.hidden = !sinVer; });
+  pon('dn-pts', A.num(t.points), t.points);
+  pon('dn-total', String(total));
+  pon('dn-10', A.num(A.nota10(t.points, total)));
+  $('dn-why').textContent = deDondeSale(t, r.answered - t.answered);
+}
+
+// De dónde salen los puntos, en pocas líneas.
+function deDondeSale(t, previas) {
+  const out = [];
+  const ks = Object.keys(t.byK).map(Number).sort((a, b) => a - b);
+  out.push(ks.length
+    ? 'Cada fallo resta según las opciones que viste: ' +
+      ks.map((k) => `${t.byK[k]} × −${A.num(A.penalty(k))} (${k} opciones)`).join(' · ') + '.'
+    : 'Cada fallo resta 1/(k−1) según las opciones que ves: contestar al azar vale 0 de media.');
+  if (t.multi.n) {
+    out.push(`${t.multi.n} de varias respuestas, con puntuación múltiple (todo o nada, ` +
+             `+1 / 0, sin penalización): ${t.multi.ok} ✓ · ${t.multi.bad} ✗ · ${t.multi.blank} ○.`);
+  }
+  if (t.open.n) {
+    out.push(`${t.open.n} abierta${t.open.n > 1 ? 's' : ''} autocalificada${t.open.n > 1 ? 's' : ''}: ` +
+             '+1 si la das por buena, 0 si no.');
+  }
+  if (previas > 0) out.push(`${previas} respondidas antes de existir la nota no puntúan.`);
+  return out.join(' ');
+}
+
 function delta(kind, text) {
   const el = document.createElement('span');
   el.className = 'delta';
@@ -1225,9 +1458,10 @@ document.addEventListener('keydown', (ev) => {
     ev.preventDefault();
     return setSound(FX.Sound.toggle());
   }
+  if (!$('micro').hidden) { if (root.Repaso) root.Repaso.tecla(ev); return; }
   if ($('play').hidden) return;
 
-  if (k === 'Escape') { ev.preventDefault(); return finishRun(); }
+  if (k === 'Escape') { ev.preventDefault(); registraActual(); return finishRun(); }
   if (k === 't' || k === 'T') { ev.preventDefault(); return toggleLang(); }
   if (k === 'm' || k === 'M') { ev.preventDefault(); return toggleMark(); }
   if (!S.q) return;
@@ -1314,6 +1548,12 @@ function pintaNube() {
 }
 
 function detalleNube(est, n) {
+  const extra = CL && CL.sinTarjetas && est !== 'solo-local' && est !== 'error'
+    ? ' El repaso rápido se guarda solo aquí hasta que vuelvas a ejecutar supabase/schema.sql.' : '';
+  return detalleBase(est, n) + extra;
+}
+
+function detalleBase(est, n) {
   const err = (CL && CL.error) || '';
   if (est === 'sincronizando') return 'Enviando cambios…';
   if (est === 'sincronizado') {
@@ -1358,17 +1598,19 @@ function nota(txt) {
 }
 
 async function importarArchivos(files) {
-  let prog = null, stats = null, leidos = 0;
+  let prog = null, stats = null, cards = null, leidos = 0;
   for (const f of files) {
     try {
       const d = JSON.parse(await f.text());
       if (d.preguntas && d.schema_version) { prog = d; leidos++; }
       else if (d.preguntas && d.sesiones) { stats = d; leidos++; }
-      else if (d.progress || d.stats) { prog = d.progress || prog; stats = d.stats || stats; leidos++; }
+      else if (d.progress || d.stats) {
+        prog = d.progress || prog; stats = d.stats || stats; cards = d.cards || cards; leidos++;
+      }
     } catch (e) { /* archivo que no es nuestro */ }
   }
   if (!leidos) return nota('Ese archivo no parece un progress.json ni un web_stats.json.');
-  const r = ST.importar(prog, stats);
+  const r = ST.importar(prog, stats, cards);
   renderHome();
   nota(`Importado: ${r.antes} → ${r.ahora} preguntas con progreso. No se ha perdido nada de lo que ya había.`);
 }
@@ -1445,7 +1687,10 @@ function wire() {
     renderHome();
   });
   window.addEventListener('beforeunload', () => {
-    if (S.run && S.q) guardarSesion();
+    if (S.run && S.q && !$('play').hidden) {
+      registraActual();         // corregida pero sin SIGUIENTE: cuenta ya
+      guardarSesion();
+    }
     ST.volcarAlSalir(BASE);
   });
 }
@@ -1467,6 +1712,16 @@ function wire() {
         pool: poolDeSpec,
         resume: reanudar,
         discard: () => ST.descartarSesion(),
+      });
+    }
+    if (root.Repaso) {
+      root.Repaso.init({
+        store: ST, cards: S.micro,
+        bank: new Map(S.bank.map((q) => [q.id, q])),
+        resalta: (t) => L.highlightTechnicalText(t, { vocab: S.vocab, ratio: 0.6 }),
+        muestra: showScreen,
+        volver: () => { renderHome(); showScreen('home'); refrescaNube(); },
+        alCambiar: flushNube,
       });
     }
     // El panel sale con lo que hay en este navegador y sale YA. La nube se

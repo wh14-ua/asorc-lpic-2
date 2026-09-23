@@ -909,11 +909,23 @@ def test_nube():
         check("advance() no hace await de la nube", "await" not in cuerpo)
         # El orden importa: registrar (local) → pintar → red.
         pos = {k: cuerpo.find(k) for k in
-               ("ST.registrar", "completeCard()", "nextQuestion()", "flushNube()")}
+               ("registraActual()", "completeCard()", "nextQuestion()", "flushNube()")}
         check("advance() guarda en local antes de pintar",
-              0 <= pos["ST.registrar"] < pos["completeCard()"], str(pos))
+              0 <= pos["registraActual()"] < pos["completeCard()"], str(pos))
         check("y manda a la nube después de pintar",
               pos["nextQuestion()"] < pos["flushNube()"], str(pos))
+    mr = re.search(r"function registraActual\(\)\s*\{(.*?)\n\}", app, re.S)
+    check("registrar es escribir en local, sin esperar a la red",
+          bool(mr) and "ST.registrar(" in mr.group(1)
+          and "await" not in re.sub(r"//.*", "", mr.group(1)))
+    # Corregida pero sin SIGUIENTE: salir, Esc o cerrar la pestaña la dan por
+    # pasada, o al reanudar se volvería a preguntar y se sumaría dos veces.
+    for donde, patron in (("salir()", r"function salir\(\)\s*\{(.*?)\n\}"),
+                          ("cerrar la pestaña", r"'beforeunload', \(\) => \{(.*?)\n  \}\);"),
+                          ("Esc", r"k === 'Escape'\) \{(.*?)\}")):
+        mm = re.search(patron, app, re.S)
+        check(f"{donde} registra la corregida antes de guardar",
+              bool(mm) and "registraActual()" in mm.group(1))
     check("marcar para repasar también se envía solo",
           re.search(r"ST\.marcar\(.*\);\s*\n\s*flushNube\(\);", app) is not None)
     check("cerrar una ronda también",
@@ -939,7 +951,7 @@ def test_nube():
     check("el esquema no tiene user_id",
           all(l.lstrip().startswith("--") or "drop column if exists user_id" in l
               for l in sql.splitlines() if "user_id" in l))
-    for t in ("asorc_attempts", "asorc_marks", "asorc_sessions", "asorc_pending"):
+    for t in ("asorc_attempts", "asorc_marks", "asorc_sessions", "asorc_pending", "asorc_card_events"):
         check(f"crea {t}", f"create table if not exists public.{t}" in sql)
     check("el histórico se identifica por evento", "event_id    text        primary key" in sql)
     check("con la comprobación de resultado", "asorc_attempts_result_ck" in sql)
@@ -947,12 +959,12 @@ def test_nube():
           "primary key (profile_id, question_id)" in sql)
     check("la ronda a medias es una sola fila", "'main'" in sql)
     check("todo cuelga de un perfil fijo", sql.count("profile_id = 'default'") >= 8)
-    check("RLS activada en las cuatro", sql.count("enable row level security") == 4)
+    check("RLS activada en las cinco", sql.count("enable row level security") == 5)
     check("y nunca desactivada", "disable row level security" not in sql)
     check("políticas explícitas para anon", sql.count("to anon") >= 10)
     check("el histórico no se puede modificar ni borrar",
           "grant select, insert         on public.asorc_attempts to anon;" in sql)
-    check("se parte de cero antes de conceder", sql.count("revoke all on") == 4)
+    check("se parte de cero antes de conceder", sql.count("revoke all on") == 5)
     check("ninguna tabla concede delete", "delete" not in
           "\n".join(l for l in sql.splitlines() if l.startswith("grant")))
     check("es idempotente: nada de drop table", "drop table" not in sql)
@@ -996,6 +1008,569 @@ def test_nube():
             return
         res = json.loads(out.stdout.strip().splitlines()[-1])
         check("cola, diferencia y fusión se comportan", res["n"] == 0, "; ".join(res["errs"]))
+    finally:
+        os.unlink(script)
+
+
+NOTA_TEST = r"""
+const A = require(process.argv[2]);
+const G = require(process.argv[3]);
+const L = require(process.argv[4]);
+const bank = JSON.parse(require('fs').readFileSync(process.argv[5], 'utf8')).questions;
+const errs = [];
+const eq = (a, b, m) => { if (JSON.stringify(a) !== JSON.stringify(b)) errs.push(`${m}: ${JSON.stringify(a)} != ${JSON.stringify(b)}`); };
+const ok = (c, m) => { if (!c) errs.push(m); };
+
+// Azar reproducible: si algo falla, falla siempre igual.
+function rng(seed) {
+  let s = seed >>> 0;
+  return () => {
+    s = (s + 0x6D2B79F5) >>> 0;
+    let t = s;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+// --- 1 · el fallo resta 1/(k−1) con las opciones que se VEN ---------------
+eq(A.delta('correct', 'single', 3), 1, 'acierto +1');
+eq(A.delta('wrong', 'single', 3), -0.5, '3 opciones: fallo −0,50');
+eq(A.delta('wrong', 'single', 4), -1 / 3, '4 opciones: fallo −1/3');
+eq(A.delta('wrong', 'single', 5), -0.25, '5 opciones: fallo −0,25');
+eq(A.delta('blank', 'single', 3), 0, 'blanco 0');
+eq(A.signed(A.delta('wrong', 'single', 4)), '−0,33', 'se ve −0,33');
+
+// --- 2 · 1 correcta + (k−1) fallos = 0 EXACTO, en cualquier orden ---------
+for (const k of [3, 4, 5]) {
+  for (let pos = 0; pos < k; pos++) {           // el acierto en cada posición
+    const st = A.newState();
+    for (let i = 0; i < k; i++) {
+      A.record(st, { id: 'q' + i, result: i === pos ? 'correct' : 'wrong', kind: 'single', k });
+    }
+    eq(st.points, 0, `${k} opciones: 1 correcta + ${k - 1} fallos (acierto en ${pos + 1}º)`);
+    eq(A.num(st.points), '0,00', `${k} opciones: se pinta 0,00 y no −0,00`);
+    eq(st.log[k - 1].after, 0, `${k} opciones: el acumulado de la última es 0`);
+  }
+}
+// Sin rejilla, 1 − 1/3 − 1/3 − 1/3 da 5,5e−17: la prueba lo distingue.
+ok(1 - 1 / 3 - 1 / 3 - 1 / 3 !== 0, 'la aritmética de coma flotante sola no basta');
+
+// --- 3 · al azar, la media converge a 0 -----------------------------------
+{
+  const r = rng(20260923);
+  const N = 200000;
+  for (const k of [3, 4, 5]) {
+    const st = A.newState();
+    for (let i = 0; i < N; i++) {
+      const res = Math.floor(r() * k) === 0 ? 'correct' : 'wrong';
+      A.record(st, { id: 'x', result: res, kind: 'single', k });
+    }
+    const media = st.points / N;
+    ok(Math.abs(media) < 0.01, `${k} opciones al azar: media ${media.toFixed(4)} no se acerca a 0`);
+  }
+  // Mezcla de 3, 4 y 5 opciones en la misma ronda: cada una con su k.
+  const st = A.newState();
+  for (let i = 0; i < N; i++) {
+    const k = 3 + Math.floor(r() * 3);
+    A.record(st, { id: 'x', result: Math.floor(r() * k) === 0 ? 'correct' : 'wrong', kind: 'single', k });
+  }
+  ok(Math.abs(st.points / N) < 0.01, `k mezcladas: media ${(st.points / N).toFixed(4)}`);
+  // Y si se aplicara el −0,5 del simulacro a todo, el azar NO sería neutro.
+  let fijo = 0;
+  for (let i = 0; i < N; i++) {
+    const k = 3 + Math.floor(r() * 3);
+    fijo += Math.floor(r() * k) === 0 ? 1 : -0.5;
+  }
+  ok(fijo / N < -0.05, `una penalización fija de −0,5 sesga el azar (${(fijo / N).toFixed(3)})`);
+}
+
+// --- 4 · sobre el banco real: k sale de las opciones mostradas ------------
+{
+  const r = rng(7);
+  const st = A.newState();
+  let n = 0, malK = 0;
+  for (const q of bank) {
+    if (q.type !== 'multiple_choice') continue;
+    for (const asorc of [false, true]) {
+      if (asorc && !(q.asorc && q.asorc.eligible)) continue;
+      const v = L.buildView(q, asorc);
+      const rule = A.ruleOf(v);
+      const want = asorc ? 3 : q.original_options.length;
+      if (rule.kind !== 'single' || rule.k !== want || rule.k !== v.shown.length) malK++;
+      for (let i = 0; i < 60; i++) {
+        const o = v.shown[Math.floor(r() * v.shown.length)];
+        const res = L.grade(new Set([o.L]), v.correctL);
+        A.record(st, Object.assign({ id: q.id, result: res }, rule));
+        n++;
+      }
+    }
+  }
+  eq(malK, 0, 'la k de cada pregunta es la de las opciones que se ven (3 en ASORC)');
+  ok(Math.abs(st.points / n) < 0.01, `banco real al azar: media ${(st.points / n).toFixed(4)}`);
+  const asorcV = L.buildView(bank.find((q) => q.asorc && q.asorc.eligible && q.original_options.length === 5), true);
+  eq(A.delta('wrong', A.ruleOf(asorcV).kind, A.ruleOf(asorcV).k), -0.5,
+     'una de 5 opciones mostrada como ASORC resta −0,50, no −0,25');
+}
+
+// --- 5 · varias respuestas y abiertas: sin −1/(k−1), registradas aparte ---
+{
+  const multi = bank.find((q) => q.type === 'multiple_response');
+  const v = L.buildView(multi, false);
+  const rule = A.ruleOf(v);
+  eq(rule.kind, 'multi', 'las de varias respuestas usan su propia regla');
+  eq(A.delta('wrong', rule.kind, rule.k), 0, 'fallar una de varias no resta');
+  eq(A.delta('correct', rule.kind, rule.k), 1, 'acertar el conjunto exacto suma 1');
+  const open = bank.find((q) => q.type === 'open');
+  const ro = A.ruleOf(L.buildView(open, false));
+  eq(ro.kind, 'open', 'las abiertas, autocalificadas');
+  eq([A.delta('correct', 'open', 0), A.delta('partial', 'open', 0), A.delta('wrong', 'open', 0)],
+     [1, 0, 0], 'abierta: +1 si «bien», 0 si no');
+
+  const st = A.newState();
+  A.record(st, { id: 'm1', result: 'correct', kind: 'multi', k: 5 });
+  A.record(st, { id: 'm2', result: 'wrong', kind: 'multi', k: 5 });
+  A.record(st, { id: 's1', result: 'wrong', kind: 'single', k: 4 });
+  A.record(st, { id: 'o1', result: 'partial', kind: 'open', k: 0 });
+  const t = A.tally(st);
+  eq([t.multi.n, t.multi.ok, t.multi.bad], [2, 1, 1], 'las de varias se cuentan aparte');
+  eq([t.ok, t.bad, t.blank, t.answered], [1, 3, 0, 4], '✓ ✗ ○ de la ronda (a medias cuenta como ✗)');
+  eq(t.byK, { 4: 1 }, 'solo resta el fallo de una respuesta');
+  eq(A.num(t.points), '0,67', 'total 1 − 1/3');
+}
+
+// --- 6 · salir y reanudar: queda exactamente igual -------------------------
+{
+  const st = A.newState();
+  const seq = [['correct', 4], ['wrong', 4], ['blank', 3], ['wrong', 3], ['correct', 5], ['wrong', 5]];
+  seq.forEach(([res, k], i) => A.record(st, { id: 'q' + i, result: res, kind: 'single', k,
+                                              picked: ['A'], order: ['C', 'A', 'B'] }));
+  const guardado = JSON.parse(JSON.stringify(A.serialize(st)));
+  const vuelta = A.restore(guardado);
+  eq(vuelta, st, 'lo restaurado es idéntico a lo guardado');
+  eq(vuelta.log.map((e) => [e.delta, e.after]), st.log.map((e) => [e.delta, e.after]),
+     'cada pregunta conserva su delta y su acumulado');
+  // y se puede seguir sumando sin arrastrar error: 1 + 3 fallos con k=4
+  const s2 = A.restore(JSON.parse(JSON.stringify(A.serialize(A.newState()))));
+  A.record(s2, { id: 'a', result: 'correct', kind: 'single', k: 4 });
+  const s3 = A.restore(JSON.parse(JSON.stringify(A.serialize(s2))));
+  for (let i = 0; i < 3; i++) A.record(s3, { id: 'b' + i, result: 'wrong', kind: 'single', k: 4 });
+  eq(s3.points, 0, 'tras varias idas y vueltas sigue siendo 0 exacto');
+  eq(A.restore(null), A.newState(), 'sin nada guardado, ronda en cero');
+  eq(A.restore({ log: [null, 5, { id: 7 }] }).log.length, 0, 'lo que no es una entrada se ignora');
+  const viejo = A.restore({ log: [{ id: 'z', result: 'wrong', kind: 'single', k: 3 }] });
+  eq([viejo.log[0].delta, viejo.points], [-0.5, -0.5], 'sin delta guardado, se recalcula con su k');
+}
+
+// Rehacer una vista ya vista: mismas opciones en el mismo orden y con las
+// mismas letras, que es lo que permite pintar el historial al reanudar.
+{
+  const q = bank.find((x) => x.type === 'multiple_choice' && x.original_options.length === 5);
+  const v1 = L.buildView(q, false);
+  const order = v1.shown.map((o) => o.label);
+  const v2 = L.buildView(q, false, order);
+  eq(v2.shown.map((o) => o.label + o.L), v1.shown.map((o) => o.label + o.L), 'la vista se rehace igual');
+  eq(v2.correctL, v1.correctL, 'y la correcta sigue en la misma letra');
+  const v3 = L.buildView(q, false, ['A', 'A', 'B', 'C', 'Z']);
+  eq(v3.shown.map((o) => o.label).sort(), q.original_options.map((o) => o.label).sort(),
+     'un orden que no cuadra se ignora y se baraja');
+}
+
+// --- 7 · el XP no se entera de la nota, ni la nota del XP ------------------
+{
+  const resultados = ['correct', 'wrong', 'correct', 'blank', 'wrong', 'correct'];
+  const xpCon = (k) => {
+    const run = G.newRun({ total: resultados.length });
+    run.academic = A.newState();
+    resultados.forEach((res, i) => {
+      G.score(run, res, 1000, 'T', 'q' + i);
+      A.record(run.academic, { id: 'q' + i, result: res, kind: 'single', k });
+    });
+    return run;
+  };
+  const r3 = xpCon(3), r5 = xpCon(5);
+  eq(r3.xp, r5.xp, 'mismo XP con 3 que con 5 opciones');
+  eq(r3.xp, 30, 'XP = 10 por acierto, sin tocar la nota');
+  ok(r3.academic.points !== r5.academic.points, 'la nota sí depende de k');
+  eq(A.num(r3.academic.points), '2,00', '3 aciertos − 2 × 0,50');
+  eq(A.num(r5.academic.points), '2,50', '3 aciertos − 2 × 0,25');
+
+  const run = G.newRun({ total: 3 });
+  run.academic = A.newState();
+  A.record(run.academic, { id: 'a', result: 'wrong', kind: 'single', k: 3 });
+  const antes = JSON.stringify(run.academic);
+  G.score(run, 'correct', 500, 'T', 'b');
+  G.score(run, 'wrong', 500, 'T', 'c');
+  eq(JSON.stringify(run.academic), antes, 'puntuar XP no toca la nota');
+  const xp = run.xp;
+  A.record(run.academic, { id: 'd', result: 'correct', kind: 'single', k: 3 });
+  eq(run.xp, xp, 'anotar la nota no toca el XP');
+}
+
+// --- 8 · formato: coma, signo y sin «−0,00» --------------------------------
+eq([A.signed(1), A.signed(-1 / 3), A.signed(-0.5), A.signed(-0.25), A.signed(0)],
+   ['+1,00', '−0,33', '−0,50', '−0,25', '0,00'], 'deltas');
+eq([A.num(6 + 2 / 3), A.num(-1.5), A.num(-1e-17), A.num(8.25)], ['6,67', '−1,50', '0,00', '8,25'], 'totales');
+eq(A.pct(6.67 / 12), '55,6%', 'rendimiento neto');
+eq([A.sign(1), A.sign(-0.25), A.sign(0), A.sign(-1e-17)], ['pos', 'neg', 'zero', 'zero'], 'signo para el color');
+eq([A.nota10(9, 20), A.nota10(-3, 20), A.nota10(5, 0)], [4.5, 0, 0], 'nota sobre 10: max(0, puntos/total·10)');
+
+console.log(JSON.stringify({ n: errs.length, errs: errs.slice(0, 10) }));
+"""
+
+
+def test_nota():
+    print("\n[12] Nota académica: fallo −1/(k−1), azar neutro y aparte del XP")
+    js = os.path.join(PROJ, "web", "js")
+    app = open(os.path.join(js, "app.js"), encoding="utf-8").read()
+    game = open(os.path.join(js, "game.js"), encoding="utf-8").read()
+    acad = open(os.path.join(js, "academic.js"), encoding="utf-8").read()
+    html = open(os.path.join(PROJ, "web", "index.html"), encoding="utf-8").read()
+
+    # --- separadas de verdad: ninguna de las dos capas lee la otra ---
+    codigo = lambda t: re.sub(r"/\*.*?\*/|//[^\n]*", "", t, flags=re.S)   # sin comentarios
+    check("game.js no sabe nada de la nota",
+          not re.search(r"academic|Academic", codigo(game)))
+    check("academic.js no sabe nada de XP ni de rachas",
+          not re.search(r"\bxp\b|combo|XP_OK", codigo(acad)))
+
+    # --- conectada donde toca ---
+    check("index.html carga academic.js antes que app.js",
+          "js/academic.js" in html and html.index("js/academic.js") < html.index("js/app.js"))
+    for ident in ("nota-ok", "nota-bad", "nota-blank", "nota-pts", "nota-of", "nota-net"):
+        check(f"el HUD tiene #{ident}", f'id="{ident}"' in html)
+    for ident in ("dn-ok", "dn-bad", "dn-blank", "dn-pts", "dn-total", "dn-10"):
+        check(f"el resultado final tiene #{ident}", f'id="{ident}"' in html)
+    for f in ("enterLearn", "gradeOpen"):
+        m = re.search(r"function " + f + r"\([^)]*\)\s*\{(.*?)\n\}", app, re.S)
+        check(f"{f}() anota la nota junto al XP", bool(m) and "anotaNota()" in m.group(1))
+    m = re.search(r"function serializaRun\(r\)\s*\{(.*?)\n\}", app, re.S)
+    check("la sesión pendiente guarda la nota", bool(m) and "academic" in m.group(1))
+    m = re.search(r"function deserializaRun\(o\)\s*\{(.*?)\n\}", app, re.S)
+    check("y al reanudar se restaura", bool(m) and "A.restore(" in m.group(1))
+    check("cada tarjeta conserva resultado, delta y acumulado",
+          all(k in app for k in ("dataset.result", "dataset.scoreDelta", "dataset.scoreAfter")))
+
+    if not shutil.which("node"):
+        check("node disponible", False)
+        return
+    with tempfile.NamedTemporaryFile("w", suffix=".js", delete=False) as f:
+        f.write(NOTA_TEST)
+        script = f.name
+    try:
+        out = subprocess.run(["node", script, os.path.join(js, "academic.js"),
+                              os.path.join(js, "game.js"), os.path.join(js, "logic.js"), QJSON],
+                             capture_output=True, text=True, timeout=180)
+        if out.returncode != 0:
+            check("ejecución node", False, out.stderr.strip()[:400])
+            return
+        res = json.loads(out.stdout.strip().splitlines()[-1])
+        check("exacta, neutra ante el azar, persistente e independiente del XP",
+              res["n"] == 0, " | ".join(res["errs"]))
+    finally:
+        os.unlink(script)
+
+
+MICRO_TEST = r"""
+const fs = require('fs');
+const path = require('path');
+const web = process.argv[2];
+const bank = JSON.parse(fs.readFileSync(process.argv[3], 'utf8')).questions;
+const micro = JSON.parse(fs.readFileSync(process.argv[4], 'utf8')).tarjetas;
+const errs = [];
+const eq = (a, b, m) => { if (JSON.stringify(a) !== JSON.stringify(b)) errs.push(`${m}: ${JSON.stringify(a)} != ${JSON.stringify(b)}`); };
+const ok = (c, m) => { if (!c) errs.push(m); };
+
+// Un navegador de mentira: localStorage y nada más.
+const almacen = () => { const m = new Map(); return {
+  getItem: (k) => (m.has(k) ? m.get(k) : null), setItem: (k, v) => m.set(k, String(v)),
+  removeItem: (k) => m.delete(k) }; };
+let LS = almacen();
+Object.defineProperty(global, 'localStorage', { configurable: true, get() { return LS; } });
+global.window = global;
+const carga = () => {
+  for (const f of ['micro.js', 'store.js', 'cloud.js']) delete require.cache[require.resolve(path.join(web, f))];
+  const M = require(path.join(web, 'micro.js'));
+  const S = require(path.join(web, 'store.js'));
+  const C = require(path.join(web, 'cloud.js'));
+  return { M, store: S.Store, cloud: C };
+};
+const { MIN, DIA } = require(path.join(web, 'micro.js'));
+const T0 = Date.parse('2026-09-23T10:00:00');
+const ev = (id, kind, at, n) => ({ event_id: `${id}:${kind}:${n || at}`, question_id: id, kind, at });
+
+(async () => {
+const { M } = carga();
+const porId = new Map(bank.map((q) => [q.id, q]));
+const temaDe = (id) => porId.get(id).topic;
+
+// --- 1 · una pregunta, una tarjeta: repetir la actualiza, no la duplica ---
+{
+  const mazo = {};
+  for (let i = 0; i < 5; i++) M.aplica(mazo, ev('Q1', 'fallo', T0 + i * MIN));
+  M.aplica(mazo, ev('Q1', 'marca', T0 + 6 * MIN));
+  M.aplica(mazo, ev('Q1', 'sabia', T0 + 7 * MIN));
+  eq(Object.keys(mazo), ['Q1'], 'fallar 5 veces, marcar y repasar la misma pregunta: una tarjeta');
+  eq([mazo.Q1.fallos, mazo.Q1.vista, mazo.Q1.sabia], [5, 1, 1], 'y sus estadísticas se actualizan');
+  eq(mazo.Q1.por, 'fallo', 'recuerda por qué entró');
+}
+
+// --- 2 · la misma pregunta conserva la misma pista -------------------------
+{
+  const ids = Object.keys(micro);
+  eq(ids.length, bank.length, 'hay contenido para todas las preguntas');
+  eq(new Set(ids).size, ids.length, 'sin ids repetidos');
+  const id = ids[0];
+  const mazo = {};
+  M.aplica(mazo, ev(id, 'fallo', T0));
+  M.conContenido(mazo[id], micro[id]);
+  const pista = mazo[id].cue;
+  M.aplica(mazo, ev(id, 'fallo', T0 + DIA));
+  M.aplica(mazo, ev(id, 'nosabia', T0 + DIA + MIN));
+  eq(M.conContenido(mazo[id], micro[id]), false, 'volver a fallarla no cambia su tarjeta');
+  eq(mazo[id].cue, pista, 'la pista es la misma');
+  eq(mazo[id].cue, micro[id].cue, 'y es la de microcards.json');
+}
+
+// --- 3 · cuándo vuelve: no la sabía pronto, dudé después, la sabía mucho menos
+{
+  const mazo = {};
+  M.aplica(mazo, ev('A', 'nosabia', T0));
+  M.aplica(mazo, ev('B', 'dude', T0));
+  M.aplica(mazo, ev('C', 'sabia', T0));
+  ok(mazo.A.proxima - T0 <= 15 * MIN, 'NO LA SABÍA vuelve pronto (minutos)');
+  eq(mazo.B.proxima - T0, DIA, 'DUDÉ vuelve mañana');
+  ok(mazo.C.proxima - T0 >= 3 * DIA, 'LA SABÍA tarda días en volver');
+  ok(mazo.A.proxima < mazo.B.proxima && mazo.B.proxima < mazo.C.proxima, 'y en ese orden');
+  const huecos = [];
+  let at = T0;
+  for (let i = 0; i < 5; i++) { M.aplica(mazo, ev('D', 'sabia', at, i)); huecos.push(mazo.D.proxima - at); at = mazo.D.proxima; }
+  ok(huecos.every((h, i) => i === 0 || h > huecos[i - 1]), 'cada vez que la sabes, tarda más en volver');
+  M.aplica(mazo, ev('D', 'fallo', at + MIN));
+  eq(mazo.D.nivel, 0, 'fallarla en una ronda la devuelve al principio');
+  ok(mazo.D.proxima <= at + MIN, 'y toca ya');
+}
+
+// --- 4 · modos: por tema, falladas hoy, marcadas, 10 y 20 rápidas ---------
+{
+  const mazo = {};
+  const ids = bank.slice(0, 40).map((q) => q.id);
+  ids.forEach((id, i) => M.aplica(mazo, ev(id, i % 3 ? 'fallo' : 'marca', T0 - (i % 2 ? 2 * DIA : 0) + i)));
+  const o = (x) => Object.assign({ now: T0 + DIA / 4, temaDe, vale: (id) => !!micro[id] }, x);
+  const tema = temaDe(ids[0]);
+  const deTema = M.elige(mazo, 'tema', o({ tema }));
+  ok(deTema.length > 0 && deTema.every((id) => temaDe(id) === tema), 'por tema: solo las de ese tema');
+  eq(deTema.length, ids.filter((id) => temaDe(id) === tema).length, 'y todas las de ese tema');
+  const hoy = M.elige(mazo, 'hoy', o({}));
+  ok(hoy.every((id) => M.mismoDia(mazo[id].ultimoFallo, T0)), 'falladas hoy: solo las de hoy');
+  ok(hoy.length > 0 && hoy.length < ids.length, 'y no las de otro día');
+  const marcadas = new Set(ids.filter((_, i) => i % 5 === 0));
+  eq(M.elige(mazo, 'marcadas', o({ marcada: (id) => marcadas.has(id) })).sort(), [...marcadas].sort(),
+     'solo marcadas');
+  eq(M.elige(mazo, 'rapidas', o({ n: 10 })).length, 10, '10 rápidas son 10');
+  eq(M.elige(mazo, 'rapidas', o({ n: 20 })).length, 20, '20 rápidas son 20');
+  eq(new Set(M.elige(mazo, 'todas', o({}))).size, ids.length, 'todas, sin repetir ninguna');
+  // lo que toca va delante de lo que no toca
+  M.aplica(mazo, ev(ids[1], 'sabia', T0 + 1));
+  const orden = M.elige(mazo, 'todas', o({}));
+  eq(orden[orden.length - 1], ids[1], 'la que acabas de saber va al final de la cola');
+}
+
+// --- 5 · mismos eventos, mismo mazo, lleguen como lleguen ----------------
+{
+  const evs = [];
+  ['X', 'Y', 'Z'].forEach((id, j) => ['fallo', 'nosabia', 'dude', 'sabia', 'fallo', 'sabia']
+    .forEach((k, i) => evs.push(ev(id, k, T0 + (i * 7 + j) * MIN))));
+  const a = M.reconstruye(evs);
+  const b = M.reconstruye(evs.slice().reverse());
+  const c = M.reconstruye(evs.slice().sort(() => 0.5 - Math.random()));
+  eq(a, b, 'da igual el orden de llegada');
+  eq(a, c, 'también desordenados');
+  const local = {}; evs.forEach((e) => M.aplica(local, e));
+  eq(local, a, 'aplicar de uno en uno = reconstruir de golpe');
+}
+
+// --- 6 · fusionar nunca pierde lo más completo -----------------------------
+{
+  const rico = M.reconstruye([ev('Q', 'fallo', T0), ev('Q', 'sabia', T0 + MIN), ev('Q', 'sabia', T0 + DIA)]);
+  const pobre = M.reconstruye([ev('Q', 'fallo', T0)]);
+  eq(M.fusiona(pobre, rico).Q.vista, 2, 'lo pobre no pisa lo rico');
+  eq(M.fusiona(rico, pobre).Q.vista, 2, 'da igual el orden');
+  const sembrado = {};
+  M.siembra(sembrado, [{ id: 'Q', fallos: 9, ultimoFallo: T0 - DIA }], T0 - 2 * DIA);
+  const f = M.fusiona(sembrado, rico).Q;
+  eq(f.vista, 2, 'los fallos del historial no ganan a los repasos de verdad');
+  eq(f.previos, 9, 'pero no se pierden');
+  eq(Object.keys(M.fusiona({ A: pobre.Q }, { B: rico.Q })).sort(), ['A', 'B'], 'se unen las de los dos lados');
+  eq(M.fusiona(rico, rico), rico, 'fusionar consigo mismo no cambia nada');
+  eq(M.siembra(sembrado, [{ id: 'Q', fallos: 1 }], T0), 0, 'sembrar lo que ya está no duplica');
+}
+
+// --- 7 · la misma tanda no se atasca en una tarjeta ------------------------
+{
+  const cola = ['a', 'b', 'c', 'd', 'e'], veces = {};
+  ok(M.reencola(cola, 0, 'a', veces), 'NO LA SABÍA la vuelve a poner en la tanda');
+  eq(cola.indexOf('a', 1), 4, 'unas tarjetas después');
+  M.reencola(cola, 4, 'a', veces);
+  eq(M.reencola(cola, 8, 'a', veces), false, 'como mucho dos veces');
+}
+
+// --- 8 · tras recargar, el mazo sigue igual -------------------------------
+{
+  LS = almacen();
+  let { store, M: M2 } = carga();
+  await store.init({ base: './', ns: 'asorc.v2' });
+  const id = bank[5].id;
+  for (const k of ['fallo', 'nosabia', 'dude', 'sabia']) {
+    const e = { question_id: id, kind: k, at: Date.now() };
+    M2.aplica(store.cards, e);
+    M2.conContenido(store.cards[id], micro[id]);
+    store.tarjetaEvento(e);
+  }
+  const antes = JSON.stringify(store.cards);
+  const cola = store.outbox.lista().filter((e) => e.tipo === 'tarjeta');
+  eq(cola.length, 4, 'cada evento va a la cola de la nube');
+  ok(cola.every((e) => e.payload.event_id && e.payload.question_id === id && e.payload.event_at),
+     'con identificador, pregunta y fecha');
+  eq(new Set(cola.map((e) => e.payload.event_id)).size, 4, 'identificadores que no se repiten');
+  ({ store } = carga());                       // recargar: módulos nuevos, mismo localStorage
+  await store.init({ base: './', ns: 'asorc.v2' });
+  eq(JSON.stringify(store.cards), antes, 'al recargar, el mazo está igual');
+  eq(store.cards[id].cue, micro[id].cue, 'con su pista');
+  eq(store.exportar().cards[id].vista, 3, 'exportar se lleva el mazo');
+}
+
+// --- 9 · la nube: con la tabla nueva viaja; sin ella, lo demás sigue igual --
+function falsoSupabase(sinTarjetas) {
+  const tablas = { asorc_attempts: [], asorc_marks: [], asorc_sessions: [], asorc_pending: [],
+                   asorc_card_events: [] };
+  if (sinTarjetas) delete tablas.asorc_card_events;
+  // Lo que contesta PostgREST 12 de verdad (lo comprueba test_sync.py): al
+  // insertar, 404 con el cuerpo vacío; al leer, 404 con 42P01.
+  const falta = (t) => ({ code: '42P01', message: `relation "public.${t}" does not exist` });
+  const clave = { asorc_attempts: 'event_id', asorc_sessions: 'uid', asorc_card_events: 'event_id', asorc_pending: 'id' };
+  return {
+    tablas,
+    from(t) {
+      const q = {
+        async upsert(filas) {
+          if (!(t in tablas)) return { error: {}, status: 404 };
+          filas.forEach((f) => {
+            const k = clave[t];
+            if (k && tablas[t].some((x) => x[k] === f[k])) return;
+            tablas[t].push(Object.assign({}, f));
+          });
+          return { error: null };
+        },
+        select() { return q; }, eq() { return q; }, order() { return q; }, limit() { return q; },
+        async range() {
+          return t in tablas ? { data: tablas[t].slice(), error: null, status: 200 }
+                             : { data: null, error: falta(t), status: 404 };
+        },
+        async maybeSingle() { return { data: (tablas[t] || [])[0] || null, error: null }; },
+      };
+      return q;
+    },
+  };
+}
+async function navegador(sb) {
+  LS = almacen();
+  const n = carga();
+  await n.store.init({ base: './', ns: 'asorc.v2' });
+  n.cloud.store = n.store; n.cloud.sb = sb; n.cloud.estado = 'sincronizado'; n.cloud.sinTarjetas = null;
+  return n;
+}
+const id9 = bank[7].id;
+const responde = (n) => {
+  n.store.registrar({ id: id9, result: 'wrong', answer: 'A', answerMs: 900, reviewMs: 100, marked: false });
+  for (const k of ['fallo', 'sabia']) {
+    const e = { question_id: id9, kind: k, at: Date.now() };
+    n.M.aplica(n.store.cards, e);
+    n.store.tarjetaEvento(e);
+  }
+};
+{
+  // Sin la tabla nueva (falta volver a ejecutar schema.sql)
+  const sb = falsoSupabase(true);
+  const a = await navegador(sb);
+  responde(a);
+  const r = await a.cloud.flush();
+  ok(r.ok, 'sin la tabla del repaso, enviar lo demás sale bien');
+  eq(sb.tablas.asorc_attempts.length, 1, 'la respuesta llega igual');
+  ok(!!a.cloud.sinTarjetas, 'y se sabe que falta la tabla');
+  ok(a.cloud.estado !== 'error', 'sin dar la nube por rota');
+  eq(a.store.outbox.lista().filter((e) => e.tipo === 'tarjeta').length, 2, 'los eventos del repaso esperan en la cola');
+  eq(a.cloud.pendientes(), 0, 'y no cuentan como pendientes que no se van a poder mandar');
+  const s = await a.cloud.sincronizar(a.store);
+  ok(s.ok, 'bajar lo de otros dispositivos no se bloquea por ellos');
+  eq(a.store.cards[id9].vista, 1, 'y el mazo local sigue intacto');
+}
+{
+  // Con la tabla: viaja, no duplica y llega a otro navegador
+  const sb = falsoSupabase(false);
+  const a = await navegador(sb);
+  responde(a);
+  await a.cloud.flush();
+  eq(a.store.outbox.tamano(), 0, 'con la tabla, la cola se vacía');
+  eq(sb.tablas.asorc_card_events.length, 2, 'y los eventos del repaso llegan');
+  const reenvio = sb.tablas.asorc_card_events.map((f) => ({ id: 'x' + f.event_id, tipo: 'tarjeta', payload: f }));
+  a.store.outbox.anadir('tarjeta', Object.assign({}, reenvio[0].payload));
+  await a.cloud.flush();
+  eq(sb.tablas.asorc_card_events.length, 2, 'reenviar el mismo evento no duplica');
+  const b = await navegador(sb);
+  const r = await b.cloud.sincronizar(b.store);
+  ok(r.ok, 'otro navegador sincroniza');
+  ok(!!b.store.cards[id9], 'y recibe la tarjeta');
+  eq([b.store.cards[id9].fallos, b.store.cards[id9].sabia], [1, 1], 'con sus estadísticas');
+  eq(b.store.cards[id9].proxima, a.store.cards[id9].proxima, 'y el mismo «cuándo vuelve»');
+}
+
+console.log(JSON.stringify({ n: errs.length, errs: errs.slice(0, 10) }));
+})().catch((e) => { console.log(JSON.stringify({ n: 1, errs: [String(e && e.stack || e)] })); });
+"""
+
+
+def test_micro():
+    print("\n[13] Repaso rápido: una tarjeta por pregunta, estable, por tema y tras recargar")
+    js = os.path.join(PROJ, "web", "js")
+    html = open(os.path.join(PROJ, "web", "index.html"), encoding="utf-8").read()
+    app = open(os.path.join(js, "app.js"), encoding="utf-8").read()
+    sql = open(os.path.join(PROJ, "supabase", "schema.sql"), encoding="utf-8").read()
+    mjson = os.path.join(PROJ, "microcards.json")
+
+    for s in ("js/micro.js", "js/repaso.js"):
+        check(f"index.html carga {s}", s in html)
+    check("micro.js va antes que store.js y cloud.js",
+          html.index("js/micro.js") < html.index("js/store.js") < html.index("js/cloud.js"))
+    for ident in ("rq-home", "micro", "rq-cue", "rq-answer", "rq-show", "rq-grade", "rq-contrast"):
+        check(f"index.html tiene #{ident}", f'id="{ident}"' in html)
+    check("los tres botones de recuperación activa",
+          all(f'data-g="{g}"' in html for g in ("sabia", "dude", "nosabia")))
+    check("fallar, dejar en blanco o marcar mete la tarjeta en el repaso",
+          app.count("alRepaso(") >= 4 and "alRepaso('marca')" in app)
+    check("y lo dice discretamente", "Añadida a repaso rápido" in app)
+    check("el esquema crea la tabla del repaso",
+          "create table if not exists public.asorc_card_events" in sql)
+    check("y es de solo añadir", "grant select, insert         on public.asorc_card_events to anon;" in sql)
+
+    if not os.path.exists(mjson):
+        check("microcards.json existe", False, "genéralo con tools/micro/merge.py")
+        return
+    if not shutil.which("node"):
+        check("node disponible", False)
+        return
+    with tempfile.NamedTemporaryFile("w", suffix=".js", delete=False) as f:
+        f.write(MICRO_TEST)
+        script = f.name
+    try:
+        out = subprocess.run(["node", script, js, QJSON, mjson],
+                             capture_output=True, text=True, timeout=180)
+        if out.returncode != 0:
+            check("ejecución node", False, out.stderr.strip()[:400])
+            return
+        res = json.loads(out.stdout.strip().splitlines()[-1])
+        check("sin duplicados, estable, programada, por modos, tras recargar y en la nube",
+              res["n"] == 0, " | ".join(res["errs"]))
     finally:
         os.unlink(script)
 
@@ -1073,6 +1648,8 @@ def main():
     test_game()
     test_logic()
     test_feed()
+    test_nota()
+    test_micro()
     test_highlight()
     test_panel()
     test_publicacion()
