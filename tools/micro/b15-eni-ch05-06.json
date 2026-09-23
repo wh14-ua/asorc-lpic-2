@@ -1,0 +1,87 @@
+{
+ "ENI-CH05-Q01": {
+  "cue": "compartición NFS o Samba: cómo se accede",
+  "answer": "mount en un directorio local, con software cliente"
+ },
+ "ENI-CH05-Q02": {
+  "cue": "compartir /etc/exports sin el servicio NFS",
+  "answer": "exportfs -a"
+ },
+ "ENI-CH05-Q03": {
+  "cue": "NFS: por qué root_squash viene por defecto",
+  "answer": "acceso por uid y root es siempre 0: pierde privilegios",
+  "contrast": ["no_root_squash → lo desactiva"]
+ },
+ "ENI-CH05-Q04": {
+  "cue": "los tres procesos de los que depende NFS",
+  "answer": "portmapd + nfsd + mountd"
+ },
+ "ENI-CH05-Q05": {
+  "cue": "NFS no fiable: asegurar las escrituras",
+  "answer": "sync (sin caché en escritura)"
+ },
+ "ENI-CH05-Q06": {
+  "cue": "Samba: validar la configuración sin cargar el servicio",
+  "answer": "testparm",
+  "contrast": ["testparm -v → también los valores por defecto"]
+ },
+ "ENI-CH05-Q07": {
+  "cue": "Samba: ocultar la compartición del Entorno de Red",
+  "answer": "browseable (solo la visibilidad)"
+ },
+ "ENI-CH05-Q08": {
+  "cue": "contraseña SMB a partir de la Unix",
+  "answer": "no se puede: MD5 es irreversible y SMB exige MD4"
+ },
+ "ENI-CH05-Q09": {
+  "cue": "sincronizar contraseñas Unix y Samba",
+  "answer": "unix passwd sync = yes (con la contraseña en claro)",
+  "contrast": ["MD5 → base de cuentas Unix", "MD4 → base de cuentas Samba"]
+ },
+ "ENI-CH05-Q10": {
+  "cue": "FTP: por qué pasivo y no activo",
+  "answer": "los cortafuegos ven el modo activo como amenaza",
+  "contrast": ["activo → el servidor abre la conexión de datos", "pasivo → el cliente abre comandos y datos"]
+ },
+ "ENI-CH06-Q01": {
+  "cue": "DNS: por qué hay varios tipos de registro",
+  "answer": "cada tipo responde a una pregunta distinta"
+ },
+ "ENI-CH06-Q02": {
+  "cue": "mensajería y resolución DNS: la relación",
+  "answer": "registros MX: si están mal, no entra correo de fuera"
+ },
+ "ENI-CH06-Q03": {
+  "cue": "servidor de caché: qué aporta a la red",
+  "answer": "guarda en memoria lo resuelto y responde al instante"
+ },
+ "ENI-CH06-Q04": {
+  "cue": "instalar el resolver DNS en Linux",
+  "answer": "no se instala: ya forma parte de la pila IP"
+ },
+ "ENI-CH06-Q05": {
+  "cue": "named.conf: ¿se puede prescindir de include?",
+  "answer": "sí: solo trocea la configuración en varios archivos"
+ },
+ "ENI-CH06-Q06": {
+  "cue": "DNS local: aprovechar la caché del proveedor",
+  "answer": "forwarders"
+ },
+ "ENI-CH06-Q07": {
+  "cue": "DNS: aplicar cambios sin reiniciar el servicio",
+  "answer": "rndc"
+ },
+ "ENI-CH06-Q08": {
+  "cue": "DNS: la comprobación más precisa y detallada",
+  "answer": "dig",
+  "contrast": ["nslookup → el que muchos siguen prefiriendo"]
+ },
+ "ENI-CH06-Q09": {
+  "cue": "named: limitar el daño de una vulnerabilidad",
+  "answer": "jaula chroot + cuenta con privilegios limitados"
+ },
+ "ENI-CH06-Q10": {
+  "cue": "delegación: por qué los servidores deben comunicarse",
+  "answer": "el padre redirige lo de la zona hija al delegado"
+ }
+}

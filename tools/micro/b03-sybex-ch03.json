@@ -1,0 +1,105 @@
+{
+ "SYBEX-CH03-RQ01": {
+  "cue": "Linux: quién gestiona la memoria",
+  "answer": "el kernel",
+  "contrast": ["utilidades GNU → manipulan archivos y datos", "aplicaciones → piden memoria, no la gestionan"]
+ },
+ "SYBEX-CH03-RQ02": {
+  "cue": "zona del disco que hace de memoria",
+  "answer": "espacio de intercambio (swap)",
+  "contrast": ["memoria virtual → RAM + disco", "memoria física → la RAM real"]
+ },
+ "SYBEX-CH03-RQ03": {
+  "cue": "Linux: cargar controladores en el kernel",
+  "answer": "módulos",
+  "contrast": ["archivos DLL → Windows", "cargador de arranque → carga el kernel"]
+ },
+ "SYBEX-CH03-RQ04": {
+  "cue": "tipo de archivo del kernel para arrancar",
+  "answer": "archivo binario",
+  "contrast": ["código fuente → hay que compilarlo antes", "parche → texto para el fuente", "módulos → se cargan después de arrancar"]
+ },
+ "SYBEX-CH03-RQ05": {
+  "cue": "actualizar el kernel a la versión siguiente",
+  "answer": "parche (patch release)",
+  "contrast": ["publicación de desarrollo → el fuente completo", "binarios → el kernel ya compilado", "módulos → cargan controladores"]
+ },
+ "SYBEX-CH03-RQ06": {
+  "cue": "make: configurar con preguntas en texto",
+  "answer": "make config",
+  "contrast": ["xconfig / gconfig → menús gráficos", "mrproper / clean → borran lo anterior"]
+ },
+ "SYBEX-CH03-RQ07": {
+  "cue": "make: configurar con menú gráfico",
+  "answer": "make gconfig",
+  "contrast": ["config → preguntas en texto", "mrproper / clean → borran lo anterior"]
+ },
+ "SYBEX-CH03-RQ08": {
+  "cue": "make: borrar archivos objeto antiguos",
+  "answer": "make mrproper",
+  "contrast": ["oldconfig → usa la configuración antigua", "bzImage → compila el binario", "gconfig → crea configuración nueva"]
+ },
+ "SYBEX-CH03-RQ09": {
+  "cue": "make: binario comprimido del kernel",
+  "answer": "make bzImage (o zImage)",
+  "contrast": ["kernel → objetivo no válido: da error", "config → solo el archivo de configuración", "clean → borra lo anterior"]
+ },
+ "SYBEX-CH03-RQ10": {
+  "cue": "Debian: crear el disco RAM inicial",
+  "answer": "mkinitramfs",
+  "contrast": ["mkinitrd → el de Red Hat"]
+ },
+ "SYBEX-CH03-RQ11": {
+  "cue": "listar todos los módulos del kernel",
+  "answer": "lsmod",
+  "contrast": ["modinfo → datos de un solo módulo", "insmod → inserta", "rmmod → elimina"]
+ },
+ "SYBEX-CH03-RQ12": {
+  "cue": "cargar un módulo sin saber su archivo",
+  "answer": "modprobe",
+  "contrast": ["insmod → necesita el archivo", "rmmod → elimina", "lsmod → lista"]
+ },
+ "SYBEX-CH03-RQ13": {
+  "cue": "información de los dispositivos USB",
+  "answer": "lsusb",
+  "contrast": ["lspci → tarjetas PCI", "lsmod → módulos; no ve lo que va en el kernel", "lsdev → puertos de E/S de todo el hardware"]
+ },
+ "SYBEX-CH03-RQ14": {
+  "cue": "lsusb: información detallada",
+  "answer": "-v",
+  "contrast": ["-d → por ID de fabricante", "-s → por bus", "-t → en árbol, sin detalle"],
+  "mnemo": "-v = verbose"
+ },
+ "SYBEX-CH03-RQ15": {
+  "cue": "conectar hardware con el sistema en marcha",
+  "answer": "hotplug (como el USB)",
+  "contrast": ["coldplug → con el equipo apagado", "PCI / PCIe → solo con el equipo apagado"],
+  "mnemo": "hot = en caliente"
+ },
+ "SYBEX-CH03-RQ16": {
+  "cue": "detectar hotplug y cargar su módulo",
+  "answer": "udevd",
+  "contrast": ["modprobe / insmod → a mano, no detectan", "lsusb → solo lista"]
+ },
+ "SYBEX-CH03-RQ17": {
+  "cue": "ajustes de configuración de udevd",
+  "answer": "/etc/udev/udev.conf",
+  "contrast": ["/etc/udev/rules.d → las reglas", "/lib/modules → archivos de módulos", "/boot → binario del kernel"]
+ },
+ "SYBEX-CH03-RQ18": {
+  "cue": "dónde están las reglas de udevd",
+  "answer": "/etc/udev/rules.d",
+  "contrast": ["/etc/udev/udevd.conf → los ajustes", "/lib/modules → archivos de módulos", "/boot → binario del kernel"],
+  "mnemo": "rules.d = las reglas"
+ },
+ "SYBEX-CH03-RQ19": {
+  "cue": "pseudodirectorio con ajustes y estadísticas del kernel",
+  "answer": "/proc",
+  "contrast": ["/usr/src/linux → código fuente del kernel"]
+ },
+ "SYBEX-CH03-RQ20": {
+  "cue": "cambiar ajustes del kernel en marcha",
+  "answer": "sysctl",
+  "contrast": ["modprobe → mete y saca módulos, no ajustes", "lsmod → lista módulos", "lsdev → información de dispositivos"]
+ }
+}

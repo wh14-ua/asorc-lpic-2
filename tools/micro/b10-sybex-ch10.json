@@ -1,0 +1,106 @@
+{
+ "SYBEX-CH10-RQ01": {
+  "cue": "Samba: dónde van sus registros",
+  "answer": "/var/log/samba/",
+  "contrast": ["/etc/samba/ → configuración", "/var/lib/samba/ → bases de datos de usuarios"],
+  "mnemo": "/var/log siempre son registros"
+ },
+ "SYBEX-CH10-RQ02": {
+  "cue": "demonios que prestan servicios Samba",
+  "answer": "smbd + nmbd + cupsd",
+  "contrast": ["cupsd → sí: comparte impresoras", "winbind → no: el demonio es winbindd"]
+ },
+ "SYBEX-CH10-RQ03": {
+  "cue": "archivo de configuración principal de Samba",
+  "answer": "smb.conf",
+  "contrast": ["mount.cifs → monta el recurso en el cliente", "smbcontrol → gestiona el demonio smbd", "/etc/samba.d → directorio en desuso"]
+ },
+ "SYBEX-CH10-RQ04": {
+  "cue": "Samba: qué hacer tras editar la configuración",
+  "answer": "comprobar la sintaxis con testparm",
+  "contrast": ["smbstatus → conexiones actuales, no sintaxis", "recargar → solo después de comprobar", "reiniciar → no hace falta"]
+ },
+ "SYBEX-CH10-RQ05": {
+  "cue": "Samba con Windows: directiva del grupo o dominio",
+  "answer": "workgroup (no un FQDN)"
+ },
+ "SYBEX-CH10-RQ06": {
+  "cue": "valores válidos de passdb backend",
+  "answer": "tdbsam + smbpasswd + ldapsam",
+  "contrast": ["ads / domain → valores de security"],
+  "mnemo": "passdb backend = dónde están las cuentas"
+ },
+ "SYBEX-CH10-RQ07": {
+  "cue": "smb.conf: sección de un recurso de archivos",
+  "answer": "una con el nombre del recurso, como [myshare]",
+  "contrast": ["[global] → directivas para todo el servidor", "[printers] → recursos de impresión", "[netlogins] → controlador de dominio", "[profiles] → perfiles de usuario móviles"]
+ },
+ "SYBEX-CH10-RQ08": {
+  "cue": "Samba: ¿el recurso pide contraseña?",
+  "answer": "public (no = pide contraseña; yes = no la pide)",
+  "contrast": ["browseable → si se ve en la lista", "guest only → solo conexiones de invitado", "writable / read only → escribir, no entrar"]
+ },
+ "SYBEX-CH10-RQ09": {
+  "cue": "Samba: acceso al estilo FTP",
+  "answer": "smbclient",
+  "contrast": ["pdbedit → bases de datos de usuarios", "rpcclient → funciones RPC de Microsoft", "ftp → servidores FTP, no Samba"],
+  "mnemo": "smbclient = cliente de Samba"
+ },
+ "SYBEX-CH10-RQ10": {
+  "cue": "cliente Samba sin acceso: los cinco diagnósticos",
+  "answer": "log level + smbclient -L + red + testparm + demonios"
+ },
+ "SYBEX-CH10-RQ11": {
+  "cue": "NFS: demonio de las peticiones de montaje",
+  "answer": "mountd",
+  "contrast": ["rpcbind (portmapper) → registra servicios RPC", "rpc.lockd → bloqueo de archivos, en el kernel", "statd → acompaña a lockd en el bloqueo"]
+ },
+ "SYBEX-CH10-RQ12": {
+  "cue": "NFS: dónde se configuran las exportaciones",
+  "answer": "/etc/exports + /etc/exports.d/ (archivos .exports)",
+  "contrast": ["/etc/exports/ → es archivo, no directorio", "/proc/fs/nfs/ → exportaciones en uso ahora", "/var/lib/nfs/ → xtab, etab y rmtab"]
+ },
+ "SYBEX-CH10-RQ13": {
+  "cue": "NFS: ubicaciones típicas de lo compartido",
+  "answer": "subdirectorios de /srv/ o /var/",
+  "contrast": ["/ y /etc/ → nunca se comparten", "/proc/ → son procesos: no tiene sentido"]
+ },
+ "SYBEX-CH10-RQ14": {
+  "cue": "/etc/exports: recurso de solo lectura",
+  "answer": "ro + async",
+  "contrast": ["rw → lectura y escritura", "sync → mejor para lectura y escritura", "subtree_check → permisos de nivel superior"]
+ },
+ "SYBEX-CH10-RQ15": {
+  "cue": "NFS: utilidades que muestran los recursos",
+  "answer": "exportfs + showmount",
+  "contrast": ["mount.nfs → monta desde el cliente", "rpcinfo → servicios RPC", "smbstatus → conexiones de Samba"]
+ },
+ "SYBEX-CH10-RQ16": {
+  "cue": "exportfs: ver los recursos con detalle",
+  "answer": "exportfs -v",
+  "contrast": ["-a → exporta todo /etc/exports", "-r → vuelve a exportar", "-u → deja de exportar", "-o → exporta desde la línea de comandos"],
+  "mnemo": "-v de verbose (modo detallado)"
+ },
+ "SYBEX-CH10-RQ17": {
+  "cue": "software de servidor FTP",
+  "answer": "pure-ftpd + vsftpd",
+  "contrast": ["ftp / lftp → clientes de línea de comandos", "FileZilla → cliente con interfaz gráfica"],
+  "mnemo": "la d final delata al demonio"
+ },
+ "SYBEX-CH10-RQ18": {
+  "cue": "FTP en modo pasivo: qué es cierto",
+  "answer": "solo el cliente abre las conexiones (datos y comandos)",
+  "contrast": ["puertos 20 y 21 → solo en modo activo"],
+  "mnemo": "pasivo = el servidor espera, el cliente abre"
+ },
+ "SYBEX-CH10-RQ19": {
+  "cue": "FTP: usuarios de las conexiones anónimas",
+  "answer": "anonymous + ftp",
+  "contrast": ["vsftpd → el demonio, no un usuario"]
+ },
+ "SYBEX-CH10-RQ20": {
+  "cue": "vsftpd: subidas anónimas (tres directivas =YES)",
+  "answer": "write_enable + anon_upload_enable + anon_mkdir_write_enable",
+  "contrast": ["pure-ftpd → AnonymousCantUpload no"]
+ }
+}

@@ -1,0 +1,85 @@
+{
+ "ENI-CH07-Q01": {
+  "cue": "Apache modular: qué se gana",
+  "answer": "solo los módulos necesarios: ejecutable más ligero"
+ },
+ "ENI-CH07-Q02": {
+  "cue": "Apache: validar la sintaxis sin arrancar",
+  "answer": "apache -t",
+  "mnemo": "-t = test"
+ },
+ "ENI-CH07-Q03": {
+  "cue": "Apache: fuente imprescindible de módulos y directivas",
+  "answer": "el sitio web de documentación oficial"
+ },
+ "ENI-CH07-Q04": {
+  "cue": "hosts virtuales: cómo sabe el servidor cuál",
+  "answer": "por el nombre que el cliente usa en la url"
+ },
+ "ENI-CH07-Q05": {
+  "cue": "Apache: crear cuentas para la autentificación local",
+  "answer": "htpasswd"
+ },
+ "ENI-CH07-Q06": {
+  "cue": "qué se pone en un .htaccess",
+  "answer": "lo mismo que un contexto Directory, junto a los datos"
+ },
+ "ENI-CH07-Q07": {
+  "cue": "que Apache busque .htaccess en cada directorio",
+  "answer": "AllowOverride: acepta configuración adicional"
+ },
+ "ENI-CH07-Q08": {
+  "cue": "certificado X509: para qué sirve",
+  "answer": "une identidad y clave pública; la firma una autoridad"
+ },
+ "ENI-CH07-Q09": {
+  "cue": "proxy que «rompe» el tráfico: por qué",
+  "answer": "corta en dos flujos: cliente a proxy, proxy a servidor"
+ },
+ "ENI-CH07-Q10": {
+  "cue": "squid: ¿acls en archivos anexos?",
+  "answer": "sí: parámetro directo o archivo que lo contenga"
+ },
+ "ENI-CH08-Q01": {
+  "cue": "MTA: qué es un alias",
+  "answer": "asociar una identidad a una cuenta que ya existe"
+ },
+ "ENI-CH08-Q02": {
+  "cue": "Postfix: cuándo usar relayhost",
+  "answer": "IP pública en una blacklist: que envíe el proveedor"
+ },
+ "ENI-CH08-Q03": {
+  "cue": "Postfix: otro nombre de dominio al exterior",
+  "answer": "myorigin"
+ },
+ "ENI-CH08-Q04": {
+  "cue": "Postfix: cuándo un mensaje es para él",
+  "answer": "dominio del destinatario en mydestination",
+  "contrast": ["no coincide → lo reenvía"]
+ },
+ "ENI-CH08-Q05": {
+  "cue": "Postfix: comprobar la configuración sin arrancar",
+  "answer": "postfix check",
+  "contrast": ["postconf -n → muestra los parámetros reales"]
+ },
+ "ENI-CH08-Q06": {
+  "cue": "SMTP o mail: fin de la redacción",
+  "answer": "un punto solo en su línea, y retorno de carro"
+ },
+ "ENI-CH08-Q07": {
+  "cue": "MTA: procesar automáticamente los mensajes entrantes",
+  "answer": "procmail (referenciado en postfix, con sus reglas)"
+ },
+ "ENI-CH08-Q08": {
+  "cue": "aviso urgente a los usuarios conectados en consola",
+  "answer": "wall"
+ },
+ "ENI-CH08-Q09": {
+  "cue": "/etc/issue y /etc/motd: cuándo se ven",
+  "answer": "issue antes de abrir sesión; motd una vez dentro"
+ },
+ "ENI-CH08-Q10": {
+  "cue": "courier: probar la autentificación sin cliente de correo",
+  "answer": "authtest"
+ }
+}

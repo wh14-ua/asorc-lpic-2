@@ -1,0 +1,95 @@
+{
+ "ENI-CH03-Q01": {
+  "cue": "añadir una IP secundaria a una interfaz",
+  "answer": "ifconfig"
+ },
+ "ENI-CH03-Q02": {
+  "cue": "dos interfaces: ¿dos puertas de enlace predeterminadas?",
+  "answer": "no: una sola, la tabla de enrutamiento es única",
+  "contrast": [
+   "si se definen dos → solo queda la última"
+  ]
+ },
+ "ENI-CH03-Q03": {
+  "cue": "cargar /etc/ethers: qué se gana",
+  "answer": "evita peticiones ARP: discreción, no rendimiento"
+ },
+ "ENI-CH03-Q04": {
+  "cue": "TCP Wrappers: conflicto entre allow y deny",
+  "answer": "manda hosts.allow: hosts.deny se ignora",
+  "contrast": [
+   "solo hosts.allow → pasan solo los mencionados",
+   "solo hosts.deny → pasan todos salvo esos"
+  ]
+ },
+ "ENI-CH03-Q05": {
+  "cue": "¿ifconfig informa de la conexión WiFi?",
+  "answer": "en realidad no: SSID, señal y cifrado los da iwconfig"
+ },
+ "ENI-CH03-Q06": {
+  "cue": "-n en arp, route o netstat: por qué",
+  "answer": "evita resolver nombres y esperar al timeout DNS"
+ },
+ "ENI-CH03-Q07": {
+  "cue": "archivo abierto que impide desmontar: quién",
+  "answer": "lsof (archivo, proceso y usuario)"
+ },
+ "ENI-CH03-Q08": {
+  "cue": "libpcap: para qué se usa",
+  "answer": "captura de tramas (tcpdump, wireshark)"
+ },
+ "ENI-CH03-Q09": {
+  "cue": "DHCP: por qué el servidor responde en broadcast",
+  "answer": "el cliente aún no tiene IP: sin destino no hay unicast"
+ },
+ "ENI-CH03-Q10": {
+  "cue": "DHCP: ¿DNS general o el de la subnet?",
+  "answer": "el de la subnet: lo concreto gana a lo general"
+ },
+ "ENI-CH04-Q01": {
+  "cue": "contraseñas fuera de /etc/passwd: por qué",
+  "answer": "todos lo leen y el hash se adivina por diccionario",
+  "contrast": [
+   "/etc/shadow → sin acceso para los usuarios"
+  ]
+ },
+ "ENI-CH04-Q02": {
+  "cue": "dns en /etc/nsswitch.conf: por qué",
+  "answer": "orden de resolución: files (local), luego dns"
+ },
+ "ENI-CH04-Q03": {
+  "cue": "PAM: qué facilita a los desarrolladores",
+  "answer": "nuevo método: cambia la configuración, no la aplicación"
+ },
+ "ENI-CH04-Q04": {
+  "cue": "pila de módulos PAM: interés",
+  "answer": "encadenar varios módulos en una sola autentificación"
+ },
+ "ENI-CH04-Q05": {
+  "cue": "PAM: cuándo sufficient no basta",
+  "answer": "si antes falló un required o requisite"
+ },
+ "ENI-CH04-Q06": {
+  "cue": "tras el éxito de un módulo required",
+  "answer": "sigue: se ejecutan los demás módulos de la pila"
+ },
+ "ENI-CH04-Q07": {
+  "cue": "LDIF de Active Directory a OpenLDAP",
+  "answer": "muy difícil: cada directorio tiene su esquema",
+  "contrast": [
+   "intercambio completo → mapeo de atributos"
+  ]
+ },
+ "ENI-CH04-Q08": {
+  "cue": "contraseña con ldapmodify: por qué no",
+  "answer": "la escribiría sin encriptar: ldappasswd sí encripta"
+ },
+ "ENI-CH04-Q09": {
+  "cue": "contexto de búsqueda LDAP fuera de ldap.conf",
+  "answer": "la variable LDAPBASE (exportada en el entorno)"
+ },
+ "ENI-CH04-Q10": {
+  "cue": "autentificación LDAP y aun así /etc/shadow: por qué",
+  "answer": "seguir entrando si el directorio no está disponible"
+ }
+}

@@ -1,0 +1,105 @@
+{
+ "SYBEX-CH08-RQ01": {
+  "cue": ".edu: qué tipo de dominio",
+  "answer": "TLD (dominio de nivel superior)",
+  "contrast": ["dominio de primer nivel → subdominio de un TLD", "dominio raíz → un solo punto", "ICANN → elige a los gestores de los TLD"]
+ },
+ "SYBEX-CH08-RQ02": {
+  "cue": "espacio de nombres: qué puede ser zona",
+  "answer": "zona raíz, o dominio de primer nivel + subdominios",
+  "contrast": ["zona de pistas → otro nombre de la zona raíz", "solo parte de los subdominios → también vale", "servidor raíz → una máquina, no una zona"]
+ },
+ "SYBEX-CH08-RQ03": {
+  "cue": "zona: los dos servidores mínimos",
+  "answer": "primario + secundario, de caché o de reenvío",
+  "contrast": ["secundario + caché o reenvío → falta el primario"]
+ },
+ "SYBEX-CH08-RQ04": {
+  "cue": "crea la consulta DNS y mira su caché",
+  "answer": "resolutor (resolver)",
+  "contrast": ["servidor de nombres → la máquina que responde", "resolución de nombres → el proceso", "caché → donde se guardan las respuestas"]
+ },
+ "SYBEX-CH08-RQ05": {
+  "cue": "implementan DNS total o parcial",
+  "answer": "todos: BIND + dnsmasq + pdnsd + Bundy + PowerDNS",
+  "contrast": ["Bundy → el antiguo BIND 10, también vale"]
+ },
+ "SYBEX-CH08-RQ06": {
+  "cue": "demonio BIND en /usr/sbin/",
+  "answer": "named",
+  "contrast": ["bind9 → paquete en Ubuntu", "bind → paquete en CentOS", "named.conf → su configuración", "bindutils → utilidades en CentOS"]
+ },
+ "SYBEX-CH08-RQ07": {
+  "cue": "named.conf: sus cláusulas",
+  "answer": "options + logging + include + comments",
+  "contrast": ["named-checkconf → utilidad: revisa la sintaxis"]
+ },
+ "SYBEX-CH08-RQ08": {
+  "cue": "servidor DNS de solo caché: directivas",
+  "answer": "acl + allow-query + listen-on + recursion yes",
+  "contrast": ["logging → conviene, pero no es obligatorio"]
+ },
+ "SYBEX-CH08-RQ09": {
+  "cue": "parar el servicio BIND",
+  "answer": "rndc stop + systemctl stop named + service bind9 stop",
+  "contrast": ["kill -s SIGTERM → también lo para", "rndc flush → vacía las cachés, no para"],
+  "mnemo": "flush limpia; stop para"
+ },
+ "SYBEX-CH08-RQ10": {
+  "cue": "logging: qué determina category",
+  "answer": "qué tipos de mensaje DNS se registran",
+  "contrast": ["channel → dónde se registran y cómo se filtran"]
+ },
+ "SYBEX-CH08-RQ11": {
+  "cue": "type de zona: valores válidos",
+  "answer": "master (primario) + hint (zona raíz)",
+  "contrast": ["secondary → no: el secundario es slave", "delegation → no: es delegation-only"]
+ },
+ "SYBEX-CH08-RQ12": {
+  "cue": "clases válidas de una sentencia de zona",
+  "answer": "IN + CH + HS",
+  "mnemo": "IN = Internet, CH = Chaosnet, HS = Hesiod"
+ },
+ "SYBEX-CH08-RQ13": {
+  "cue": "transferencia de zona: qué la dispara",
+  "answer": "secundario: arranca, expira su refresco o rndc",
+  "contrast": ["reinicio del primario → no dispara nada"]
+ },
+ "SYBEX-CH08-RQ14": {
+  "cue": "bases de datos de zona: directorio",
+  "answer": "/var/named/ o /etc/bind/, según la distribución"
+ },
+ "SYBEX-CH08-RQ15": {
+  "cue": "registro que abre la zona",
+  "answer": "SOA",
+  "contrast": ["NS → servidor de nombres", "CNAME → alias", "PTR → búsqueda inversa"],
+  "mnemo": "SOA = start of authority"
+ },
+ "SYBEX-CH08-RQ16": {
+  "cue": "zona inversa",
+  "answer": "de IP a FQDN (al revés de lo habitual)",
+  "contrast": ["IP del maestro de zona hija → glue record", "copiar datos de zona → transferencia de zona", "type hint → zona de pistas"]
+ },
+ "SYBEX-CH08-RQ17": {
+  "cue": "asegurar el DNS: medidas válidas",
+  "answer": "solo BIND + no root + doble horizonte + ocultar versión",
+  "contrast": ["actualizar una vez al año → no: en cuanto salga"]
+ },
+ "SYBEX-CH08-RQ18": {
+  "cue": "jaula chroot: nuevo directorio raíz",
+  "answer": "/chroot/named/ o /chroot/bind/",
+  "contrast": ["/etc/bind/ → de BIND, pero no raíz de jaula"]
+ },
+ "SYBEX-CH08-RQ19": {
+  "cue": "DNSSEC: clave que firma los registros",
+  "answer": "clave de firma de zona (ZSK)",
+  "contrast": ["KSK → firma la ZSK, no los registros", "DNSKEY → donde se guarda la KSK"],
+  "mnemo": "ZSK = zone signing key; KSK = key signing key"
+ },
+ "SYBEX-CH08-RQ20": {
+  "cue": "crear claves TSIG o DNSSEC",
+  "answer": "dnssec-keygen",
+  "contrast": ["dnssec-signzone → firma la zona a mano", "dnssec-dsfromkey → registro para la zona padre"],
+  "mnemo": "keygen genera; signzone firma"
+ }
+}

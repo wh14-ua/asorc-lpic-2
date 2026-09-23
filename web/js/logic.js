@@ -643,8 +643,10 @@
   /* ------------------------------------------------------------- vista
    * Baraja UNA vez. Al cambiar de idioma solo cambia el texto: el orden y
    * las letras en pantalla se mantienen.
+   * `order` (etiquetas del libro en el orden en que se vieron) rehace una
+   * vista ya mostrada, con las mismas letras; si no cuadra, se baraja.
    */
-  function buildView(q, asorcMode) {
+  function buildView(q, asorcMode, order) {
     let opts = q.original_options || [];
     if (asorcMode && q.asorc && q.asorc.eligible) {
       const keep = new Set(q.asorc.kept_option_labels || []);
@@ -653,7 +655,11 @@
     const esByLabel = {};
     (q.original_options_es || []).forEach((o) => { esByLabel[o.label] = o.text; });
 
-    const shown = shuffled(opts).map((o, idx) => ({
+    const byLabel = new Map(opts.map((o) => [o.label, o]));
+    const fixed = Array.isArray(order) && order.length === opts.length &&
+      new Set(order).size === order.length && order.every((l) => byLabel.has(l));
+
+    const shown = (fixed ? order.map((l) => byLabel.get(l)) : shuffled(opts)).map((o, idx) => ({
       label: o.label,                 // etiqueta original del libro
       L: LETTERS[idx],                // letra que se ve en pantalla
       n: idx + 1,                     // índice 1..n (tecla numérica)

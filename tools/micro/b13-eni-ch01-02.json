@@ -1,0 +1,90 @@
+{
+ "ENI-CH01-Q01": {
+  "cue": "por qué hace falta un sistema de archivos",
+  "answer": "organiza el espacio: nombres y ubicación física"
+ },
+ "ENI-CH01-Q02": {
+  "cue": "disco que ocupa un pseudosistema de archivos",
+  "answer": "ninguno: vive en memoria"
+ },
+ "ENI-CH01-Q03": {
+  "cue": "qué garantiza que un UUID sea único",
+  "answer": "el azar: 128 bits aleatorios"
+ },
+ "ENI-CH01-Q04": {
+  "cue": "optimizar escrituras en un sistema de archivos lento",
+  "answer": "escritura asíncrona: primero en memoria, luego al disco"
+ },
+ "ENI-CH01-Q05": {
+  "cue": "comprobar la raíz (/): por qué cuesta",
+  "answer": "exige desmontar y está en uso: comprobar al reiniciar"
+ },
+ "ENI-CH01-Q06": {
+  "cue": "lsdev: de dónde saca la información",
+  "answer": "lee /proc/interrupts, /proc/ioports y /proc/dma"
+ },
+ "ENI-CH01-Q07": {
+  "cue": "tar: por qué comprimir solo en disco",
+  "answer": "comprimido, una pérdida parcial estropea mucho más",
+  "contrast": ["sin comprimir → solo se pierde la zona dañada"]
+ },
+ "ENI-CH01-Q08": {
+  "cue": "imagen iso con dd: ¿montar el cdrom?",
+  "answer": "no: copia bloques, no archivos",
+  "contrast": ["copiar archivos concretos → sí hay que montar"]
+ },
+ "ENI-CH01-Q09": {
+  "cue": "RAID 5: mínimo de discos",
+  "answer": "tres: dos de datos y uno de paridad",
+  "contrast": ["con disco de recambio (spare) → cuatro"]
+ },
+ "ENI-CH01-Q10": {
+  "cue": "partición o volumen lógico LVM: diferencia",
+  "answer": "en el uso, ninguna; solo el volumen lógico crece",
+  "contrast": ["lvextend → agranda el volumen lógico", "resize2fs → redimensiona el sistema de archivos"]
+ },
+ "ENI-CH02-Q01": {
+  "cue": "servicio, daemon y nivel de ejecución",
+  "answer": "daemon = servicio; el nivel dice cuáles corren"
+ },
+ "ENI-CH02-Q02": {
+  "cue": "restart o reload: cuál consume menos",
+  "answer": "reload: relee la configuración (signal 1, hup)",
+  "contrast": ["restart → stop + start: mata y levanta"]
+ },
+ "ENI-CH02-Q03": {
+  "cue": "último script del arranque, en cualquier nivel",
+  "answer": "rc.local"
+ },
+ "ENI-CH02-Q04": {
+  "cue": "qué muestra dmesg",
+  "answer": "los mensajes del kernel desde el arranque (ring buffer)"
+ },
+ "ENI-CH02-Q05": {
+  "cue": "GRUB: menu.lst y grub.conf, el mismo archivo",
+  "answer": "un enlace simbólico",
+  "contrast": ["enlace duro → no sale de su sistema de archivos"]
+ },
+ "ENI-CH02-Q06": {
+  "cue": "ubicación usual del gestor de arranque",
+  "answer": "el MBR, lo primero que lee la BIOS",
+  "mnemo": "MBR = Master Boot Record"
+ },
+ "ENI-CH02-Q07": {
+  "cue": "kernel en sólo lectura (ro): para qué",
+  "answer": "diagnosticar sin dañar si la partición tiene problemas"
+ },
+ "ENI-CH02-Q08": {
+  "cue": "parámetro del kernel: acceso tipo monousuario",
+  "answer": "init= con un shell: arranca sin ningún servicio"
+ },
+ "ENI-CH02-Q09": {
+  "cue": "nivel de ejecución que se carga al arrancar",
+  "answer": "inittab: línea initdefault",
+  "contrast": ["telinit → cambia el nivel en funcionamiento"]
+ },
+ "ENI-CH02-Q10": {
+  "cue": "copia integral de archivos: por qué no basta",
+  "answer": "el gestor de arranque está fuera de las particiones"
+ }
+}

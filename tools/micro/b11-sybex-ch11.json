@@ -1,0 +1,110 @@
+{
+ "SYBEX-CH11-RQ01": {
+  "cue": "DHCPd: su archivo de configuración",
+  "answer": "/etc/dhcp/dhcpd.conf",
+  "contrast": ["/etc/dhcpd.d/ → DHCPd no usa carpeta", "isc-dhcp-server → el paquete en Debian", "/etc/services → puertos TCP y UDP"]
+ },
+ "SYBEX-CH11-RQ02": {
+  "cue": "DHCPd: salida predeterminada de los clientes",
+  "answer": "router",
+  "contrast": ["range → direcciones a repartir", "broadcast-address → dirección de difusión", "smtp-server → servidor de correo"],
+  "mnemo": "cada opción se llama como lo que reparte"
+ },
+ "SYBEX-CH11-RQ03": {
+  "cue": "DHCPd: conjunto de IP a repartir",
+  "answer": "range",
+  "contrast": ["router → router predeterminado", "broadcast-address → dirección de difusión", "smtp-server → servidor de correo"],
+  "mnemo": "range = rango de direcciones"
+ },
+ "SYBEX-CH11-RQ04": {
+  "cue": "DHCPd: IP concedidas en este momento",
+  "answer": "/var/lib/dhcp/dhcpd.leases",
+  "contrast": ["/etc/dhcp/dhcpd.conf → la configuración", "/etc/dhcp/dhcpd.leases → no vive en /etc"],
+  "mnemo": "leases = concesiones"
+ },
+ "SYBEX-CH11-RQ05": {
+  "cue": "DHCPd: MAC del cliente para IP estática",
+  "answer": "hardware",
+  "contrast": ["fixed-address → la IP fija, no la MAC", "host-name → el nombre del cliente", "range → conjunto de direcciones"]
+ },
+ "SYBEX-CH11-RQ06": {
+  "cue": "DHCP: agrupar ajustes de un cliente concreto",
+  "answer": "host",
+  "contrast": ["group → varios hosts a la vez", "fixed-address → un ajuste suelto, no un grupo", "range → direcciones para todos"]
+ },
+ "SYBEX-CH11-RQ07": {
+  "cue": "opción DHCP de la máscara de subred",
+  "answer": "1",
+  "contrast": ["3 → router predeterminado", "5 → servidor de nombres", "6 → servidor de dominio"]
+ },
+ "SYBEX-CH11-RQ08": {
+  "cue": "PAM con /etc/passwd y /etc/shadow",
+  "answer": "pam_unix.so",
+  "contrast": ["pam_ldap.so → directorio LDAP de red", "pam_userdb.so → una base de datos", "pam_sss.so → SSSD, directorios remotos"]
+ },
+ "SYBEX-CH11-RQ09": {
+  "cue": "PAM: autenticar con un directorio de red",
+  "answer": "pam_ldap.so",
+  "contrast": ["pam_unix.so → archivo local /etc/passwd", "pam_userdb.so → base de datos local"]
+ },
+ "SYBEX-CH11-RQ10": {
+  "cue": "PAM: restricciones a las contraseñas",
+  "answer": "pam_cracklib.so",
+  "contrast": ["pam_limits.so → límites de recursos", "pam_unix.so → solo autenticación estándar", "pam_userdb.so → base de datos local"],
+  "mnemo": "crack en el nombre: intenta romper tu contraseña"
+ },
+ "SYBEX-CH11-RQ11": {
+  "cue": "PAM con un único archivo de configuración",
+  "answer": "/etc/pam.conf",
+  "contrast": ["/etc/pam.d → una carpeta, no un archivo"]
+ },
+ "SYBEX-CH11-RQ12": {
+  "cue": "PAM: carpeta con un archivo por aplicación",
+  "answer": "/etc/pam.d",
+  "contrast": ["/etc/pam.conf → método del archivo único"],
+  "mnemo": "la d de pam.d es de directorio"
+ },
+ "SYBEX-CH11-RQ13": {
+  "cue": "PAM: corta en seco si falla",
+  "answer": "requisite",
+  "contrast": ["required → marca el fallo y sigue", "sufficient → basta si acierta", "optional → no bloquea nada"]
+ },
+ "SYBEX-CH11-RQ14": {
+  "cue": "PAM: tipo que registra los intentos",
+  "answer": "session",
+  "contrast": ["auth → autentica, pero no anota", "account → solo verifica la cuenta", "password → gestiona contraseñas"]
+ },
+ "SYBEX-CH11-RQ15": {
+  "cue": "LDAP: plantilla de atributos para objetos",
+  "answer": "la clase de objeto (object class)",
+  "contrast": ["esquema → estructura de la base de datos", "ID de objeto → identifica, no es plantilla", "árbol LDAP → los objetos reales"]
+ },
+ "SYBEX-CH11-RQ16": {
+  "cue": "LDAP: la información guardada de un objeto",
+  "answer": "los atributos",
+  "contrast": ["clase de objeto → la plantilla, no los valores", "ID de objeto → un valor único, sin información", "esquema → los objetos y sus relaciones"]
+ },
+ "SYBEX-CH11-RQ17": {
+  "cue": "LDAP: nombre único de cada objeto",
+  "answer": "nombre distinguido (distinguished name)",
+  "contrast": ["ID de objeto → único, pero no es un nombre", "atributos → no son únicos", "clase de objeto → la comparten muchos"]
+ },
+ "SYBEX-CH11-RQ18": {
+  "cue": "OpenLDAP: servidor que escucha a los clientes",
+  "answer": "slapd",
+  "contrast": ["slurpd → solo al replicar servidores", "slapadd → añade objetos", "slapindex → reindexa"],
+  "mnemo": "la d final: slapd es el demonio"
+ },
+ "SYBEX-CH11-RQ19": {
+  "cue": "LDAP: añadir objetos desde el servidor",
+  "answer": "slapadd",
+  "contrast": ["ldapadd / ldapmodify → programas cliente", "slapindex → solo reindexa lo existente"],
+  "mnemo": "slap… servidor; ldap… cliente"
+ },
+ "SYBEX-CH11-RQ20": {
+  "cue": "LDAP: añadir objetos desde un cliente",
+  "answer": "ldapadd",
+  "contrast": ["slapadd → añade, pero desde el servidor", "ldapmodify → solo modifica lo existente", "slapindex → reindexa, en el servidor"],
+  "mnemo": "slap… servidor; ldap… cliente"
+ }
+}

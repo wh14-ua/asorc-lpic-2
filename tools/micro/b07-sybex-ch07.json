@@ -1,0 +1,105 @@
+{
+ "SYBEX-CH07-RQ01": {
+  "cue": "Postfix: archivos de configuración",
+  "answer": "/etc/postfix",
+  "contrast": ["/var/spool/postfix → mensajes en proceso", "/var/spool/mail → buzones de usuarios locales", "/etc/mail → no es de Postfix"]
+ },
+ "SYBEX-CH07-RQ02": {
+  "cue": "Postfix: proceso principal",
+  "answer": "master",
+  "contrast": ["qmgr, pickup, cleanup, smtp → gestionan la cola"]
+ },
+ "SYBEX-CH07-RQ03": {
+  "cue": "Postfix: cuándo arrancan y paran los procesos",
+  "answer": "master.cf",
+  "contrast": ["main.cf → cómo se tratan los mensajes", "install.cf → qué funciones se instalan"]
+ },
+ "SYBEX-CH07-RQ04": {
+  "cue": "Postfix: cómo se procesa el correo",
+  "answer": "main.cf",
+  "contrast": ["master.cf → los procesos", "/etc/aliases → alias", "/var/log/maillog → el registro"]
+ },
+ "SYBEX-CH07-RQ05": {
+  "cue": "Postfix: mensajes mientras los procesa",
+  "answer": "/var/spool/postfix",
+  "contrast": ["/var/spool/mail → buzones, correo ya entregado", "/etc/postfix → configuración"]
+ },
+ "SYBEX-CH07-RQ06": {
+  "cue": "mensajes esperando en la cola de correo",
+  "answer": "mailq",
+  "contrast": ["newaliases → crea la base de datos de alias", "master, pickup, smtp → parte interna de Postfix"],
+  "mnemo": "mailq = mail queue"
+ },
+ "SYBEX-CH07-RQ07": {
+  "cue": "pasar los alias de texto a binario",
+  "answer": "newaliases",
+  "contrast": ["mailq → enseña la cola", "master, pickup, smtp → parte interna de Postfix"]
+ },
+ "SYBEX-CH07-RQ08": {
+  "cue": "texto que lee newaliases",
+  "answer": "/etc/aliases",
+  "contrast": ["main.cf, master.cf → configuración, sin alias"]
+ },
+ "SYBEX-CH07-RQ09": {
+  "cue": "Postfix: su archivo de registro",
+  "answer": "/var/log/maillog",
+  "contrast": ["/var/log/messages → el del kernel", "/var/spool/mail → correo en formato mbox"]
+ },
+ "SYBEX-CH07-RQ10": {
+  "cue": "procmail: recetas de un solo usuario",
+  "answer": "$HOME/.procmailrc",
+  "contrast": ["/etc/procmailrc → todas las cuentas"]
+ },
+ "SYBEX-CH07-RQ11": {
+  "cue": "procmail: recetas para todo el correo",
+  "answer": "/etc/procmailrc",
+  "contrast": ["$HOME/.procmailrc → solo ese usuario"]
+ },
+ "SYBEX-CH07-RQ12": {
+  "cue": "procmail: receta :0 c messages",
+  "answer": "copia todo el correo entrante al directorio messages",
+  "contrast": ["mueve → no: el original sigue su camino"],
+  "mnemo": "c = copia"
+ },
+ "SYBEX-CH07-RQ13": {
+  "cue": "MDA que entrega a los buzones locales",
+  "answer": "Procmail",
+  "contrast": ["Sendmail, Postfix, Courier, Dovecot → no son MDA"]
+ },
+ "SYBEX-CH07-RQ14": {
+  "cue": "Postfix: pasar el correo entrante a procmail",
+  "answer": "mailbox_command",
+  "contrast": ["mydestination → para qué direcciones acepta", "relayhost → a dónde va todo lo que sale", "myhost → nombre del servidor local"]
+ },
+ "SYBEX-CH07-RQ15": {
+  "cue": "buzón: todo en un único archivo",
+  "answer": "mbox",
+  "contrast": ["maildir → un archivo por mensaje"],
+  "mnemo": "mbox = una caja; maildir = un directorio"
+ },
+ "SYBEX-CH07-RQ16": {
+  "cue": "buzón: un archivo por mensaje",
+  "answer": "maildir",
+  "contrast": ["mbox → todo en un solo archivo"],
+  "mnemo": "maildir = un directorio lleno de mensajes"
+ },
+ "SYBEX-CH07-RQ17": {
+  "cue": "Courier: archivos de configuración",
+  "answer": "/etc/courier",
+  "contrast": ["/etc/mail → no lo usa Courier"]
+ },
+ "SYBEX-CH07-RQ18": {
+  "cue": "Courier: total de clientes a la vez",
+  "answer": "MAXDAEMONS",
+  "contrast": ["MAXPERIP → por cliente, no el total", "MAILDIRPATH → dónde están los buzones", "ADDRESS → en qué interfaz escucha", "PORT → el puerto TCP"]
+ },
+ "SYBEX-CH07-RQ19": {
+  "cue": "Dovecot: dónde guarda su configuración",
+  "answer": "dovecot.conf o /etc/dovecot, según la distribución"
+ },
+ "SYBEX-CH07-RQ20": {
+  "cue": "Dovecot: métodos de autenticación",
+  "answer": "mechanisms",
+  "contrast": ["protocols → qué protocolos de correo", "mail_location → dónde está el buzón", "listen → puerto TCP de escucha", "login_max_connections → usuarios a la vez"]
+ }
+}

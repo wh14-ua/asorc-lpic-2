@@ -1,0 +1,160 @@
+{
+ "SYBEX-CH12-RQ01": {
+  "cue": "vulnerabilidad que da acceso a un atacante",
+  "answer": "vector de ataque",
+  "contrast": [
+   "puerto abierto → solo un tipo de vulnerabilidad"
+  ]
+ },
+ "SYBEX-CH12-RQ02": {
+  "cue": "archivo con los puertos de cada aplicación",
+  "answer": "/etc/services",
+  "contrast": [
+   "/proc/sys/net/ipv4 → ajustes IPv4 del kernel",
+   "/etc/ssh/sshd_conf → configura OpenSSH",
+   "/etc/openvpn → configura OpenVPN"
+  ]
+ },
+ "SYBEX-CH12-RQ03": {
+  "cue": "telnet: comprobar si un puerto está abierto",
+  "answer": "telnet dirección puerto",
+  "contrast": [
+   "dirección:puerto → no es el formato de telnet",
+   "solo el puerto 23 → no: cualquier puerto TCP"
+  ]
+ },
+ "SYBEX-CH12-RQ04": {
+  "cue": "puertos TCP escuchando en el servidor local",
+  "answer": "netstat",
+  "contrast": [
+   "telnet → prueba un puerto cada vez",
+   "iptables → filtra paquetes en el kernel"
+  ]
+ },
+ "SYBEX-CH12-RQ05": {
+  "cue": "netcat: escanear varios puertos",
+  "answer": "-z",
+  "contrast": [
+   "-l → escucha conexiones entrantes",
+   "-v → salida más detallada",
+   "-6 → usa direcciones IPv6"
+  ]
+ },
+ "SYBEX-CH12-RQ06": {
+  "cue": "nmap: huella (fingerprint) del sistema remoto",
+  "answer": "-A",
+  "contrast": [
+   "-sT → escanea puertos TCP",
+   "-sU → escanea puertos UDP",
+   "-p → rango de puertos"
+  ]
+ },
+ "SYBEX-CH12-RQ07": {
+  "cue": "OpenVAS: simular ataques conocidos",
+  "answer": "NVT (Network Vulnerability Tests)",
+  "contrast": [
+   "NVD → define vulnerabilidades, no simula",
+   "interfaz web → manejar OpenVAS"
+  ]
+ },
+ "SYBEX-CH12-RQ08": {
+  "cue": "software que avisa de un ataque activo",
+  "answer": "IDS (sistema de detección de intrusiones)",
+  "contrast": [
+   "escáner de puertos → vías abiertas, no ataques",
+   "NVT → simula ataques, no los detecta"
+  ]
+ },
+ "SYBEX-CH12-RQ09": {
+  "cue": "fail2ban: archivo de reglas",
+  "answer": "jail.conf (en /etc/fail2ban)",
+  "contrast": [
+   "fail2ban.conf → ahí no están las reglas"
+  ],
+  "mnemo": "jail.conf = la cárcel y sus normas"
+ },
+ "SYBEX-CH12-RQ10": {
+  "cue": "NIDS: vigila la red buscando ataques",
+  "answer": "Snort",
+  "contrast": [
+   "OpenVAS → busca vulnerabilidades, no vigila",
+   "OpenVPN → túnel cifrado",
+   "OpenSSH → canal seguro con un servidor"
+  ]
+ },
+ "SYBEX-CH12-RQ11": {
+  "cue": "Snort: ver los paquetes en pantalla",
+  "answer": "modo analizador (sniffer)",
+  "contrast": [
+   "modo registro (logging) → los guarda en archivo",
+   "modo NIDS → solo eventos de vulnerabilidad",
+   "línea de comandos → no los muestra por defecto"
+  ]
+ },
+ "SYBEX-CH12-RQ12": {
+  "cue": "Snort: qué define HOME_NET",
+  "answer": "las direcciones locales que hay que vigilar",
+  "contrast": [
+   "EXTERNAL_NET → las direcciones remotas"
+  ],
+  "mnemo": "HOME_NET = las direcciones de casa"
+ },
+ "SYBEX-CH12-RQ13": {
+  "cue": "regla Snort: tráfico en un solo sentido",
+  "answer": "origen -> destino: 10.0.0.1 -> 10.0.0.2",
+  "contrast": [
+   "<> → los dos sentidos"
+  ]
+ },
+ "SYBEX-CH12-RQ14": {
+  "cue": "cuántos rangos privados tiene IPv4",
+  "answer": "tres: 10, 172.16 a 172.31 y 192.168"
+ },
+ "SYBEX-CH12-RQ15": {
+  "cue": "IPv6 de enlace local: empieza por",
+  "answer": "fe80",
+  "contrast": [
+   "ff02 → multidifusión para routers",
+   "ff05 → multidifusión para servidores DHCP"
+  ]
+ },
+ "SYBEX-CH12-RQ16": {
+  "cue": "clientes de red privada hacia servidores externos",
+  "answer": "NAT: traduce la dirección privada a una pública"
+ },
+ "SYBEX-CH12-RQ17": {
+  "cue": "crear reglas de cortafuegos",
+  "answer": "iptables",
+  "contrast": [
+   "netstat y nmap → solo ven el estado de puertos",
+   "nc → solo comunicación de red"
+  ]
+ },
+ "SYBEX-CH12-RQ18": {
+  "cue": "iptables: añadir una regla a una cadena",
+  "answer": "-A",
+  "contrast": [
+   "-L → lista las reglas",
+   "-F → vacía las reglas",
+   "-j → qué hacer con el paquete"
+  ]
+ },
+ "SYBEX-CH12-RQ19": {
+  "cue": "iptables: descartar avisando al origen",
+  "answer": "REJECT (devuelve un ICMP)",
+  "contrast": [
+   "DROP → descarta en silencio",
+   "LOG → acepta y además lo registra",
+   "ACCEPT → deja pasar"
+  ]
+ },
+ "SYBEX-CH12-RQ20": {
+  "cue": "iptables: política por defecto de una cadena",
+  "answer": "-P",
+  "contrast": [
+   "-j → la acción de una regla concreta",
+   "-F → borra todas las reglas",
+   "-L → solo lista"
+  ]
+ }
+}

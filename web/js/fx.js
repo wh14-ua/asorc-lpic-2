@@ -80,7 +80,8 @@
     const step = (now) => {
       const p = Math.min(1, (now - t0) / ms);
       const e = 1 - Math.pow(1 - p, 3);            // easeOutCubic
-      el.textContent = fmt(from + (to - from) * e);
+      // El último fotograma pinta el valor exacto, no una suma con decimales.
+      el.textContent = fmt(p < 1 ? from + (to - from) * e : to);
       if (p < 1) raf = requestAnimationFrame(step);
     };
     raf = requestAnimationFrame(step);

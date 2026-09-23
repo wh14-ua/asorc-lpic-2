@@ -1,0 +1,163 @@
+{
+ "SYBEX-CH02-RQ01": {
+  "cue": "mensaje a las terminales tty",
+  "answer": "write (a una) + wall (a todas)",
+  "contrast": [
+   "mesg → solo el permiso de escritura",
+   "echo → solo tu propia salida estándar",
+   "mail → correo, no mensajes de terminal"
+  ]
+ },
+ "SYBEX-CH02-RQ02": {
+  "cue": "apagar sin avisar a los usuarios",
+  "answer": "shutdown --no-wall",
+  "contrast": [
+   "-c → cancela un apagado",
+   "-k → no apaga; bloquea inicios de sesión"
+  ]
+ },
+ "SYBEX-CH02-RQ03": {
+  "cue": "aviso legal antes de iniciar sesión",
+  "answer": "/etc/issue (y /etc/issue.net por red)",
+  "contrast": [
+   "/etc/motd → después de entrar: tarde",
+   "notify-send → aviso único, solo entorno gráfico"
+  ]
+ },
+ "SYBEX-CH02-RQ04": {
+  "cue": "soporte de copia más rápido",
+  "answer": "SSD",
+  "contrast": [
+   "HDD → entre la cinta y el SSD",
+   "cintas magnéticas → de lo más lento",
+   "NAS → no dice qué soporte hay detrás"
+  ]
+ },
+ "SYBEX-CH02-RQ05": {
+  "cue": "lo cambiado desde la última completa",
+  "answer": "incremental o diferencial",
+  "contrast": [
+   "incremental → desde la última copia",
+   "diferencial → desde la última completa"
+  ]
+ },
+ "SYBEX-CH02-RQ06": {
+  "cue": "restauración completa: qué directorios copiar",
+  "answer": "/bin/ + /home/",
+  "contrast": [
+   "/bin/ → programas de utilidad",
+   "/home/ → archivos de los usuarios",
+   "/run/ y /tmp/ → temporales: no se copian"
+  ]
+ },
+ "SYBEX-CH02-RQ07": {
+  "cue": "copias con interfaz gráfica o web",
+  "answer": "Amanda + Duplicity + Bacula",
+  "contrast": [
+   "Nagios → monitoriza recursos, no copia"
+  ]
+ },
+ "SYBEX-CH02-RQ08": {
+  "cue": "tar con compresión gzip: sus tres formas",
+  "answer": "--gzip + -z + z (larga, corta, antigua)",
+  "contrast": [
+   "-g / g → copias incrementales, no compresión"
+  ]
+ },
+ "SYBEX-CH02-RQ09": {
+  "cue": "tar incremental: extensión de la instantánea",
+  "answer": ".snar"
+ },
+ "SYBEX-CH02-RQ10": {
+  "cue": "tar: verificar la copia recién creada",
+  "answer": "-d (--compare, --diff) + -W (--verify)",
+  "contrast": [
+   "-d → compara con los archivos de fuera",
+   "-W → solo archivadores, no tarballs",
+   "-J → comprime con xz, no verifica"
+  ]
+ },
+ "SYBEX-CH02-RQ11": {
+  "cue": "cinta con rebobinado automático",
+  "answer": "/dev/st0 (SCSI) + /dev/ht1 (PATA)",
+  "contrast": [
+   "/dev/nst0, /dev/nht0, /dev/nht1 → no rebobinan"
+  ],
+  "mnemo": "n delante = no rebobina"
+ },
+ "SYBEX-CH02-RQ12": {
+  "cue": "controlar una cinta magnética",
+  "answer": "mt",
+  "contrast": [
+   "tar / star → la usan, no la controlan",
+   "dd / rsync → copian, pero no controlan cintas"
+  ],
+  "mnemo": "mt = magnetic tape"
+ },
+ "SYBEX-CH02-RQ13": {
+  "cue": "rsync a ServerA, cifrado con OpenSSH",
+  "answer": "rsync -av Project ServerA:~/",
+  "contrast": [
+   "sin los dos puntos → ServerA es otro archivo",
+   "rsync:// → demonio rsync, sin cifrar",
+   "/run/media/ServerA → medio extraíble local"
+  ]
+ },
+ "SYBEX-CH02-RQ14": {
+  "cue": "dd: para qué sirve",
+  "answer": "copia de bajo nivel y poner a cero (/dev/zero)",
+  "contrast": [
+   "disco montado → puede corromperlo",
+   "incrementales diarias → no se usa",
+   "cintas → no las gestiona"
+  ]
+ },
+ "SYBEX-CH02-RQ15": {
+  "cue": "código fuente: instrucciones de instalación",
+  "answer": "README + INSTALL",
+  "contrast": [
+   "COPYING → la licencia",
+   "RELEASE-NOTES / NEWS → novedades de la versión"
+  ]
+ },
+ "SYBEX-CH02-RQ16": {
+  "cue": "crea el Makefile a partir de Makefile.in",
+  "answer": "configure",
+  "contrast": [
+   "make → compila con el Makefile",
+   "make install → coloca los archivos"
+  ]
+ },
+ "SYBEX-CH02-RQ17": {
+  "cue": "ver la memoria del sistema: los tres",
+  "answer": "free + vmstat + top",
+  "contrast": [
+   "top → la memoria, entre otras estadísticas",
+   "mtr → vista dinámica del encaminamiento"
+  ]
+ },
+ "SYBEX-CH02-RQ18": {
+  "cue": "CPU 20 veces cada 2 segundos",
+  "answer": "sar 2 20 (intervalo, veces)",
+  "contrast": [
+   "sar 20 2 → 2 veces cada 20 segundos",
+   "uptime → no acepta parámetros"
+  ]
+ },
+ "SYBEX-CH02-RQ19": {
+  "cue": "monitorización de recursos: los tres",
+  "answer": "collectd + MRTG + Nagios",
+  "contrast": [
+   "Duplicity → copias de seguridad"
+  ]
+ },
+ "SYBEX-CH02-RQ20": {
+  "cue": "memoria de un proceso inactivo",
+  "answer": "se vuelca al swap (o memoria virtual)",
+  "contrast": [
+   "hojas → no: la memoria se divide en páginas",
+   "swapping → de RAM al swap, no entre procesos",
+   "psmap → mapea procesos, no da estadísticas"
+  ]
+ }
+}

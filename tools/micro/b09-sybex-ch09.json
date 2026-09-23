@@ -1,0 +1,104 @@
+{
+ "SYBEX-CH09-RQ01": {
+  "cue": "protocolo de peticiones y respuestas web",
+  "answer": "HTTP",
+  "contrast": ["HTML → formato del documento", "SSL / TLS → cifrado"]
+ },
+ "SYBEX-CH09-RQ02": {
+  "cue": "formato del contenido de una página web",
+  "answer": "HTML",
+  "contrast": ["HTTP → transporta el documento", "SSL / TLS → cifrado"]
+ },
+ "SYBEX-CH09-RQ03": {
+  "cue": "HTTP: archivo solicitado no encontrado",
+  "answer": "404",
+  "contrast": ["200 → petición con éxito", "403 → existe, pero sin permiso", "500 → problema en el servidor"]
+ },
+ "SYBEX-CH09-RQ04": {
+  "cue": "parar Apache de forma ordenada (graceful)",
+  "answer": "apache2ctl",
+  "contrast": ["systemctl → para, pero no de forma ordenada", "httpd / apache2 → el propio servidor"]
+ },
+ "SYBEX-CH09-RQ05": {
+  "cue": "Apache: comprobar la configuración antes de arrancar",
+  "answer": "apache2ctl",
+  "contrast": ["systemctl → arranca y para, no revisa archivos", "httpd / apache2 → el propio servidor"]
+ },
+ "SYBEX-CH09-RQ06": {
+  "cue": "Apache: carpeta compartida con los clientes",
+  "answer": "DocumentRoot",
+  "contrast": ["ServerRoot → archivos de configuración", "Listen → IP y puertos de escucha", "DirectoryIndex → archivo si piden una carpeta"]
+ },
+ "SYBEX-CH09-RQ07": {
+  "cue": "Apache: directivas para una carpeta concreta",
+  "answer": "<Directory>",
+  "contrast": ["<VirtualHost> → un host virtual", "<IfDefined> → si hay variable de entorno", "<IfModule> → si hay un módulo cargado"],
+  "mnemo": "el nombre del bloque dice a qué se aplica"
+ },
+ "SYBEX-CH09-RQ08": {
+  "cue": "Apache: qué información va al registro",
+  "answer": "LogFormat",
+  "contrast": ["ErrorLog → dónde está el registro de errores", "ErrorDocument → mensajes de error al cliente"]
+ },
+ "SYBEX-CH09-RQ09": {
+  "cue": "Apache: registro de las peticiones de clientes",
+  "answer": "access.log",
+  "contrast": ["error.log → solo errores", "apache2.conf / httpd.conf → configuración"],
+  "mnemo": "access = accesos; error = fallos"
+ },
+ "SYBEX-CH09-RQ10": {
+  "cue": "Apache: carpeta web propia de cada usuario",
+  "answer": "UserDir",
+  "contrast": ["AuthUserFile → archivo de autenticación", "DocumentRoot → la carpeta del servidor"]
+ },
+ "SYBEX-CH09-RQ11": {
+  "cue": "dominio de un host virtual",
+  "answer": "ServerName",
+  "contrast": ["DocumentRoot → la carpeta", "NameVirtualHost → IP del servidor físico", "<VirtualHost> → el bloque entero"]
+ },
+ "SYBEX-CH09-RQ12": {
+  "cue": "alojamiento virtual por IP: definir las direcciones",
+  "answer": "Listen",
+  "contrast": ["NameVirtualHost → alojamiento por nombre", "<VirtualHost> → agrupa directivas, no define IP"]
+ },
+ "SYBEX-CH09-RQ13": {
+  "cue": "Apache: crear archivo de usuarios y contraseñas",
+  "answer": "htpasswd",
+  "contrast": ["mod_auth → usa el archivo, no lo crea", "httpd / apache2 → el propio servidor"]
+ },
+ "SYBEX-CH09-RQ14": {
+  "cue": "Apache: directiva del archivo de contraseñas",
+  "answer": "AuthUserFile",
+  "contrast": ["AuthType → tipo de autenticación", "AuthName → texto que se pide al cliente", "Order → restringe por red, no por usuario"]
+ },
+ "SYBEX-CH09-RQ15": {
+  "cue": "Apache con intérprete de programas externo",
+  "answer": "CGI (Common Gateway Interface)",
+  "contrast": ["mod_perl / mod_php → dentro del servidor", "mod_auth → autenticación, no programación"]
+ },
+ "SYBEX-CH09-RQ16": {
+  "cue": "Apache: redirigir los .php al proceso PHP",
+  "answer": "AddHandler",
+  "contrast": ["LoadModule → instala el módulo, no reparte", "DirectoryIndex → archivo por defecto de carpeta"]
+ },
+ "SYBEX-CH09-RQ17": {
+  "cue": "Apache: ubicación del certificado SSL",
+  "answer": "SSLCertificateFile",
+  "contrast": ["SSLCertificateKeyFile → la clave", "SSLEngine → cuándo se aceptan conexiones SSL"]
+ },
+ "SYBEX-CH09-RQ18": {
+  "cue": "proxy web: sus dos funciones",
+  "answer": "caché de peticiones + limitar a qué sitios se accede",
+  "contrast": ["un cliente a varios servidores → proxy inverso", "qué archivos sirve el servidor → DocumentRoot"]
+ },
+ "SYBEX-CH09-RQ19": {
+  "cue": "Squid: autenticación de los clientes",
+  "answer": "auth_param",
+  "contrast": ["acl → grupos de acceso", "http_access → reglas de acceso", "mod_auth → módulo de Apache, no de Squid"]
+ },
+ "SYBEX-CH09-RQ20": {
+  "cue": "nginx: sección de los ajustes básicos",
+  "answer": "server",
+  "contrast": ["location → una carpeta concreta", "root → dónde están los archivos", "listen → IP y puertos de escucha"]
+ }
+}

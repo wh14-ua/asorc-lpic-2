@@ -1,0 +1,239 @@
+{
+ "SYBEX-AT-01": {
+  "cue": "info de procesos: los cuatro",
+  "answer": "lsof + pstree + netstat + pmap",
+  "contrast": ["iostat → E/S por dispositivo, no procesos"]
+ },
+ "SYBEX-AT-02": {
+  "cue": "insertar controladores sin recompilar el kernel",
+  "answer": "modules (módulos)"
+ },
+ "SYBEX-AT-03": {
+  "cue": "archivo de configuración del kernel",
+  "answer": "/usr/src/linux/.config",
+  "contrast": [
+   "/etc/modules.conf → los módulos, no el kernel",
+   "/boot/grub/grub.conf → GRUB Legacy",
+   "/usr/src/linux/arch/x86/boot → bzImage"
+  ]
+ },
+ "SYBEX-AT-04": {
+  "cue": "versión del kernel: dónde se lee",
+  "answer": "/proc/sys/kernel (archivo version)",
+  "contrast": [
+   "/proc/ioports → puertos de E/S del hardware",
+   "/proc/dma → canales DMA",
+   "/etc/sysctl.d → ajustes del kernel"
+  ]
+ },
+ "SYBEX-AT-05": {
+  "cue": "equivalente de chkconfig",
+  "answer": "update-rc.d (Debian)",
+  "contrast": [
+   "init / telinit → equivalentes, pero entre sí",
+   "inittab → un archivo, no un comando",
+   "rc → lanza los scripts de un nivel"
+  ]
+ },
+ "SYBEX-AT-06": {
+  "cue": "GRUB Legacy: lo que sí usa",
+  "answer": "menú + shell de grub + comando initrd",
+  "contrast": [
+   "/boot/grub/grub.cfg → de GRUB2, no de Legacy",
+   "por UEFI → no: nació en 1999 para mejorar LILO",
+   "initrd → el disco RAM del arranque"
+  ]
+ },
+ "SYBEX-AT-07": {
+  "cue": "cargadores de arranque de Linux: los cuatro",
+  "answer": "SYSLINUX + EXTLINUX + ISOLINUX + PXELINUX",
+  "contrast": ["TFTP → transporta la imagen, no arranca"]
+ },
+ "SYBEX-AT-08": {
+  "cue": "mount a secas: de dónde lee",
+  "answer": "/etc/mtab",
+  "contrast": [
+   "/etc/fstab → lo que se monta al arrancar",
+   "/proc/mounts → casi igual, pero mount no lo lee",
+   "/proc/filesystems → los que soporta el kernel"
+  ]
+ },
+ "SYBEX-AT-09": {
+  "cue": "smartd: su archivo de configuración",
+  "answer": "smartd.conf"
+ },
+ "SYBEX-AT-10": {
+  "cue": "estado de un RAID por software",
+  "answer": "mdadm --detail /dev/md1 o cat /proc/mdstat",
+  "contrast": [
+   "mdadm --misc --detail → igual; --misc sobra",
+   "/etc/mdadm.conf → configuración, no estado"
+  ]
+ },
+ "SYBEX-AT-11": {
+  "cue": "grupo de volúmenes: crearlo y ampliarlo",
+  "answer": "vgcreate + vgextend",
+  "contrast": [
+   "pvcreate → marca un volumen físico",
+   "lvcreate → saca un volumen lógico del grupo",
+   "mdadm → arrays RAID, no volúmenes lógicos"
+  ],
+  "mnemo": "pv = físico, vg = grupo, lv = lógico"
+ },
+ "SYBEX-AT-12": {
+  "cue": "ver la tabla ARP",
+  "answer": "arp a secas, no ifconfig -arp",
+  "contrast": [
+   "ifconfig -arp → activa o desactiva ARP",
+   "route -n → tabla de encaminamiento"
+  ]
+ },
+ "SYBEX-AT-13": {
+  "cue": "simular tráfico entre servidor y cliente",
+  "answer": "nc",
+  "contrast": [
+   "tcpdump → captura paquetes, no los genera",
+   "ping / ping6 → solo comprueban la conexión",
+   "traceroute → lista los saltos",
+   "nmap → qué escucha en cada puerto"
+  ]
+ },
+ "SYBEX-AT-14": {
+  "cue": "NIC nueva sin conectividad: qué revisar",
+  "answer": "ifconfig eth2 + dmesg + archivos de /var/log/",
+  "contrast": [
+   "dmesg → ¿se cargó el módulo de la tarjeta?",
+   "ping / tcpdump → nada nuevo: no pasan paquetes"
+  ]
+ },
+ "SYBEX-AT-15": {
+  "cue": "cinta que rebobina sola",
+  "answer": "/dev/st0 (SCSI) + /dev/ht1 (PATA)",
+  "contrast": [
+   "/dev/nst0, /dev/nht0 → no rebobinan",
+   "/dev/sdt1 → una partición, no una cinta"
+  ],
+  "mnemo": "n delante = no rebobina"
+ },
+ "SYBEX-AT-16": {
+  "cue": "rndc sobre BIND: qué puede hacer",
+  "answer": "detener + recargar configuración y zonas",
+  "contrast": ["arrancar → no: solo controla BIND en marcha"]
+ },
+ "SYBEX-AT-17": {
+  "cue": "BIND: valores de la directiva type",
+  "answer": "hint + forward + stub",
+  "contrast": [
+   "primary / secondary → no: master / slave",
+   "hint → lista de servidores raíz"
+  ]
+ },
+ "SYBEX-AT-18": {
+  "cue": "apache2ctl: sus comandos válidos",
+  "answer": "restart + graceful + fullstatus + status",
+  "contrast": [
+   "restart → cierra conexiones y reinicia",
+   "graceful → reinicia sin cortar conexiones",
+   "fullstatus / status → informe completo / breve"
+  ]
+ },
+ "SYBEX-AT-19": {
+  "cue": "Nginx: afirmaciones ciertas",
+  "answer": "asíncrono + puerto TCP 80 + proxy inverso",
+  "contrast": ["un hilo aparte por cliente → no, es asíncrono"]
+ },
+ "SYBEX-AT-20": {
+  "cue": "Samba: bases de datos de cuentas",
+  "answer": "smbpasswd + tdbsam + ldapsam",
+  "contrast": [
+   "net → comando: une Samba a un dominio",
+   "smbclient → comando: conecta y lista recursos"
+  ]
+ },
+ "SYBEX-AT-21": {
+  "cue": "exportaciones NFS: listarlas y aplicarlas",
+  "answer": "exportfs",
+  "contrast": [
+   "showmount → quién monta qué",
+   "rpcinfo → servicios RPC",
+   "nfsstat → estadísticas NFS"
+  ]
+ },
+ "SYBEX-AT-22": {
+  "cue": "DHCPd: dónde registra sus eventos",
+  "answer": "/var/log/messages o el diario de systemd",
+  "contrast": [
+   "pump → cliente DHCP, no un registro",
+   "BOOTP → protocolo, no un diario",
+   "dhcpd.leases → IP cedidas, no eventos"
+  ]
+ },
+ "SYBEX-AT-23": {
+  "cue": "PAM con el Security Services Daemon",
+  "answer": "pam_sss.so",
+  "contrast": [
+   "pam_unix.so → /etc/passwd y /etc/shadow",
+   "pam_nis.so → servidor NIS",
+   "pam_krb5.so → Kerberos 5",
+   "pam_ldap.so → servidor LDAP"
+  ]
+ },
+ "SYBEX-AT-24": {
+  "cue": "añadir objetos a una base LDAP",
+  "answer": "ldapadd + ldapmodify",
+  "contrast": [
+   "ldapadd → enlace a ldapmodify, para LDIF",
+   "ldappasswd → cambia la contraseña",
+   "ldapsearch → consulta, no añade"
+  ]
+ },
+ "SYBEX-AT-25": {
+  "cue": "OpenLDAP con un solo archivo de texto",
+  "answer": "slapd.conf",
+  "contrast": [
+   "slapd-conf → varios archivos LDIF",
+   "/etc/ldap → directorio de slapd-conf"
+  ]
+ },
+ "SYBEX-AT-26": {
+  "cue": "Postfix: emulación de sendmail",
+  "answer": "sendmail + mailq + newaliases",
+  "contrast": [
+   "procmail → recetas de cada usuario",
+   "mbox → un buzón, un archivo"
+  ]
+ },
+ "SYBEX-AT-27": {
+  "cue": "pseudoarchivos que controlan el encaminamiento",
+  "answer": "/proc/sys/net/ (ipv4, ipv6)",
+  "contrast": [
+   "/proc/sys/vm/ → memoria virtual",
+   "/proc/sys/dev/ → parámetros de dispositivos",
+   "/srv/ → datos servidos, sin pseudoarchivos"
+  ]
+ },
+ "SYBEX-AT-28": {
+  "cue": "Very Secure FTP: su archivo principal",
+  "answer": "vsftpd.conf"
+ },
+ "SYBEX-AT-29": {
+  "cue": "OpenSSH: opción del nivel soportado",
+  "answer": "Protocol",
+  "contrast": [
+   "PermitRootLogin → root entra directo o no",
+   "PubKeyAuthentication → por clave pública",
+   "AllowUsers → lista de usuarios permitidos",
+   "PasswordAuthentication → por contraseña"
+  ]
+ },
+ "SYBEX-AT-30": {
+  "cue": "actualiza el cortafuegos por su cuenta",
+  "answer": "fail2ban",
+  "contrast": [
+   "Snort → por defecto solo alerta",
+   "Bugtraq → lista de correo de seguridad",
+   "nmap / nc → auditan, no modifican el cortafuegos"
+  ],
+  "mnemo": "fail2ban = fail → ban"
+ }
+}

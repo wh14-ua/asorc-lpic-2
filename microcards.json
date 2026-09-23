@@ -1,0 +1,2771 @@
+{
+ "schema_version": 1,
+ "nota": "Microtarjetas de repaso rápido: pista corta → respuesta corta, una por pregunta. Salen solo del material de cada pregunta; questions.json no se toca.",
+ "tarjetas": {
+  "SYBEX-AT-01": {
+   "cue": "info de procesos: los cuatro",
+   "answer": "lsof + pstree + netstat + pmap",
+   "contrast": [
+    "iostat → E/S por dispositivo, no procesos"
+   ]
+  },
+  "SYBEX-AT-02": {
+   "cue": "insertar controladores sin recompilar el kernel",
+   "answer": "modules (módulos)"
+  },
+  "SYBEX-AT-03": {
+   "cue": "archivo de configuración del kernel",
+   "answer": "/usr/src/linux/.config",
+   "contrast": [
+    "/etc/modules.conf → los módulos, no el kernel",
+    "/boot/grub/grub.conf → GRUB Legacy",
+    "/usr/src/linux/arch/x86/boot → bzImage"
+   ]
+  },
+  "SYBEX-AT-04": {
+   "cue": "versión del kernel: dónde se lee",
+   "answer": "/proc/sys/kernel (archivo version)",
+   "contrast": [
+    "/proc/ioports → puertos de E/S del hardware",
+    "/proc/dma → canales DMA",
+    "/etc/sysctl.d → ajustes del kernel"
+   ]
+  },
+  "SYBEX-AT-05": {
+   "cue": "equivalente de chkconfig",
+   "answer": "update-rc.d (Debian)",
+   "contrast": [
+    "init / telinit → equivalentes, pero entre sí",
+    "inittab → un archivo, no un comando",
+    "rc → lanza los scripts de un nivel"
+   ]
+  },
+  "SYBEX-AT-06": {
+   "cue": "GRUB Legacy: lo que sí usa",
+   "answer": "menú + shell de grub + comando initrd",
+   "contrast": [
+    "/boot/grub/grub.cfg → de GRUB2, no de Legacy",
+    "por UEFI → no: nació en 1999 para mejorar LILO",
+    "initrd → el disco RAM del arranque"
+   ]
+  },
+  "SYBEX-AT-07": {
+   "cue": "cargadores de arranque de Linux: los cuatro",
+   "answer": "SYSLINUX + EXTLINUX + ISOLINUX + PXELINUX",
+   "contrast": [
+    "TFTP → transporta la imagen, no arranca"
+   ]
+  },
+  "SYBEX-AT-08": {
+   "cue": "mount a secas: de dónde lee",
+   "answer": "/etc/mtab",
+   "contrast": [
+    "/etc/fstab → lo que se monta al arrancar",
+    "/proc/mounts → casi igual, pero mount no lo lee",
+    "/proc/filesystems → los que soporta el kernel"
+   ]
+  },
+  "SYBEX-AT-09": {
+   "cue": "smartd: su archivo de configuración",
+   "answer": "smartd.conf"
+  },
+  "SYBEX-AT-10": {
+   "cue": "estado de un RAID por software",
+   "answer": "mdadm --detail /dev/md1 o cat /proc/mdstat",
+   "contrast": [
+    "mdadm --misc --detail → igual; --misc sobra",
+    "/etc/mdadm.conf → configuración, no estado"
+   ]
+  },
+  "SYBEX-AT-11": {
+   "cue": "grupo de volúmenes: crearlo y ampliarlo",
+   "answer": "vgcreate + vgextend",
+   "contrast": [
+    "pvcreate → marca un volumen físico",
+    "lvcreate → saca un volumen lógico del grupo",
+    "mdadm → arrays RAID, no volúmenes lógicos"
+   ],
+   "mnemo": "pv = físico, vg = grupo, lv = lógico"
+  },
+  "SYBEX-AT-12": {
+   "cue": "ver la tabla ARP",
+   "answer": "arp a secas, no ifconfig -arp",
+   "contrast": [
+    "ifconfig -arp → activa o desactiva ARP",
+    "route -n → tabla de encaminamiento"
+   ]
+  },
+  "SYBEX-AT-13": {
+   "cue": "simular tráfico entre servidor y cliente",
+   "answer": "nc",
+   "contrast": [
+    "tcpdump → captura paquetes, no los genera",
+    "ping / ping6 → solo comprueban la conexión",
+    "traceroute → lista los saltos",
+    "nmap → qué escucha en cada puerto"
+   ]
+  },
+  "SYBEX-AT-14": {
+   "cue": "NIC nueva sin conectividad: qué revisar",
+   "answer": "ifconfig eth2 + dmesg + archivos de /var/log/",
+   "contrast": [
+    "dmesg → ¿se cargó el módulo de la tarjeta?",
+    "ping / tcpdump → nada nuevo: no pasan paquetes"
+   ]
+  },
+  "SYBEX-AT-15": {
+   "cue": "cinta que rebobina sola",
+   "answer": "/dev/st0 (SCSI) + /dev/ht1 (PATA)",
+   "contrast": [
+    "/dev/nst0, /dev/nht0 → no rebobinan",
+    "/dev/sdt1 → una partición, no una cinta"
+   ],
+   "mnemo": "n delante = no rebobina"
+  },
+  "SYBEX-AT-16": {
+   "cue": "rndc sobre BIND: qué puede hacer",
+   "answer": "detener + recargar configuración y zonas",
+   "contrast": [
+    "arrancar → no: solo controla BIND en marcha"
+   ]
+  },
+  "SYBEX-AT-17": {
+   "cue": "BIND: valores de la directiva type",
+   "answer": "hint + forward + stub",
+   "contrast": [
+    "primary / secondary → no: master / slave",
+    "hint → lista de servidores raíz"
+   ]
+  },
+  "SYBEX-AT-18": {
+   "cue": "apache2ctl: sus comandos válidos",
+   "answer": "restart + graceful + fullstatus + status",
+   "contrast": [
+    "restart → cierra conexiones y reinicia",
+    "graceful → reinicia sin cortar conexiones",
+    "fullstatus / status → informe completo / breve"
+   ]
+  },
+  "SYBEX-AT-19": {
+   "cue": "Nginx: afirmaciones ciertas",
+   "answer": "asíncrono + puerto TCP 80 + proxy inverso",
+   "contrast": [
+    "un hilo aparte por cliente → no, es asíncrono"
+   ]
+  },
+  "SYBEX-AT-20": {
+   "cue": "Samba: bases de datos de cuentas",
+   "answer": "smbpasswd + tdbsam + ldapsam",
+   "contrast": [
+    "net → comando: une Samba a un dominio",
+    "smbclient → comando: conecta y lista recursos"
+   ]
+  },
+  "SYBEX-AT-21": {
+   "cue": "exportaciones NFS: listarlas y aplicarlas",
+   "answer": "exportfs",
+   "contrast": [
+    "showmount → quién monta qué",
+    "rpcinfo → servicios RPC",
+    "nfsstat → estadísticas NFS"
+   ]
+  },
+  "SYBEX-AT-22": {
+   "cue": "DHCPd: dónde registra sus eventos",
+   "answer": "/var/log/messages o el diario de systemd",
+   "contrast": [
+    "pump → cliente DHCP, no un registro",
+    "BOOTP → protocolo, no un diario",
+    "dhcpd.leases → IP cedidas, no eventos"
+   ]
+  },
+  "SYBEX-AT-23": {
+   "cue": "PAM con el Security Services Daemon",
+   "answer": "pam_sss.so",
+   "contrast": [
+    "pam_unix.so → /etc/passwd y /etc/shadow",
+    "pam_nis.so → servidor NIS",
+    "pam_krb5.so → Kerberos 5",
+    "pam_ldap.so → servidor LDAP"
+   ]
+  },
+  "SYBEX-AT-24": {
+   "cue": "añadir objetos a una base LDAP",
+   "answer": "ldapadd + ldapmodify",
+   "contrast": [
+    "ldapadd → enlace a ldapmodify, para LDIF",
+    "ldappasswd → cambia la contraseña",
+    "ldapsearch → consulta, no añade"
+   ]
+  },
+  "SYBEX-AT-25": {
+   "cue": "OpenLDAP con un solo archivo de texto",
+   "answer": "slapd.conf",
+   "contrast": [
+    "slapd-conf → varios archivos LDIF",
+    "/etc/ldap → directorio de slapd-conf"
+   ]
+  },
+  "SYBEX-AT-26": {
+   "cue": "Postfix: emulación de sendmail",
+   "answer": "sendmail + mailq + newaliases",
+   "contrast": [
+    "procmail → recetas de cada usuario",
+    "mbox → un buzón, un archivo"
+   ]
+  },
+  "SYBEX-AT-27": {
+   "cue": "pseudoarchivos que controlan el encaminamiento",
+   "answer": "/proc/sys/net/ (ipv4, ipv6)",
+   "contrast": [
+    "/proc/sys/vm/ → memoria virtual",
+    "/proc/sys/dev/ → parámetros de dispositivos",
+    "/srv/ → datos servidos, sin pseudoarchivos"
+   ]
+  },
+  "SYBEX-AT-28": {
+   "cue": "Very Secure FTP: su archivo principal",
+   "answer": "vsftpd.conf"
+  },
+  "SYBEX-AT-29": {
+   "cue": "OpenSSH: opción del nivel soportado",
+   "answer": "Protocol",
+   "contrast": [
+    "PermitRootLogin → root entra directo o no",
+    "PubKeyAuthentication → por clave pública",
+    "AllowUsers → lista de usuarios permitidos",
+    "PasswordAuthentication → por contraseña"
+   ]
+  },
+  "SYBEX-AT-30": {
+   "cue": "actualiza el cortafuegos por su cuenta",
+   "answer": "fail2ban",
+   "contrast": [
+    "Snort → por defecto solo alerta",
+    "Bugtraq → lista de correo de seguridad",
+    "nmap / nc → auditan, no modifican el cortafuegos"
+   ],
+   "mnemo": "fail2ban = fail → ban"
+  },
+  "SYBEX-CH01-RQ01": {
+   "cue": "lo primero que arranca el firmware",
+   "answer": "el cargador de arranque",
+   "contrast": [
+    "init / telinit / mount → ya con Linux arrancado"
+   ]
+  },
+  "SYBEX-CH01-RQ02": {
+   "cue": "firmware: dónde busca primero el cargador",
+   "answer": "MBR: primer sector del primer disco",
+   "contrast": [
+    "partición de arranque → la busca el cargador",
+    "/boot/grub → configuración, no el cargador"
+   ],
+   "mnemo": "MBR = Master Boot Record"
+  },
+  "SYBEX-CH01-RQ03": {
+   "cue": "mensajes de arranque más recientes",
+   "answer": "dmesg (búfer circular del kernel)",
+   "contrast": [
+    "init → arranca programas desde el kernel",
+    "chkconfig → niveles de ejecución de un programa"
+   ]
+  },
+  "SYBEX-CH01-RQ04": {
+   "cue": "carpeta de los registros de arranque",
+   "answer": "/var/log",
+   "contrast": [
+    "/var/messages → algunos Unix, no Linux",
+    "/boot → configuración de GRUB e imágenes",
+    "/proc → datos del kernel en vivo"
+   ]
+  },
+  "SYBEX-CH01-RQ05": {
+   "cue": "BIOS: sitios donde puede buscar el cargador",
+   "answer": "todos: disco interno o externo, DVD, USB y red (PXE)"
+  },
+  "SYBEX-CH01-RQ06": {
+   "cue": "dónde está el MBR",
+   "answer": "primer sector del primer disco duro",
+   "contrast": [
+    "partición de arranque → cargador sí, MBR no"
+   ]
+  },
+  "SYBEX-CH01-RQ07": {
+   "cue": "dónde está la ESP en Linux",
+   "answer": "/boot/efi",
+   "contrast": [
+    "/boot/grub → configuración e imágenes de GRUB"
+   ],
+   "mnemo": "ESP = EFI System Partition"
+  },
+  "SYBEX-CH01-RQ08": {
+   "cue": "extensión de los cargadores UEFI",
+   "answer": ".efi",
+   "contrast": [
+    ".uefi → no se usa en Linux",
+    ".cfg → configuración de GRUB2",
+    ".conf / .lst → configuración de GRUB Legacy"
+   ]
+  },
+  "SYBEX-CH01-RQ09": {
+   "cue": "primer cargador de arranque de Linux",
+   "answer": "LILO",
+   "contrast": [
+    "GRUB Legacy → el segundo, pese al nombre",
+    "GRUB2 → mejora posterior de GRUB Legacy"
+   ],
+   "mnemo": "LILO = Linux Loader"
+  },
+  "SYBEX-CH01-RQ10": {
+   "cue": "configuración de GRUB Legacy: dónde",
+   "answer": "/boot/grub",
+   "contrast": [
+    "/boot/efi → cargadores UEFI",
+    "/etc → muchas configuraciones, pero no esta"
+   ]
+  },
+  "SYBEX-CH01-RQ11": {
+   "cue": "configuración de GRUB2: los dos sitios",
+   "answer": "/boot/grub + /etc/grub.d",
+   "contrast": [
+    "/boot/efi → archivos del cargador UEFI"
+   ]
+  },
+  "SYBEX-CH01-RQ12": {
+   "cue": "generar el grub.cfg de GRUB2",
+   "answer": "grub-mkconfig",
+   "contrast": [
+    "grub-install → instala el cargador en el MBR"
+   ]
+  },
+  "SYBEX-CH01-RQ13": {
+   "cue": "lo que usa el kernel para arrancar programas",
+   "answer": "init",
+   "contrast": [
+    "GRUB2 → lo lanza el firmware, no el kernel",
+    "systemctl → controla programas en systemd",
+    "telinit → cambia el nivel actual"
+   ]
+  },
+  "SYBEX-CH01-RQ14": {
+   "cue": "SysV: archivo del nivel por defecto",
+   "answer": "/etc/inittab (ajuste initdefault)",
+   "contrast": [
+    "/etc/init.d, /etc/rc.d → scripts de arranque",
+    "/etc/grub.d → configuración de GRUB2"
+   ]
+  },
+  "SYBEX-CH01-RQ15": {
+   "cue": "nivel de ejecución por defecto en Debian",
+   "answer": "2",
+   "contrast": [
+    "5 → gráfico por defecto en Red Hat",
+    "1 → monousuario",
+    "0 → apaga",
+    "6 → reinicia"
+   ]
+  },
+  "SYBEX-CH01-RQ16": {
+   "cue": "cambiar el nivel de ejecución actual",
+   "answer": "init + telinit",
+   "contrast": [
+    "chkconfig / update-rc.d → niveles de un programa"
+   ]
+  },
+  "SYBEX-CH01-RQ17": {
+   "cue": "ver en qué niveles arranca un programa",
+   "answer": "chkconfig",
+   "contrast": [
+    "update-rc.d → los cambia, pero no los muestra",
+    "init / telinit → nivel de todo el sistema"
+   ]
+  },
+  "SYBEX-CH01-RQ18": {
+   "cue": "Debian: fijar los niveles de un programa",
+   "answer": "update-rc.d",
+   "contrast": [
+    "chkconfig → su equivalente en Red Hat",
+    "init / telinit → nivel de todo el sistema"
+   ]
+  },
+  "SYBEX-CH01-RQ19": {
+   "cue": "partición que no monta por errores",
+   "answer": "fsck",
+   "contrast": [
+    "mount → acopla",
+    "umount → retira",
+    "init / telinit → nivel de ejecución"
+   ]
+  },
+  "SYBEX-CH01-RQ20": {
+   "cue": "acoplar una partición al directorio virtual",
+   "answer": "mount",
+   "contrast": [
+    "umount → la retira",
+    "fsck → la repara, no la monta",
+    "dmesg → dice dónde se acopló, no acopla"
+   ]
+  },
+  "SYBEX-CH02-RQ01": {
+   "cue": "mensaje a las terminales tty",
+   "answer": "write (a una) + wall (a todas)",
+   "contrast": [
+    "mesg → solo el permiso de escritura",
+    "echo → solo tu propia salida estándar",
+    "mail → correo, no mensajes de terminal"
+   ]
+  },
+  "SYBEX-CH02-RQ02": {
+   "cue": "apagar sin avisar a los usuarios",
+   "answer": "shutdown --no-wall",
+   "contrast": [
+    "-c → cancela un apagado",
+    "-k → no apaga; bloquea inicios de sesión"
+   ]
+  },
+  "SYBEX-CH02-RQ03": {
+   "cue": "aviso legal antes de iniciar sesión",
+   "answer": "/etc/issue (y /etc/issue.net por red)",
+   "contrast": [
+    "/etc/motd → después de entrar: tarde",
+    "notify-send → aviso único, solo entorno gráfico"
+   ]
+  },
+  "SYBEX-CH02-RQ04": {
+   "cue": "soporte de copia más rápido",
+   "answer": "SSD",
+   "contrast": [
+    "HDD → entre la cinta y el SSD",
+    "cintas magnéticas → de lo más lento",
+    "NAS → no dice qué soporte hay detrás"
+   ]
+  },
+  "SYBEX-CH02-RQ05": {
+   "cue": "lo cambiado desde la última completa",
+   "answer": "incremental o diferencial",
+   "contrast": [
+    "incremental → desde la última copia",
+    "diferencial → desde la última completa"
+   ]
+  },
+  "SYBEX-CH02-RQ06": {
+   "cue": "restauración completa: qué directorios copiar",
+   "answer": "/bin/ + /home/",
+   "contrast": [
+    "/bin/ → programas de utilidad",
+    "/home/ → archivos de los usuarios",
+    "/run/ y /tmp/ → temporales: no se copian"
+   ]
+  },
+  "SYBEX-CH02-RQ07": {
+   "cue": "copias con interfaz gráfica o web",
+   "answer": "Amanda + Duplicity + Bacula",
+   "contrast": [
+    "Nagios → monitoriza recursos, no copia"
+   ]
+  },
+  "SYBEX-CH02-RQ08": {
+   "cue": "tar con compresión gzip: sus tres formas",
+   "answer": "--gzip + -z + z (larga, corta, antigua)",
+   "contrast": [
+    "-g / g → copias incrementales, no compresión"
+   ]
+  },
+  "SYBEX-CH02-RQ09": {
+   "cue": "tar incremental: extensión de la instantánea",
+   "answer": ".snar"
+  },
+  "SYBEX-CH02-RQ10": {
+   "cue": "tar: verificar la copia recién creada",
+   "answer": "-d (--compare, --diff) + -W (--verify)",
+   "contrast": [
+    "-d → compara con los archivos de fuera",
+    "-W → solo archivadores, no tarballs",
+    "-J → comprime con xz, no verifica"
+   ]
+  },
+  "SYBEX-CH02-RQ11": {
+   "cue": "cinta con rebobinado automático",
+   "answer": "/dev/st0 (SCSI) + /dev/ht1 (PATA)",
+   "contrast": [
+    "/dev/nst0, /dev/nht0, /dev/nht1 → no rebobinan"
+   ],
+   "mnemo": "n delante = no rebobina"
+  },
+  "SYBEX-CH02-RQ12": {
+   "cue": "controlar una cinta magnética",
+   "answer": "mt",
+   "contrast": [
+    "tar / star → la usan, no la controlan",
+    "dd / rsync → copian, pero no controlan cintas"
+   ],
+   "mnemo": "mt = magnetic tape"
+  },
+  "SYBEX-CH02-RQ13": {
+   "cue": "rsync a ServerA, cifrado con OpenSSH",
+   "answer": "rsync -av Project ServerA:~/",
+   "contrast": [
+    "sin los dos puntos → ServerA es otro archivo",
+    "rsync:// → demonio rsync, sin cifrar",
+    "/run/media/ServerA → medio extraíble local"
+   ]
+  },
+  "SYBEX-CH02-RQ14": {
+   "cue": "dd: para qué sirve",
+   "answer": "copia de bajo nivel y poner a cero (/dev/zero)",
+   "contrast": [
+    "disco montado → puede corromperlo",
+    "incrementales diarias → no se usa",
+    "cintas → no las gestiona"
+   ]
+  },
+  "SYBEX-CH02-RQ15": {
+   "cue": "código fuente: instrucciones de instalación",
+   "answer": "README + INSTALL",
+   "contrast": [
+    "COPYING → la licencia",
+    "RELEASE-NOTES / NEWS → novedades de la versión"
+   ]
+  },
+  "SYBEX-CH02-RQ16": {
+   "cue": "crea el Makefile a partir de Makefile.in",
+   "answer": "configure",
+   "contrast": [
+    "make → compila con el Makefile",
+    "make install → coloca los archivos"
+   ]
+  },
+  "SYBEX-CH02-RQ17": {
+   "cue": "ver la memoria del sistema: los tres",
+   "answer": "free + vmstat + top",
+   "contrast": [
+    "top → la memoria, entre otras estadísticas",
+    "mtr → vista dinámica del encaminamiento"
+   ]
+  },
+  "SYBEX-CH02-RQ18": {
+   "cue": "CPU 20 veces cada 2 segundos",
+   "answer": "sar 2 20 (intervalo, veces)",
+   "contrast": [
+    "sar 20 2 → 2 veces cada 20 segundos",
+    "uptime → no acepta parámetros"
+   ]
+  },
+  "SYBEX-CH02-RQ19": {
+   "cue": "monitorización de recursos: los tres",
+   "answer": "collectd + MRTG + Nagios",
+   "contrast": [
+    "Duplicity → copias de seguridad"
+   ]
+  },
+  "SYBEX-CH02-RQ20": {
+   "cue": "memoria de un proceso inactivo",
+   "answer": "se vuelca al swap (o memoria virtual)",
+   "contrast": [
+    "hojas → no: la memoria se divide en páginas",
+    "swapping → de RAM al swap, no entre procesos",
+    "psmap → mapea procesos, no da estadísticas"
+   ]
+  },
+  "SYBEX-CH03-RQ01": {
+   "cue": "Linux: quién gestiona la memoria",
+   "answer": "el kernel",
+   "contrast": [
+    "utilidades GNU → manipulan archivos y datos",
+    "aplicaciones → piden memoria, no la gestionan"
+   ]
+  },
+  "SYBEX-CH03-RQ02": {
+   "cue": "zona del disco que hace de memoria",
+   "answer": "espacio de intercambio (swap)",
+   "contrast": [
+    "memoria virtual → RAM + disco",
+    "memoria física → la RAM real"
+   ]
+  },
+  "SYBEX-CH03-RQ03": {
+   "cue": "Linux: cargar controladores en el kernel",
+   "answer": "módulos",
+   "contrast": [
+    "archivos DLL → Windows",
+    "cargador de arranque → carga el kernel"
+   ]
+  },
+  "SYBEX-CH03-RQ04": {
+   "cue": "tipo de archivo del kernel para arrancar",
+   "answer": "archivo binario",
+   "contrast": [
+    "código fuente → hay que compilarlo antes",
+    "parche → texto para el fuente",
+    "módulos → se cargan después de arrancar"
+   ]
+  },
+  "SYBEX-CH03-RQ05": {
+   "cue": "actualizar el kernel a la versión siguiente",
+   "answer": "parche (patch release)",
+   "contrast": [
+    "publicación de desarrollo → el fuente completo",
+    "binarios → el kernel ya compilado",
+    "módulos → cargan controladores"
+   ]
+  },
+  "SYBEX-CH03-RQ06": {
+   "cue": "make: configurar con preguntas en texto",
+   "answer": "make config",
+   "contrast": [
+    "xconfig / gconfig → menús gráficos",
+    "mrproper / clean → borran lo anterior"
+   ]
+  },
+  "SYBEX-CH03-RQ07": {
+   "cue": "make: configurar con menú gráfico",
+   "answer": "make gconfig",
+   "contrast": [
+    "config → preguntas en texto",
+    "mrproper / clean → borran lo anterior"
+   ]
+  },
+  "SYBEX-CH03-RQ08": {
+   "cue": "make: borrar archivos objeto antiguos",
+   "answer": "make mrproper",
+   "contrast": [
+    "oldconfig → usa la configuración antigua",
+    "bzImage → compila el binario",
+    "gconfig → crea configuración nueva"
+   ]
+  },
+  "SYBEX-CH03-RQ09": {
+   "cue": "make: binario comprimido del kernel",
+   "answer": "make bzImage (o zImage)",
+   "contrast": [
+    "kernel → objetivo no válido: da error",
+    "config → solo el archivo de configuración",
+    "clean → borra lo anterior"
+   ]
+  },
+  "SYBEX-CH03-RQ10": {
+   "cue": "Debian: crear el disco RAM inicial",
+   "answer": "mkinitramfs",
+   "contrast": [
+    "mkinitrd → el de Red Hat"
+   ]
+  },
+  "SYBEX-CH03-RQ11": {
+   "cue": "listar todos los módulos del kernel",
+   "answer": "lsmod",
+   "contrast": [
+    "modinfo → datos de un solo módulo",
+    "insmod → inserta",
+    "rmmod → elimina"
+   ]
+  },
+  "SYBEX-CH03-RQ12": {
+   "cue": "cargar un módulo sin saber su archivo",
+   "answer": "modprobe",
+   "contrast": [
+    "insmod → necesita el archivo",
+    "rmmod → elimina",
+    "lsmod → lista"
+   ]
+  },
+  "SYBEX-CH03-RQ13": {
+   "cue": "información de los dispositivos USB",
+   "answer": "lsusb",
+   "contrast": [
+    "lspci → tarjetas PCI",
+    "lsmod → módulos; no ve lo que va en el kernel",
+    "lsdev → puertos de E/S de todo el hardware"
+   ]
+  },
+  "SYBEX-CH03-RQ14": {
+   "cue": "lsusb: información detallada",
+   "answer": "-v",
+   "contrast": [
+    "-d → por ID de fabricante",
+    "-s → por bus",
+    "-t → en árbol, sin detalle"
+   ],
+   "mnemo": "-v = verbose"
+  },
+  "SYBEX-CH03-RQ15": {
+   "cue": "conectar hardware con el sistema en marcha",
+   "answer": "hotplug (como el USB)",
+   "contrast": [
+    "coldplug → con el equipo apagado",
+    "PCI / PCIe → solo con el equipo apagado"
+   ],
+   "mnemo": "hot = en caliente"
+  },
+  "SYBEX-CH03-RQ16": {
+   "cue": "detectar hotplug y cargar su módulo",
+   "answer": "udevd",
+   "contrast": [
+    "modprobe / insmod → a mano, no detectan",
+    "lsusb → solo lista"
+   ]
+  },
+  "SYBEX-CH03-RQ17": {
+   "cue": "ajustes de configuración de udevd",
+   "answer": "/etc/udev/udev.conf",
+   "contrast": [
+    "/etc/udev/rules.d → las reglas",
+    "/lib/modules → archivos de módulos",
+    "/boot → binario del kernel"
+   ]
+  },
+  "SYBEX-CH03-RQ18": {
+   "cue": "dónde están las reglas de udevd",
+   "answer": "/etc/udev/rules.d",
+   "contrast": [
+    "/etc/udev/udevd.conf → los ajustes",
+    "/lib/modules → archivos de módulos",
+    "/boot → binario del kernel"
+   ],
+   "mnemo": "rules.d = las reglas"
+  },
+  "SYBEX-CH03-RQ19": {
+   "cue": "pseudodirectorio con ajustes y estadísticas del kernel",
+   "answer": "/proc",
+   "contrast": [
+    "/usr/src/linux → código fuente del kernel"
+   ]
+  },
+  "SYBEX-CH03-RQ20": {
+   "cue": "cambiar ajustes del kernel en marcha",
+   "answer": "sysctl",
+   "contrast": [
+    "modprobe → mete y saca módulos, no ajustes",
+    "lsmod → lista módulos",
+    "lsdev → información de dispositivos"
+   ]
+  },
+  "SYBEX-CH04-RQ01": {
+   "cue": "crear un sistema ext2: las tres formas",
+   "answer": "mkfs -t ext2 + mkfs.ext2 + mke2fs"
+  },
+  "SYBEX-CH04-RQ02": {
+   "cue": "todos los sistemas de archivos soportados",
+   "answer": "/proc/filesystems",
+   "contrast": [
+    "/etc/mtab, /proc/mounts → solo los montados",
+    "/proc/swaps → espacio de intercambio",
+    "/proc/cpuinfo → los procesadores"
+   ]
+  },
+  "SYBEX-CH04-RQ03": {
+   "cue": "acoplar un sistema de archivos temporalmente",
+   "answer": "mount",
+   "contrast": [
+    "/etc/fstab → persistente, no temporal",
+    "mkfs → formatea, no acopla",
+    "e2label → solo da la etiqueta",
+    "AutoFS → hay que configurarlo antes"
+   ]
+  },
+  "SYBEX-CH04-RQ04": {
+   "cue": "mount: montar por UUID",
+   "answer": "-U",
+   "contrast": [
+    "-L → por etiqueta",
+    "-o → opciones de montaje",
+    "-a → todo lo de /etc/fstab sin montar",
+    "-n → sin actualizar /etc/mtab"
+   ]
+  },
+  "SYBEX-CH04-RQ05": {
+   "cue": "escribir ya los metadatos que están en memoria",
+   "answer": "sync",
+   "contrast": [
+    "fuser / lsof → quién usa el sistema de archivos",
+    "dmesg → búfer del kernel, no vacía nada"
+   ]
+  },
+  "SYBEX-CH04-RQ06": {
+   "cue": "los seis campos de /etc/fstab",
+   "answer": "nombre, punto de montaje, tipo, opciones, dump, fsck",
+   "contrast": [
+    "cpio → no: el volcado es de dump",
+    "AutoFS → sus montajes no van en /etc/fstab"
+   ]
+  },
+  "SYBEX-CH04-RQ07": {
+   "cue": "averiguar el UUID de un sistema de archivos",
+   "answer": "blkid",
+   "contrast": [
+    "e2label → la etiqueta, no el UUID",
+    "findfs → necesita ya la etiqueta o el UUID",
+    "findmnt / mount → lo montado, sin UUID"
+   ]
+  },
+  "SYBEX-CH04-RQ08": {
+   "cue": "Btrfs: niveles RAID posibles",
+   "answer": "RAID 0, 1 y 10",
+   "contrast": [
+    "RAID 5 y 6 (con paridad) → todavía no"
+   ]
+  },
+  "SYBEX-CH04-RQ09": {
+   "cue": "extensiones del estándar ISO9660",
+   "answer": "El Torito + Joliet + Rock Ridge",
+   "contrast": [
+    "UDF → estándar aparte, sobre todo DVD"
+   ]
+  },
+  "SYBEX-CH04-RQ10": {
+   "cue": "crear una imagen ISO",
+   "answer": "mkisofs",
+   "contrast": [
+    "cdrecord → la graba en el disco",
+    "mkfs → crea sistemas de archivos",
+    "mount -t iso9660 → la monta"
+   ]
+  },
+  "SYBEX-CH04-RQ11": {
+   "cue": "preparar una partición como espacio de intercambio",
+   "answer": "mkswap",
+   "contrast": [
+    "swapon → activa un swap ya preparado",
+    "swapoff → lo desactiva",
+    "swapon -s → estadísticas de intercambio"
+   ]
+  },
+  "SYBEX-CH04-RQ12": {
+   "cue": "tipos de mapa en /etc/auto.master",
+   "answer": "integrado, directo e indirecto",
+   "contrast": [
+    "SMART → autodiagnóstico de discos, no mapas"
+   ]
+  },
+  "SYBEX-CH04-RQ13": {
+   "cue": "AutoFS: usar otro archivo como mapa maestro",
+   "answer": "/etc/sysconfig/autofs (o /etc/default/autofs)",
+   "contrast": [
+    "auto.direct, auto.misc, auto.tmp → son mapas",
+    "/etc/autofs.net → script antiguo de AutoFS"
+   ]
+  },
+  "SYBEX-CH04-RQ14": {
+   "cue": "sistema de archivos cifrado por capas",
+   "answer": "eCryptfs",
+   "contrast": [
+    "dm-crypt, LUKS → cifran, pero no por capas",
+    "XFS, Btrfs → no cifran"
+   ]
+  },
+  "SYBEX-CH04-RQ15": {
+   "cue": "utilidad que NO ajusta ext2, ext3 ni ext4",
+   "answer": "uuidgen: solo genera números UUID",
+   "contrast": [
+    "debugfs, e2label, resize2fs, tune2fs → ajustan"
+   ]
+  },
+  "SYBEX-CH04-RQ16": {
+   "cue": "asignar un UUID nuevo a un ext4",
+   "answer": "tune2fs",
+   "contrast": [
+    "uuidgen → lo genera, no lo asigna",
+    "blkid → lo muestra, no lo cambia",
+    "e2label → la etiqueta",
+    "resize2fs → el tamaño"
+   ]
+  },
+  "SYBEX-CH04-RQ17": {
+   "cue": "fsck.xfs sobre un XFS: qué hace",
+   "answer": "nada: XFS repara con sus propias utilidades"
+  },
+  "SYBEX-CH04-RQ18": {
+   "cue": "Btrfs tras un desastre: recuperar archivos",
+   "answer": "btrfs restore",
+   "contrast": [
+    "check, rescue → ayudan, pero menos potentes",
+    "get property, scrub → no restauran"
+   ]
+  },
+  "SYBEX-CH04-RQ19": {
+   "cue": "XFS: buscar inconsistencias sin reparar",
+   "answer": "xfs_check (o xfs_repair -n)",
+   "contrast": [
+    "xfs_info → información, no inconsistencias",
+    "xfs_metadump → copia los metadatos",
+    "xfsdump / xfsrestore → copia y restauración"
+   ]
+  },
+  "SYBEX-CH04-RQ20": {
+   "cue": "SMART: resumen rápido de salud",
+   "answer": "smartctl -H",
+   "contrast": [
+    "-a → toda la información, no un resumen",
+    "-i → info del disco y si soporta SMART",
+    "-t short / -t long → lanzan pruebas"
+   ],
+   "mnemo": "-H de health"
+  },
+  "SYBEX-CH05-RQ01": {
+   "cue": "RAID tolerantes a fallos",
+   "answer": "RAID 1, 5, 6 y 10: todos menos el 0",
+   "contrast": [
+    "RAID 0 → solo bandas: no guarda nada de más"
+   ]
+  },
+  "SYBEX-CH05-RQ02": {
+   "cue": "distribución por bandas con doble paridad",
+   "answer": "RAID 6",
+   "contrast": [
+    "RAID 5 → paridad simple",
+    "RAID 0 → solo bandas",
+    "RAID 1 → espejo",
+    "RAID 10 → espejo con bandas"
+   ]
+  },
+  "SYBEX-CH05-RQ03": {
+   "cue": "¿RAID por software soportado?",
+   "answer": "/proc/mdstat",
+   "contrast": [
+    "/dev/md0 → el array",
+    "/etc/mdadm/mdadm.conf → configuración",
+    "/dev/mapper → Device Mapper"
+   ]
+  },
+  "SYBEX-CH05-RQ04": {
+   "cue": "mdadm: el modo que NO existe",
+   "answer": "delete (borrado)",
+   "contrast": [
+    "grow → hace crecer, reduce o reconfigura",
+    "--follow → vigila unidades md y reacciona",
+    "--manage → gestiona miembros, añade reservas",
+    "misceláneo → lo demás (borrar superbloques)"
+   ]
+  },
+  "SYBEX-CH05-RQ05": {
+   "cue": "mdadm: modo para crear un array",
+   "answer": "-C (--create)",
+   "contrast": [
+    "-F → follow o monitor",
+    "--grow, --misc → modos que no crean arrays"
+   ]
+  },
+  "SYBEX-CH05-RQ06": {
+   "cue": "estado actual de los arrays RAID",
+   "answer": "/proc/mdstat",
+   "contrast": [
+    "mdadm.conf → configuración, no estado",
+    "/etc/fstab → no guarda estado de RAID"
+   ]
+  },
+  "SYBEX-CH05-RQ07": {
+   "cue": "mdadm: a qué array pertenece una unidad",
+   "answer": "--misc --examine /dev/sdc1",
+   "contrast": [
+    "--detail /dev/md0 → solo si es ese array",
+    "--monitor --help → opciones del modo monitor"
+   ]
+  },
+  "SYBEX-CH05-RQ08": {
+   "cue": "eliminar un array RAID desmontado",
+   "answer": "detenerlo y borrar los superbloques de sus unidades",
+   "contrast": [
+    "borrar los datos → no hace falta",
+    "reducir o monitorizar → no hace falta"
+   ]
+  },
+  "SYBEX-CH05-RQ09": {
+   "cue": "sobre qué unidades funciona hdparm",
+   "answer": "todas: PATA, ATAPI, SATA y SCSI",
+   "contrast": [
+    "SCSI → solo con SAT y algunas opciones"
+   ]
+  },
+  "SYBEX-CH05-RQ10": {
+   "cue": "sdparm: parámetros de modo comunes",
+   "answer": "ninguna opción: el comando a secas",
+   "contrast": [
+    "--all → toda la información reconocida",
+    "--hex → páginas VPD en hexadecimal",
+    "--page → código hexadecimal de cada página VPD",
+    "--command → stop, sync, start o load; no show"
+   ]
+  },
+  "SYBEX-CH05-RQ11": {
+   "cue": "iSCSI: designa a la vez destino y disco",
+   "answer": "IQN",
+   "contrast": [
+    "WWID, WWN, LUN → solo el disco, no el destino",
+    "scsi_id → comando para crear un número único"
+   ]
+  },
+  "SYBEX-CH05-RQ12": {
+   "cue": "iSCSI: registros de descubrimiento",
+   "answer": "/var/lib/iscsi/nodes + /var/lib/iscsi/send_targets",
+   "contrast": [
+    "/etc/iscsi/iscsid.conf → configuración",
+    "/lib/udev/scsi_id → el comando scsi_id"
+   ]
+  },
+  "SYBEX-CH05-RQ13": {
+   "cue": "agrupar varios discos como una sola unidad",
+   "answer": "RAID + gestión de volúmenes lógicos (LVM)",
+   "contrast": [
+    "iSCSI → trae un disco de red, no agrupa",
+    "tejido de almacenamiento → hardware de SAN"
+   ]
+  },
+  "SYBEX-CH05-RQ14": {
+   "cue": "partición sin usar designada para LVM",
+   "answer": "PV (volumen físico)",
+   "contrast": [
+    "VG → grupo que reúne varios PV",
+    "LV → lo que se saca del grupo",
+    "backstore → acceso a un medio físico en SAN"
+   ]
+  },
+  "SYBEX-CH05-RQ15": {
+   "cue": "tamaño del PE: cuándo se fija",
+   "answer": "al añadir el PV a un VG, no al designarlo",
+   "contrast": [
+    "PE → bloque mínimo que se asigna en un PV",
+    "tamaño por defecto → 4 MiB, y se puede elegir"
+   ],
+   "mnemo": "PE = physical extent"
+  },
+  "SYBEX-CH05-RQ16": {
+   "cue": "LE: a qué se asocian",
+   "answer": "a los extents físicos del VG",
+   "contrast": [
+    "LV → se compone de LE, no al revés",
+    "mapeo → da acceso a los datos, no bloquea",
+    "designar el PV → ahí no hay mapeo"
+   ],
+   "mnemo": "LE = extent lógico"
+  },
+  "SYBEX-CH05-RQ17": {
+   "cue": "designar una partición como PV",
+   "answer": "pvcreate",
+   "contrast": [
+    "pvdisplay → atributos de un PV",
+    "pvscan → lista los PV del sistema",
+    "vgcreate → mete PV en un VG"
+   ],
+   "mnemo": "…create crea, …display enseña, …scan lista"
+  },
+  "SYBEX-CH05-RQ18": {
+   "cue": "comprobar el recién creado vg01",
+   "answer": "vgdisplay",
+   "contrast": [
+    "pvdisplay → volúmenes físicos",
+    "lvdisplay → volúmenes lógicos",
+    "pvscan → lista los PV",
+    "vgcreate → crea, no comprueba"
+   ],
+   "mnemo": "el prefijo manda: pv, vg o lv"
+  },
+  "SYBEX-CH05-RQ19": {
+   "cue": "instantáneas de volúmenes lógicos: qué es cierto",
+   "answer": "son LV y se pueden montar",
+   "contrast": [
+    "solo lectura → no: lectura y escritura",
+    "datos originales → no se copian",
+    "vgcreate → no: se crean con lvcreate"
+   ]
+  },
+  "SYBEX-CH05-RQ20": {
+   "cue": "renombrar un LV",
+   "answer": "lvrename",
+   "contrast": [
+    "lvremove → lo elimina",
+    "lvconvert → cambia su disposición",
+    "lvs → información de los LV"
+   ],
+   "mnemo": "lvrename = LV + rename"
+  },
+  "SYBEX-CH06-RQ01": {
+   "cue": "cifrado WPA: en qué capa opera",
+   "answer": "física (la señal inalámbrica)",
+   "contrast": [
+    "red → direcciona con IP, sin tocar la señal",
+    "transporte → reparte por puertos",
+    "aplicación → donde corren los programas"
+   ]
+  },
+  "SYBEX-CH06-RQ02": {
+   "cue": "a qué red está conectado el sistema",
+   "answer": "máscara de red (netmask)",
+   "contrast": [
+    "dirección IP → sin máscara no dice la red",
+    "router predeterminado → otra IP más",
+    "servidor DNS → traduce nombres a IP"
+   ]
+  },
+  "SYBEX-CH06-RQ03": {
+   "cue": "máscara de red válida",
+   "answer": "unos seguidos al principio: 255.255.255.0",
+   "contrast": [
+    "255.255.0.255 → unos cortados",
+    "0.255.255.255 → unos al final",
+    "192.168.1.0 → dirección de red, no máscara"
+   ]
+  },
+  "SYBEX-CH06-RQ04": {
+   "cue": "las dos partes de una IP",
+   "answer": "dirección de red + dirección de host",
+   "contrast": [
+    "máscara de red → no está en la IP: la interpreta",
+    "nombre de host → no forma parte de la IP"
+   ]
+  },
+  "SYBEX-CH06-RQ05": {
+   "cue": "bits de una dirección IPv6",
+   "answer": "128: ocho grupos de cuatro hexadecimales",
+   "contrast": [
+    "32 → IPv4",
+    "64 → suele ser solo la parte de red"
+   ]
+  },
+  "SYBEX-CH06-RQ06": {
+   "cue": "paquetes para hosts de redes remotas",
+   "answer": "router predeterminado (default router)",
+   "contrast": [
+    "máscara de red → solo define la red local",
+    "servidor DNS → traduce nombres, no encamina"
+   ]
+  },
+  "SYBEX-CH06-RQ07": {
+   "cue": "convertir nombre de host en IP",
+   "answer": "servidor DNS",
+   "contrast": [
+    "router predeterminado → manda paquetes fuera",
+    "máscara de red → define la red local"
+   ]
+  },
+  "SYBEX-CH06-RQ08": {
+   "cue": "IP automática para los clientes",
+   "answer": "DHCP",
+   "contrast": [
+    "ifconfig → IP fija, a mano",
+    "tabla ARP → une IP con dirección hardware",
+    "router predeterminado → no reparte direcciones"
+   ],
+   "mnemo": "DHCP = Dynamic Host Configuration Protocol"
+  },
+  "SYBEX-CH06-RQ09": {
+   "cue": "aplicaciones locales hablando entre sí",
+   "answer": "loopback (bucle local)",
+   "contrast": [
+    "MAC → hardware de la tarjeta",
+    "hostname → para conexiones remotas"
+   ]
+  },
+  "SYBEX-CH06-RQ10": {
+   "cue": "transporte: garantiza la entrega",
+   "answer": "TCP",
+   "contrast": [
+    "UDP → más rápido, sin garantía",
+    "ICMP → mensajes de control, sin garantía"
+   ]
+  },
+  "SYBEX-CH06-RQ11": {
+   "cue": "nc: simular un servidor web",
+   "answer": "nc -l 80",
+   "contrast": [
+    "nc 192.168.1.77 80 → se conecta, no escucha",
+    "nc -l 22 → escucha, pero en otro puerto"
+   ],
+   "mnemo": "-l = listen"
+  },
+  "SYBEX-CH06-RQ12": {
+   "cue": "Red Hat: carpeta de configuración de red",
+   "answer": "/etc/sysconfig/network-scripts",
+   "contrast": [
+    "/etc/network → Debian (archivo interfaces)",
+    "ifcfg-eth0 → un archivo, no una carpeta"
+   ]
+  },
+  "SYBEX-CH06-RQ13": {
+   "cue": "Debian: línea para IP dinámica",
+   "answer": "iface eth0 inet dhcp",
+   "contrast": [
+    "inet static → IP fija",
+    "auto eth0 → se levanta al arrancar",
+    "inet6 auto → IPv6 de enlace local",
+    "BOOTPROTO → no es de Debian"
+   ]
+  },
+  "SYBEX-CH06-RQ14": {
+   "cue": "lista de servidores DNS del sistema",
+   "answer": "/etc/resolv.conf (líneas nameserver)",
+   "contrast": [
+    "/etc/network/interfaces → red en Debian, sin DNS",
+    "/etc/hosts.allow → tcp_wrappers"
+   ],
+   "mnemo": "resolv.conf = resolver nombres"
+  },
+  "SYBEX-CH06-RQ15": {
+   "cue": "ifconfig: IP y máscara para eth0",
+   "answer": "ifconfig eth0 IP netmask máscara (up/down opcional)",
+   "contrast": [
+    "ifconfig up IP netmask … → falta la interfaz"
+   ]
+  },
+  "SYBEX-CH06-RQ16": {
+   "cue": "ver las redes inalámbricas disponibles",
+   "answer": "iwlist",
+   "contrast": [
+    "iwconfig → conecta a un punto de acceso",
+    "ifconfig / ip → ponen la dirección IP",
+    "arp → IP con dirección hardware"
+   ],
+   "mnemo": "iwlist: list = listar redes"
+  },
+  "SYBEX-CH06-RQ17": {
+   "cue": "iwconfig: nombre del punto de acceso",
+   "answer": "essid (el SSID)",
+   "contrast": [
+    "key → clave de cifrado",
+    "channel → radiofrecuencia",
+    "netmask, address → no son de iwconfig"
+   ]
+  },
+  "SYBEX-CH06-RQ18": {
+   "cue": "mostrar y fijar dirección, máscara y router",
+   "answer": "ip",
+   "contrast": [
+    "ifconfig → dirección y máscara, no router",
+    "router → solo el router predeterminado",
+    "ifup → solo levanta la interfaz"
+   ]
+  },
+  "SYBEX-CH06-RQ19": {
+   "cue": "enviar ICMP para comprobar la conectividad",
+   "answer": "ping",
+   "contrast": [
+    "nmap → busca puertos abiertos",
+    "nc → simula cliente o servidor TCP o UDP",
+    "tcpdump → captura, no envía",
+    "netstat → estadísticas de la interfaz"
+   ]
+  },
+  "SYBEX-CH06-RQ20": {
+   "cue": "ver los paquetes de red",
+   "answer": "tcpdump",
+   "contrast": [
+    "netstat → estadísticas, no paquetes",
+    "dig → consulta el DNS",
+    "nc → simula un cliente o un servidor"
+   ]
+  },
+  "SYBEX-CH07-RQ01": {
+   "cue": "Postfix: archivos de configuración",
+   "answer": "/etc/postfix",
+   "contrast": [
+    "/var/spool/postfix → mensajes en proceso",
+    "/var/spool/mail → buzones de usuarios locales",
+    "/etc/mail → no es de Postfix"
+   ]
+  },
+  "SYBEX-CH07-RQ02": {
+   "cue": "Postfix: proceso principal",
+   "answer": "master",
+   "contrast": [
+    "qmgr, pickup, cleanup, smtp → gestionan la cola"
+   ]
+  },
+  "SYBEX-CH07-RQ03": {
+   "cue": "Postfix: cuándo arrancan y paran los procesos",
+   "answer": "master.cf",
+   "contrast": [
+    "main.cf → cómo se tratan los mensajes",
+    "install.cf → qué funciones se instalan"
+   ]
+  },
+  "SYBEX-CH07-RQ04": {
+   "cue": "Postfix: cómo se procesa el correo",
+   "answer": "main.cf",
+   "contrast": [
+    "master.cf → los procesos",
+    "/etc/aliases → alias",
+    "/var/log/maillog → el registro"
+   ]
+  },
+  "SYBEX-CH07-RQ05": {
+   "cue": "Postfix: mensajes mientras los procesa",
+   "answer": "/var/spool/postfix",
+   "contrast": [
+    "/var/spool/mail → buzones, correo ya entregado",
+    "/etc/postfix → configuración"
+   ]
+  },
+  "SYBEX-CH07-RQ06": {
+   "cue": "mensajes esperando en la cola de correo",
+   "answer": "mailq",
+   "contrast": [
+    "newaliases → crea la base de datos de alias",
+    "master, pickup, smtp → parte interna de Postfix"
+   ],
+   "mnemo": "mailq = mail queue"
+  },
+  "SYBEX-CH07-RQ07": {
+   "cue": "pasar los alias de texto a binario",
+   "answer": "newaliases",
+   "contrast": [
+    "mailq → enseña la cola",
+    "master, pickup, smtp → parte interna de Postfix"
+   ]
+  },
+  "SYBEX-CH07-RQ08": {
+   "cue": "texto que lee newaliases",
+   "answer": "/etc/aliases",
+   "contrast": [
+    "main.cf, master.cf → configuración, sin alias"
+   ]
+  },
+  "SYBEX-CH07-RQ09": {
+   "cue": "Postfix: su archivo de registro",
+   "answer": "/var/log/maillog",
+   "contrast": [
+    "/var/log/messages → el del kernel",
+    "/var/spool/mail → correo en formato mbox"
+   ]
+  },
+  "SYBEX-CH07-RQ10": {
+   "cue": "procmail: recetas de un solo usuario",
+   "answer": "$HOME/.procmailrc",
+   "contrast": [
+    "/etc/procmailrc → todas las cuentas"
+   ]
+  },
+  "SYBEX-CH07-RQ11": {
+   "cue": "procmail: recetas para todo el correo",
+   "answer": "/etc/procmailrc",
+   "contrast": [
+    "$HOME/.procmailrc → solo ese usuario"
+   ]
+  },
+  "SYBEX-CH07-RQ12": {
+   "cue": "procmail: receta :0 c messages",
+   "answer": "copia todo el correo entrante al directorio messages",
+   "contrast": [
+    "mueve → no: el original sigue su camino"
+   ],
+   "mnemo": "c = copia"
+  },
+  "SYBEX-CH07-RQ13": {
+   "cue": "MDA que entrega a los buzones locales",
+   "answer": "Procmail",
+   "contrast": [
+    "Sendmail, Postfix, Courier, Dovecot → no son MDA"
+   ]
+  },
+  "SYBEX-CH07-RQ14": {
+   "cue": "Postfix: pasar el correo entrante a procmail",
+   "answer": "mailbox_command",
+   "contrast": [
+    "mydestination → para qué direcciones acepta",
+    "relayhost → a dónde va todo lo que sale",
+    "myhost → nombre del servidor local"
+   ]
+  },
+  "SYBEX-CH07-RQ15": {
+   "cue": "buzón: todo en un único archivo",
+   "answer": "mbox",
+   "contrast": [
+    "maildir → un archivo por mensaje"
+   ],
+   "mnemo": "mbox = una caja; maildir = un directorio"
+  },
+  "SYBEX-CH07-RQ16": {
+   "cue": "buzón: un archivo por mensaje",
+   "answer": "maildir",
+   "contrast": [
+    "mbox → todo en un solo archivo"
+   ],
+   "mnemo": "maildir = un directorio lleno de mensajes"
+  },
+  "SYBEX-CH07-RQ17": {
+   "cue": "Courier: archivos de configuración",
+   "answer": "/etc/courier",
+   "contrast": [
+    "/etc/mail → no lo usa Courier"
+   ]
+  },
+  "SYBEX-CH07-RQ18": {
+   "cue": "Courier: total de clientes a la vez",
+   "answer": "MAXDAEMONS",
+   "contrast": [
+    "MAXPERIP → por cliente, no el total",
+    "MAILDIRPATH → dónde están los buzones",
+    "ADDRESS → en qué interfaz escucha",
+    "PORT → el puerto TCP"
+   ]
+  },
+  "SYBEX-CH07-RQ19": {
+   "cue": "Dovecot: dónde guarda su configuración",
+   "answer": "dovecot.conf o /etc/dovecot, según la distribución"
+  },
+  "SYBEX-CH07-RQ20": {
+   "cue": "Dovecot: métodos de autenticación",
+   "answer": "mechanisms",
+   "contrast": [
+    "protocols → qué protocolos de correo",
+    "mail_location → dónde está el buzón",
+    "listen → puerto TCP de escucha",
+    "login_max_connections → usuarios a la vez"
+   ]
+  },
+  "SYBEX-CH08-RQ01": {
+   "cue": ".edu: qué tipo de dominio",
+   "answer": "TLD (dominio de nivel superior)",
+   "contrast": [
+    "dominio de primer nivel → subdominio de un TLD",
+    "dominio raíz → un solo punto",
+    "ICANN → elige a los gestores de los TLD"
+   ]
+  },
+  "SYBEX-CH08-RQ02": {
+   "cue": "espacio de nombres: qué puede ser zona",
+   "answer": "zona raíz, o dominio de primer nivel + subdominios",
+   "contrast": [
+    "zona de pistas → otro nombre de la zona raíz",
+    "solo parte de los subdominios → también vale",
+    "servidor raíz → una máquina, no una zona"
+   ]
+  },
+  "SYBEX-CH08-RQ03": {
+   "cue": "zona: los dos servidores mínimos",
+   "answer": "primario + secundario, de caché o de reenvío",
+   "contrast": [
+    "secundario + caché o reenvío → falta el primario"
+   ]
+  },
+  "SYBEX-CH08-RQ04": {
+   "cue": "crea la consulta DNS y mira su caché",
+   "answer": "resolutor (resolver)",
+   "contrast": [
+    "servidor de nombres → la máquina que responde",
+    "resolución de nombres → el proceso",
+    "caché → donde se guardan las respuestas"
+   ]
+  },
+  "SYBEX-CH08-RQ05": {
+   "cue": "implementan DNS total o parcial",
+   "answer": "todos: BIND + dnsmasq + pdnsd + Bundy + PowerDNS",
+   "contrast": [
+    "Bundy → el antiguo BIND 10, también vale"
+   ]
+  },
+  "SYBEX-CH08-RQ06": {
+   "cue": "demonio BIND en /usr/sbin/",
+   "answer": "named",
+   "contrast": [
+    "bind9 → paquete en Ubuntu",
+    "bind → paquete en CentOS",
+    "named.conf → su configuración",
+    "bindutils → utilidades en CentOS"
+   ]
+  },
+  "SYBEX-CH08-RQ07": {
+   "cue": "named.conf: sus cláusulas",
+   "answer": "options + logging + include + comments",
+   "contrast": [
+    "named-checkconf → utilidad: revisa la sintaxis"
+   ]
+  },
+  "SYBEX-CH08-RQ08": {
+   "cue": "servidor DNS de solo caché: directivas",
+   "answer": "acl + allow-query + listen-on + recursion yes",
+   "contrast": [
+    "logging → conviene, pero no es obligatorio"
+   ]
+  },
+  "SYBEX-CH08-RQ09": {
+   "cue": "parar el servicio BIND",
+   "answer": "rndc stop + systemctl stop named + service bind9 stop",
+   "contrast": [
+    "kill -s SIGTERM → también lo para",
+    "rndc flush → vacía las cachés, no para"
+   ],
+   "mnemo": "flush limpia; stop para"
+  },
+  "SYBEX-CH08-RQ10": {
+   "cue": "logging: qué determina category",
+   "answer": "qué tipos de mensaje DNS se registran",
+   "contrast": [
+    "channel → dónde se registran y cómo se filtran"
+   ]
+  },
+  "SYBEX-CH08-RQ11": {
+   "cue": "type de zona: valores válidos",
+   "answer": "master (primario) + hint (zona raíz)",
+   "contrast": [
+    "secondary → no: el secundario es slave",
+    "delegation → no: es delegation-only"
+   ]
+  },
+  "SYBEX-CH08-RQ12": {
+   "cue": "clases válidas de una sentencia de zona",
+   "answer": "IN + CH + HS",
+   "mnemo": "IN = Internet, CH = Chaosnet, HS = Hesiod"
+  },
+  "SYBEX-CH08-RQ13": {
+   "cue": "transferencia de zona: qué la dispara",
+   "answer": "secundario: arranca, expira su refresco o rndc",
+   "contrast": [
+    "reinicio del primario → no dispara nada"
+   ]
+  },
+  "SYBEX-CH08-RQ14": {
+   "cue": "bases de datos de zona: directorio",
+   "answer": "/var/named/ o /etc/bind/, según la distribución"
+  },
+  "SYBEX-CH08-RQ15": {
+   "cue": "registro que abre la zona",
+   "answer": "SOA",
+   "contrast": [
+    "NS → servidor de nombres",
+    "CNAME → alias",
+    "PTR → búsqueda inversa"
+   ],
+   "mnemo": "SOA = start of authority"
+  },
+  "SYBEX-CH08-RQ16": {
+   "cue": "zona inversa",
+   "answer": "de IP a FQDN (al revés de lo habitual)",
+   "contrast": [
+    "IP del maestro de zona hija → glue record",
+    "copiar datos de zona → transferencia de zona",
+    "type hint → zona de pistas"
+   ]
+  },
+  "SYBEX-CH08-RQ17": {
+   "cue": "asegurar el DNS: medidas válidas",
+   "answer": "solo BIND + no root + doble horizonte + ocultar versión",
+   "contrast": [
+    "actualizar una vez al año → no: en cuanto salga"
+   ]
+  },
+  "SYBEX-CH08-RQ18": {
+   "cue": "jaula chroot: nuevo directorio raíz",
+   "answer": "/chroot/named/ o /chroot/bind/",
+   "contrast": [
+    "/etc/bind/ → de BIND, pero no raíz de jaula"
+   ]
+  },
+  "SYBEX-CH08-RQ19": {
+   "cue": "DNSSEC: clave que firma los registros",
+   "answer": "clave de firma de zona (ZSK)",
+   "contrast": [
+    "KSK → firma la ZSK, no los registros",
+    "DNSKEY → donde se guarda la KSK"
+   ],
+   "mnemo": "ZSK = zone signing key; KSK = key signing key"
+  },
+  "SYBEX-CH08-RQ20": {
+   "cue": "crear claves TSIG o DNSSEC",
+   "answer": "dnssec-keygen",
+   "contrast": [
+    "dnssec-signzone → firma la zona a mano",
+    "dnssec-dsfromkey → registro para la zona padre"
+   ],
+   "mnemo": "keygen genera; signzone firma"
+  },
+  "SYBEX-CH09-RQ01": {
+   "cue": "protocolo de peticiones y respuestas web",
+   "answer": "HTTP",
+   "contrast": [
+    "HTML → formato del documento",
+    "SSL / TLS → cifrado"
+   ]
+  },
+  "SYBEX-CH09-RQ02": {
+   "cue": "formato del contenido de una página web",
+   "answer": "HTML",
+   "contrast": [
+    "HTTP → transporta el documento",
+    "SSL / TLS → cifrado"
+   ]
+  },
+  "SYBEX-CH09-RQ03": {
+   "cue": "HTTP: archivo solicitado no encontrado",
+   "answer": "404",
+   "contrast": [
+    "200 → petición con éxito",
+    "403 → existe, pero sin permiso",
+    "500 → problema en el servidor"
+   ]
+  },
+  "SYBEX-CH09-RQ04": {
+   "cue": "parar Apache de forma ordenada (graceful)",
+   "answer": "apache2ctl",
+   "contrast": [
+    "systemctl → para, pero no de forma ordenada",
+    "httpd / apache2 → el propio servidor"
+   ]
+  },
+  "SYBEX-CH09-RQ05": {
+   "cue": "Apache: comprobar la configuración antes de arrancar",
+   "answer": "apache2ctl",
+   "contrast": [
+    "systemctl → arranca y para, no revisa archivos",
+    "httpd / apache2 → el propio servidor"
+   ]
+  },
+  "SYBEX-CH09-RQ06": {
+   "cue": "Apache: carpeta compartida con los clientes",
+   "answer": "DocumentRoot",
+   "contrast": [
+    "ServerRoot → archivos de configuración",
+    "Listen → IP y puertos de escucha",
+    "DirectoryIndex → archivo si piden una carpeta"
+   ]
+  },
+  "SYBEX-CH09-RQ07": {
+   "cue": "Apache: directivas para una carpeta concreta",
+   "answer": "<Directory>",
+   "contrast": [
+    "<VirtualHost> → un host virtual",
+    "<IfDefined> → si hay variable de entorno",
+    "<IfModule> → si hay un módulo cargado"
+   ],
+   "mnemo": "el nombre del bloque dice a qué se aplica"
+  },
+  "SYBEX-CH09-RQ08": {
+   "cue": "Apache: qué información va al registro",
+   "answer": "LogFormat",
+   "contrast": [
+    "ErrorLog → dónde está el registro de errores",
+    "ErrorDocument → mensajes de error al cliente"
+   ]
+  },
+  "SYBEX-CH09-RQ09": {
+   "cue": "Apache: registro de las peticiones de clientes",
+   "answer": "access.log",
+   "contrast": [
+    "error.log → solo errores",
+    "apache2.conf / httpd.conf → configuración"
+   ],
+   "mnemo": "access = accesos; error = fallos"
+  },
+  "SYBEX-CH09-RQ10": {
+   "cue": "Apache: carpeta web propia de cada usuario",
+   "answer": "UserDir",
+   "contrast": [
+    "AuthUserFile → archivo de autenticación",
+    "DocumentRoot → la carpeta del servidor"
+   ]
+  },
+  "SYBEX-CH09-RQ11": {
+   "cue": "dominio de un host virtual",
+   "answer": "ServerName",
+   "contrast": [
+    "DocumentRoot → la carpeta",
+    "NameVirtualHost → IP del servidor físico",
+    "<VirtualHost> → el bloque entero"
+   ]
+  },
+  "SYBEX-CH09-RQ12": {
+   "cue": "alojamiento virtual por IP: definir las direcciones",
+   "answer": "Listen",
+   "contrast": [
+    "NameVirtualHost → alojamiento por nombre",
+    "<VirtualHost> → agrupa directivas, no define IP"
+   ]
+  },
+  "SYBEX-CH09-RQ13": {
+   "cue": "Apache: crear archivo de usuarios y contraseñas",
+   "answer": "htpasswd",
+   "contrast": [
+    "mod_auth → usa el archivo, no lo crea",
+    "httpd / apache2 → el propio servidor"
+   ]
+  },
+  "SYBEX-CH09-RQ14": {
+   "cue": "Apache: directiva del archivo de contraseñas",
+   "answer": "AuthUserFile",
+   "contrast": [
+    "AuthType → tipo de autenticación",
+    "AuthName → texto que se pide al cliente",
+    "Order → restringe por red, no por usuario"
+   ]
+  },
+  "SYBEX-CH09-RQ15": {
+   "cue": "Apache con intérprete de programas externo",
+   "answer": "CGI (Common Gateway Interface)",
+   "contrast": [
+    "mod_perl / mod_php → dentro del servidor",
+    "mod_auth → autenticación, no programación"
+   ]
+  },
+  "SYBEX-CH09-RQ16": {
+   "cue": "Apache: redirigir los .php al proceso PHP",
+   "answer": "AddHandler",
+   "contrast": [
+    "LoadModule → instala el módulo, no reparte",
+    "DirectoryIndex → archivo por defecto de carpeta"
+   ]
+  },
+  "SYBEX-CH09-RQ17": {
+   "cue": "Apache: ubicación del certificado SSL",
+   "answer": "SSLCertificateFile",
+   "contrast": [
+    "SSLCertificateKeyFile → la clave",
+    "SSLEngine → cuándo se aceptan conexiones SSL"
+   ]
+  },
+  "SYBEX-CH09-RQ18": {
+   "cue": "proxy web: sus dos funciones",
+   "answer": "caché de peticiones + limitar a qué sitios se accede",
+   "contrast": [
+    "un cliente a varios servidores → proxy inverso",
+    "qué archivos sirve el servidor → DocumentRoot"
+   ]
+  },
+  "SYBEX-CH09-RQ19": {
+   "cue": "Squid: autenticación de los clientes",
+   "answer": "auth_param",
+   "contrast": [
+    "acl → grupos de acceso",
+    "http_access → reglas de acceso",
+    "mod_auth → módulo de Apache, no de Squid"
+   ]
+  },
+  "SYBEX-CH09-RQ20": {
+   "cue": "nginx: sección de los ajustes básicos",
+   "answer": "server",
+   "contrast": [
+    "location → una carpeta concreta",
+    "root → dónde están los archivos",
+    "listen → IP y puertos de escucha"
+   ]
+  },
+  "SYBEX-CH10-RQ01": {
+   "cue": "Samba: dónde van sus registros",
+   "answer": "/var/log/samba/",
+   "contrast": [
+    "/etc/samba/ → configuración",
+    "/var/lib/samba/ → bases de datos de usuarios"
+   ],
+   "mnemo": "/var/log siempre son registros"
+  },
+  "SYBEX-CH10-RQ02": {
+   "cue": "demonios que prestan servicios Samba",
+   "answer": "smbd + nmbd + cupsd",
+   "contrast": [
+    "cupsd → sí: comparte impresoras",
+    "winbind → no: el demonio es winbindd"
+   ]
+  },
+  "SYBEX-CH10-RQ03": {
+   "cue": "archivo de configuración principal de Samba",
+   "answer": "smb.conf",
+   "contrast": [
+    "mount.cifs → monta el recurso en el cliente",
+    "smbcontrol → gestiona el demonio smbd",
+    "/etc/samba.d → directorio en desuso"
+   ]
+  },
+  "SYBEX-CH10-RQ04": {
+   "cue": "Samba: qué hacer tras editar la configuración",
+   "answer": "comprobar la sintaxis con testparm",
+   "contrast": [
+    "smbstatus → conexiones actuales, no sintaxis",
+    "recargar → solo después de comprobar",
+    "reiniciar → no hace falta"
+   ]
+  },
+  "SYBEX-CH10-RQ05": {
+   "cue": "Samba con Windows: directiva del grupo o dominio",
+   "answer": "workgroup (no un FQDN)"
+  },
+  "SYBEX-CH10-RQ06": {
+   "cue": "valores válidos de passdb backend",
+   "answer": "tdbsam + smbpasswd + ldapsam",
+   "contrast": [
+    "ads / domain → valores de security"
+   ],
+   "mnemo": "passdb backend = dónde están las cuentas"
+  },
+  "SYBEX-CH10-RQ07": {
+   "cue": "smb.conf: sección de un recurso de archivos",
+   "answer": "una con el nombre del recurso, como [myshare]",
+   "contrast": [
+    "[global] → directivas para todo el servidor",
+    "[printers] → recursos de impresión",
+    "[netlogins] → controlador de dominio",
+    "[profiles] → perfiles de usuario móviles"
+   ]
+  },
+  "SYBEX-CH10-RQ08": {
+   "cue": "Samba: ¿el recurso pide contraseña?",
+   "answer": "public (no = pide contraseña; yes = no la pide)",
+   "contrast": [
+    "browseable → si se ve en la lista",
+    "guest only → solo conexiones de invitado",
+    "writable / read only → escribir, no entrar"
+   ]
+  },
+  "SYBEX-CH10-RQ09": {
+   "cue": "Samba: acceso al estilo FTP",
+   "answer": "smbclient",
+   "contrast": [
+    "pdbedit → bases de datos de usuarios",
+    "rpcclient → funciones RPC de Microsoft",
+    "ftp → servidores FTP, no Samba"
+   ],
+   "mnemo": "smbclient = cliente de Samba"
+  },
+  "SYBEX-CH10-RQ10": {
+   "cue": "cliente Samba sin acceso: los cinco diagnósticos",
+   "answer": "log level + smbclient -L + red + testparm + demonios"
+  },
+  "SYBEX-CH10-RQ11": {
+   "cue": "NFS: demonio de las peticiones de montaje",
+   "answer": "mountd",
+   "contrast": [
+    "rpcbind (portmapper) → registra servicios RPC",
+    "rpc.lockd → bloqueo de archivos, en el kernel",
+    "statd → acompaña a lockd en el bloqueo"
+   ]
+  },
+  "SYBEX-CH10-RQ12": {
+   "cue": "NFS: dónde se configuran las exportaciones",
+   "answer": "/etc/exports + /etc/exports.d/ (archivos .exports)",
+   "contrast": [
+    "/etc/exports/ → es archivo, no directorio",
+    "/proc/fs/nfs/ → exportaciones en uso ahora",
+    "/var/lib/nfs/ → xtab, etab y rmtab"
+   ]
+  },
+  "SYBEX-CH10-RQ13": {
+   "cue": "NFS: ubicaciones típicas de lo compartido",
+   "answer": "subdirectorios de /srv/ o /var/",
+   "contrast": [
+    "/ y /etc/ → nunca se comparten",
+    "/proc/ → son procesos: no tiene sentido"
+   ]
+  },
+  "SYBEX-CH10-RQ14": {
+   "cue": "/etc/exports: recurso de solo lectura",
+   "answer": "ro + async",
+   "contrast": [
+    "rw → lectura y escritura",
+    "sync → mejor para lectura y escritura",
+    "subtree_check → permisos de nivel superior"
+   ]
+  },
+  "SYBEX-CH10-RQ15": {
+   "cue": "NFS: utilidades que muestran los recursos",
+   "answer": "exportfs + showmount",
+   "contrast": [
+    "mount.nfs → monta desde el cliente",
+    "rpcinfo → servicios RPC",
+    "smbstatus → conexiones de Samba"
+   ]
+  },
+  "SYBEX-CH10-RQ16": {
+   "cue": "exportfs: ver los recursos con detalle",
+   "answer": "exportfs -v",
+   "contrast": [
+    "-a → exporta todo /etc/exports",
+    "-r → vuelve a exportar",
+    "-u → deja de exportar",
+    "-o → exporta desde la línea de comandos"
+   ],
+   "mnemo": "-v de verbose (modo detallado)"
+  },
+  "SYBEX-CH10-RQ17": {
+   "cue": "software de servidor FTP",
+   "answer": "pure-ftpd + vsftpd",
+   "contrast": [
+    "ftp / lftp → clientes de línea de comandos",
+    "FileZilla → cliente con interfaz gráfica"
+   ],
+   "mnemo": "la d final delata al demonio"
+  },
+  "SYBEX-CH10-RQ18": {
+   "cue": "FTP en modo pasivo: qué es cierto",
+   "answer": "solo el cliente abre las conexiones (datos y comandos)",
+   "contrast": [
+    "puertos 20 y 21 → solo en modo activo"
+   ],
+   "mnemo": "pasivo = el servidor espera, el cliente abre"
+  },
+  "SYBEX-CH10-RQ19": {
+   "cue": "FTP: usuarios de las conexiones anónimas",
+   "answer": "anonymous + ftp",
+   "contrast": [
+    "vsftpd → el demonio, no un usuario"
+   ]
+  },
+  "SYBEX-CH10-RQ20": {
+   "cue": "vsftpd: subidas anónimas (tres directivas =YES)",
+   "answer": "write_enable + anon_upload_enable + anon_mkdir_write_enable",
+   "contrast": [
+    "pure-ftpd → AnonymousCantUpload no"
+   ]
+  },
+  "SYBEX-CH11-RQ01": {
+   "cue": "DHCPd: su archivo de configuración",
+   "answer": "/etc/dhcp/dhcpd.conf",
+   "contrast": [
+    "/etc/dhcpd.d/ → DHCPd no usa carpeta",
+    "isc-dhcp-server → el paquete en Debian",
+    "/etc/services → puertos TCP y UDP"
+   ]
+  },
+  "SYBEX-CH11-RQ02": {
+   "cue": "DHCPd: salida predeterminada de los clientes",
+   "answer": "router",
+   "contrast": [
+    "range → direcciones a repartir",
+    "broadcast-address → dirección de difusión",
+    "smtp-server → servidor de correo"
+   ],
+   "mnemo": "cada opción se llama como lo que reparte"
+  },
+  "SYBEX-CH11-RQ03": {
+   "cue": "DHCPd: conjunto de IP a repartir",
+   "answer": "range",
+   "contrast": [
+    "router → router predeterminado",
+    "broadcast-address → dirección de difusión",
+    "smtp-server → servidor de correo"
+   ],
+   "mnemo": "range = rango de direcciones"
+  },
+  "SYBEX-CH11-RQ04": {
+   "cue": "DHCPd: IP concedidas en este momento",
+   "answer": "/var/lib/dhcp/dhcpd.leases",
+   "contrast": [
+    "/etc/dhcp/dhcpd.conf → la configuración",
+    "/etc/dhcp/dhcpd.leases → no vive en /etc"
+   ],
+   "mnemo": "leases = concesiones"
+  },
+  "SYBEX-CH11-RQ05": {
+   "cue": "DHCPd: MAC del cliente para IP estática",
+   "answer": "hardware",
+   "contrast": [
+    "fixed-address → la IP fija, no la MAC",
+    "host-name → el nombre del cliente",
+    "range → conjunto de direcciones"
+   ]
+  },
+  "SYBEX-CH11-RQ06": {
+   "cue": "DHCP: agrupar ajustes de un cliente concreto",
+   "answer": "host",
+   "contrast": [
+    "group → varios hosts a la vez",
+    "fixed-address → un ajuste suelto, no un grupo",
+    "range → direcciones para todos"
+   ]
+  },
+  "SYBEX-CH11-RQ07": {
+   "cue": "opción DHCP de la máscara de subred",
+   "answer": "1",
+   "contrast": [
+    "3 → router predeterminado",
+    "5 → servidor de nombres",
+    "6 → servidor de dominio"
+   ]
+  },
+  "SYBEX-CH11-RQ08": {
+   "cue": "PAM con /etc/passwd y /etc/shadow",
+   "answer": "pam_unix.so",
+   "contrast": [
+    "pam_ldap.so → directorio LDAP de red",
+    "pam_userdb.so → una base de datos",
+    "pam_sss.so → SSSD, directorios remotos"
+   ]
+  },
+  "SYBEX-CH11-RQ09": {
+   "cue": "PAM: autenticar con un directorio de red",
+   "answer": "pam_ldap.so",
+   "contrast": [
+    "pam_unix.so → archivo local /etc/passwd",
+    "pam_userdb.so → base de datos local"
+   ]
+  },
+  "SYBEX-CH11-RQ10": {
+   "cue": "PAM: restricciones a las contraseñas",
+   "answer": "pam_cracklib.so",
+   "contrast": [
+    "pam_limits.so → límites de recursos",
+    "pam_unix.so → solo autenticación estándar",
+    "pam_userdb.so → base de datos local"
+   ],
+   "mnemo": "crack en el nombre: intenta romper tu contraseña"
+  },
+  "SYBEX-CH11-RQ11": {
+   "cue": "PAM con un único archivo de configuración",
+   "answer": "/etc/pam.conf",
+   "contrast": [
+    "/etc/pam.d → una carpeta, no un archivo"
+   ]
+  },
+  "SYBEX-CH11-RQ12": {
+   "cue": "PAM: carpeta con un archivo por aplicación",
+   "answer": "/etc/pam.d",
+   "contrast": [
+    "/etc/pam.conf → método del archivo único"
+   ],
+   "mnemo": "la d de pam.d es de directorio"
+  },
+  "SYBEX-CH11-RQ13": {
+   "cue": "PAM: corta en seco si falla",
+   "answer": "requisite",
+   "contrast": [
+    "required → marca el fallo y sigue",
+    "sufficient → basta si acierta",
+    "optional → no bloquea nada"
+   ]
+  },
+  "SYBEX-CH11-RQ14": {
+   "cue": "PAM: tipo que registra los intentos",
+   "answer": "session",
+   "contrast": [
+    "auth → autentica, pero no anota",
+    "account → solo verifica la cuenta",
+    "password → gestiona contraseñas"
+   ]
+  },
+  "SYBEX-CH11-RQ15": {
+   "cue": "LDAP: plantilla de atributos para objetos",
+   "answer": "la clase de objeto (object class)",
+   "contrast": [
+    "esquema → estructura de la base de datos",
+    "ID de objeto → identifica, no es plantilla",
+    "árbol LDAP → los objetos reales"
+   ]
+  },
+  "SYBEX-CH11-RQ16": {
+   "cue": "LDAP: la información guardada de un objeto",
+   "answer": "los atributos",
+   "contrast": [
+    "clase de objeto → la plantilla, no los valores",
+    "ID de objeto → un valor único, sin información",
+    "esquema → los objetos y sus relaciones"
+   ]
+  },
+  "SYBEX-CH11-RQ17": {
+   "cue": "LDAP: nombre único de cada objeto",
+   "answer": "nombre distinguido (distinguished name)",
+   "contrast": [
+    "ID de objeto → único, pero no es un nombre",
+    "atributos → no son únicos",
+    "clase de objeto → la comparten muchos"
+   ]
+  },
+  "SYBEX-CH11-RQ18": {
+   "cue": "OpenLDAP: servidor que escucha a los clientes",
+   "answer": "slapd",
+   "contrast": [
+    "slurpd → solo al replicar servidores",
+    "slapadd → añade objetos",
+    "slapindex → reindexa"
+   ],
+   "mnemo": "la d final: slapd es el demonio"
+  },
+  "SYBEX-CH11-RQ19": {
+   "cue": "LDAP: añadir objetos desde el servidor",
+   "answer": "slapadd",
+   "contrast": [
+    "ldapadd / ldapmodify → programas cliente",
+    "slapindex → solo reindexa lo existente"
+   ],
+   "mnemo": "slap… servidor; ldap… cliente"
+  },
+  "SYBEX-CH11-RQ20": {
+   "cue": "LDAP: añadir objetos desde un cliente",
+   "answer": "ldapadd",
+   "contrast": [
+    "slapadd → añade, pero desde el servidor",
+    "ldapmodify → solo modifica lo existente",
+    "slapindex → reindexa, en el servidor"
+   ],
+   "mnemo": "slap… servidor; ldap… cliente"
+  },
+  "SYBEX-CH12-RQ01": {
+   "cue": "vulnerabilidad que da acceso a un atacante",
+   "answer": "vector de ataque",
+   "contrast": [
+    "puerto abierto → solo un tipo de vulnerabilidad"
+   ]
+  },
+  "SYBEX-CH12-RQ02": {
+   "cue": "archivo con los puertos de cada aplicación",
+   "answer": "/etc/services",
+   "contrast": [
+    "/proc/sys/net/ipv4 → ajustes IPv4 del kernel",
+    "/etc/ssh/sshd_conf → configura OpenSSH",
+    "/etc/openvpn → configura OpenVPN"
+   ]
+  },
+  "SYBEX-CH12-RQ03": {
+   "cue": "telnet: comprobar si un puerto está abierto",
+   "answer": "telnet dirección puerto",
+   "contrast": [
+    "dirección:puerto → no es el formato de telnet",
+    "solo el puerto 23 → no: cualquier puerto TCP"
+   ]
+  },
+  "SYBEX-CH12-RQ04": {
+   "cue": "puertos TCP escuchando en el servidor local",
+   "answer": "netstat",
+   "contrast": [
+    "telnet → prueba un puerto cada vez",
+    "iptables → filtra paquetes en el kernel"
+   ]
+  },
+  "SYBEX-CH12-RQ05": {
+   "cue": "netcat: escanear varios puertos",
+   "answer": "-z",
+   "contrast": [
+    "-l → escucha conexiones entrantes",
+    "-v → salida más detallada",
+    "-6 → usa direcciones IPv6"
+   ]
+  },
+  "SYBEX-CH12-RQ06": {
+   "cue": "nmap: huella (fingerprint) del sistema remoto",
+   "answer": "-A",
+   "contrast": [
+    "-sT → escanea puertos TCP",
+    "-sU → escanea puertos UDP",
+    "-p → rango de puertos"
+   ]
+  },
+  "SYBEX-CH12-RQ07": {
+   "cue": "OpenVAS: simular ataques conocidos",
+   "answer": "NVT (Network Vulnerability Tests)",
+   "contrast": [
+    "NVD → define vulnerabilidades, no simula",
+    "interfaz web → manejar OpenVAS"
+   ]
+  },
+  "SYBEX-CH12-RQ08": {
+   "cue": "software que avisa de un ataque activo",
+   "answer": "IDS (sistema de detección de intrusiones)",
+   "contrast": [
+    "escáner de puertos → vías abiertas, no ataques",
+    "NVT → simula ataques, no los detecta"
+   ]
+  },
+  "SYBEX-CH12-RQ09": {
+   "cue": "fail2ban: archivo de reglas",
+   "answer": "jail.conf (en /etc/fail2ban)",
+   "contrast": [
+    "fail2ban.conf → ahí no están las reglas"
+   ],
+   "mnemo": "jail.conf = la cárcel y sus normas"
+  },
+  "SYBEX-CH12-RQ10": {
+   "cue": "NIDS: vigila la red buscando ataques",
+   "answer": "Snort",
+   "contrast": [
+    "OpenVAS → busca vulnerabilidades, no vigila",
+    "OpenVPN → túnel cifrado",
+    "OpenSSH → canal seguro con un servidor"
+   ]
+  },
+  "SYBEX-CH12-RQ11": {
+   "cue": "Snort: ver los paquetes en pantalla",
+   "answer": "modo analizador (sniffer)",
+   "contrast": [
+    "modo registro (logging) → los guarda en archivo",
+    "modo NIDS → solo eventos de vulnerabilidad",
+    "línea de comandos → no los muestra por defecto"
+   ]
+  },
+  "SYBEX-CH12-RQ12": {
+   "cue": "Snort: qué define HOME_NET",
+   "answer": "las direcciones locales que hay que vigilar",
+   "contrast": [
+    "EXTERNAL_NET → las direcciones remotas"
+   ],
+   "mnemo": "HOME_NET = las direcciones de casa"
+  },
+  "SYBEX-CH12-RQ13": {
+   "cue": "regla Snort: tráfico en un solo sentido",
+   "answer": "origen -> destino: 10.0.0.1 -> 10.0.0.2",
+   "contrast": [
+    "<> → los dos sentidos"
+   ]
+  },
+  "SYBEX-CH12-RQ14": {
+   "cue": "cuántos rangos privados tiene IPv4",
+   "answer": "tres: 10, 172.16 a 172.31 y 192.168"
+  },
+  "SYBEX-CH12-RQ15": {
+   "cue": "IPv6 de enlace local: empieza por",
+   "answer": "fe80",
+   "contrast": [
+    "ff02 → multidifusión para routers",
+    "ff05 → multidifusión para servidores DHCP"
+   ]
+  },
+  "SYBEX-CH12-RQ16": {
+   "cue": "clientes de red privada hacia servidores externos",
+   "answer": "NAT: traduce la dirección privada a una pública"
+  },
+  "SYBEX-CH12-RQ17": {
+   "cue": "crear reglas de cortafuegos",
+   "answer": "iptables",
+   "contrast": [
+    "netstat y nmap → solo ven el estado de puertos",
+    "nc → solo comunicación de red"
+   ]
+  },
+  "SYBEX-CH12-RQ18": {
+   "cue": "iptables: añadir una regla a una cadena",
+   "answer": "-A",
+   "contrast": [
+    "-L → lista las reglas",
+    "-F → vacía las reglas",
+    "-j → qué hacer con el paquete"
+   ]
+  },
+  "SYBEX-CH12-RQ19": {
+   "cue": "iptables: descartar avisando al origen",
+   "answer": "REJECT (devuelve un ICMP)",
+   "contrast": [
+    "DROP → descarta en silencio",
+    "LOG → acepta y además lo registra",
+    "ACCEPT → deja pasar"
+   ]
+  },
+  "SYBEX-CH12-RQ20": {
+   "cue": "iptables: política por defecto de una cadena",
+   "answer": "-P",
+   "contrast": [
+    "-j → la acción de una regla concreta",
+    "-F → borra todas las reglas",
+    "-L → solo lista"
+   ]
+  },
+  "ENI-CH01-Q01": {
+   "cue": "por qué hace falta un sistema de archivos",
+   "answer": "organiza el espacio: nombres y ubicación física"
+  },
+  "ENI-CH01-Q02": {
+   "cue": "disco que ocupa un pseudosistema de archivos",
+   "answer": "ninguno: vive en memoria"
+  },
+  "ENI-CH01-Q03": {
+   "cue": "qué garantiza que un UUID sea único",
+   "answer": "el azar: 128 bits aleatorios"
+  },
+  "ENI-CH01-Q04": {
+   "cue": "optimizar escrituras en un sistema de archivos lento",
+   "answer": "escritura asíncrona: primero en memoria, luego al disco"
+  },
+  "ENI-CH01-Q05": {
+   "cue": "comprobar la raíz (/): por qué cuesta",
+   "answer": "exige desmontar y está en uso: comprobar al reiniciar"
+  },
+  "ENI-CH01-Q06": {
+   "cue": "lsdev: de dónde saca la información",
+   "answer": "lee /proc/interrupts, /proc/ioports y /proc/dma"
+  },
+  "ENI-CH01-Q07": {
+   "cue": "tar: por qué comprimir solo en disco",
+   "answer": "comprimido, una pérdida parcial estropea mucho más",
+   "contrast": [
+    "sin comprimir → solo se pierde la zona dañada"
+   ]
+  },
+  "ENI-CH01-Q08": {
+   "cue": "imagen iso con dd: ¿montar el cdrom?",
+   "answer": "no: copia bloques, no archivos",
+   "contrast": [
+    "copiar archivos concretos → sí hay que montar"
+   ]
+  },
+  "ENI-CH01-Q09": {
+   "cue": "RAID 5: mínimo de discos",
+   "answer": "tres: dos de datos y uno de paridad",
+   "contrast": [
+    "con disco de recambio (spare) → cuatro"
+   ]
+  },
+  "ENI-CH01-Q10": {
+   "cue": "partición o volumen lógico LVM: diferencia",
+   "answer": "en el uso, ninguna; solo el volumen lógico crece",
+   "contrast": [
+    "lvextend → agranda el volumen lógico",
+    "resize2fs → redimensiona el sistema de archivos"
+   ]
+  },
+  "ENI-CH02-Q01": {
+   "cue": "servicio, daemon y nivel de ejecución",
+   "answer": "daemon = servicio; el nivel dice cuáles corren"
+  },
+  "ENI-CH02-Q02": {
+   "cue": "restart o reload: cuál consume menos",
+   "answer": "reload: relee la configuración (signal 1, hup)",
+   "contrast": [
+    "restart → stop + start: mata y levanta"
+   ]
+  },
+  "ENI-CH02-Q03": {
+   "cue": "último script del arranque, en cualquier nivel",
+   "answer": "rc.local"
+  },
+  "ENI-CH02-Q04": {
+   "cue": "qué muestra dmesg",
+   "answer": "los mensajes del kernel desde el arranque (ring buffer)"
+  },
+  "ENI-CH02-Q05": {
+   "cue": "GRUB: menu.lst y grub.conf, el mismo archivo",
+   "answer": "un enlace simbólico",
+   "contrast": [
+    "enlace duro → no sale de su sistema de archivos"
+   ]
+  },
+  "ENI-CH02-Q06": {
+   "cue": "ubicación usual del gestor de arranque",
+   "answer": "el MBR, lo primero que lee la BIOS",
+   "mnemo": "MBR = Master Boot Record"
+  },
+  "ENI-CH02-Q07": {
+   "cue": "kernel en sólo lectura (ro): para qué",
+   "answer": "diagnosticar sin dañar si la partición tiene problemas"
+  },
+  "ENI-CH02-Q08": {
+   "cue": "parámetro del kernel: acceso tipo monousuario",
+   "answer": "init= con un shell: arranca sin ningún servicio"
+  },
+  "ENI-CH02-Q09": {
+   "cue": "nivel de ejecución que se carga al arrancar",
+   "answer": "inittab: línea initdefault",
+   "contrast": [
+    "telinit → cambia el nivel en funcionamiento"
+   ]
+  },
+  "ENI-CH02-Q10": {
+   "cue": "copia integral de archivos: por qué no basta",
+   "answer": "el gestor de arranque está fuera de las particiones"
+  },
+  "ENI-CH03-Q01": {
+   "cue": "añadir una IP secundaria a una interfaz",
+   "answer": "ifconfig"
+  },
+  "ENI-CH03-Q02": {
+   "cue": "dos interfaces: ¿dos puertas de enlace predeterminadas?",
+   "answer": "no: una sola, la tabla de enrutamiento es única",
+   "contrast": [
+    "si se definen dos → solo queda la última"
+   ]
+  },
+  "ENI-CH03-Q03": {
+   "cue": "cargar /etc/ethers: qué se gana",
+   "answer": "evita peticiones ARP: discreción, no rendimiento"
+  },
+  "ENI-CH03-Q04": {
+   "cue": "TCP Wrappers: conflicto entre allow y deny",
+   "answer": "manda hosts.allow: hosts.deny se ignora",
+   "contrast": [
+    "solo hosts.allow → pasan solo los mencionados",
+    "solo hosts.deny → pasan todos salvo esos"
+   ]
+  },
+  "ENI-CH03-Q05": {
+   "cue": "¿ifconfig informa de la conexión WiFi?",
+   "answer": "en realidad no: SSID, señal y cifrado los da iwconfig"
+  },
+  "ENI-CH03-Q06": {
+   "cue": "-n en arp, route o netstat: por qué",
+   "answer": "evita resolver nombres y esperar al timeout DNS"
+  },
+  "ENI-CH03-Q07": {
+   "cue": "archivo abierto que impide desmontar: quién",
+   "answer": "lsof (archivo, proceso y usuario)"
+  },
+  "ENI-CH03-Q08": {
+   "cue": "libpcap: para qué se usa",
+   "answer": "captura de tramas (tcpdump, wireshark)"
+  },
+  "ENI-CH03-Q09": {
+   "cue": "DHCP: por qué el servidor responde en broadcast",
+   "answer": "el cliente aún no tiene IP: sin destino no hay unicast"
+  },
+  "ENI-CH03-Q10": {
+   "cue": "DHCP: ¿DNS general o el de la subnet?",
+   "answer": "el de la subnet: lo concreto gana a lo general"
+  },
+  "ENI-CH04-Q01": {
+   "cue": "contraseñas fuera de /etc/passwd: por qué",
+   "answer": "todos lo leen y el hash se adivina por diccionario",
+   "contrast": [
+    "/etc/shadow → sin acceso para los usuarios"
+   ]
+  },
+  "ENI-CH04-Q02": {
+   "cue": "dns en /etc/nsswitch.conf: por qué",
+   "answer": "orden de resolución: files (local), luego dns"
+  },
+  "ENI-CH04-Q03": {
+   "cue": "PAM: qué facilita a los desarrolladores",
+   "answer": "nuevo método: cambia la configuración, no la aplicación"
+  },
+  "ENI-CH04-Q04": {
+   "cue": "pila de módulos PAM: interés",
+   "answer": "encadenar varios módulos en una sola autentificación"
+  },
+  "ENI-CH04-Q05": {
+   "cue": "PAM: cuándo sufficient no basta",
+   "answer": "si antes falló un required o requisite"
+  },
+  "ENI-CH04-Q06": {
+   "cue": "tras el éxito de un módulo required",
+   "answer": "sigue: se ejecutan los demás módulos de la pila"
+  },
+  "ENI-CH04-Q07": {
+   "cue": "LDIF de Active Directory a OpenLDAP",
+   "answer": "muy difícil: cada directorio tiene su esquema",
+   "contrast": [
+    "intercambio completo → mapeo de atributos"
+   ]
+  },
+  "ENI-CH04-Q08": {
+   "cue": "contraseña con ldapmodify: por qué no",
+   "answer": "la escribiría sin encriptar: ldappasswd sí encripta"
+  },
+  "ENI-CH04-Q09": {
+   "cue": "contexto de búsqueda LDAP fuera de ldap.conf",
+   "answer": "la variable LDAPBASE (exportada en el entorno)"
+  },
+  "ENI-CH04-Q10": {
+   "cue": "autentificación LDAP y aun así /etc/shadow: por qué",
+   "answer": "seguir entrando si el directorio no está disponible"
+  },
+  "ENI-CH05-Q01": {
+   "cue": "compartición NFS o Samba: cómo se accede",
+   "answer": "mount en un directorio local, con software cliente"
+  },
+  "ENI-CH05-Q02": {
+   "cue": "compartir /etc/exports sin el servicio NFS",
+   "answer": "exportfs -a"
+  },
+  "ENI-CH05-Q03": {
+   "cue": "NFS: por qué root_squash viene por defecto",
+   "answer": "acceso por uid y root es siempre 0: pierde privilegios",
+   "contrast": [
+    "no_root_squash → lo desactiva"
+   ]
+  },
+  "ENI-CH05-Q04": {
+   "cue": "los tres procesos de los que depende NFS",
+   "answer": "portmapd + nfsd + mountd"
+  },
+  "ENI-CH05-Q05": {
+   "cue": "NFS no fiable: asegurar las escrituras",
+   "answer": "sync (sin caché en escritura)"
+  },
+  "ENI-CH05-Q06": {
+   "cue": "Samba: validar la configuración sin cargar el servicio",
+   "answer": "testparm",
+   "contrast": [
+    "testparm -v → también los valores por defecto"
+   ]
+  },
+  "ENI-CH05-Q07": {
+   "cue": "Samba: ocultar la compartición del Entorno de Red",
+   "answer": "browseable (solo la visibilidad)"
+  },
+  "ENI-CH05-Q08": {
+   "cue": "contraseña SMB a partir de la Unix",
+   "answer": "no se puede: MD5 es irreversible y SMB exige MD4"
+  },
+  "ENI-CH05-Q09": {
+   "cue": "sincronizar contraseñas Unix y Samba",
+   "answer": "unix passwd sync = yes (con la contraseña en claro)",
+   "contrast": [
+    "MD5 → base de cuentas Unix",
+    "MD4 → base de cuentas Samba"
+   ]
+  },
+  "ENI-CH05-Q10": {
+   "cue": "FTP: por qué pasivo y no activo",
+   "answer": "los cortafuegos ven el modo activo como amenaza",
+   "contrast": [
+    "activo → el servidor abre la conexión de datos",
+    "pasivo → el cliente abre comandos y datos"
+   ]
+  },
+  "ENI-CH06-Q01": {
+   "cue": "DNS: por qué hay varios tipos de registro",
+   "answer": "cada tipo responde a una pregunta distinta"
+  },
+  "ENI-CH06-Q02": {
+   "cue": "mensajería y resolución DNS: la relación",
+   "answer": "registros MX: si están mal, no entra correo de fuera"
+  },
+  "ENI-CH06-Q03": {
+   "cue": "servidor de caché: qué aporta a la red",
+   "answer": "guarda en memoria lo resuelto y responde al instante"
+  },
+  "ENI-CH06-Q04": {
+   "cue": "instalar el resolver DNS en Linux",
+   "answer": "no se instala: ya forma parte de la pila IP"
+  },
+  "ENI-CH06-Q05": {
+   "cue": "named.conf: ¿se puede prescindir de include?",
+   "answer": "sí: solo trocea la configuración en varios archivos"
+  },
+  "ENI-CH06-Q06": {
+   "cue": "DNS local: aprovechar la caché del proveedor",
+   "answer": "forwarders"
+  },
+  "ENI-CH06-Q07": {
+   "cue": "DNS: aplicar cambios sin reiniciar el servicio",
+   "answer": "rndc"
+  },
+  "ENI-CH06-Q08": {
+   "cue": "DNS: la comprobación más precisa y detallada",
+   "answer": "dig",
+   "contrast": [
+    "nslookup → el que muchos siguen prefiriendo"
+   ]
+  },
+  "ENI-CH06-Q09": {
+   "cue": "named: limitar el daño de una vulnerabilidad",
+   "answer": "jaula chroot + cuenta con privilegios limitados"
+  },
+  "ENI-CH06-Q10": {
+   "cue": "delegación: por qué los servidores deben comunicarse",
+   "answer": "el padre redirige lo de la zona hija al delegado"
+  },
+  "ENI-CH07-Q01": {
+   "cue": "Apache modular: qué se gana",
+   "answer": "solo los módulos necesarios: ejecutable más ligero"
+  },
+  "ENI-CH07-Q02": {
+   "cue": "Apache: validar la sintaxis sin arrancar",
+   "answer": "apache -t",
+   "mnemo": "-t = test"
+  },
+  "ENI-CH07-Q03": {
+   "cue": "Apache: fuente imprescindible de módulos y directivas",
+   "answer": "el sitio web de documentación oficial"
+  },
+  "ENI-CH07-Q04": {
+   "cue": "hosts virtuales: cómo sabe el servidor cuál",
+   "answer": "por el nombre que el cliente usa en la url"
+  },
+  "ENI-CH07-Q05": {
+   "cue": "Apache: crear cuentas para la autentificación local",
+   "answer": "htpasswd"
+  },
+  "ENI-CH07-Q06": {
+   "cue": "qué se pone en un .htaccess",
+   "answer": "lo mismo que un contexto Directory, junto a los datos"
+  },
+  "ENI-CH07-Q07": {
+   "cue": "que Apache busque .htaccess en cada directorio",
+   "answer": "AllowOverride: acepta configuración adicional"
+  },
+  "ENI-CH07-Q08": {
+   "cue": "certificado X509: para qué sirve",
+   "answer": "une identidad y clave pública; la firma una autoridad"
+  },
+  "ENI-CH07-Q09": {
+   "cue": "proxy que «rompe» el tráfico: por qué",
+   "answer": "corta en dos flujos: cliente a proxy, proxy a servidor"
+  },
+  "ENI-CH07-Q10": {
+   "cue": "squid: ¿acls en archivos anexos?",
+   "answer": "sí: parámetro directo o archivo que lo contenga"
+  },
+  "ENI-CH08-Q01": {
+   "cue": "MTA: qué es un alias",
+   "answer": "asociar una identidad a una cuenta que ya existe"
+  },
+  "ENI-CH08-Q02": {
+   "cue": "Postfix: cuándo usar relayhost",
+   "answer": "IP pública en una blacklist: que envíe el proveedor"
+  },
+  "ENI-CH08-Q03": {
+   "cue": "Postfix: otro nombre de dominio al exterior",
+   "answer": "myorigin"
+  },
+  "ENI-CH08-Q04": {
+   "cue": "Postfix: cuándo un mensaje es para él",
+   "answer": "dominio del destinatario en mydestination",
+   "contrast": [
+    "no coincide → lo reenvía"
+   ]
+  },
+  "ENI-CH08-Q05": {
+   "cue": "Postfix: comprobar la configuración sin arrancar",
+   "answer": "postfix check",
+   "contrast": [
+    "postconf -n → muestra los parámetros reales"
+   ]
+  },
+  "ENI-CH08-Q06": {
+   "cue": "SMTP o mail: fin de la redacción",
+   "answer": "un punto solo en su línea, y retorno de carro"
+  },
+  "ENI-CH08-Q07": {
+   "cue": "MTA: procesar automáticamente los mensajes entrantes",
+   "answer": "procmail (referenciado en postfix, con sus reglas)"
+  },
+  "ENI-CH08-Q08": {
+   "cue": "aviso urgente a los usuarios conectados en consola",
+   "answer": "wall"
+  },
+  "ENI-CH08-Q09": {
+   "cue": "/etc/issue y /etc/motd: cuándo se ven",
+   "answer": "issue antes de abrir sesión; motd una vez dentro"
+  },
+  "ENI-CH08-Q10": {
+   "cue": "courier: probar la autentificación sin cliente de correo",
+   "answer": "authtest"
+  },
+  "ENI-CH09-Q01": {
+   "cue": "Linux: activar el enrutamiento de paquetes IP",
+   "answer": "1 en /proc/sys/net/ipv4/ip_forward"
+  },
+  "ENI-CH09-Q02": {
+   "cue": "parámetro de sysctl",
+   "answer": "ruta bajo /proc/sys con puntos en vez de barras",
+   "contrast": [
+    "/etc/sysctl.conf → lo permanente, al arrancar"
+   ]
+  },
+  "ENI-CH09-Q03": {
+   "cue": "una sola tarjeta de red: ¿tabla de enrutamiento?",
+   "answer": "sí: como mínimo, la red local y la ruta por defecto"
+  },
+  "ENI-CH09-Q04": {
+   "cue": "iptables -L: qué tabla muestra",
+   "answer": "filter",
+   "contrast": [
+    "nat → iptables -t nat -L"
+   ]
+  },
+  "ENI-CH09-Q05": {
+   "cue": "iptables: tráfico al propio sistema o enrutado",
+   "answer": "INPUT para el propio sistema; FORWARD, de paso"
+  },
+  "ENI-CH09-Q06": {
+   "cue": "iptables: ninguna regla de la cadena encaja",
+   "answer": "política por defecto (-P), una por cadena",
+   "mnemo": "-P = policy"
+  },
+  "ENI-CH09-Q07": {
+   "cue": "NAT: protección rudimentaria de la red privada",
+   "answer": "esconde las direcciones privadas; desde fuera, sin ruta"
+  },
+  "ENI-CH09-Q08": {
+   "cue": "iptables: reglas automáticas contra el tráfico molesto",
+   "answer": "fail2ban"
+  },
+  "ENI-CH09-Q09": {
+   "cue": "Bugtraq y CERT: qué son",
+   "answer": "organismos de vigilancia que publican vulnerabilidades"
+  },
+  "ENI-CH09-Q10": {
+   "cue": "OpenVAS: por qué sirve para parques informáticos",
+   "answer": "cliente/servidor: servidor central, cliente por máquina"
+  },
+  "ENI-CH10-Q01": {
+   "cue": "telnet: qué seguridad sí tiene",
+   "answer": "autentificación por contraseña, pero sin encriptar",
+   "contrast": [
+    "integridad y confidencialidad → no las tiene"
+   ]
+  },
+  "ENI-CH10-Q02": {
+   "cue": "cliente SSH: registro de servidores ya conectados",
+   "answer": "~/.ssh/known_hosts (huella de cada servidor)"
+  },
+  "ENI-CH10-Q03": {
+   "cue": "ssh-keygen: ¿clave pública o privada?",
+   "answer": "las dos a la vez: siempre el par entero"
+  },
+  "ENI-CH10-Q04": {
+   "cue": "SSH: claves privadas guardadas en memoria",
+   "answer": "ssh-agent",
+   "contrast": [
+    "ssh-add → se las facilita al agente",
+    "ssh-keygen → las crea"
+   ]
+  },
+  "ENI-CH10-Q05": {
+   "cue": "scp: qué necesita en la máquina remota",
+   "answer": "solo el servicio SSH"
+  },
+  "ENI-CH10-Q06": {
+   "cue": "tráfico transportado por SSH: cómo se llama",
+   "answer": "túnel: solo cambia el transporte"
+  },
+  "ENI-CH10-Q07": {
+   "cue": "sesiones gráficas X11 por un túnel SSH",
+   "answer": "X11Forwarding yes en el sshd_config del servidor"
+  },
+  "ENI-CH10-Q08": {
+   "cue": "VPN sitio a sitio o punto a punto",
+   "answer": "punto a punto: dos máquinas; sitio a sitio: dos redes"
+  },
+  "ENI-CH10-Q09": {
+   "cue": "OpenVPN: dos máquinas sin enrutamiento entre ellas",
+   "answer": "modo puente: las dos en la misma subred"
+  },
+  "ENI-CH10-Q10": {
+   "cue": "túnel Open VPN: ¿está montado?",
+   "answer": "ifconfig: tun0 con su IP (necesaria, no suficiente)"
+  },
+  "ENI-CH11-Q01": {
+   "cue": "compilado más eficiente que interpretado: por qué",
+   "answer": "el binario ya trae instrucciones del procesador",
+   "contrast": [
+    "interpretado → un intérprete traduce cada acción"
+   ]
+  },
+  "ENI-CH11-Q02": {
+   "cue": "script configure de las fuentes: para qué",
+   "answer": "comprueba el entorno y genera el Makefile"
+  },
+  "ENI-CH11-Q03": {
+   "cue": "fuentes: borrar lo compilado y la configuración",
+   "answer": "make mrproper (como recién extraído del tar)",
+   "contrast": [
+    "make clean → solo lo que salió de compilar"
+   ]
+  },
+  "ENI-CH11-Q04": {
+   "cue": "programa compilado dinámicamente: de qué depende",
+   "answer": "de las librerías compartidas",
+   "contrast": [
+    "librerías estáticas → hoy es muy raro usarlas"
+   ]
+  },
+  "ENI-CH11-Q05": {
+   "cue": "ldconfig: lista de directorios a analizar",
+   "answer": "/etc/ld.so.conf"
+  },
+  "ENI-CH11-Q06": {
+   "cue": "kernel: reaprovechar el .config anterior",
+   "answer": "make oldconfig (solo pregunta lo nuevo)"
+  },
+  "ENI-CH11-Q07": {
+   "cue": "kernel 2.5.8: por qué no instalarlo",
+   "answer": "segunda cifra impar: versión en desarrollo",
+   "contrast": [
+    "2.4 y 2.6 → versiones de producción"
+   ]
+  },
+  "ENI-CH11-Q08": {
+   "cue": "módulo presente pero no cargado al arrancar",
+   "answer": "no hace falta: su hardware no está o nadie lo invoca"
+  },
+  "ENI-CH11-Q09": {
+   "cue": "ramdisk de carga del kernel: qué formato",
+   "answer": "un cpio comprimido con gzip"
+  },
+  "ENI-CH11-Q10": {
+   "cue": "mkinitrd sustituido por mkinitramfs: por qué",
+   "answer": "usa devfs, no udev, y no gestiona discos sata"
+  }
+ }
+}

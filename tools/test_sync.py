@@ -177,11 +177,32 @@ def main():
 
         # --- y ahora sí, las pruebas ---------------------------------------
         entorno = dict(os.environ, NODE_PATH=modulos)
-        out = subprocess.run(
-            ["node", os.path.join(PROJ, "tools", "sync_e2e.js"),
-             os.path.join(PROJ, "web", "js"),
-             f"http://127.0.0.1:{PUERTO_PASARELA}", jwt_anon()],
-            env=entorno, timeout=300)
+        e2e = ["node", os.path.join(PROJ, "tools", "sync_e2e.js"),
+               os.path.join(PROJ, "web", "js"),
+               f"http://127.0.0.1:{PUERTO_PASARELA}", jwt_anon()]
+        out = subprocess.run(e2e, env=entorno, timeout=300)
+        if out.returncode:
+            sys.exit(out.returncode)
+
+        # --- quien aún no ha vuelto a ejecutar schema.sql ------------------
+        # Sin la tabla del repaso rápido, lo de siempre tiene que seguir
+        # sincronizando; al volver a ejecutarlo, lo retenido sale solo.
+        recarga = lambda: (psql("-d", "e2e", "-c", "notify pgrst, 'reload schema';"), time.sleep(2))
+        print("\n[sync] quitando la tabla del repaso rápido…")
+        r = psql("-d", "e2e", "-c", "drop table public.asorc_card_events;")
+        if r.returncode:
+            print(r.stderr[:500]); sys.exit(1)
+        recarga()
+        estado = os.path.join(tmp, "navegador.json")
+        out = subprocess.run(e2e + ["sin-tarjetas", estado], env=entorno, timeout=120)
+        if out.returncode:
+            sys.exit(out.returncode)
+        print("\n[sync] volviendo a ejecutar schema.sql…")
+        r = psql("-d", "e2e", "-f", os.path.join(PROJ, "supabase", "schema.sql"))
+        if r.returncode:
+            print("FALLA schema.sql:\n" + r.stderr[:1500]); sys.exit(1)
+        recarga()
+        out = subprocess.run(e2e + ["vuelve-tabla", estado], env=entorno, timeout=120)
         sys.exit(out.returncode)
     finally:
         if pasarela:

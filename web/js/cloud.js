@@ -28,6 +28,11 @@
  * por subir. Si se bajara antes, la fusión (que se queda con el contador más
  * alto) podría dar por buena una cuenta que aún no incluye lo de este
  * navegador. Ver `sincronizar`.
+ *
+ * El repaso rápido también son eventos (asorc_card_events): fallo, marca,
+ * sabía, dudé, no sabía. Van los últimos y aparte: si su tabla todavía no
+ * existe porque falta volver a ejecutar schema.sql, lo demás se sincroniza
+ * igual y esos eventos esperan en la cola, sin dar la nube por rota.
  */
 'use strict';
 
@@ -51,6 +56,7 @@
     ultima: 0,
     alCambiar: null,
 
+    sinTarjetas: null,      // motivo, si la tabla del repaso rápido no está
     _enVuelo: null,
     _otraVez: false,
     _intento: 0,
@@ -61,9 +67,26 @@
       return !!(c && c.supabaseUrl && c.supabaseAnonKey);
     },
 
+    // Lo que falta por subir. Los eventos del repaso rápido retenidos porque
+    // su tabla no existe no cuentan: no se van a poder mandar reintentando.
     pendientes() {
-      return this.store && this.store.outbox ? this.store.outbox.tamano() : 0;
+      if (!this.store || !this.store.outbox) return 0;
+      return this._paraEnviar(this.store.outbox.lista()).length;
     },
+
+    _paraEnviar(cola) {
+      return this.sinTarjetas ? cola.filter((e) => e.tipo !== 'tarjeta') : cola;
+    },
+
+    // Tabla que no existe (o del esquema anterior): no se arregla reintentando.
+    // Ojo: al insertar en una tabla que no existe, PostgREST 12 contesta 404
+    // con el cuerpo vacío, así que el error llega sin código: cuenta el estado.
+    _faltaTabla(err) {
+      return !!err && (['42P01', 'PGRST205', '42703', 'PGRST204'].includes(err.code) ||
+                       err.status === 404);
+    },
+
+    SIN_TARJETAS: 'Falta la tabla del repaso rápido: vuelve a ejecutar supabase/schema.sql.',
 
     viva() { return !!this.sb && this.estado !== 'error'; },
 
@@ -78,6 +101,7 @@
     /* ------------------------------------------------------------ arranque */
     async init(store) {
       this.store = store || null;
+      this.sinTarjetas = null;           // se vuelve a mirar en cada arranque
       if (!this.configurada()) {
         this._estado('solo-local', 'Sin configurar: falta web/config.js.');
         return this;
@@ -183,7 +207,7 @@
     async _flush(o) {
       const st = this.store;
       if (!st || !st.outbox) return { ok: false, motivo: 'sin cola' };
-      const cola = st.outbox.lista();
+      const cola = this._paraEnviar(st.outbox.lista());
       if (!cola.length) {
         if (this.viva()) { this._cancelar(); this._estado('sincronizado', null); }
         return { ok: true, enviados: 0 };
@@ -195,7 +219,7 @@
       }
 
       this._estado('sincronizando');
-      const grupos = { intento: [], marca: [], ronda: [], pendiente: [] };
+      const grupos = { intento: [], marca: [], ronda: [], pendiente: [], tarjeta: [] };
       cola.forEach((e) => { if (grupos[e.tipo]) grupos[e.tipo].push(e); });
 
       const hechos = [];
@@ -241,6 +265,22 @@
         if (r.error) throw r.error;
       });
 
+      // El repaso rápido, el último y aparte (ver la cabecera).
+      if (grupos.tarjeta.length && !fallo) {
+        try {
+          const filas = grupos.tarjeta.map((e) => Object.assign({ profile_id: PERFIL }, e.payload));
+          for (let i = 0; i < filas.length; i += LOTE) {
+            const r = await this.sb.from('asorc_card_events')
+              .upsert(filas.slice(i, i + LOTE), { onConflict: 'event_id', ignoreDuplicates: true });
+            if (r.error) throw Object.assign(r.error, { status: r.status });
+          }
+          grupos.tarjeta.forEach((e) => hechos.push(e.id));
+        } catch (e) {
+          if (this._faltaTabla(e)) this.sinTarjetas = this.SIN_TARJETAS;
+          else fallo = e;
+        }
+      }
+
       if (hechos.length) st.outbox.quitar(hechos);
 
       if (fallo) {
@@ -268,7 +308,7 @@
         let q = this.sb.from(tabla).select('*').eq('profile_id', PERFIL);
         if (orden) q = q.order(orden, { ascending: true });
         const r = await q.range(desde, desde + PAGINA - 1);
-        if (r.error) throw r.error;
+        if (r.error) throw Object.assign(r.error, { status: r.status });
         out.push(...(r.data || []));
         if (!r.data || r.data.length < PAGINA) break;
       }
@@ -323,7 +363,21 @@
       });
       stats.sesiones = sesiones.map((r) => r.payload).filter(Boolean);
       const pendiente = pend && pend.data ? pend.data.payload : null;
-      return { progress, stats, pendiente };
+
+      // El repaso rápido: sus eventos, tal cual, para rehacer el mazo.
+      let tarjetas = null;
+      if (!this.sinTarjetas) {
+        try {
+          tarjetas = (await this._todas('asorc_card_events', 'event_at')).map((r) => ({
+            event_id: r.event_id, question_id: r.question_id, kind: r.kind,
+            at: Date.parse(r.event_at),
+          }));
+        } catch (e) {
+          if (!this._faltaTabla(e)) throw e;
+          this.sinTarjetas = this.SIN_TARJETAS;
+        }
+      }
+      return { progress, stats, pendiente, tarjetas };
     },
 
     /* ------------------------------------------------- histórico de fuera
@@ -383,7 +437,7 @@
       // 1 · la cola. Si queda algo sin subir, NO se baja: lo remoto no
       //     contendría a lo local y fusionar dejaría cuentas cortas.
       const subida = await this._flush({});
-      if (!subida.ok || store.outbox.tamano()) {
+      if (!subida.ok || this.pendientes()) {
         return { ok: false, motivo: subida.motivo || 'quedan cambios por subir' };
       }
 
@@ -400,8 +454,11 @@
           filas.forEach((f) => this._acumula(remoto.progress, remoto.stats, f));
         }
 
-        // 4 · fusionar: a estas alturas lo remoto contiene a lo local
-        store.importar(remoto.progress, remoto.stats);
+        // 4 · fusionar: a estas alturas lo remoto contiene a lo local. El mazo
+        //     de repaso se rehace con los eventos de la nube y se funde sin
+        //     perder nada (gana la tarjeta que sabe más).
+        store.importar(remoto.progress, remoto.stats,
+                       remoto.tarjetas && root.Micro ? root.Micro.reconstruye(remoto.tarjetas) : null);
         // La ronda a medias: si aquí no hay ninguna, se adopta la de la nube.
         if (!store.session && remoto.pendiente && !o.sinPendiente) {
           store.session = remoto.pendiente;

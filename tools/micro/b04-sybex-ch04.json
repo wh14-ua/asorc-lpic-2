@@ -1,0 +1,163 @@
+{
+ "SYBEX-CH04-RQ01": {
+  "cue": "crear un sistema ext2: las tres formas",
+  "answer": "mkfs -t ext2 + mkfs.ext2 + mke2fs"
+ },
+ "SYBEX-CH04-RQ02": {
+  "cue": "todos los sistemas de archivos soportados",
+  "answer": "/proc/filesystems",
+  "contrast": [
+   "/etc/mtab, /proc/mounts → solo los montados",
+   "/proc/swaps → espacio de intercambio",
+   "/proc/cpuinfo → los procesadores"
+  ]
+ },
+ "SYBEX-CH04-RQ03": {
+  "cue": "acoplar un sistema de archivos temporalmente",
+  "answer": "mount",
+  "contrast": [
+   "/etc/fstab → persistente, no temporal",
+   "mkfs → formatea, no acopla",
+   "e2label → solo da la etiqueta",
+   "AutoFS → hay que configurarlo antes"
+  ]
+ },
+ "SYBEX-CH04-RQ04": {
+  "cue": "mount: montar por UUID",
+  "answer": "-U",
+  "contrast": [
+   "-L → por etiqueta",
+   "-o → opciones de montaje",
+   "-a → todo lo de /etc/fstab sin montar",
+   "-n → sin actualizar /etc/mtab"
+  ]
+ },
+ "SYBEX-CH04-RQ05": {
+  "cue": "escribir ya los metadatos que están en memoria",
+  "answer": "sync",
+  "contrast": [
+   "fuser / lsof → quién usa el sistema de archivos",
+   "dmesg → búfer del kernel, no vacía nada"
+  ]
+ },
+ "SYBEX-CH04-RQ06": {
+  "cue": "los seis campos de /etc/fstab",
+  "answer": "nombre, punto de montaje, tipo, opciones, dump, fsck",
+  "contrast": [
+   "cpio → no: el volcado es de dump",
+   "AutoFS → sus montajes no van en /etc/fstab"
+  ]
+ },
+ "SYBEX-CH04-RQ07": {
+  "cue": "averiguar el UUID de un sistema de archivos",
+  "answer": "blkid",
+  "contrast": [
+   "e2label → la etiqueta, no el UUID",
+   "findfs → necesita ya la etiqueta o el UUID",
+   "findmnt / mount → lo montado, sin UUID"
+  ]
+ },
+ "SYBEX-CH04-RQ08": {
+  "cue": "Btrfs: niveles RAID posibles",
+  "answer": "RAID 0, 1 y 10",
+  "contrast": [
+   "RAID 5 y 6 (con paridad) → todavía no"
+  ]
+ },
+ "SYBEX-CH04-RQ09": {
+  "cue": "extensiones del estándar ISO9660",
+  "answer": "El Torito + Joliet + Rock Ridge",
+  "contrast": [
+   "UDF → estándar aparte, sobre todo DVD"
+  ]
+ },
+ "SYBEX-CH04-RQ10": {
+  "cue": "crear una imagen ISO",
+  "answer": "mkisofs",
+  "contrast": [
+   "cdrecord → la graba en el disco",
+   "mkfs → crea sistemas de archivos",
+   "mount -t iso9660 → la monta"
+  ]
+ },
+ "SYBEX-CH04-RQ11": {
+  "cue": "preparar una partición como espacio de intercambio",
+  "answer": "mkswap",
+  "contrast": [
+   "swapon → activa un swap ya preparado",
+   "swapoff → lo desactiva",
+   "swapon -s → estadísticas de intercambio"
+  ]
+ },
+ "SYBEX-CH04-RQ12": {
+  "cue": "tipos de mapa en /etc/auto.master",
+  "answer": "integrado, directo e indirecto",
+  "contrast": [
+   "SMART → autodiagnóstico de discos, no mapas"
+  ]
+ },
+ "SYBEX-CH04-RQ13": {
+  "cue": "AutoFS: usar otro archivo como mapa maestro",
+  "answer": "/etc/sysconfig/autofs (o /etc/default/autofs)",
+  "contrast": [
+   "auto.direct, auto.misc, auto.tmp → son mapas",
+   "/etc/autofs.net → script antiguo de AutoFS"
+  ]
+ },
+ "SYBEX-CH04-RQ14": {
+  "cue": "sistema de archivos cifrado por capas",
+  "answer": "eCryptfs",
+  "contrast": [
+   "dm-crypt, LUKS → cifran, pero no por capas",
+   "XFS, Btrfs → no cifran"
+  ]
+ },
+ "SYBEX-CH04-RQ15": {
+  "cue": "utilidad que NO ajusta ext2, ext3 ni ext4",
+  "answer": "uuidgen: solo genera números UUID",
+  "contrast": [
+   "debugfs, e2label, resize2fs, tune2fs → ajustan"
+  ]
+ },
+ "SYBEX-CH04-RQ16": {
+  "cue": "asignar un UUID nuevo a un ext4",
+  "answer": "tune2fs",
+  "contrast": [
+   "uuidgen → lo genera, no lo asigna",
+   "blkid → lo muestra, no lo cambia",
+   "e2label → la etiqueta",
+   "resize2fs → el tamaño"
+  ]
+ },
+ "SYBEX-CH04-RQ17": {
+  "cue": "fsck.xfs sobre un XFS: qué hace",
+  "answer": "nada: XFS repara con sus propias utilidades"
+ },
+ "SYBEX-CH04-RQ18": {
+  "cue": "Btrfs tras un desastre: recuperar archivos",
+  "answer": "btrfs restore",
+  "contrast": [
+   "check, rescue → ayudan, pero menos potentes",
+   "get property, scrub → no restauran"
+  ]
+ },
+ "SYBEX-CH04-RQ19": {
+  "cue": "XFS: buscar inconsistencias sin reparar",
+  "answer": "xfs_check (o xfs_repair -n)",
+  "contrast": [
+   "xfs_info → información, no inconsistencias",
+   "xfs_metadump → copia los metadatos",
+   "xfsdump / xfsrestore → copia y restauración"
+  ]
+ },
+ "SYBEX-CH04-RQ20": {
+  "cue": "SMART: resumen rápido de salud",
+  "answer": "smartctl -H",
+  "contrast": [
+   "-a → toda la información, no un resumen",
+   "-i → info del disco y si soporta SMART",
+   "-t short / -t long → lanzan pruebas"
+  ],
+  "mnemo": "-H de health"
+ }
+}

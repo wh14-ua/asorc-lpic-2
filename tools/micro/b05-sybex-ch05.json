@@ -1,0 +1,107 @@
+{
+ "SYBEX-CH05-RQ01": {
+  "cue": "RAID tolerantes a fallos",
+  "answer": "RAID 1, 5, 6 y 10: todos menos el 0",
+  "contrast": ["RAID 0 → solo bandas: no guarda nada de más"]
+ },
+ "SYBEX-CH05-RQ02": {
+  "cue": "distribución por bandas con doble paridad",
+  "answer": "RAID 6",
+  "contrast": ["RAID 5 → paridad simple", "RAID 0 → solo bandas", "RAID 1 → espejo", "RAID 10 → espejo con bandas"]
+ },
+ "SYBEX-CH05-RQ03": {
+  "cue": "¿RAID por software soportado?",
+  "answer": "/proc/mdstat",
+  "contrast": ["/dev/md0 → el array", "/etc/mdadm/mdadm.conf → configuración", "/dev/mapper → Device Mapper"]
+ },
+ "SYBEX-CH05-RQ04": {
+  "cue": "mdadm: el modo que NO existe",
+  "answer": "delete (borrado)",
+  "contrast": ["grow → hace crecer, reduce o reconfigura", "--follow → vigila unidades md y reacciona", "--manage → gestiona miembros, añade reservas", "misceláneo → lo demás (borrar superbloques)"]
+ },
+ "SYBEX-CH05-RQ05": {
+  "cue": "mdadm: modo para crear un array",
+  "answer": "-C (--create)",
+  "contrast": ["-F → follow o monitor", "--grow, --misc → modos que no crean arrays"]
+ },
+ "SYBEX-CH05-RQ06": {
+  "cue": "estado actual de los arrays RAID",
+  "answer": "/proc/mdstat",
+  "contrast": ["mdadm.conf → configuración, no estado", "/etc/fstab → no guarda estado de RAID"]
+ },
+ "SYBEX-CH05-RQ07": {
+  "cue": "mdadm: a qué array pertenece una unidad",
+  "answer": "--misc --examine /dev/sdc1",
+  "contrast": ["--detail /dev/md0 → solo si es ese array", "--monitor --help → opciones del modo monitor"]
+ },
+ "SYBEX-CH05-RQ08": {
+  "cue": "eliminar un array RAID desmontado",
+  "answer": "detenerlo y borrar los superbloques de sus unidades",
+  "contrast": ["borrar los datos → no hace falta", "reducir o monitorizar → no hace falta"]
+ },
+ "SYBEX-CH05-RQ09": {
+  "cue": "sobre qué unidades funciona hdparm",
+  "answer": "todas: PATA, ATAPI, SATA y SCSI",
+  "contrast": ["SCSI → solo con SAT y algunas opciones"]
+ },
+ "SYBEX-CH05-RQ10": {
+  "cue": "sdparm: parámetros de modo comunes",
+  "answer": "ninguna opción: el comando a secas",
+  "contrast": ["--all → toda la información reconocida", "--hex → páginas VPD en hexadecimal", "--page → código hexadecimal de cada página VPD", "--command → stop, sync, start o load; no show"]
+ },
+ "SYBEX-CH05-RQ11": {
+  "cue": "iSCSI: designa a la vez destino y disco",
+  "answer": "IQN",
+  "contrast": ["WWID, WWN, LUN → solo el disco, no el destino", "scsi_id → comando para crear un número único"]
+ },
+ "SYBEX-CH05-RQ12": {
+  "cue": "iSCSI: registros de descubrimiento",
+  "answer": "/var/lib/iscsi/nodes + /var/lib/iscsi/send_targets",
+  "contrast": ["/etc/iscsi/iscsid.conf → configuración", "/lib/udev/scsi_id → el comando scsi_id"]
+ },
+ "SYBEX-CH05-RQ13": {
+  "cue": "agrupar varios discos como una sola unidad",
+  "answer": "RAID + gestión de volúmenes lógicos (LVM)",
+  "contrast": ["iSCSI → trae un disco de red, no agrupa", "tejido de almacenamiento → hardware de SAN"]
+ },
+ "SYBEX-CH05-RQ14": {
+  "cue": "partición sin usar designada para LVM",
+  "answer": "PV (volumen físico)",
+  "contrast": ["VG → grupo que reúne varios PV", "LV → lo que se saca del grupo", "backstore → acceso a un medio físico en SAN"]
+ },
+ "SYBEX-CH05-RQ15": {
+  "cue": "tamaño del PE: cuándo se fija",
+  "answer": "al añadir el PV a un VG, no al designarlo",
+  "contrast": ["PE → bloque mínimo que se asigna en un PV", "tamaño por defecto → 4 MiB, y se puede elegir"],
+  "mnemo": "PE = physical extent"
+ },
+ "SYBEX-CH05-RQ16": {
+  "cue": "LE: a qué se asocian",
+  "answer": "a los extents físicos del VG",
+  "contrast": ["LV → se compone de LE, no al revés", "mapeo → da acceso a los datos, no bloquea", "designar el PV → ahí no hay mapeo"],
+  "mnemo": "LE = extent lógico"
+ },
+ "SYBEX-CH05-RQ17": {
+  "cue": "designar una partición como PV",
+  "answer": "pvcreate",
+  "contrast": ["pvdisplay → atributos de un PV", "pvscan → lista los PV del sistema", "vgcreate → mete PV en un VG"],
+  "mnemo": "…create crea, …display enseña, …scan lista"
+ },
+ "SYBEX-CH05-RQ18": {
+  "cue": "comprobar el recién creado vg01",
+  "answer": "vgdisplay",
+  "contrast": ["pvdisplay → volúmenes físicos", "lvdisplay → volúmenes lógicos", "pvscan → lista los PV", "vgcreate → crea, no comprueba"],
+  "mnemo": "el prefijo manda: pv, vg o lv"
+ },
+ "SYBEX-CH05-RQ19": {
+  "cue": "instantáneas de volúmenes lógicos: qué es cierto",
+  "answer": "son LV y se pueden montar",
+  "contrast": ["solo lectura → no: lectura y escritura", "datos originales → no se copian", "vgcreate → no: se crean con lvcreate"]
+ },
+ "SYBEX-CH05-RQ20": {
+  "cue": "renombrar un LV",
+  "answer": "lvrename",
+  "contrast": ["lvremove → lo elimina", "lvconvert → cambia su disposición", "lvs → información de los LV"],
+  "mnemo": "lvrename = LV + rename"
+ }
+}

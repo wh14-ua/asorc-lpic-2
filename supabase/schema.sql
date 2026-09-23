@@ -16,6 +16,8 @@
 --   nada. Los contadores del panel se derivan sumando esos eventos, nunca se
 --   guardan sumados. Lo que no es un evento (la marca de repaso, la ronda a
 --   medias) se resuelve por marca de tiempo: gana el cambio más reciente.
+--   El repaso rápido también son eventos (asorc_card_events): fallar, marcar,
+--   «la sabía», «dudé», «no la sabía». El mazo se rehace aplicándolos en orden.
 --
 -- RIESGO ASUMIDO
 --   Sin autenticación y con la publishable key a la vista, cualquiera que
@@ -64,6 +66,19 @@ create table if not exists public.asorc_sessions (
   profile_id text        not null default 'default',
   payload    jsonb       not null,
   created_at timestamptz not null default now()
+);
+
+-- Repaso rápido. Cada cosa que le pasa a una microtarjeta es un evento
+-- irrepetible; el mazo se reconstruye aplicándolos en orden de event_at.
+create table if not exists public.asorc_card_events (
+  event_id    text        primary key,
+  profile_id  text        not null default 'default',
+  question_id text        not null,
+  kind        text        not null,
+  event_at    timestamptz not null default now(),
+  created_at  timestamptz not null default now(),
+  constraint asorc_card_events_kind_ck
+    check (kind in ('fallo', 'marca', 'sabia', 'dude', 'nosabia'))
 );
 
 -- Ronda a medias. Una sola fila en todo el proyecto: id = 'main'.
@@ -208,6 +223,8 @@ create index if not exists asorc_attempts_cuando
   on public.asorc_attempts (profile_id, answered_at);
 create index if not exists asorc_sessions_perfil
   on public.asorc_sessions (profile_id, created_at);
+create index if not exists asorc_card_events_cuando
+  on public.asorc_card_events (profile_id, event_at);
 
 
 -- =========================================================================
@@ -236,12 +253,13 @@ create trigger asorc_pending_lww before update on public.asorc_pending
 
 -- =========================================================================
 -- 5 · RLS
---     Activada en las cuatro tablas. Nada de desactivarla como atajo.
+--     Activada en las cinco tablas. Nada de desactivarla como atajo.
 -- =========================================================================
-alter table public.asorc_attempts enable row level security;
-alter table public.asorc_marks    enable row level security;
-alter table public.asorc_sessions enable row level security;
-alter table public.asorc_pending  enable row level security;
+alter table public.asorc_attempts    enable row level security;
+alter table public.asorc_marks       enable row level security;
+alter table public.asorc_sessions    enable row level security;
+alter table public.asorc_pending     enable row level security;
+alter table public.asorc_card_events enable row level security;
 
 -- Fuera cualquier política anterior (las del esquema con auth.uid() bloquearían
 -- todo). Se quitan todas y se vuelven a crear las de abajo, que son las únicas.
@@ -275,6 +293,12 @@ create policy "sessions leer"   on public.asorc_sessions
 create policy "sessions añadir" on public.asorc_sessions
   for insert to anon with check (profile_id = 'default');
 
+-- ---- repaso rápido: como el histórico, leer y añadir ---------------------
+create policy "cards leer"      on public.asorc_card_events
+  for select to anon using (profile_id = 'default');
+create policy "cards añadir"    on public.asorc_card_events
+  for insert to anon with check (profile_id = 'default');
+
 -- ---- ronda a medias: una fila que se pisa a sí misma --------------------
 create policy "pending leer"    on public.asorc_pending
   for select to anon using (profile_id = 'default' and id = 'main');
@@ -292,20 +316,22 @@ create policy "pending cambiar" on public.asorc_pending
 -- =========================================================================
 grant usage on schema public to anon;
 
-revoke all on public.asorc_attempts from anon, authenticated, public;
-revoke all on public.asorc_marks    from anon, authenticated, public;
-revoke all on public.asorc_sessions from anon, authenticated, public;
-revoke all on public.asorc_pending  from anon, authenticated, public;
+revoke all on public.asorc_attempts    from anon, authenticated, public;
+revoke all on public.asorc_marks       from anon, authenticated, public;
+revoke all on public.asorc_sessions    from anon, authenticated, public;
+revoke all on public.asorc_pending     from anon, authenticated, public;
+revoke all on public.asorc_card_events from anon, authenticated, public;
 
 grant select, insert         on public.asorc_attempts to anon;
 grant select, insert, update on public.asorc_marks    to anon;
 grant select, insert         on public.asorc_sessions to anon;
 grant select, insert, update on public.asorc_pending  to anon;
+grant select, insert         on public.asorc_card_events to anon;
 
 
 -- =========================================================================
 -- 7 · COMPROBACIÓN
---     Debe salir: cuatro tablas con rowsecurity = true y once políticas.
+--     Debe salir: cinco tablas con rowsecurity = true y trece políticas.
 -- =========================================================================
 select t.tablename,
        t.rowsecurity                                    as rls,

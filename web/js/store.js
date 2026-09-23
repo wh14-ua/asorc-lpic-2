@@ -9,7 +9,7 @@
  *
  * El esquema de «progreso» es el MISMO que usa la aplicación de terminal, para
  * que los dos sigan leyéndose. Lo que la terminal no conoce (tiempos, marcas,
- * sesiones) vive aparte, en «stats».
+ * sesiones) vive aparte, en «stats». El mazo de repaso rápido, en «cards».
  *
  * PRIMERO LO LOCAL. Responder una pregunta escribe en localStorage y sigue. La
  * nube nunca está en el camino: lo que hay que mandarle se apunta en una cola
@@ -123,17 +123,19 @@
           stats: leer('stats', VACIO_STATS()),
           session: leer('session', null),
           prefs: leer('prefs', {}),
+          cards: leer('cards', {}),
         };
       },
       async guardar(estado) {
         escribir('progress', estado.progress);
         escribir('stats', estado.stats);
         escribir('prefs', estado.prefs);
+        escribir('cards', estado.cards || {});
         if (estado.session) escribir('session', estado.session);
         else { try { localStorage.removeItem(k('session')); } catch (e) {} }
       },
       async borrarTodo() {
-        ['progress', 'stats', 'session', 'prefs', 'syncQueue', 'seed'].forEach((x) => {
+        ['progress', 'stats', 'session', 'prefs', 'cards', 'syncQueue', 'seed'].forEach((x) => {
           try { localStorage.removeItem(k(x)); } catch (e) {}
         });
       },
@@ -186,8 +188,8 @@
    * duplica nada (lo garantiza la clave primaria del otro lado).
    *
    * Hay dos clases de evento:
-   *   intento, ronda      son hechos, se acumulan: van todos.
-   *   marca, pendiente    son estados, solo importa el último: se funden.
+   *   intento, ronda, tarjeta   son hechos, se acumulan: van todos.
+   *   marca, pendiente          son estados, solo importa el último: se funden.
    */
   function Outbox(ns) {
     const clave = ns + '.syncQueue';
@@ -245,6 +247,7 @@
     stats: VACIO_STATS(),
     session: null,
     prefs: {},
+    cards: {},              // mazo de repaso rápido, por question_id (micro.js)
     local: null,            // LocalServerStore si lo hay
     browser: null,
     outbox: null,           // cola hacia la nube, la vacía cloud.js
@@ -260,6 +263,7 @@
       const b = await this.browser.cargar();
       this.progress = b.progress; this.stats = b.stats;
       this.session = b.session; this.prefs = b.prefs || {};
+      this.cards = b.cards && typeof b.cards === 'object' ? b.cards : {};
 
       const srv = LocalServerStore(base);
       if (await srv.disponible()) {
@@ -344,6 +348,21 @@
       this.guardarLocal();
     },
 
+    /* Un evento de repaso rápido: fallo, marca, sabía, dudé o no sabía. Quien
+     * llama ya lo ha aplicado al mazo (micro.js); aquí se guarda y se apunta
+     * para la nube con su propio identificador, así que reenviarlo no duplica. */
+    tarjetaEvento(ev) {
+      ev.event_id = ev.event_id || uid();
+      this.encolar('tarjeta', {
+        event_id: ev.event_id,
+        question_id: ev.question_id,
+        kind: ev.kind,
+        event_at: new Date(ev.at).toISOString(),
+      });
+      this.guardarLocal();
+      return ev;
+    },
+
     cerrarRonda(registro) {
       if (registro) {
         registro.uid = registro.uid || uid();
@@ -405,16 +424,20 @@
 
     /* ------------------------------------------------------- importación */
     // §27: nunca sobrescribir lo más completo con lo más pobre.
-    importar(progress, stats) {
+    importar(progress, stats, cards) {
       const antes = Object.keys(this.progress.preguntas).length;
       this.progress = fusionaProgreso(this.progress, progress || VACIO_PROG());
       this.stats = fusionaStats(this.stats, stats || VACIO_STATS());
+      // El mazo se funde con la misma regla: gana la tarjeta que sabe más.
+      if (cards && typeof cards === 'object' && root.Micro) {
+        this.cards = root.Micro.fusiona(this.cards, cards);
+      }
       this.guardarLocal();
       return { antes, ahora: Object.keys(this.progress.preguntas).length };
     },
 
     exportar() {
-      return { progress: this.progress, stats: this.stats, prefs: this.prefs };
+      return { progress: this.progress, stats: this.stats, prefs: this.prefs, cards: this.cards };
     },
 
   };

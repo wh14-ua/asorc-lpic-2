@@ -1,0 +1,106 @@
+{
+ "SYBEX-CH06-RQ01": {
+  "cue": "cifrado WPA: en qué capa opera",
+  "answer": "física (la señal inalámbrica)",
+  "contrast": ["red → direcciona con IP, sin tocar la señal", "transporte → reparte por puertos", "aplicación → donde corren los programas"]
+ },
+ "SYBEX-CH06-RQ02": {
+  "cue": "a qué red está conectado el sistema",
+  "answer": "máscara de red (netmask)",
+  "contrast": ["dirección IP → sin máscara no dice la red", "router predeterminado → otra IP más", "servidor DNS → traduce nombres a IP"]
+ },
+ "SYBEX-CH06-RQ03": {
+  "cue": "máscara de red válida",
+  "answer": "unos seguidos al principio: 255.255.255.0",
+  "contrast": ["255.255.0.255 → unos cortados", "0.255.255.255 → unos al final", "192.168.1.0 → dirección de red, no máscara"]
+ },
+ "SYBEX-CH06-RQ04": {
+  "cue": "las dos partes de una IP",
+  "answer": "dirección de red + dirección de host",
+  "contrast": ["máscara de red → no está en la IP: la interpreta", "nombre de host → no forma parte de la IP"]
+ },
+ "SYBEX-CH06-RQ05": {
+  "cue": "bits de una dirección IPv6",
+  "answer": "128: ocho grupos de cuatro hexadecimales",
+  "contrast": ["32 → IPv4", "64 → suele ser solo la parte de red"]
+ },
+ "SYBEX-CH06-RQ06": {
+  "cue": "paquetes para hosts de redes remotas",
+  "answer": "router predeterminado (default router)",
+  "contrast": ["máscara de red → solo define la red local", "servidor DNS → traduce nombres, no encamina"]
+ },
+ "SYBEX-CH06-RQ07": {
+  "cue": "convertir nombre de host en IP",
+  "answer": "servidor DNS",
+  "contrast": ["router predeterminado → manda paquetes fuera", "máscara de red → define la red local"]
+ },
+ "SYBEX-CH06-RQ08": {
+  "cue": "IP automática para los clientes",
+  "answer": "DHCP",
+  "contrast": ["ifconfig → IP fija, a mano", "tabla ARP → une IP con dirección hardware", "router predeterminado → no reparte direcciones"],
+  "mnemo": "DHCP = Dynamic Host Configuration Protocol"
+ },
+ "SYBEX-CH06-RQ09": {
+  "cue": "aplicaciones locales hablando entre sí",
+  "answer": "loopback (bucle local)",
+  "contrast": ["MAC → hardware de la tarjeta", "hostname → para conexiones remotas"]
+ },
+ "SYBEX-CH06-RQ10": {
+  "cue": "transporte: garantiza la entrega",
+  "answer": "TCP",
+  "contrast": ["UDP → más rápido, sin garantía", "ICMP → mensajes de control, sin garantía"]
+ },
+ "SYBEX-CH06-RQ11": {
+  "cue": "nc: simular un servidor web",
+  "answer": "nc -l 80",
+  "contrast": ["nc 192.168.1.77 80 → se conecta, no escucha", "nc -l 22 → escucha, pero en otro puerto"],
+  "mnemo": "-l = listen"
+ },
+ "SYBEX-CH06-RQ12": {
+  "cue": "Red Hat: carpeta de configuración de red",
+  "answer": "/etc/sysconfig/network-scripts",
+  "contrast": ["/etc/network → Debian (archivo interfaces)", "ifcfg-eth0 → un archivo, no una carpeta"]
+ },
+ "SYBEX-CH06-RQ13": {
+  "cue": "Debian: línea para IP dinámica",
+  "answer": "iface eth0 inet dhcp",
+  "contrast": ["inet static → IP fija", "auto eth0 → se levanta al arrancar", "inet6 auto → IPv6 de enlace local", "BOOTPROTO → no es de Debian"]
+ },
+ "SYBEX-CH06-RQ14": {
+  "cue": "lista de servidores DNS del sistema",
+  "answer": "/etc/resolv.conf (líneas nameserver)",
+  "contrast": ["/etc/network/interfaces → red en Debian, sin DNS", "/etc/hosts.allow → tcp_wrappers"],
+  "mnemo": "resolv.conf = resolver nombres"
+ },
+ "SYBEX-CH06-RQ15": {
+  "cue": "ifconfig: IP y máscara para eth0",
+  "answer": "ifconfig eth0 IP netmask máscara (up/down opcional)",
+  "contrast": ["ifconfig up IP netmask … → falta la interfaz"]
+ },
+ "SYBEX-CH06-RQ16": {
+  "cue": "ver las redes inalámbricas disponibles",
+  "answer": "iwlist",
+  "contrast": ["iwconfig → conecta a un punto de acceso", "ifconfig / ip → ponen la dirección IP", "arp → IP con dirección hardware"],
+  "mnemo": "iwlist: list = listar redes"
+ },
+ "SYBEX-CH06-RQ17": {
+  "cue": "iwconfig: nombre del punto de acceso",
+  "answer": "essid (el SSID)",
+  "contrast": ["key → clave de cifrado", "channel → radiofrecuencia", "netmask, address → no son de iwconfig"]
+ },
+ "SYBEX-CH06-RQ18": {
+  "cue": "mostrar y fijar dirección, máscara y router",
+  "answer": "ip",
+  "contrast": ["ifconfig → dirección y máscara, no router", "router → solo el router predeterminado", "ifup → solo levanta la interfaz"]
+ },
+ "SYBEX-CH06-RQ19": {
+  "cue": "enviar ICMP para comprobar la conectividad",
+  "answer": "ping",
+  "contrast": ["nmap → busca puertos abiertos", "nc → simula cliente o servidor TCP o UDP", "tcpdump → captura, no envía", "netstat → estadísticas de la interfaz"]
+ },
+ "SYBEX-CH06-RQ20": {
+  "cue": "ver los paquetes de red",
+  "answer": "tcpdump",
+  "contrast": ["netstat → estadísticas, no paquetes", "dig → consulta el DNS", "nc → simula un cliente o un servidor"]
+ }
+}

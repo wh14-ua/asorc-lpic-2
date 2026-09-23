@@ -1,0 +1,150 @@
+{
+ "SYBEX-CH01-RQ01": {
+  "cue": "lo primero que arranca el firmware",
+  "answer": "el cargador de arranque",
+  "contrast": ["init / telinit / mount → ya con Linux arrancado"]
+ },
+ "SYBEX-CH01-RQ02": {
+  "cue": "firmware: dónde busca primero el cargador",
+  "answer": "MBR: primer sector del primer disco",
+  "contrast": [
+   "partición de arranque → la busca el cargador",
+   "/boot/grub → configuración, no el cargador"
+  ],
+  "mnemo": "MBR = Master Boot Record"
+ },
+ "SYBEX-CH01-RQ03": {
+  "cue": "mensajes de arranque más recientes",
+  "answer": "dmesg (búfer circular del kernel)",
+  "contrast": [
+   "init → arranca programas desde el kernel",
+   "chkconfig → niveles de ejecución de un programa"
+  ]
+ },
+ "SYBEX-CH01-RQ04": {
+  "cue": "carpeta de los registros de arranque",
+  "answer": "/var/log",
+  "contrast": [
+   "/var/messages → algunos Unix, no Linux",
+   "/boot → configuración de GRUB e imágenes",
+   "/proc → datos del kernel en vivo"
+  ]
+ },
+ "SYBEX-CH01-RQ05": {
+  "cue": "BIOS: sitios donde puede buscar el cargador",
+  "answer": "todos: disco interno o externo, DVD, USB y red (PXE)"
+ },
+ "SYBEX-CH01-RQ06": {
+  "cue": "dónde está el MBR",
+  "answer": "primer sector del primer disco duro",
+  "contrast": ["partición de arranque → cargador sí, MBR no"]
+ },
+ "SYBEX-CH01-RQ07": {
+  "cue": "dónde está la ESP en Linux",
+  "answer": "/boot/efi",
+  "contrast": ["/boot/grub → configuración e imágenes de GRUB"],
+  "mnemo": "ESP = EFI System Partition"
+ },
+ "SYBEX-CH01-RQ08": {
+  "cue": "extensión de los cargadores UEFI",
+  "answer": ".efi",
+  "contrast": [
+   ".uefi → no se usa en Linux",
+   ".cfg → configuración de GRUB2",
+   ".conf / .lst → configuración de GRUB Legacy"
+  ]
+ },
+ "SYBEX-CH01-RQ09": {
+  "cue": "primer cargador de arranque de Linux",
+  "answer": "LILO",
+  "contrast": [
+   "GRUB Legacy → el segundo, pese al nombre",
+   "GRUB2 → mejora posterior de GRUB Legacy"
+  ],
+  "mnemo": "LILO = Linux Loader"
+ },
+ "SYBEX-CH01-RQ10": {
+  "cue": "configuración de GRUB Legacy: dónde",
+  "answer": "/boot/grub",
+  "contrast": [
+   "/boot/efi → cargadores UEFI",
+   "/etc → muchas configuraciones, pero no esta"
+  ]
+ },
+ "SYBEX-CH01-RQ11": {
+  "cue": "configuración de GRUB2: los dos sitios",
+  "answer": "/boot/grub + /etc/grub.d",
+  "contrast": ["/boot/efi → archivos del cargador UEFI"]
+ },
+ "SYBEX-CH01-RQ12": {
+  "cue": "generar el grub.cfg de GRUB2",
+  "answer": "grub-mkconfig",
+  "contrast": ["grub-install → instala el cargador en el MBR"]
+ },
+ "SYBEX-CH01-RQ13": {
+  "cue": "lo que usa el kernel para arrancar programas",
+  "answer": "init",
+  "contrast": [
+   "GRUB2 → lo lanza el firmware, no el kernel",
+   "systemctl → controla programas en systemd",
+   "telinit → cambia el nivel actual"
+  ]
+ },
+ "SYBEX-CH01-RQ14": {
+  "cue": "SysV: archivo del nivel por defecto",
+  "answer": "/etc/inittab (ajuste initdefault)",
+  "contrast": [
+   "/etc/init.d, /etc/rc.d → scripts de arranque",
+   "/etc/grub.d → configuración de GRUB2"
+  ]
+ },
+ "SYBEX-CH01-RQ15": {
+  "cue": "nivel de ejecución por defecto en Debian",
+  "answer": "2",
+  "contrast": [
+   "5 → gráfico por defecto en Red Hat",
+   "1 → monousuario",
+   "0 → apaga",
+   "6 → reinicia"
+  ]
+ },
+ "SYBEX-CH01-RQ16": {
+  "cue": "cambiar el nivel de ejecución actual",
+  "answer": "init + telinit",
+  "contrast": ["chkconfig / update-rc.d → niveles de un programa"]
+ },
+ "SYBEX-CH01-RQ17": {
+  "cue": "ver en qué niveles arranca un programa",
+  "answer": "chkconfig",
+  "contrast": [
+   "update-rc.d → los cambia, pero no los muestra",
+   "init / telinit → nivel de todo el sistema"
+  ]
+ },
+ "SYBEX-CH01-RQ18": {
+  "cue": "Debian: fijar los niveles de un programa",
+  "answer": "update-rc.d",
+  "contrast": [
+   "chkconfig → su equivalente en Red Hat",
+   "init / telinit → nivel de todo el sistema"
+  ]
+ },
+ "SYBEX-CH01-RQ19": {
+  "cue": "partición que no monta por errores",
+  "answer": "fsck",
+  "contrast": [
+   "mount → acopla",
+   "umount → retira",
+   "init / telinit → nivel de ejecución"
+  ]
+ },
+ "SYBEX-CH01-RQ20": {
+  "cue": "acoplar una partición al directorio virtual",
+  "answer": "mount",
+  "contrast": [
+   "umount → la retira",
+   "fsck → la repara, no la monta",
+   "dmesg → dice dónde se acopló, no acopla"
+  ]
+ }
+}

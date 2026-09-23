@@ -1,0 +1,131 @@
+{
+ "ENI-CH09-Q01": {
+  "cue": "Linux: activar el enrutamiento de paquetes IP",
+  "answer": "1 en /proc/sys/net/ipv4/ip_forward"
+ },
+ "ENI-CH09-Q02": {
+  "cue": "parámetro de sysctl",
+  "answer": "ruta bajo /proc/sys con puntos en vez de barras",
+  "contrast": ["/etc/sysctl.conf → lo permanente, al arrancar"]
+ },
+ "ENI-CH09-Q03": {
+  "cue": "una sola tarjeta de red: ¿tabla de enrutamiento?",
+  "answer": "sí: como mínimo, la red local y la ruta por defecto"
+ },
+ "ENI-CH09-Q04": {
+  "cue": "iptables -L: qué tabla muestra",
+  "answer": "filter",
+  "contrast": ["nat → iptables -t nat -L"]
+ },
+ "ENI-CH09-Q05": {
+  "cue": "iptables: tráfico al propio sistema o enrutado",
+  "answer": "INPUT para el propio sistema; FORWARD, de paso"
+ },
+ "ENI-CH09-Q06": {
+  "cue": "iptables: ninguna regla de la cadena encaja",
+  "answer": "política por defecto (-P), una por cadena",
+  "mnemo": "-P = policy"
+ },
+ "ENI-CH09-Q07": {
+  "cue": "NAT: protección rudimentaria de la red privada",
+  "answer": "esconde las direcciones privadas; desde fuera, sin ruta"
+ },
+ "ENI-CH09-Q08": {
+  "cue": "iptables: reglas automáticas contra el tráfico molesto",
+  "answer": "fail2ban"
+ },
+ "ENI-CH09-Q09": {
+  "cue": "Bugtraq y CERT: qué son",
+  "answer": "organismos de vigilancia que publican vulnerabilidades"
+ },
+ "ENI-CH09-Q10": {
+  "cue": "OpenVAS: por qué sirve para parques informáticos",
+  "answer": "cliente/servidor: servidor central, cliente por máquina"
+ },
+ "ENI-CH10-Q01": {
+  "cue": "telnet: qué seguridad sí tiene",
+  "answer": "autentificación por contraseña, pero sin encriptar",
+  "contrast": ["integridad y confidencialidad → no las tiene"]
+ },
+ "ENI-CH10-Q02": {
+  "cue": "cliente SSH: registro de servidores ya conectados",
+  "answer": "~/.ssh/known_hosts (huella de cada servidor)"
+ },
+ "ENI-CH10-Q03": {
+  "cue": "ssh-keygen: ¿clave pública o privada?",
+  "answer": "las dos a la vez: siempre el par entero"
+ },
+ "ENI-CH10-Q04": {
+  "cue": "SSH: claves privadas guardadas en memoria",
+  "answer": "ssh-agent",
+  "contrast": ["ssh-add → se las facilita al agente", "ssh-keygen → las crea"]
+ },
+ "ENI-CH10-Q05": {
+  "cue": "scp: qué necesita en la máquina remota",
+  "answer": "solo el servicio SSH"
+ },
+ "ENI-CH10-Q06": {
+  "cue": "tráfico transportado por SSH: cómo se llama",
+  "answer": "túnel: solo cambia el transporte"
+ },
+ "ENI-CH10-Q07": {
+  "cue": "sesiones gráficas X11 por un túnel SSH",
+  "answer": "X11Forwarding yes en el sshd_config del servidor"
+ },
+ "ENI-CH10-Q08": {
+  "cue": "VPN sitio a sitio o punto a punto",
+  "answer": "punto a punto: dos máquinas; sitio a sitio: dos redes"
+ },
+ "ENI-CH10-Q09": {
+  "cue": "OpenVPN: dos máquinas sin enrutamiento entre ellas",
+  "answer": "modo puente: las dos en la misma subred"
+ },
+ "ENI-CH10-Q10": {
+  "cue": "túnel Open VPN: ¿está montado?",
+  "answer": "ifconfig: tun0 con su IP (necesaria, no suficiente)"
+ },
+ "ENI-CH11-Q01": {
+  "cue": "compilado más eficiente que interpretado: por qué",
+  "answer": "el binario ya trae instrucciones del procesador",
+  "contrast": ["interpretado → un intérprete traduce cada acción"]
+ },
+ "ENI-CH11-Q02": {
+  "cue": "script configure de las fuentes: para qué",
+  "answer": "comprueba el entorno y genera el Makefile"
+ },
+ "ENI-CH11-Q03": {
+  "cue": "fuentes: borrar lo compilado y la configuración",
+  "answer": "make mrproper (como recién extraído del tar)",
+  "contrast": ["make clean → solo lo que salió de compilar"]
+ },
+ "ENI-CH11-Q04": {
+  "cue": "programa compilado dinámicamente: de qué depende",
+  "answer": "de las librerías compartidas",
+  "contrast": ["librerías estáticas → hoy es muy raro usarlas"]
+ },
+ "ENI-CH11-Q05": {
+  "cue": "ldconfig: lista de directorios a analizar",
+  "answer": "/etc/ld.so.conf"
+ },
+ "ENI-CH11-Q06": {
+  "cue": "kernel: reaprovechar el .config anterior",
+  "answer": "make oldconfig (solo pregunta lo nuevo)"
+ },
+ "ENI-CH11-Q07": {
+  "cue": "kernel 2.5.8: por qué no instalarlo",
+  "answer": "segunda cifra impar: versión en desarrollo",
+  "contrast": ["2.4 y 2.6 → versiones de producción"]
+ },
+ "ENI-CH11-Q08": {
+  "cue": "módulo presente pero no cargado al arrancar",
+  "answer": "no hace falta: su hardware no está o nadie lo invoca"
+ },
+ "ENI-CH11-Q09": {
+  "cue": "ramdisk de carga del kernel: qué formato",
+  "answer": "un cpio comprimido con gzip"
+ },
+ "ENI-CH11-Q10": {
+  "cue": "mkinitrd sustituido por mkinitramfs: por qué",
+  "answer": "usa devfs, no udev, y no gestiona discos sata"
+ }
+}
