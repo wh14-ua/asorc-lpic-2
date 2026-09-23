@@ -254,8 +254,10 @@ eq(G.finalMilestones(tiny, ses).length, 0, 'sin récord con 1 respuesta');
 // La sesión que se guarda usa el esquema esperado
 const rec2 = G.sessionRecord(r);
 eq(Object.keys(rec2).sort(),
-   ['blancos','correctas','falladas','marcadas','modo','ms_explicacion','ms_respuesta','musica','respondidas','ts'],
+   ['blancos','correctas','falladas','marcadas','mejor_racha','modo','ms_explicacion','ms_respuesta',
+    'musica','respondidas','ts','xp'],
    'campos de la sesión');
+eq([rec2.xp, rec2.mejor_racha], [r.xp, r.bestCombo], 'con el XP y la mejor racha de la ronda');
 
 console.log(JSON.stringify({ n: errs.length, errs: errs.slice(0, 8) }));
 """
@@ -1722,6 +1724,52 @@ ok(r.ok, 'otro navegador sincroniza');
 eq(b1.store.stats.sesiones.length, 1, 'y recibe la ronda');
 eq(b1.store.stats.sesiones[0].attempts, d.attempts, 'con el mismo detalle, pregunta a pregunta');
 
+// --- 9 · historial global: todas las rondas juntas, la más reciente primero --
+{
+  const ronda = (uid, ts, modo, extra) => Object.assign({ uid, ts, modo, respondidas: 2, correctas: 1,
+    falladas: 1, blancos: 0, ms_respuesta: 20000, ms_explicacion: 10000, total: 2, puntos: 0.75,
+    attempts: [at('Q1', 'correct', 'DNS'), at('Q2', 'wrong', 'Correo electrónico')] }, extra || {});
+  const mezcla = [
+    ronda('tema', 1790000100, 'Compartición de archivos'),
+    ronda('sprint', 1790000500, 'Sprint de 20'),
+    ronda('asorc', 1790000300, 'Solo ASORC', { asorc: true }),
+    ronda('mezcla', 1790000900, 'DNS + Correo electrónico'),
+    ronda('fallos', 1790000700, 'Repaso de fallos'),
+    ronda('repetir', 1790001100, 'Repetir: Sprint de 20'),
+    ronda('falladas', 1790000800, 'Falladas de «Solo ASORC»'),
+    { ts: 1789999000, modo: 'Sprint de 50', respondidas: 50, correctas: 30, falladas: 15, blancos: 5,
+      ms_respuesta: 500000, ms_explicacion: 300000 },              // vieja, sin detalle
+  ];
+  const barajadas = mezcla.slice().sort(() => 0.5 - Math.random());
+  const g = H.global(barajadas);
+  eq(g.length, mezcla.length, 'el historial global tiene todas las rondas, sin filtrar por tipo');
+  eq(g.map((x) => x.modo), ['Repetir: Sprint de 20', 'DNS + Correo electrónico', 'Falladas de «Solo ASORC»',
+    'Repaso de fallos', 'Sprint de 20', 'Solo ASORC', 'Compartición de archivos', 'Sprint de 50'],
+    'temas, sprint, ASORC, mezclas, repasos y repeticiones juntos, de la más reciente a la más antigua');
+  ok(g.every((x, i) => i === 0 || g[i - 1].ts >= x.ts), 'en orden cronológico inverso');
+  eq(H.tieneDetalle(g[g.length - 1]), false, 'y la vieja sin detalle, en su sitio por fecha');
+  eq(H.INICIALES, 10, 'se ven primero las 10 últimas');
+  eq(H.global([null, 7, mezcla[0]]).length, 1, 'lo que no es una ronda no entra');
+}
+
+// --- 10 · lo que enseña cada entrada ---------------------------------------
+{
+  const r = H.resumen({ uid: 'x', ts: 1790000000, modo: 'Compartición de archivos', respondidas: 15,
+    correctas: 10, falladas: 5, blancos: 0, ms_respuesta: 252000, ms_explicacion: 60000, total: 15,
+    puntos: 8.75, xp: 100, mejor_racha: 4,
+    attempts: Array.from({ length: 15 }, (_, i) => at('Q' + i, i < 10 ? 'correct' : 'wrong', 'Compartición de archivos')) });
+  eq([r.modo, r.preguntas, r.ok, r.bad, r.blank, r.puntos], ['Compartición de archivos', 15, 10, 5, 0, 8.75],
+     'modo, preguntas, ✓ ✗ ○ y puntos');
+  eq(A.num(r.nota10), '5,83', 'nota sobre 10: 8,75 / 15 → 5,83');
+  eq([r.duracionMs, Math.round(r.segPregunta * 10) / 10, r.xp, r.mejorRacha], [312000, 16.8, 100, 4],
+     'duración, s/pregunta, XP y mejor racha');
+  const v = H.resumen({ ts: 1789999000, modo: 'Sprint de 50', respondidas: 50, correctas: 30, falladas: 15,
+    blancos: 5, ms_respuesta: 500000, ms_explicacion: 300000 });
+  eq([v.detalle, v.preguntas, v.puntos, v.nota10, v.xp, v.mejorRacha], [false, 50, null, null, null, null],
+     'una vieja no recibe puntos ni XP inventados');
+  eq(v.duracionMs, 800000, 'pero sí enseña lo que guardaba');
+}
+
 console.log(JSON.stringify({ n: errs.length, errs: errs.slice(0, 10) }));
 })().catch((e) => { console.log(JSON.stringify({ n: 1, errs: [String(e && e.stack || e)] })); });
 """
@@ -1741,6 +1789,16 @@ def test_historial():
         check(f"index.html tiene #{ident}", f'id="{ident}"' in html)
     check("las sesiones viejas lo dicen tal cual",
           "Esta sesión es anterior al historial detallado de preguntas." in html)
+    # El historial global es la vista principal: debajo de REPASO RÁPIDO y
+    # antes de TEMAS, con las 10 últimas y el resto a un botón.
+    posiciones = [html.find('id="rq-home"'), html.find('id="hist-home"'), html.find("<h2>Temas</h2>")]
+    check("el historial global va debajo de REPASO RÁPIDO y antes de TEMAS",
+          -1 not in posiciones and posiciones == sorted(posiciones), str(posiciones))
+    hist = open(os.path.join(js, "historial.js"), encoding="utf-8").read()
+    check("y enseña el resto con VER TODO EL HISTORIAL", "VER TODO EL HISTORIAL" in hist
+          and "VER TODO EL HISTORIAL" in html)
+    check("sin otra fuente de datos: ST.stats.sesiones",
+          "global(ctx.store.stats.sesiones)" in hist)
     m = re.search(r"async function finishRun\(\)\s*\{(.*?)\n\}", app, re.S)
     check("al cerrar la ronda se guarda su detalle", bool(m) and "Historial.detalle(" in m.group(1)
           and "cerrarRonda(registro)" in m.group(1))

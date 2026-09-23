@@ -1206,6 +1206,45 @@ code.hl-code {
 .hist-empty { margin: 0; font-size: 15px; color: var(--dim); }
 #hist-more { margin-top: 10px; }
 
+/* El historial global, en el inicio: la vista principal de todas las rondas. */
+.hist-home {
+  margin-top: 16px; padding: 16px 20px 14px;
+  background: var(--surf); border: 1px solid var(--line); border-left: 4px solid var(--v);
+  border-radius: var(--r-md); box-shadow: var(--shadow);
+}
+.hist-home-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 4px 16px; flex-wrap: wrap; margin-bottom: 6px;
+}
+.hist-home-h {
+  margin: 0; font-family: var(--ui); font-size: 14px; font-weight: 800;
+  letter-spacing: .12em; color: var(--v-text);
+}
+.hist-home-sum { margin: 0; font-size: 15px; color: var(--dim); }
+.hist-home .hist-rows { gap: 0; }
+.hist-entry {
+  width: 100%; display: grid; grid-template-columns: minmax(0, 1fr) auto 1em;
+  align-items: center; gap: 4px 20px; padding: 12px 8px;
+  background: transparent; border: 0; border-top: 1px solid var(--line-soft); border-radius: 8px;
+  font: inherit; color: var(--ink); text-align: left; cursor: pointer;
+}
+.hist-rows li:first-child .hist-entry { border-top-color: transparent; }
+.hist-entry:hover { background: var(--surf-2); }
+.he-izq { display: grid; gap: 2px; min-width: 0; }
+.he-when { font-family: var(--mono); font-size: 12.5px; font-weight: 700; letter-spacing: .04em; color: var(--dim); }
+.he-modo { font-family: var(--display); font-size: 18px; font-weight: 700; line-height: 1.2; overflow-wrap: anywhere; }
+.he-meta { font-size: 13.5px; color: var(--dim); }
+.he-der { display: grid; justify-items: end; gap: 4px; }
+.he-der .hs-m b { font-size: 18px; }
+.he-pts { font-family: var(--mono); font-size: 14px; color: var(--dim); white-space: nowrap; }
+.he-pts b { font-size: 17px; font-weight: 800; color: var(--ink); }
+.he-pts b[data-sign="neg"] { color: var(--bad); }
+.he-pts.is-old {
+  font-family: var(--ui); font-size: 12px; font-weight: 600;
+  border: 1px dashed var(--line); border-radius: 999px; padding: 2px 9px;
+}
+.hs-extra { margin: 6px 0 0; font-size: 14.5px; color: var(--dim); }
+
 /* En el panel de un tema, más apretado: dos líneas por ronda. */
 .tpanel-hist { margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--line); }
 .tpanel-hist-h {
@@ -1482,6 +1521,10 @@ code.hl-code {
   .rq-bar-modo { display: none; }
   .rq-grade { display: grid; grid-template-columns: 1fr; width: 100%; }
   .rq-acts .cta { width: 100%; justify-content: center; }
+  .hist-home { padding: 14px 14px 12px; }
+  .hist-entry { grid-template-columns: minmax(0, 1fr); gap: 6px; padding: 12px 4px; }
+  .he-der { justify-items: start; grid-auto-flow: column; justify-content: space-between; align-items: baseline; }
+  .hist-entry .hist-go { display: none; }
   .hist-row { display: flex; flex-wrap: wrap; gap: 4px 12px; }
   .hist-modo { flex: 1 1 100%; order: -1; }
   .hist-pts { margin-left: auto; }

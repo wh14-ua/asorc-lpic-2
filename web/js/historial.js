@@ -53,6 +53,36 @@
   // Más reciente primero.
   const ordenadas = (sesiones) => (sesiones || []).slice().sort((a, b) => (b.ts | 0) - (a.ts | 0));
 
+  /* El historial global: TODAS las rondas de ST.stats.sesiones, sean del tipo
+   * que sean (tema, sprint, ASORC, mezcla, repaso de fallos, repetición) y
+   * tengan detalle o no, de la más reciente a la más antigua. */
+  const global = (sesiones) => ordenadas((sesiones || []).filter((s) => s && typeof s === 'object'));
+  const INICIALES = 10;          // las que se ven antes de «VER TODO EL HISTORIAL»
+
+  /* Lo que enseña cada entrada. Lo que una ronda vieja no guardaba (puntos,
+   * XP, racha) sale como null y no se pinta: no se inventa. */
+  function resumen(s) {
+    const det = tieneDetalle(s);
+    const hechas = det ? validos(s).length : (s.respondidas | 0);
+    const total = (s.total | 0) || hechas;
+    const puntos = det ? Number(s.puntos) || 0 : null;
+    const ms = (Number(s.ms_respuesta) || 0) + (Number(s.ms_explicacion) || 0);
+    return {
+      ts: Number(s.ts) || 0,
+      modo: String(s.modo || 'Ronda'),
+      detalle: det,
+      preguntas: total,
+      hechas,
+      ok: s.correctas | 0, bad: s.falladas | 0, blank: s.blancos | 0,
+      puntos,
+      nota10: det && total ? Math.max(0, (puntos / total) * 10) : null,
+      duracionMs: ms || null,
+      segPregunta: s.respondidas ? (Number(s.ms_respuesta) || 0) / s.respondidas / 1000 : null,
+      xp: Number.isFinite(s.xp) ? s.xp : null,
+      mejorRacha: Number.isFinite(s.mejor_racha) ? s.mejor_racha : null,
+    };
+  }
+
   /* Las sesiones de un tema: las nuevas que tienen alguna pregunta de ese
    * tema y, de las viejas, solo las que se lanzaron para ese tema (su etiqueta
    * es el tema, o lo incluye en una mezcla «A + B»). Un sprint viejo no se
@@ -91,7 +121,7 @@
   const $ = (id) => doc.getElementById(id);
   let ctx = null;     // { store, bank: Map, simple, A, resalta, codifica, muestra, volver, repasar, repetir }
   let vista = null;   // { s, tema, filtro }
-  let cuantas = 8;    // filas visibles en el inicio
+  let todo = false;   // ¿se ve el historial entero o solo las últimas?
 
   // Lo que viene de una sesión (la nube la puede escribir cualquiera con la
   // URL) nunca entra en HTML sin escapar.
@@ -105,18 +135,30 @@
     return e;
   }
 
-  // «hoy · 18:32», «ayer · 09:10», «23 sep 2026 · 18:32»
+  // «23 SEP · 17:46»; con el año solo si no es el de ahora.
+  const MESES = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC'];
   function cuando(ts) {
     const d = new Date((Number(ts) || 0) * 1000);
-    const hoy = new Date();
-    const ayer = new Date(hoy.getTime() - 86400000);
-    const hora = d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
-    if (d.toDateString() === hoy.toDateString()) return `hoy · ${hora}`;
-    if (d.toDateString() === ayer.toDateString()) return `ayer · ${hora}`;
-    return `${d.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })} · ${hora}`;
+    const dd = (n) => String(n).padStart(2, '0');
+    const anio = d.getFullYear() !== new Date().getFullYear() ? ` ${d.getFullYear()}` : '';
+    return `${d.getDate()} ${MESES[d.getMonth()]}${anio} · ${dd(d.getHours())}:${dd(d.getMinutes())}`;
   }
 
   const segundos = (ms) => ((Number(ms) || 0) / 1000).toFixed(1).replace('.', ',') + ' s';
+  // «45 s», «4 min 12 s», «1 h 05 min»
+  function duracion(ms) {
+    const t = Math.round((Number(ms) || 0) / 1000);
+    if (t < 60) return `${t} s`;
+    if (t < 3600) return `${Math.floor(t / 60)} min ${String(t % 60).padStart(2, '0')} s`;
+    return `${Math.floor(t / 3600)} h ${String(Math.floor(t / 60) % 60).padStart(2, '0')} min`;
+  }
+  // duración · s/pregunta · XP · mejor racha, lo que haya
+  const extras = (r) => [
+    r.duracionMs != null ? duracion(r.duracionMs) : null,
+    r.segPregunta != null ? `${r.segPregunta.toFixed(1).replace('.', ',')} s/pregunta` : null,
+    r.xp != null ? `${r.xp} XP` : null,
+    r.mejorRacha != null ? `mejor racha ${r.mejorRacha}` : null,
+  ].filter(Boolean);
 
   // ✓ 11 ✗ 6 ○ 3, de una sesión entera o de sus intentos de un tema.
   function marcador(n) {
@@ -163,21 +205,59 @@
     return b;
   }
 
-  /* El historial de la pantalla de inicio. */
+  /* Una entrada del historial global:
+   *   23 SEP · 17:46                         ✓ 10  ✗ 5  ○ 0
+   *   Compartición de archivos               8,75 / 15 · 5,83/10
+   *   15 preguntas · 4 min 12 s · 16,8 s/pregunta · 100 XP · mejor racha 4  */
+  function entrada(s) {
+    const r = resumen(s);
+    const b = el('button', 'hist-entry');
+    b.type = 'button';
+    b.dataset.detalle = r.detalle ? 'si' : 'no';
+    const izq = el('span', 'he-izq');
+    const preguntas = r.hechas < r.preguntas ? `${r.hechas} de ${r.preguntas} preguntas` : `${r.preguntas} preguntas`;
+    izq.append(el('span', 'he-when', cuando(r.ts)), el('span', 'he-modo', r.modo),
+               el('span', 'he-meta', [preguntas].concat(extras(r)).join(' · ')));
+    const der = el('span', 'he-der');
+    der.appendChild(marcador(r));
+    const pts = el('span', 'he-pts');
+    if (r.detalle) {
+      const b2 = el('b', null, ctx.A.num(r.puntos));
+      b2.dataset.sign = ctx.A.sign(r.puntos);
+      pts.append(b2, ` / ${r.preguntas} · ${ctx.A.num(r.nota10)}/10`);
+      pts.title = 'Puntos netos sobre el total de preguntas · nota sobre 10';
+    } else {
+      pts.textContent = 'sin detalle';
+      pts.classList.add('is-old');
+      pts.title = 'Anterior al historial detallado de preguntas';
+    }
+    der.appendChild(pts);
+    b.append(izq, der, el('span', 'hist-go', '›'));
+    b.addEventListener('click', () => abre(clave(s)));
+    return b;
+  }
+
+  /* El historial global, en el inicio: la vista principal de todas las
+   * rondas. Primero las 10 últimas; «VER TODO EL HISTORIAL» enseña el resto,
+   * en el mismo orden. */
   function pintaInicio() {
     if (!ctx) return;
-    const todas = ordenadas(ctx.store.stats.sesiones);
+    const todas = global(ctx.store.stats.sesiones);
     const box = $('hist-rows');
     box.innerHTML = '';
     $('hist-empty').hidden = todas.length > 0;
-    todas.slice(0, cuantas).forEach((s) => {
+    $('hist-sum').textContent = todas.length
+      ? `${todas.length} ronda${todas.length > 1 ? 's' : ''} · la última, ${cuando(todas[0].ts)}` : '';
+    (todo ? todas : todas.slice(0, INICIALES)).forEach((s) => {
       const li = el('li');
-      li.appendChild(fila(s));
+      li.appendChild(entrada(s));
       box.appendChild(li);
     });
     const mas = $('hist-more');
-    mas.hidden = todas.length <= cuantas;
-    mas.textContent = `VER MÁS · ${todas.length - cuantas} más`;
+    mas.hidden = todas.length <= INICIALES;
+    mas.textContent = todo ? `VER SOLO LAS ${INICIALES} ÚLTIMAS`
+      : `VER TODO EL HISTORIAL · ${todas.length - INICIALES} más`;
+    mas.setAttribute('aria-expanded', todo ? 'true' : 'false');
   }
 
   /* El historial de un tema, dentro de su panel (dash.js). */
@@ -211,6 +291,7 @@
     const { s, tema } = vista;
     const lista = intentos(s, { tema });
     $('hs-when').textContent = `${cuando(s.ts)}${s.musica === 'con' ? ' · con música' : ''}`;
+    $('hs-extra').textContent = extras(resumen(s)).join(' · ');
     $('hs-title').textContent = s.modo || 'Ronda';
     $('hs-tema').hidden = !tema;
     $('hs-tema').textContent = tema ? `Solo las preguntas de «${tema}»` : '';
@@ -225,9 +306,6 @@
       b.dataset.sign = ctx.A.sign(s.puntos);
       p.append('Puntos netos ', b, ` / ${total} · nota ${ctx.A.num(ctx.A.nota10(s.puntos, total))} / 10`);
       sum.appendChild(p);
-    }
-    if (s.respondidas) {
-      sum.appendChild(el('span', 'hs-sec', `${segundos((s.ms_respuesta | 0) / s.respondidas)} por pregunta`));
     }
 
     const viejo = !tieneDetalle(s);
@@ -434,7 +512,7 @@
 
   function init(contexto) {
     ctx = contexto;
-    $('hist-more').addEventListener('click', () => { cuantas += 20; pintaInicio(); });
+    $('hist-more').addEventListener('click', () => { todo = !todo; pintaInicio(); });
     $('hs-back').addEventListener('click', () => ctx.volver());
     $('hs-repasar').addEventListener('click', () => {
       if (!vista) return;
@@ -451,8 +529,8 @@
 
   const API = {
     // puro
-    clave, tieneDetalle, detalle, ordenadas, deTema, intentos, filtra, cuenta,
-    paraRepasar, paraRepetir, FILTROS: Object.keys(FILTROS),
+    clave, tieneDetalle, detalle, ordenadas, global, resumen, INICIALES, deTema, intentos, filtra,
+    cuenta, paraRepasar, paraRepetir, FILTROS: Object.keys(FILTROS),
     // pantalla
     init, pintaInicio, pintaTema, abre, tecla,
   };

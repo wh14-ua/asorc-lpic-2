@@ -341,9 +341,20 @@ tema y la comparación con/sin música quedan plegados en «Ver detalle».
 
 ### Historial de tests
 
-En el inicio, **Historial de tests**: cada ronda cerrada, de la más reciente a la más
-antigua, con fecha, modo, ✓ ✗ ○ y los puntos netos sobre el total (`1,00 / 20`). Una ronda que
-dejaste a medias con `Esc` dice cuántas llegaste a contestar (`Solo ASORC · 5 de 202`).
+En el inicio, justo debajo de **⚡ REPASO RÁPIDO** y antes de los temas, **HISTORIAL DE
+TESTS** es la vista principal de todas tus rondas: por tema, sprint, ASORC, mezclas, repaso de
+fallos y repeticiones, todas juntas y de la más reciente a la más antigua. Salen las 10
+últimas y **VER TODO EL HISTORIAL** enseña el resto, en el mismo orden. Cada entrada:
+
+```
+23 SEP · 17:46                                            ✓ 10   ✗ 5   ○ 0
+Compartición de archivos                                  8,75 / 15 · 5,83/10
+15 preguntas · 4 min 12 s · 16,8 s/pregunta · 100 XP · mejor racha 4
+```
+
+La duración es el tiempo de respuesta más el de leer la explicación. XP y mejor racha solo
+los traen las rondas nuevas; a las viejas no se les inventan. Una ronda que dejaste a medias
+con `Esc` lo dice: `4 de 20 preguntas`.
 
 Al abrir una se ve **pregunta a pregunta**, con los filtros **TODAS · FALLADAS · ACERTADAS
 · EN BLANCO** («a medias» cuenta como fallada): enunciado, resultado, tu respuesta, la
@@ -355,9 +366,9 @@ cita la explicación original—, la explicación en llano y la del libro.
 - **REPETIR TEST** lanza las mismas preguntas y en el mismo orden; las opciones se vuelven a
   barajar. Las dos conservan el formato de entonces: si era ASORC, con 3 opciones.
 
-Cada tema tiene también su historial, en su panel: las rondas en las que salió. Al abrir
-desde ahí una ronda mixta se ven **solo las preguntas de ese tema**, y los dos botones
-trabajan con ellas.
+Cada tema tiene también su historial, secundario, en su panel: las rondas en las que salió.
+Al abrir desde ahí una ronda mixta se ven **solo las preguntas de ese tema**, y los dos
+botones trabajan con ellas.
 
 **Cómo se guarda, sin tabla nueva.** El registro de cada ronda ya viajaba entero a
 `asorc_sessions`, cuyo `payload` es JSONB; ahora lleva además qué pasó en cada pregunta:
@@ -371,7 +382,8 @@ trabajan con ellas.
 
 Ni el enunciado ni las opciones se copian: salen de `questions.json` por `question_id`. Lo
 que sí se guarda es lo que marcaste (`answer`, con las etiquetas del libro), porque eso no se
-puede reconstruir. El registro lleva también `asorc`, `total` y `puntos`.
+puede reconstruir. El registro lleva también `asorc`, `total`, `puntos`, `xp` y
+`mejor_racha`. No hay otra fuente de datos: todo sale de `ST.stats.sesiones`.
 
 **Las sesiones de antes** siguen apareciendo, pero al abrirlas dicen *Esta sesión es anterior
 al historial detallado de preguntas*. Los intentos de `asorc_attempts` no llevan ronda, así
@@ -823,7 +835,10 @@ historial de tests: que cada intento guarda exactamente sus siete campos y no co
 enunciado ni las opciones, que las sesiones viejas no reciben intentos inventados, los
 cuatro filtros, que desde un tema solo salen sus preguntas, qué lanzan REPASAR ESTAS
 FALLADAS y REPETIR TEST, que lo que llegue roto de la nube no rompe nada, y que la sesión
-sobrevive a recargar y viaja a otro navegador.
+sobrevive a recargar y viaja a otro navegador. Y el historial global: que rondas de todos los
+modos y temas (y las viejas sin detalle) salen juntas y en orden cronológico inverso aunque
+lleguen desordenadas, que va debajo de REPASO RÁPIDO y antes de los temas, y que cada entrada
+calcula bien preguntas, puntos, nota sobre 10, duración, s/pregunta, XP y mejor racha.
 
 ```bash
 python3 tools/test_contrast.py

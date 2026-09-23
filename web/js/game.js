@@ -145,6 +145,9 @@
       ms_respuesta: run.answerMs,
       ms_explicacion: run.reviewMs,
       marcadas: run.marked.size,
+      // para el historial de tests (las rondas de antes no los traen)
+      xp: run.xp,
+      mejor_racha: run.bestCombo,
     };
   }
 

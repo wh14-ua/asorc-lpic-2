@@ -71,6 +71,18 @@
     <div class="rq-home-topics" id="rq-home-topics" hidden></div>
   </section>
 
+  <!-- El historial global: TODAS las rondas, de la más reciente a la más
+       antigua. Es la vista principal; cada tema tiene además la suya. -->
+  <section class="hist-home" id="hist-home" aria-labelledby="hist-home-h">
+    <div class="hist-home-head">
+      <h2 class="hist-home-h" id="hist-home-h">HISTORIAL DE TESTS</h2>
+      <p class="hist-home-sum" id="hist-sum"></p>
+    </div>
+    <ol class="hist-rows" id="hist-rows"></ol>
+    <p class="hist-empty" id="hist-empty" hidden>Aún no has cerrado ninguna ronda.</p>
+    <button type="button" id="hist-more" class="ghost ghost-sm" aria-expanded="false" hidden>VER TODO EL HISTORIAL</button>
+  </section>
+
   <section class="home-block">
     <h2>Temas</h2>
     <div id="topic-grid" class="topic-grid"></div>
@@ -91,15 +103,6 @@
   <section id="topic-block" class="home-block" hidden>
     <h2>¿Qué tema?</h2>
     <div id="topics" class="topics"></div>
-  </section>
-
-  <!-- Cada ronda cerrada, de la más reciente a la más antigua. Se abre para
-       ver pregunta a pregunta qué pasó. -->
-  <section class="home-block hist-home" aria-labelledby="hist-home-h">
-    <h2 id="hist-home-h">Historial de tests</h2>
-    <ol class="hist-rows" id="hist-rows"></ol>
-    <p class="hist-empty" id="hist-empty" hidden>Aún no has cerrado ninguna ronda.</p>
-    <button type="button" id="hist-more" class="ghost ghost-sm" hidden>VER MÁS</button>
   </section>
 
   <section class="home-block home-prefs">
@@ -214,6 +217,7 @@
     <header class="hs-head">
       <p class="hs-when" id="hs-when"></p>
       <h2 class="hs-title" id="hs-title"></h2>
+      <p class="hs-extra" id="hs-extra"></p>
       <p class="hs-tema" id="hs-tema" hidden></p>
       <p class="hs-sum" id="hs-sum"></p>
     </header>
