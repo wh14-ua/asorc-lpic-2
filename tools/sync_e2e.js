@@ -395,6 +395,39 @@ async function L(a) {
 }
 
 /* =========================================================================
+ *  N · el historial de tests viaja en asorc_sessions, pregunta a pregunta
+ * ========================================================================= */
+async function N(a) {
+  console.log('\nN · una ronda cerrada llega entera a otro navegador');
+  // JSONB guarda las claves en su propio orden: se compara sin depender de él.
+  const canon = (lista) => (lista || []).map((o) => Object.fromEntries(Object.entries(o).sort(
+    ([x], [y]) => (x < y ? -1 : 1))));
+  await usar(a);
+  const attempts = [
+    { question_id: 'Q-N1', result: 'correct', answer: 'B', scoreDelta: 1, scoreAfter: 1, answerMs: 4200, topic: 'DNS' },
+    { question_id: 'Q-N2', result: 'wrong', answer: 'A,C', scoreDelta: 0, scoreAfter: 1, answerMs: 9100, topic: 'Correo' },
+    { question_id: 'Q-N3', result: 'wrong', answer: 'A', scoreDelta: -1 / 3, scoreAfter: 2 / 3, answerMs: 7000, topic: 'DNS' },
+  ];
+  await a.store.cerrarRonda({ ts: Math.floor(Date.now() / 1000), modo: 'Sprint de 20', musica: 'sin',
+    respondidas: 3, correctas: 1, falladas: 2, blancos: 0, ms_respuesta: 20300, ms_explicacion: 0,
+    marcadas: 0, asorc: false, total: 20, puntos: 2 / 3, attempts });
+  const r = await a.cloud.flush();
+  ok(r.ok, 'la ronda se envía', r.motivo);
+  const fila = (await filasEnBase('asorc_sessions')).find((f) => f.payload && f.payload.modo === 'Sprint de 20'
+    && Array.isArray(f.payload.attempts));
+  ok(!!fila, 'está en asorc_sessions, sin tabla nueva');
+  eq(canon(fila && fila.payload.attempts), canon(attempts), 'con los intentos dentro del payload JSONB');
+
+  const c = await arranca(nuevoNavegador('N2'));
+  const s = await c.cloud.sincronizar(c.store);
+  ok(s.ok, 'otro navegador sincroniza', s.motivo);
+  const suya = c.store.stats.sesiones.find((x) => x.uid === fila.uid);
+  eq(canon(suya && suya.attempts), canon(attempts), 'y la recibe con el mismo detalle');
+  await c.cloud.sincronizar(c.store);
+  eq(c.store.stats.sesiones.filter((x) => x.uid === fila.uid).length, 1, 'sincronizar otra vez no la duplica');
+}
+
+/* =========================================================================
  *  K · anon no puede romper el histórico
  * ========================================================================= */
 async function K() {
@@ -486,6 +519,7 @@ async function todo() {
     await I(a);
     await J();
     await L(a);
+    await N(a);
     await K();
   }
 }

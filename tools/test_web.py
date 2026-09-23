@@ -1483,8 +1483,10 @@ async function navegador(sb) {
 const id9 = bank[7].id;
 const responde = (n) => {
   n.store.registrar({ id: id9, result: 'wrong', answer: 'A', answerMs: 900, reviewMs: 100, marked: false });
-  for (const k of ['fallo', 'sabia']) {
-    const e = { question_id: id9, kind: k, at: Date.now() };
+  // Como la web: nunca dos eventos en el mismo milisegundo (repaso.js).
+  const t0 = Date.now();
+  for (const [i, k] of ['fallo', 'sabia'].entries()) {
+    const e = { question_id: id9, kind: k, at: t0 + i };
     n.M.aplica(n.store.cards, e);
     n.store.tarjetaEvento(e);
   }
@@ -1575,6 +1577,202 @@ def test_micro():
         os.unlink(script)
 
 
+HIST_TEST = r"""
+const fs = require('fs');
+const path = require('path');
+const web = process.argv[2];
+const bank = JSON.parse(fs.readFileSync(process.argv[3], 'utf8')).questions;
+const errs = [];
+const eq = (a, b, m) => { if (JSON.stringify(a) !== JSON.stringify(b)) errs.push(`${m}: ${JSON.stringify(a)} != ${JSON.stringify(b)}`); };
+const ok = (c, m) => { if (!c) errs.push(m); };
+
+const almacen = () => { const m = new Map(); return {
+  getItem: (k) => (m.has(k) ? m.get(k) : null), setItem: (k, v) => m.set(k, String(v)),
+  removeItem: (k) => m.delete(k) }; };
+let LS = almacen();
+Object.defineProperty(global, 'localStorage', { configurable: true, get() { return LS; } });
+global.window = global;
+const carga = () => {
+  for (const f of ['micro.js', 'store.js', 'cloud.js']) delete require.cache[require.resolve(path.join(web, f))];
+  require(path.join(web, 'micro.js'));
+  const S = require(path.join(web, 'store.js'));
+  return { store: S.Store, S, cloud: require(path.join(web, 'cloud.js')) };
+};
+const A = require(path.join(web, 'academic.js'));
+const G = require(path.join(web, 'game.js'));
+const H = require(path.join(web, 'historial.js'));
+const porId = new Map(bank.map((q) => [q.id, q]));
+const temaDe = (id) => (porId.get(id) || {}).topic || '';
+
+(async () => {
+const asorc = bank.filter((q) => q.asorc && q.asorc.eligible);
+const [q1, q2, q3] = asorc;
+
+// --- 1 · lo que se guarda por pregunta: lo justo, sin copiar el banco ------
+const run = G.newRun({ total: 5, asorc: true });
+run.academic = A.newState();
+A.record(run.academic, { id: q1.id, result: 'correct', kind: 'single', k: 3, picked: [q1.asorc.correct_label], ms: 4200 });
+const malaQ2 = q2.asorc.kept_option_labels.find((l) => l !== q2.asorc.correct_label);
+A.record(run.academic, { id: q2.id, result: 'wrong', kind: 'single', k: 3, picked: [malaQ2], ms: 9000 });
+A.record(run.academic, { id: q3.id, result: 'blank', kind: 'single', k: 3, picked: [], ms: 20000 });
+const d = H.detalle(run, temaDe, 5);
+eq(Object.keys(d.attempts[0]).sort(),
+   ['answer', 'answerMs', 'question_id', 'result', 'scoreAfter', 'scoreDelta', 'topic'],
+   'cada intento lleva exactamente esos siete campos');
+eq(d.attempts.map((a) => a.question_id), [q1.id, q2.id, q3.id], 'en el orden en que se contestaron');
+eq(d.attempts.map((a) => a.answer), [q1.asorc.correct_label, malaQ2, ''], 'y la respuesta que elegiste');
+eq(d.attempts.map((a) => a.scoreDelta), [1, -0.5, 0], 'con lo que sumó o restó cada una');
+eq(d.attempts.map((a) => a.scoreAfter), [1, 0.5, 0.5], 'y el acumulado tras ella');
+eq(d.attempts.map((a) => a.answerMs), [4200, 9000, 20000], 'y su tiempo de respuesta');
+eq(d.attempts[0].topic, q1.topic, 'y su tema');
+eq([d.asorc, d.total, d.puntos], [true, 5, 0.5], 'y de la ronda: formato, tamaño y puntos');
+const texto = JSON.stringify(d);
+ok(!texto.includes((q2.question_es || q2.question).slice(0, 25)), 'el enunciado no se copia');
+ok(!(q2.original_options || []).some((o) => o.text.length > 12 && texto.includes(o.text)),
+   'ni el texto de las opciones');
+
+// --- 2 · las sesiones de antes siguen ahí, sin detalle inventado ----------
+const vieja = { ts: 1700000000, modo: 'Sprint de 20', respondidas: 20, correctas: 11, falladas: 6, blancos: 3 };
+eq(H.tieneDetalle(vieja), false, 'una sesión vieja no tiene detalle');
+eq(H.intentos(vieja), [], 'y no se le inventan intentos');
+eq(H.clave(vieja), '1700000000|Sprint de 20|20', 'se identifica igual que al fundirla');
+eq(H.clave({ uid: 'u-1', ts: 3 }), 'u-1', 'las nuevas, por su uid');
+
+// --- 3 · filtros: todas, falladas, acertadas, en blanco -------------------
+const at = (id, result, topic, extra) => Object.assign({ question_id: id, result, answer: '',
+  scoreDelta: 0, scoreAfter: 0, answerMs: 1000, topic }, extra || {});
+const s = { uid: 's1', ts: 200, modo: 'DNS + Correo electrónico', attempts: [
+  at('Q1', 'correct', 'DNS'), at('Q2', 'wrong', 'Correo electrónico'), at('Q3', 'blank', 'DNS'),
+  at('Q4', 'partial', 'DNS'), at('Q5', 'correct', 'Correo electrónico'), at('Q6', 'wrong', 'DNS') ] };
+const todas = H.intentos(s);
+eq(H.cuenta(todas), { todas: 6, falladas: 3, acertadas: 2, blanco: 1 }, 'cuenta de cada filtro');
+eq(H.filtra(todas, 'falladas').map((a) => a.question_id), ['Q2', 'Q4', 'Q6'],
+   'falladas: las incorrectas y las «a medias»');
+eq(H.filtra(todas, 'acertadas').map((a) => a.question_id), ['Q1', 'Q5'], 'acertadas');
+eq(H.filtra(todas, 'blanco').map((a) => a.question_id), ['Q3'], 'en blanco');
+
+// --- 4 · desde el historial de un tema, solo lo de ese tema --------------
+eq(H.intentos(s, { tema: 'DNS' }).map((a) => a.question_id), ['Q1', 'Q3', 'Q4', 'Q6'],
+   'una sesión mixta abierta desde un tema enseña solo ese tema');
+const sesiones = [
+  vieja,
+  { ts: 50, modo: 'DNS', respondidas: 5 },                                   // vieja, de ese tema
+  { ts: 60, modo: 'DNS + Servidor web', respondidas: 5 },                    // vieja, mezcla con él
+  { ts: 70, modo: 'Servidor web', respondidas: 5 },                          // vieja, de otro tema
+  s,                                                                        // nueva, con DNS
+  { uid: 's2', ts: 1800000000, modo: 'Sprint de 20', attempts: [at('Q9', 'correct', 'Servidor web')] },
+];
+eq(H.deTema(sesiones, 'DNS').map((x) => x.modo), ['DNS + Correo electrónico', 'DNS + Servidor web', 'DNS'],
+   'historial del tema: las nuevas con preguntas suyas y las viejas lanzadas para él, las más recientes primero');
+eq(H.ordenadas(sesiones)[0].uid, 's2', 'el historial general, de la más reciente a la más antigua');
+
+// --- 5 · repasar las falladas y repetir el test ---------------------------
+eq(H.paraRepasar(todas), ['Q2', 'Q4', 'Q6'], 'REPASAR ESTAS FALLADAS: solo las falladas');
+eq(H.paraRepasar(H.intentos(s, { tema: 'DNS' })), ['Q4', 'Q6'], 'y desde un tema, solo las suyas');
+eq(H.paraRepetir(todas), ['Q1', 'Q2', 'Q3', 'Q4', 'Q5', 'Q6'], 'REPETIR TEST: las mismas y en el mismo orden');
+eq(H.paraRepetir([at('Q1', 'wrong'), at('Q1', 'correct')]), ['Q1'], 'sin repetir ninguna');
+
+// --- 6 · lo que llega roto de la nube no rompe nada -----------------------
+const rota = { uid: 'r', ts: 1, modo: 'X', attempts: [null, 5, { result: 'wrong' }, at('Q1', 'wrong', 'DNS')] };
+eq(H.intentos(rota).length, 1, 'se ignora lo que no tiene forma de intento');
+eq(H.deTema([rota], 'DNS').length, 1, 'y el filtro por tema no revienta');
+
+// --- 7 · se guarda con la ronda y sobrevive a recargar --------------------
+LS = almacen();
+let { store } = carga();
+await store.init({ base: './', ns: 'asorc.v2' });
+const registro = Object.assign(G.sessionRecord(run), d);
+await store.cerrarRonda(registro);
+const uid = store.stats.sesiones[0].uid;
+({ store } = carga());
+await store.init({ base: './', ns: 'asorc.v2' });
+const vuelta = store.stats.sesiones.find((x) => x.uid === uid);
+eq(vuelta && vuelta.attempts, d.attempts, 'tras recargar, la sesión conserva sus intentos');
+const { S } = carga();
+eq(S.fusionaStats(store.stats, store.stats).sesiones.length, 1, 'fundirla consigo misma no la duplica');
+eq(S.fusionaStats({ sesiones: [vieja] }, store.stats).sesiones.length, 2, 'y convive con las viejas');
+
+// --- 8 · y viaja por asorc_sessions a otro navegador ----------------------
+const tabla = [];
+const sb = { from() { const q = {
+  async upsert(filas) { filas.forEach((f) => { if (!tabla.some((x) => x.uid === f.uid)) tabla.push(f); }); return { error: null }; },
+  select() { return q; }, eq() { return q; }, order() { return q; },
+  async range() { return { data: tabla.slice(), error: null, status: 200 }; },
+  async maybeSingle() { return { data: null, error: null }; } }; return q; } };
+const vacia = () => ({ from() { const q = { async upsert() { return { error: null }; },
+  select() { return q; }, eq() { return q; }, order() { return q; },
+  async range() { return { data: [], error: null }; }, async maybeSingle() { return { data: null, error: null }; } };
+  return q; } });
+const a1 = carga();
+LS = almacen();
+await a1.store.init({ base: './', ns: 'asorc.v2' });
+a1.cloud.store = a1.store; a1.cloud.estado = 'sincronizado'; a1.cloud.sinTarjetas = null;
+a1.cloud.sb = { from(t) { return t === 'asorc_sessions' ? sb.from() : vacia().from(); } };
+await a1.store.cerrarRonda(Object.assign(G.sessionRecord(run), H.detalle(run, temaDe, 5)));
+await a1.cloud.flush();
+eq(tabla.length, 1, 'la ronda llega a asorc_sessions');
+eq(tabla[0].payload.attempts, d.attempts, 'con sus intentos dentro del payload');
+LS = almacen();
+const b1 = carga();
+await b1.store.init({ base: './', ns: 'asorc.v2' });
+b1.cloud.store = b1.store; b1.cloud.estado = 'sincronizado'; b1.cloud.sinTarjetas = null;
+b1.cloud.sb = { from(t) { return t === 'asorc_sessions' ? sb.from() : vacia().from(); } };
+const r = await b1.cloud.sincronizar(b1.store);
+ok(r.ok, 'otro navegador sincroniza');
+eq(b1.store.stats.sesiones.length, 1, 'y recibe la ronda');
+eq(b1.store.stats.sesiones[0].attempts, d.attempts, 'con el mismo detalle, pregunta a pregunta');
+
+console.log(JSON.stringify({ n: errs.length, errs: errs.slice(0, 10) }));
+})().catch((e) => { console.log(JSON.stringify({ n: 1, errs: [String(e && e.stack || e)] })); });
+"""
+
+
+def test_historial():
+    print("\n[14] Historial de tests: cada ronda, pregunta a pregunta, sin tabla nueva")
+    js = os.path.join(PROJ, "web", "js")
+    html = open(os.path.join(PROJ, "web", "index.html"), encoding="utf-8").read()
+    app = open(os.path.join(js, "app.js"), encoding="utf-8").read()
+    sql = open(os.path.join(PROJ, "supabase", "schema.sql"), encoding="utf-8").read()
+
+    check("index.html carga historial.js antes que app.js",
+          "js/historial.js" in html and html.index("js/historial.js") < html.index("js/app.js"))
+    for ident in ("hist-rows", "hist-more", "hist", "hs-list", "hs-filtros", "hs-repasar",
+                  "hs-repetir", "hs-old", "hs-back"):
+        check(f"index.html tiene #{ident}", f'id="{ident}"' in html)
+    check("las sesiones viejas lo dicen tal cual",
+          "Esta sesión es anterior al historial detallado de preguntas." in html)
+    m = re.search(r"async function finishRun\(\)\s*\{(.*?)\n\}", app, re.S)
+    check("al cerrar la ronda se guarda su detalle", bool(m) and "Historial.detalle(" in m.group(1)
+          and "cerrarRonda(registro)" in m.group(1))
+    # Ni tabla ni columna nueva: asorc_sessions sigue igual y el detalle va
+    # dentro de su payload, que ya era JSONB.
+    ms = re.search(r"create table if not exists public\.asorc_sessions \((.*?)\);", sql, re.S)
+    columnas = re.findall(r"^\s*(\w+)\s", ms.group(1), re.M) if ms else []
+    anadidas = re.findall(r"alter table public\.asorc_sessions\s+add column if not exists (\w+)", sql)
+    check("sin tabla ni columna nueva: el detalle va en el payload JSONB de asorc_sessions",
+          sql.count("create table if not exists") == 5
+          and columnas == ["uid", "profile_id", "payload", "created_at"]
+          and "jsonb" in ms.group(1) and set(anadidas) <= {"profile_id", "payload", "created_at"},
+          f"{columnas} {anadidas}")
+
+    if not shutil.which("node"):
+        check("node disponible", False)
+        return
+    with tempfile.NamedTemporaryFile("w", suffix=".js", delete=False) as f:
+        f.write(HIST_TEST)
+        script = f.name
+    try:
+        out = subprocess.run(["node", script, js, QJSON], capture_output=True, text=True, timeout=180)
+        if out.returncode != 0:
+            check("ejecución node", False, out.stderr.strip()[:400])
+            return
+        res = json.loads(out.stdout.strip().splitlines()[-1])
+        check("intentos justos, viejas sin inventar, filtros, tema, repasar/repetir y nube",
+              res["n"] == 0, " | ".join(res["errs"]))
+    finally:
+        os.unlink(script)
+
+
 def test_feed():
     """El feed reutiliza la lógica de siempre, pero los elementos de una
     pregunta ya no llevan id: hay muchas tarjetas vivas a la vez. Aquí se
@@ -1650,6 +1848,7 @@ def main():
     test_feed()
     test_nota()
     test_micro()
+    test_historial()
     test_highlight()
     test_panel()
     test_publicacion()

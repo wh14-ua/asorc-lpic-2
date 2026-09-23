@@ -14,7 +14,7 @@
 
 (function (root, doc) {
 
-  let ctx = null;          // { bank, store, start, resume, discard }
+  let ctx = null;          // { bank, store, start, pool, resume, discard, historialTema }
   const $ = (id) => doc.getElementById(id);
   const el = (tag, cls, txt) => {
     const e = doc.createElement(tag);
@@ -185,6 +185,13 @@
       boton('TODAS', `${todas} preguntas`, 'all', nuevas === 0, todas > 0),
     );
     p.append(tam, acc);
+    // Las rondas en las que salió este tema; al abrir una mezclada, solo sus
+    // preguntas de este tema (historial.js).
+    if (ctx.historialTema) {
+      const h = el('div', 'tpanel-hist');
+      ctx.historialTema(t.nombre, h);
+      p.appendChild(h);
+    }
     return p;
   }
 

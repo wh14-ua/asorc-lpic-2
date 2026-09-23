@@ -54,7 +54,7 @@ def main():
                     "js/app.js", "js/store.js", "js/dash.js", "js/cloud.js",
                     "js/logic.js", "js/game.js", "js/academic.js", "js/fx.js", "js/burst.js",
                     "questions.json", "explanations_simple.json", "microcards.json",
-                    "js/micro.js", "js/repaso.js"]
+                    "js/micro.js", "js/repaso.js", "js/historial.js"]
     faltan = [f for f in OBLIGATORIOS if not os.path.exists(os.path.join(dest, f))]
     if faltan:
         sys.exit("el sitio quedaría incompleto, faltan: " + ", ".join(faltan))

@@ -44,6 +44,7 @@ navegador
    ├── academic.js  la nota: +1 / −1/(k−1) / 0, aparte del XP  (lógica pura)
    ├── micro.js   repaso rápido: el mazo y cuándo vuelve cada tarjeta  (lógica pura)
    ├── repaso.js  repaso rápido: sección del inicio y pantalla de tarjetas
+   ├── historial.js  historial de tests: cada ronda, pregunta a pregunta
    ├── fx.js      sonido y microinteracciones
    ├── burst.js   explicación por fragmentos
    └── app.js     presentación, feed y flujo
@@ -338,6 +339,46 @@ pregunta, más la comparación con tu ronda anterior (`↑ 7 % precisión`, `↓
 Si has fallado, **REPASAR N FALLOS** lanza al momento una ronda solo con esas. El desglose por
 tema y la comparación con/sin música quedan plegados en «Ver detalle».
 
+### Historial de tests
+
+En el inicio, **Historial de tests**: cada ronda cerrada, de la más reciente a la más
+antigua, con fecha, modo, ✓ ✗ ○ y los puntos netos sobre el total (`1,00 / 20`). Una ronda que
+dejaste a medias con `Esc` dice cuántas llegaste a contestar (`Solo ASORC · 5 de 202`).
+
+Al abrir una se ve **pregunta a pregunta**, con los filtros **TODAS · FALLADAS · ACERTADAS
+· EN BLANCO** («a medias» cuenta como fallada): enunciado, resultado, tu respuesta, la
+correcta, lo que sumó o restó, el acumulado tras ella, el tema y el tiempo de respuesta. Al
+pulsar una pregunta se despliegan sus opciones —con las letras del libro, que son las que
+cita la explicación original—, la explicación en llano y la del libro.
+
+- **REPASAR ESTAS FALLADAS** lanza una ronda solo con las falladas de esa sesión, barajadas.
+- **REPETIR TEST** lanza las mismas preguntas y en el mismo orden; las opciones se vuelven a
+  barajar. Las dos conservan el formato de entonces: si era ASORC, con 3 opciones.
+
+Cada tema tiene también su historial, en su panel: las rondas en las que salió. Al abrir
+desde ahí una ronda mixta se ven **solo las preguntas de ese tema**, y los dos botones
+trabajan con ellas.
+
+**Cómo se guarda, sin tabla nueva.** El registro de cada ronda ya viajaba entero a
+`asorc_sessions`, cuyo `payload` es JSONB; ahora lleva además qué pasó en cada pregunta:
+
+```jsonc
+"attempts": [
+  { "question_id": "SYBEX-CH06-RQ03", "result": "wrong", "answer": "E",
+    "scoreDelta": -0.5, "scoreAfter": 0.5, "answerMs": 7300, "topic": "Servicios de red" }
+]
+```
+
+Ni el enunciado ni las opciones se copian: salen de `questions.json` por `question_id`. Lo
+que sí se guarda es lo que marcaste (`answer`, con las etiquetas del libro), porque eso no se
+puede reconstruir. El registro lleva también `asorc`, `total` y `puntos`.
+
+**Las sesiones de antes** siguen apareciendo, pero al abrirlas dicen *Esta sesión es anterior
+al historial detallado de preguntas*. Los intentos de `asorc_attempts` no llevan ronda, así
+que no se reconstruyen por fechas ni se les inventa ninguna asociación. En el historial de un
+tema solo salen las viejas que se lanzaron para ese tema (su etiqueta es el tema o lo incluye
+en una mezcla), porque eso sí lo dicen ellas mismas.
+
 ### Dejar en blanco
 
 Fallar resta en la nota (−0,5 en el simulacro **ASORC**, −1/(k−1) en general) y no contestar
@@ -383,6 +424,7 @@ partículas. Todo es navegable por teclado con foco visible.
 | `web/js/academic.js` | la nota: +1 / −1/(k−1) / 0 por pregunta, exacta y aparte del XP |
 | `web/js/micro.js` | repaso rápido: el mazo como eventos, cuándo vuelve cada tarjeta, modos |
 | `web/js/repaso.js` | repaso rápido: sección del inicio, pantalla de tarjetas y teclado |
+| `web/js/historial.js` | historial de tests: lista de rondas, cada una pregunta a pregunta, repasar y repetir |
 | `web/js/fx.js` | sonido y microinteracciones |
 | `web/js/burst.js` | reproductor de la explicación por fragmentos |
 | `web/js/app.js` | presentación, feed y flujo |
@@ -526,7 +568,7 @@ SQL sin romper lo que ya hay. No borra tablas ni datos, y si encuentra el esquem
 |---|---|---|
 | `asorc_attempts` | el histórico, un intento por fila | `event_id` del cliente |
 | `asorc_marks` | marcas de repaso | `(profile_id, question_id)` |
-| `asorc_sessions` | rondas terminadas | `uid` del cliente |
+| `asorc_sessions` | rondas terminadas, con su detalle pregunta a pregunta dentro del `payload` | `uid` del cliente |
 | `asorc_pending` | la ronda a medias, una sola fila | `id = 'main'` |
 | `asorc_card_events` | repaso rápido: fallo, marca, sabía, dudé, no sabía; un evento por fila | `event_id` del cliente |
 
@@ -746,7 +788,8 @@ repaso rápido: que sus eventos llegan, que reenviarlos no duplica, que otro nav
 la misma tarjeta con el mismo «cuándo vuelve» y que son de solo añadir. Y el caso de quien
 no ha vuelto a ejecutar `schema.sql`: borra la tabla del repaso a mitad de prueba, comprueba
 que todo lo demás se sigue sincronizando y que, al volver a aplicar el esquema, lo retenido
-sale solo.
+sale solo. Y el historial: que una ronda cerrada llega a `asorc_sessions` con sus intentos
+dentro del payload y otro navegador la recibe con el mismo detalle, sin duplicarla.
 
 Necesita `initdb`, `docker`, `node` y el cliente: `cd tools && npm install @supabase/supabase-js`.
 Si falta algo se salta y lo dice. **Nunca toca el Supabase real ni tu progreso**: todo vive en
@@ -775,7 +818,12 @@ banco. Con un lote suelto (`python3 tools/test_micro.py tools/micro/b05-sybex-ch
 sirve para escribirlas. `test_web.py` prueba además el mazo: que repetir una pregunta no
 duplica su tarjeta, que conserva la misma pista, cuándo vuelve cada una, los modos (por
 tema, falladas hoy, marcadas, 10 y 20 rápidas), que el mismo conjunto de eventos da el mismo
-mazo en cualquier orden, que fusionar no pierde nada y que tras recargar sigue igual.
+mazo en cualquier orden, que fusionar no pierde nada y que tras recargar sigue igual. Y el
+historial de tests: que cada intento guarda exactamente sus siete campos y no copia ni el
+enunciado ni las opciones, que las sesiones viejas no reciben intentos inventados, los
+cuatro filtros, que desde un tema solo salen sus preguntas, qué lanzan REPASAR ESTAS
+FALLADAS y REPETIR TEST, que lo que llegue roto de la nube no rompe nada, y que la sesión
+sobrevive a recargar y viaja a otro navegador.
 
 ```bash
 python3 tools/test_contrast.py

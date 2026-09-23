@@ -81,6 +81,7 @@ const S = {
   lastDone: null,             // última tarjeta contestada (la única desplegada)
   simple: {},                 // explicaciones reescritas en llano, por id
   micro: {},                  // microtarjetas de repaso rápido, por id
+  porId: new Map(),           // el banco por question_id
   vocab: null,                // términos técnicos, sacados del propio banco
 };
 
@@ -105,6 +106,7 @@ async function loadAll() {
   const q = await pideJSON(['questions.json', 'api/questions']);
   if (!q || !q.questions) throw new Error('no se pudo leer questions.json');
   S.bank = q.questions;
+  S.porId = new Map(S.bank.map((x) => [x.id, x]));
   S.vocab = L.buildVocab(S.bank);
 
   // Si no están, se enseña el texto del libro: la web funciona igual.
@@ -166,13 +168,14 @@ function eligible(mode, topic) {
  *  Inicio
  * =================================================================== */
 function showScreen(which) {
-  ['home', 'play', 'done', 'micro'].forEach((s) => { $(s).hidden = s !== which; });
+  ['home', 'play', 'done', 'micro', 'hist'].forEach((s) => { $(s).hidden = s !== which; });
   window.scrollTo(0, 0);
 }
 
 function renderHome() {
   if (root.Dash) root.Dash.pintar();
   if (root.Repaso) root.Repaso.pintaInicio();
+  if (root.Historial) root.Historial.pintaInicio();
   const tr = S.bank.filter((q) => q.translated).length;
   $('home-sub').textContent =
     `${S.bank.length} preguntas · ${tr} en español · sin límite de tiempo`;
@@ -890,6 +893,7 @@ function anotaNota() {
     result: S.q.result,
     picked: etiquetasMarcadas(),
     order: v.shown.map((o) => o.label),
+    ms: S.q.answerMs,
   }));
 }
 
@@ -1258,7 +1262,11 @@ async function finishRun() {
 
   const prevSession = G.lastSession(ST.stats.sesiones, r.music);
   const finals = G.finalMilestones(r, ST.stats.sesiones);
-  await ST.cerrarRonda(G.sessionRecord(r));
+  // El registro de la ronda lleva, para el historial de tests, qué pasó en
+  // cada pregunta (historial.js). Viaja en el mismo payload de asorc_sessions.
+  const registro = G.sessionRecord(r);
+  if (root.Historial) Object.assign(registro, root.Historial.detalle(r, temaDe, S.queue.length || r.total));
+  await ST.cerrarRonda(registro);
   flushNube();                    // la ronda cerrada también viaja sola
 
   const pct = r.answered ? (r.ok / r.answered) * 100 : 0;
@@ -1391,6 +1399,16 @@ function deDondeSale(t, previas) {
   return out.join(' ');
 }
 
+const temaDe = (id) => { const q = S.porId.get(id); return q ? q.topic : ''; };
+
+/* Rondas que salen del historial: las mismas preguntas de aquella sesión, en
+ * su orden (REPETIR TEST), o solo sus falladas, barajadas. Las opciones se
+ * vuelven a barajar siempre, y el formato (ASORC o no) es el de entonces. */
+function rondaDelHistorial(ids, asorc, etiqueta, barajar) {
+  arranca({ kind: 'historial', label: etiqueta, topics: [], filter: null, size: null, asorc: !!asorc },
+          barajar ? L.shuffled(ids) : ids.slice(), 0, null);
+}
+
 function delta(kind, text) {
   const el = document.createElement('span');
   el.className = 'delta';
@@ -1459,6 +1477,7 @@ document.addEventListener('keydown', (ev) => {
     return setSound(FX.Sound.toggle());
   }
   if (!$('micro').hidden) { if (root.Repaso) root.Repaso.tecla(ev); return; }
+  if (!$('hist').hidden) { if (root.Historial) root.Historial.tecla(ev); return; }
   if ($('play').hidden) return;
 
   if (k === 'Escape') { ev.preventDefault(); registraActual(); return finishRun(); }
@@ -1712,6 +1731,7 @@ function wire() {
         pool: poolDeSpec,
         resume: reanudar,
         discard: () => ST.descartarSesion(),
+        historialTema: (tema, box) => root.Historial && root.Historial.pintaTema(box, tema),
       });
     }
     if (root.Repaso) {
@@ -1722,6 +1742,18 @@ function wire() {
         muestra: showScreen,
         volver: () => { renderHome(); showScreen('home'); refrescaNube(); },
         alCambiar: flushNube,
+      });
+    }
+    if (root.Historial) {
+      root.Historial.init({
+        store: ST, bank: S.porId, simple: S.simple, A,
+        resalta: (t) => L.highlightTechnicalText(t, { vocab: S.vocab }),
+        codifica: L.codify,
+        muestra: showScreen,
+        volver: () => { renderHome(); showScreen('home'); },
+        repasar: (ids, asorc, modo) => rondaDelHistorial(ids, asorc, `Falladas de «${modo}»`, true),
+        repetir: (ids, asorc, modo) =>
+          rondaDelHistorial(ids, asorc, 'Repetir: ' + String(modo).replace(/^Repetir: /, ''), false),
       });
     }
     // El panel sale con lo que hay en este navegador y sale YA. La nube se

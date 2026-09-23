@@ -93,6 +93,15 @@
     <div id="topics" class="topics"></div>
   </section>
 
+  <!-- Cada ronda cerrada, de la más reciente a la más antigua. Se abre para
+       ver pregunta a pregunta qué pasó. -->
+  <section class="home-block hist-home" aria-labelledby="hist-home-h">
+    <h2 id="hist-home-h">Historial de tests</h2>
+    <ol class="hist-rows" id="hist-rows"></ol>
+    <p class="hist-empty" id="hist-empty" hidden>Aún no has cerrado ninguna ronda.</p>
+    <button type="button" id="hist-more" class="ghost ghost-sm" hidden>VER MÁS</button>
+  </section>
+
   <section class="home-block home-prefs">
     <div class="pref">
       <h2>Sesión</h2>
@@ -193,6 +202,32 @@
   <button type="button" id="to-active" class="to-active" hidden>
     <span aria-hidden="true">↓</span> VOLVER A PREGUNTA ACTUAL
   </button>
+</main>
+
+<!-- ===================== HISTORIAL: UNA SESIÓN ===================== -->
+<main id="hist" class="screen" hidden>
+  <div class="hs-bar">
+    <button type="button" id="hs-back" class="exit-btn">← VOLVER</button>
+    <span class="hs-bar-t">HISTORIAL DE TESTS</span>
+  </div>
+  <div class="hs-wrap">
+    <header class="hs-head">
+      <p class="hs-when" id="hs-when"></p>
+      <h2 class="hs-title" id="hs-title"></h2>
+      <p class="hs-tema" id="hs-tema" hidden></p>
+      <p class="hs-sum" id="hs-sum"></p>
+    </header>
+    <p class="hs-old" id="hs-old" hidden>Esta sesión es anterior al historial detallado de preguntas.</p>
+    <div class="hs-tools" id="hs-tools">
+      <div class="seg hs-filtros" id="hs-filtros" role="group" aria-label="Qué preguntas ver"></div>
+      <div class="hs-acts">
+        <button type="button" id="hs-repasar" class="cta cta-sm">REPASAR ESTAS FALLADAS</button>
+        <button type="button" id="hs-repetir" class="ghost ghost-sm">REPETIR TEST</button>
+      </div>
+    </div>
+    <p class="hs-empty" id="hs-empty" hidden>En esta sesión no llegaste a contestar ninguna pregunta.</p>
+    <ol class="hs-list" id="hs-list"></ol>
+  </div>
 </main>
 
 <!-- ===================== REPASO RÁPIDO ===================== -->
@@ -428,6 +463,7 @@
 <script src="./js/fx.js"></script>
 <script src="./js/burst.js"></script>
 <script src="./js/repaso.js"></script>
+<script src="./js/historial.js"></script>
 <script src="./js/app.js"></script>
 </body>
 </html>

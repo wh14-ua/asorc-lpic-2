@@ -47,9 +47,10 @@
 
   /* ------------------------------------------------------------ estado
    * points es el acumulado; log, una entrada por pregunta corregida:
-   *   { id, result, kind, k, delta, after, picked?, order? }
-   * picked y order (etiquetas del libro: lo marcado y el orden en pantalla)
-   * no puntúan: sirven para rehacer el feed tal cual al reanudar.
+   *   { id, result, kind, k, delta, after, picked?, order?, ms? }
+   * picked, order y ms (lo marcado y el orden en pantalla, con las etiquetas
+   * del libro, y el tiempo de respuesta) no puntúan: sirven para rehacer el
+   * feed al reanudar y para el historial de tests.
    */
   function newState() { return { points: 0, log: [] }; }
 
@@ -59,6 +60,7 @@
                 delta: d, after: st.points };
     if (Array.isArray(a.picked)) e.picked = a.picked.map(String);
     if (Array.isArray(a.order)) e.order = a.order.map(String);
+    if (Number.isFinite(a.ms)) e.ms = Math.max(0, Math.round(a.ms));
     st.log.push(e);
     return e;
   }

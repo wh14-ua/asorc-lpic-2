@@ -47,12 +47,18 @@
     if (cambios) st.guardarLocal();
   }
 
+  /* Reloj de los eventos: nunca dos con el mismo milisegundo. Al rehacer el
+   * mazo en otro dispositivo se ordenan por tiempo; con un empate decidiría
+   * su id, que es aleatorio, y «fallo» y «la sabía» podrían cambiar de orden. */
+  let ultimoAt = 0;
+  const ahora = () => (ultimoAt = Math.max(Date.now(), ultimoAt + 1));
+
   /* Un evento para la tarjeta de esa pregunta: fallo, marca, sabia, dude o
    * nosabia. La crea si no existe y si existe la actualiza: nunca dos. */
   function anota(id, kind) {
     if (!ctx || !vale(id) || !M.KINDS.includes(kind)) return null;
     const nueva = !ctx.store.cards[id];
-    const ev = { question_id: id, kind, at: Date.now() };
+    const ev = { question_id: id, kind, at: ahora() };
     const t = M.aplica(ctx.store.cards, ev);
     copiaContenido(id);
     ctx.store.tarjetaEvento(ev);

@@ -56,7 +56,7 @@ def main():
                     "questions.json", "explanations_simple.json", "microcards.json",
                     "js/app.js", "js/store.js", "js/dash.js", "js/cloud.js",
                     "js/logic.js", "js/game.js", "js/academic.js", "js/fx.js", "js/burst.js",
-                    "js/micro.js", "js/repaso.js"]
+                    "js/micro.js", "js/repaso.js", "js/historial.js"]
         for f in exigidos:
             check(f"_site/{f}", os.path.exists(os.path.join(dest, f)))
         check("server.py NO viaja al sitio", not os.path.exists(os.path.join(dest, "server.py")))
