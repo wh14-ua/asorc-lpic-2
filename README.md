@@ -347,10 +347,17 @@ fallos y repeticiones, todas juntas y de la más reciente a la más antigua. Sal
 últimas y **VER TODO EL HISTORIAL** enseña el resto, en el mismo orden. Cada entrada:
 
 ```
-23 SEP · 17:46                                            ✓ 10   ✗ 5   ○ 0
-Compartición de archivos                                  8,75 / 15 · 5,83/10
+23 SEP · 17:46                                   ✓ 10  ✗ 5  ○ 0     NOTA 5,83 / 10
+Compartición de archivos                                          PUNTOS 8,75 / 15
 15 preguntas · 4 min 12 s · 16,8 s/pregunta · 100 XP · mejor racha 4
 ```
+
+**La nota es la protagonista**: `NOTA x / 10` en grande (en verde desde el 5, en rojo por
+debajo, pero siempre escrita) y debajo `PUNTOS x / N`. Sale de la puntuación académica, con
+la misma función de `academic.js` que el resultado final —puntos netos ÷ preguntas de la
+ronda × 10, nunca el porcentaje de aciertos— y se ve sin abrir la ronda. Al abrirla, sale
+otra vez en grande en la cabecera. Las rondas de antes de la puntuación académica no reciben
+nota inventada: dicen *sin nota académica* y enseñan solo lo que guardaban.
 
 La duración es el tiempo de respuesta más el de leer la explicación. XP y mejor racha solo
 los traen las rondas nuevas; a las viejas no se les inventan. Una ronda que dejaste a medias
@@ -359,8 +366,18 @@ con `Esc` lo dice: `4 de 20 preguntas`.
 Al abrir una se ve **pregunta a pregunta**, con los filtros **TODAS · FALLADAS · ACERTADAS
 · EN BLANCO** («a medias» cuenta como fallada): enunciado, resultado, tu respuesta, la
 correcta, lo que sumó o restó, el acumulado tras ella, el tema y el tiempo de respuesta. Al
-pulsar una pregunta se despliegan sus opciones —con las letras del libro, que son las que
-cita la explicación original—, la explicación en llano y la del libro.
+pulsar una pregunta se despliegan, primero, dos cajas que no se mezclan:
+
+```
+EN ESTA RONDA          HISTORIAL DE ESTA PREGUNTA
+✗ Fallada · −0,25      8 intentos · ✓ 3 aciertos · ✗ 4 fallos · ○ 1 en blanco
+                       43% acierto histórico
+```
+
+La primera es lo que pasó en esa ronda; la segunda, **todos** tus intentos con esa pregunta,
+no solo los de esa sesión. Después, sus opciones —con las letras del libro, que son las que
+cita la explicación original—, la explicación en llano y la del libro. Cualquier pregunta de
+la ronda enseña las dos cajas al desplegarla.
 
 - **REPASAR ESTAS FALLADAS** lanza una ronda solo con las falladas de esa sesión, barajadas.
 - **REPETIR TEST** lanza las mismas preguntas y en el mismo orden; las opciones se vuelven a
@@ -368,7 +385,32 @@ cita la explicación original—, la explicación en llano y la del libro.
 
 Cada tema tiene también su historial, secundario, en su panel: las rondas en las que salió.
 Al abrir desde ahí una ronda mixta se ven **solo las preguntas de ese tema**, y los dos
-botones trabajan con ellas.
+botones trabajan con ellas. La nota grande es entonces **la de ese tema en esa ronda**: la
+suma de los `scoreDelta` de sus preguntas sobre cuántas son, con la misma `nota10` (en una
+ronda DNS + Correo con 5 de DNS que suman 1,50 puntos: `NOTA 3,00 / 10 · PUNTOS 1,50 / 5`).
+Debajo, discreta, *Ronda completa: 2,50/10*. Los ✓ ✗ ○ de la cabecera son también solo los
+del tema, así que nada de lo que se ve mezcla la ronda entera con el tema. En la lista del
+panel, cada ronda lleva ya esa nota del tema.
+
+**Ronda incompleta** (la dejaste con `Esc`): la nota del tema es **provisional** y va solo
+sobre las preguntas de ese tema que hiciste: `NOTA PROVISIONAL 1,67/10 · 3 preguntas
+realizadas`. Lo dice la etiqueta, no lleva el verde/rojo de aprobado y su caja es
+discontinua. El registro de la ronda guarda las preguntas contestadas, no las que faltaban,
+así que no hay forma fiable de saber cuántas de ese tema quedaron sin hacer; tampoco se
+deduce por la etiqueta, ni en una ronda de un solo tema. La de la ronda completa no cambia:
+cuenta las no contestadas como 0 sobre las planificadas.
+
+**Historial de cada pregunta.** Sale de los contadores de siempre
+(`Store.progress.preguntas[id]`: aciertos, fallos, blancos, parciales), sin fuente nueva:
+
+- intentos = aciertos + fallos + blancos + a medias
+- respondidas = aciertos + fallos + a medias
+- acierto histórico = aciertos ÷ respondidas: los blancos no entran, igual que en el panel.
+
+Si hay alguna a medias, sale también `◐ 2 a medias`. En el test aparece al corregir, tras la
+explicación, y **ya cuenta la respuesta que acabas de dar** (aún no está registrada: se
+registra al pasar a la siguiente, y entonces los contadores quedan exactamente como se
+enseñaron). En las abiertas, al autocalificarte.
 
 **Cómo se guarda, sin tabla nueva.** El registro de cada ronda ya viajaba entero a
 `asorc_sessions`, cuyo `payload` es JSONB; ahora lleva además qué pasó en cada pregunta:
@@ -838,7 +880,16 @@ FALLADAS y REPETIR TEST, que lo que llegue roto de la nube no rompe nada, y que 
 sobrevive a recargar y viaja a otro navegador. Y el historial global: que rondas de todos los
 modos y temas (y las viejas sin detalle) salen juntas y en orden cronológico inverso aunque
 lleguen desordenadas, que va debajo de REPASO RÁPIDO y antes de los temas, y que cada entrada
-calcula bien preguntas, puntos, nota sobre 10, duración, s/pregunta, XP y mejor racha.
+calcula bien preguntas, puntos, nota sobre 10, duración, s/pregunta, XP y mejor racha. La
+nota, en concreto: que la calcula `Academic.nota10` (y no una copia de la fórmula ni el
+porcentaje de aciertos), que no baja de 0 y que las rondas viejas no reciben ninguna. La de un
+tema: que suma solo los `scoreDelta` de sus preguntas sobre la rejilla exacta (1 − ⅓ − ⅓ − ⅓
+= 0), sobre cuántas son, que no es la global y que los temas suman la ronda; y que en una
+ronda incompleta es provisional y va solo sobre las realizadas, también si era de un solo
+tema, mientras la de la ronda completa sigue sobre las planificadas. Y el historial
+de cada pregunta: intentos, respondidas sin blancos, el mismo porcentaje que el panel, que
+justo tras responder ya cuenta el intento actual y que, al registrarlo, los contadores quedan
+igual que se enseñaron.
 
 ```bash
 python3 tools/test_contrast.py

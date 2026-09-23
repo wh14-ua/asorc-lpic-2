@@ -59,13 +59,26 @@
   const global = (sesiones) => ordenadas((sesiones || []).filter((s) => s && typeof s === 'object'));
   const INICIALES = 10;          // las que se ven antes de «VER TODO EL HISTORIAL»
 
+  /* Los puntos de la ronda tal como los calculó academic.js: el total que se
+   * guardó al cerrarla o, si faltara, el acumulado tras su última pregunta.
+   * Una ronda de antes de la nota académica no tiene: null, no un 0. */
+  function puntosDe(s) {
+    if (!tieneDetalle(s)) return null;
+    if (Number.isFinite(s.puntos)) return s.puntos;
+    const v = validos(s);
+    const ultimo = v.length ? v[v.length - 1].scoreAfter : null;
+    return Number.isFinite(ultimo) ? ultimo : null;
+  }
+
   /* Lo que enseña cada entrada. Lo que una ronda vieja no guardaba (puntos,
-   * XP, racha) sale como null y no se pinta: no se inventa. */
+   * nota, XP, racha) sale como null y no se pinta: no se inventa. La nota
+   * sobre 10 es la de academic.js —la misma del resultado final—, nunca el
+   * porcentaje de aciertos. */
   function resumen(s) {
     const det = tieneDetalle(s);
     const hechas = det ? validos(s).length : (s.respondidas | 0);
     const total = (s.total | 0) || hechas;
-    const puntos = det ? Number(s.puntos) || 0 : null;
+    const puntos = puntosDe(s);
     const ms = (Number(s.ms_respuesta) || 0) + (Number(s.ms_explicacion) || 0);
     return {
       ts: Number(s.ts) || 0,
@@ -75,7 +88,7 @@
       hechas,
       ok: s.correctas | 0, bad: s.falladas | 0, blank: s.blancos | 0,
       puntos,
-      nota10: det && total ? Math.max(0, (puntos / total) * 10) : null,
+      nota10: puntos != null && total ? root.Academic.nota10(puntos, total) : null,
       duracionMs: ms || null,
       segPregunta: s.respondidas ? (Number(s.ms_respuesta) || 0) / s.respondidas / 1000 : null,
       xp: Number.isFinite(s.xp) ? s.xp : null,
@@ -109,6 +122,43 @@
   };
   const filtra = (lista, f) => lista.filter(FILTROS[f] || FILTROS.todas);
   const cuenta = (lista) => Object.fromEntries(Object.keys(FILTROS).map((f) => [f, filtra(lista, f).length]));
+
+  // ¿Se quedó a medias (Esc)? Tenía más preguntas de las que se contestaron.
+  const incompleta = (s) => tieneDetalle(s) && (s.total | 0) > validos(s).length;
+
+  /* La nota de las preguntas de un tema dentro de una ronda: sus scoreDelta
+   * sumados (sobre la rejilla exacta de academic.js) y sobre cuántas son,
+   * con la misma nota10 que todo lo demás.
+   * Si la ronda quedó incompleta, la nota es PROVISIONAL y va solo sobre las
+   * preguntas del tema que se hicieron: el registro de la ronda guarda las
+   * contestadas, no las que faltaban, así que no se puede saber cuántas de
+   * ese tema quedaron sin hacer. Tampoco se deduce por la etiqueta, ni en una
+   * ronda de un solo tema. */
+  function notaDeTema(s, tema) {
+    const lista = intentos(s, { tema });
+    if (!tieneDetalle(s) || !lista.length) return null;
+    const A = root.Academic;
+    const puntos = lista.reduce((acc, a) => A.snap(acc + (Number(a.scoreDelta) || 0)), 0);
+    return { puntos, preguntas: lista.length, nota10: A.nota10(puntos, lista.length),
+             provisional: incompleta(s) };
+  }
+
+  /* Lo que llevas con una pregunta en todos tus intentos, de los contadores de
+   * Store.progress.preguntas[id] (los mismos del panel). `actual` es el
+   * resultado que todavía no se ha registrado —justo después de contestar—,
+   * para que cuente ya. Los blancos cuentan como intento pero no entran en el
+   * acierto, igual que en el panel. */
+  function historico(p, actual) {
+    const c = {
+      aciertos: p ? p.aciertos | 0 : 0, fallos: p ? p.fallos | 0 : 0,
+      blancos: p ? p.blancos | 0 : 0, parciales: p ? p.parciales | 0 : 0,
+    };
+    const campo = { correct: 'aciertos', wrong: 'fallos', blank: 'blancos', partial: 'parciales' }[actual];
+    if (campo) c[campo]++;
+    const intentos = c.aciertos + c.fallos + c.blancos + c.parciales;
+    const respondidas = c.aciertos + c.fallos + c.parciales;
+    return Object.assign(c, { intentos, respondidas, acierto: respondidas ? c.aciertos / respondidas : null });
+  }
 
   const unicas = (ids) => [...new Set(ids)];
   // REPASAR ESTAS FALLADAS: solo las falladas (a medias cuenta como fallada).
@@ -160,6 +210,11 @@
     r.mejorRacha != null ? `mejor racha ${r.mejorRacha}` : null,
   ].filter(Boolean);
 
+  // «3 preguntas realizadas», «1 pregunta realizada»
+  const realizadas = (n) => `${n} pregunta${n === 1 ? '' : 's'} realizada${n === 1 ? '' : 's'}`;
+  const TXT_PROV = 'Nota provisional: la ronda quedó incompleta y no se guardó qué preguntas de este tema ' +
+    'faltaban, así que se calcula solo sobre las que hiciste. No es la nota definitiva.';
+
   // ✓ 11 ✗ 6 ○ 3, de una sesión entera o de sus intentos de un tema.
   function marcador(n) {
     const box = el('span', 'hs-marc');
@@ -195,7 +250,17 @@
       pts.textContent = 'sin detalle';
       pts.classList.add('is-old');
     } else if (lista) {
-      pts.textContent = `${lista.length} de este tema`;
+      const t = notaDeTema(s, tema);
+      if (!t) {
+        pts.textContent = `${lista.length} de este tema`;
+      } else {
+        // En dos trozos que no se parten: si no cabe, salta por el «·».
+        const prov = t.provisional;
+        pts.append(el('span', null, `${prov ? 'NOTA PROVISIONAL' : 'NOTA'} ${ctx.A.num(t.nota10)}/10`), ' · ',
+                   el('span', null, prov ? realizadas(t.preguntas) : `${t.preguntas} de este tema`));
+        pts.classList.toggle('is-prov', prov);
+        pts.title = prov ? TXT_PROV : 'Nota de las preguntas de este tema en esa ronda';
+      }
     } else {
       pts.textContent = `${ctx.A.num(s.puntos)} / ${s.total || s.attempts.length}`;
       pts.title = 'Puntos netos sobre el total de preguntas';
@@ -218,23 +283,40 @@
     const preguntas = r.hechas < r.preguntas ? `${r.hechas} de ${r.preguntas} preguntas` : `${r.preguntas} preguntas`;
     izq.append(el('span', 'he-when', cuando(r.ts)), el('span', 'he-modo', r.modo),
                el('span', 'he-meta', [preguntas].concat(extras(r)).join(' · ')));
-    const der = el('span', 'he-der');
-    der.appendChild(marcador(r));
-    const pts = el('span', 'he-pts');
-    if (r.detalle) {
-      const b2 = el('b', null, ctx.A.num(r.puntos));
-      b2.dataset.sign = ctx.A.sign(r.puntos);
-      pts.append(b2, ` / ${r.preguntas} · ${ctx.A.num(r.nota10)}/10`);
-      pts.title = 'Puntos netos sobre el total de preguntas · nota sobre 10';
-    } else {
-      pts.textContent = 'sin detalle';
-      pts.classList.add('is-old');
-      pts.title = 'Anterior al historial detallado de preguntas';
-    }
-    der.appendChild(pts);
-    b.append(izq, der, el('span', 'hist-go', '›'));
+    b.append(izq, marcador(r), nota(r, 'he'), el('span', 'hist-go', '›'));
     b.addEventListener('click', () => abre(clave(s)));
     return b;
+  }
+
+  /* La nota, protagonista: NOTA X,XX / 10 y debajo PUNTOS X,XX / N, las dos de
+   * academic.js. Una ronda de antes de la nota académica no tiene: se dice y
+   * no se inventa ninguna. Una provisional (r.provisional: la de un tema en
+   * una ronda incompleta) lo dice en la etiqueta, cuenta sobre cuántas
+   * preguntas va y no lleva el verde/rojo de aprobado: no es definitiva.
+   * pre = 'he' (entrada) o 'hs' (cabecera). */
+  function nota(r, pre) {
+    const box = el('span', `${pre}-grade`);
+    if (r.nota10 == null) {
+      box.classList.add('is-sin');
+      box.textContent = 'sin nota académica';
+      box.title = 'Ronda anterior a la puntuación académica: solo quedan sus datos';
+      return box;
+    }
+    const prov = !!r.provisional;
+    if (prov) box.classList.add('is-prov');
+    else box.dataset.aprobado = r.nota10 >= 5 ? 'si' : 'no';
+    const n = el('span', `${pre}-nota`);
+    n.append(el('span', `${pre}-lbl`, prov ? 'NOTA PROVISIONAL' : 'NOTA'), el('b', null, ctx.A.num(r.nota10)),
+             el('span', `${pre}-de`, '/ 10'));
+    const p = el('span', `${pre}-puntos`);
+    const pb = el('b', null, ctx.A.num(r.puntos));
+    pb.dataset.sign = ctx.A.sign(r.puntos);
+    p.append(el('span', `${pre}-lbl`, 'PUNTOS'), pb, el('span', `${pre}-de`, `/ ${r.preguntas}`));
+    box.append(n, p);
+    if (prov) box.appendChild(el('span', `${pre}-prov`, realizadas(r.preguntas)));
+    box.title = prov ? TXT_PROV
+      : 'Nota sobre 10 = puntos netos ÷ preguntas de la ronda × 10 (no el % de aciertos)';
+    return box;
   }
 
   /* El historial global, en el inicio: la vista principal de todas las
@@ -290,8 +372,26 @@
   function pintaSesion() {
     const { s, tema } = vista;
     const lista = intentos(s, { tema });
+    const r = resumen(s);
     $('hs-when').textContent = `${cuando(s.ts)}${s.musica === 'con' ? ' · con música' : ''}`;
-    $('hs-extra').textContent = extras(resumen(s)).join(' · ');
+    $('hs-extra').textContent = extras(r).join(' · ');
+    // La nota, grande, arriba a la derecha. Desde un tema, primero la de SUS
+    // preguntas (sus scoreDelta sobre cuántas son) y la de la ronda entera,
+    // debajo y discreta: la global no se mezcla con los ✓ ✗ ○ del tema.
+    const g = $('hs-grade');
+    if (tema) {
+      const t = notaDeTema(s, tema);
+      const n = nota(t || { nota10: null }, 'hs');
+      if (t && !t.provisional) {
+        n.title = `Nota de las ${t.preguntas} preguntas de «${tema}» en esta ronda: sus puntos netos ÷ ${t.preguntas} × 10`;
+      }
+      g.replaceChildren(n);
+      if (t && r.nota10 != null) {
+        g.appendChild(el('span', 'hs-grade-cap', `Ronda completa: ${ctx.A.num(r.nota10)}/10`));
+      }
+    } else {
+      g.replaceChildren(nota(r, 'hs'));
+    }
     $('hs-title').textContent = s.modo || 'Ronda';
     $('hs-tema').hidden = !tema;
     $('hs-tema').textContent = tema ? `Solo las preguntas de «${tema}»` : '';
@@ -299,14 +399,7 @@
     const sum = $('hs-sum');
     sum.innerHTML = '';
     sum.appendChild(marcador(numeros(s, tema ? lista : null)));
-    if (tieneDetalle(s) && !tema) {
-      const total = s.total || s.attempts.length;
-      const p = el('span', 'hs-nota');
-      const b = el('b', null, ctx.A.num(s.puntos));
-      b.dataset.sign = ctx.A.sign(s.puntos);
-      p.append('Puntos netos ', b, ` / ${total} · nota ${ctx.A.num(ctx.A.nota10(s.puntos, total))} / 10`);
-      sum.appendChild(p);
-    }
+    if (tema) sum.appendChild(el('span', 'hs-sec', 'de este tema'));
 
     const viejo = !tieneDetalle(s);
     $('hs-old').hidden = !viejo;
@@ -432,10 +525,56 @@
     return li;
   }
 
-  /* La explicación de una pregunta del historial: sus opciones con las letras
-   * del libro (que son las que cita la explicación original), la versión en
-   * llano y, desplegable, el texto del libro. */
+  /* HISTORIAL DE ESTA PREGUNTA: todos tus intentos con ella, no solo los de
+   * una ronda. h viene de historico(). */
+  function bloqueHistorico(h) {
+    const box = el('div', 'qhist');
+    box.appendChild(el('p', 'qhist-h', 'HISTORIAL DE ESTA PREGUNTA'));
+    const fila = el('p', 'qhist-n');
+    const dato = (ico, n, uno, varios, cls) => {
+      const c = el('span', 'qhist-c ' + cls);
+      c.append(el('span', 'qhist-ico', ico), el('b', null, String(n)), ` ${n === 1 ? uno : varios}`);
+      return c;
+    };
+    fila.append(el('b', 'qhist-tot', `${h.intentos} intento${h.intentos === 1 ? '' : 's'}`),
+                dato('✓', h.aciertos, 'acierto', 'aciertos', 'is-ok'),
+                dato('✗', h.fallos, 'fallo', 'fallos', 'is-bad'),
+                dato('○', h.blancos, 'en blanco', 'en blanco', 'is-blank'));
+    if (h.parciales) fila.appendChild(dato('◐', h.parciales, 'a medias', 'a medias', 'is-mid'));
+    box.appendChild(fila);
+    const pct = el('p', 'qhist-pct');
+    if (h.acierto == null) {
+      pct.textContent = h.intentos ? 'sin acierto histórico: solo la has dejado en blanco' : 'aún sin intentos';
+    } else {
+      pct.append(el('b', null, `${Math.round(h.acierto * 100)}%`), ' acierto histórico');
+      pct.title = 'aciertos ÷ (aciertos + fallos + a medias): los blancos no cuentan';
+    }
+    box.appendChild(pct);
+    return box;
+  }
+
+  /* EN ESTA RONDA frente a HISTORIAL DE ESTA PREGUNTA: lo de esa sesión y lo
+   * de siempre, cada uno en su caja. */
+  function estadisticas(q, a) {
+    const box = el('div', 'hq-stats');
+    const ronda = el('div', 'hq-ronda');
+    ronda.dataset.r = a.result;
+    ronda.appendChild(el('p', 'qhist-h', 'EN ESTA RONDA'));
+    const lin = el('p', 'hq-ronda-n');
+    const [ico, txt] = RES[a.result] || ['·', String(a.result || '')];
+    const d = el('b', 'hq-ronda-d', ctx.A.signed(a.scoreDelta));
+    d.dataset.sign = ctx.A.sign(a.scoreDelta);
+    lin.append(el('span', 'hq-ronda-r', `${ico} ${txt.charAt(0).toUpperCase()}${txt.slice(1)}`), ' · ', d);
+    ronda.appendChild(lin);
+    box.append(ronda, bloqueHistorico(historico(ctx.store.prog(q.id), null)));
+    return box;
+  }
+
+  /* La explicación de una pregunta del historial: primero lo de esa ronda y tu
+   * historial con ella; luego sus opciones con las letras del libro (las que
+   * cita la explicación original), la versión en llano y el texto del libro. */
   function explicacion(box, q, a, asorc) {
+    box.appendChild(estadisticas(q, a));
     if (q.type !== 'open') {
       const correctas = correctasDe(q, asorc);
       const mias = String(a.answer || '').split(',').filter(Boolean);
@@ -530,9 +669,9 @@
   const API = {
     // puro
     clave, tieneDetalle, detalle, ordenadas, global, resumen, INICIALES, deTema, intentos, filtra,
-    cuenta, paraRepasar, paraRepetir, FILTROS: Object.keys(FILTROS),
+    cuenta, paraRepasar, paraRepetir, incompleta, notaDeTema, historico, FILTROS: Object.keys(FILTROS),
     // pantalla
-    init, pintaInicio, pintaTema, abre, tecla,
+    init, pintaInicio, pintaTema, abre, tecla, bloqueHistorico,
   };
   root.Historial = API;
   if (typeof module !== 'undefined' && module.exports) module.exports = API;

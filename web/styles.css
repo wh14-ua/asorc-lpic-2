@@ -1223,8 +1223,8 @@ code.hl-code {
 .hist-home-sum { margin: 0; font-size: 15px; color: var(--dim); }
 .hist-home .hist-rows { gap: 0; }
 .hist-entry {
-  width: 100%; display: grid; grid-template-columns: minmax(0, 1fr) auto 1em;
-  align-items: center; gap: 4px 20px; padding: 12px 8px;
+  width: 100%; display: grid; grid-template-columns: minmax(0, 1fr) auto auto 1em;
+  align-items: center; gap: 4px 22px; padding: 12px 8px;
   background: transparent; border: 0; border-top: 1px solid var(--line-soft); border-radius: 8px;
   font: inherit; color: var(--ink); text-align: left; cursor: pointer;
 }
@@ -1234,16 +1234,46 @@ code.hl-code {
 .he-when { font-family: var(--mono); font-size: 12.5px; font-weight: 700; letter-spacing: .04em; color: var(--dim); }
 .he-modo { font-family: var(--display); font-size: 18px; font-weight: 700; line-height: 1.2; overflow-wrap: anywhere; }
 .he-meta { font-size: 13.5px; color: var(--dim); }
-.he-der { display: grid; justify-items: end; gap: 4px; }
-.he-der .hs-m b { font-size: 18px; }
-.he-pts { font-family: var(--mono); font-size: 14px; color: var(--dim); white-space: nowrap; }
-.he-pts b { font-size: 17px; font-weight: 800; color: var(--ink); }
-.he-pts b[data-sign="neg"] { color: var(--bad); }
-.he-pts.is-old {
-  font-family: var(--ui); font-size: 12px; font-weight: 600;
-  border: 1px dashed var(--line); border-radius: 999px; padding: 2px 9px;
+.hist-entry .hs-m b { font-size: 17px; }
+
+/* La nota, protagonista: NOTA x / 10 grande y PUNTOS x / N debajo. El color
+   dice aprobado o no, pero el número va siempre escrito. */
+.he-grade { display: grid; justify-items: end; gap: 3px; min-width: 9.5em; }
+.he-nota, .he-puntos, .hs-nota, .hs-puntos { display: inline-flex; align-items: baseline; gap: 6px; white-space: nowrap; }
+.he-lbl, .hs-lbl { font-size: 11px; font-weight: 800; letter-spacing: .12em; color: var(--dim); }
+.he-nota b { font-family: var(--mono); font-size: 27px; font-weight: 800; line-height: 1; letter-spacing: -0.02em; }
+.he-de, .hs-de { font-family: var(--mono); font-size: 13px; color: var(--dim); }
+.he-puntos b { font-family: var(--mono); font-size: 15px; font-weight: 800; color: var(--ink); }
+.he-grade[data-aprobado="si"] .he-nota b, .hs-grade[data-aprobado="si"] .hs-nota b { color: var(--ok); }
+.he-grade[data-aprobado="no"] .he-nota b, .hs-grade[data-aprobado="no"] .hs-nota b { color: var(--bad); }
+.he-puntos b[data-sign="neg"], .hs-puntos b[data-sign="neg"] { color: var(--bad); }
+.he-grade.is-sin, .hs-grade.is-sin {
+  justify-self: end; min-width: 0; font-size: 12px; font-weight: 600; color: var(--dim);
+  border: 1px dashed var(--line); border-radius: 999px; padding: 3px 10px;
 }
 .hs-extra { margin: 6px 0 0; font-size: 14.5px; color: var(--dim); }
+
+.hs-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px 28px; flex-wrap: wrap; }
+.hs-head-txt { flex: 1 1 320px; min-width: 0; }
+.hs-grade-box { flex: none; display: grid; justify-items: end; }
+.hs-grade {
+  display: grid; justify-items: end; gap: 8px; padding: 14px 20px;
+  background: var(--surf); border: 1px solid var(--line); border-radius: var(--r-md); box-shadow: var(--shadow);
+}
+.hs-lbl { font-size: 12.5px; }
+.hs-nota b { font-family: var(--mono); font-size: clamp(40px, 6vw, 56px); font-weight: 800; line-height: 1; letter-spacing: -0.03em; }
+.hs-nota .hs-de { font-size: 18px; }
+.hs-puntos b { font-family: var(--mono); font-size: 22px; font-weight: 800; color: var(--ink); }
+.hs-puntos .hs-de { font-size: 16px; }
+.hs-grade.is-sin { font-size: 14px; padding: 8px 14px; box-shadow: none; background: transparent; }
+.hs-grade-cap { margin-top: 6px; font-size: 12.5px; color: var(--dim); }
+/* Provisional: la de un tema en una ronda incompleta. Lo dice la etiqueta, no
+   lleva el verde/rojo de aprobado y el borde es discontinuo: no es definitiva. */
+.hs-grade.is-prov { border: 1px dashed var(--warn); box-shadow: none; }
+.is-prov .hs-nota .hs-lbl, .is-prov .he-nota .he-lbl { color: var(--warn); }
+.hs-prov, .he-prov { font-size: 13px; font-weight: 700; color: var(--warn); }
+.hist-pts.is-prov { color: var(--warn); }
+.hist-pts > span { white-space: nowrap; }
 
 /* En el panel de un tema, más apretado: dos líneas por ronda. */
 .tpanel-hist { margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--line); }
@@ -1274,9 +1304,7 @@ code.hl-code {
 }
 .hs-sum { margin: 14px 0 0; display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px 24px; color: var(--dim); }
 .hs-sum .hs-m b { font-size: 22px; }
-.hs-nota, .hs-sec { font-size: 15px; }
-.hs-nota b { font-family: var(--mono); font-size: 20px; font-weight: 800; color: var(--ink); }
-.hs-nota b[data-sign="neg"] { color: var(--bad); }
+.hs-sec { font-size: 15px; }
 .hs-old, .hs-empty {
   margin: 24px 0 0; padding: 16px 18px; border-radius: var(--r-md);
   background: var(--surf); border: 1px dashed var(--line); color: var(--dim); font-size: 16px;
@@ -1326,6 +1354,51 @@ code.hl-code {
 .hq-opt[data-k="bad"] .hq-opt-m { color: var(--bad); }
 .hq-opt-t { overflow-wrap: anywhere; }
 .hq-opt-tuya { margin-left: auto; flex: none; font-size: 12px; font-weight: 700; color: var(--dim); }
+
+/* HISTORIAL DE ESTA PREGUNTA: todos tus intentos con ella (los contadores de
+   siempre), no los de una ronda. En el test sale tras la explicación, ya con
+   la respuesta recién dada; en el historial, al lado de EN ESTA RONDA, cada
+   uno en su caja para que no se confundan. */
+.qhist {
+  display: grid; gap: 4px; padding: 10px 14px; border-radius: var(--r-sm);
+  background: var(--surf); border: 1px dashed var(--teal);
+}
+.qhist-h { margin: 0; font-size: 11.5px; font-weight: 800; letter-spacing: .12em; color: var(--teal); }
+.qhist-n {
+  margin: 0; display: flex; align-items: baseline; flex-wrap: wrap; gap: 2px 16px;
+  font-size: 14.5px; color: var(--dim);
+}
+.qhist-tot { color: var(--ink); font-weight: 800; }
+.qhist-c { display: inline-flex; align-items: baseline; gap: 4px; white-space: nowrap; }
+.qhist-c b { font-family: var(--mono); font-weight: 800; color: var(--ink); }
+.qhist-ico { font-weight: 800; }
+.qhist-c.is-ok .qhist-ico { color: var(--ok); }
+.qhist-c.is-bad .qhist-ico, .qhist-c.is-mid .qhist-ico { color: var(--bad); }
+.qhist-c.is-blank .qhist-ico { color: var(--warn); }
+.qhist-pct { margin: 0; font-size: 14px; color: var(--dim); }
+.qhist-pct b { font-family: var(--mono); font-size: 17px; font-weight: 800; color: var(--ink); }
+
+.hq-stats {
+  display: grid; grid-template-columns: minmax(0, auto) minmax(0, 1fr);
+  align-items: stretch; gap: 10px; margin: 0 0 14px;
+}
+.hq-ronda {
+  display: grid; gap: 4px; align-content: start; padding: 10px 16px 10px 14px;
+  border-radius: var(--r-sm); background: var(--surf);
+  border: 1px solid var(--line); border-left: 4px solid var(--line);
+}
+.hq-ronda[data-r="correct"] { border-left-color: var(--ok); }
+.hq-ronda[data-r="wrong"], .hq-ronda[data-r="partial"] { border-left-color: var(--bad); }
+.hq-ronda[data-r="blank"] { border-left-color: var(--warn); }
+.hq-ronda .qhist-h { color: var(--v-text); }
+.hq-ronda-n {
+  margin: 0; display: flex; align-items: baseline; gap: 4px 8px; flex-wrap: wrap;
+  font-size: 15.5px; font-weight: 700; white-space: nowrap;
+}
+.hq-ronda-d { font-family: var(--mono); font-size: 19px; font-weight: 800; }
+.hq-ronda-d[data-sign="pos"] { color: var(--ok); }
+.hq-ronda-d[data-sign="neg"] { color: var(--bad); }
+.hq-ronda-d[data-sign="zero"] { color: var(--dim); }
 
 /* =========================== RESULTADO =========================== */
 #done {
@@ -1523,13 +1596,18 @@ code.hl-code {
   .rq-acts .cta { width: 100%; justify-content: center; }
   .hist-home { padding: 14px 14px 12px; }
   .hist-entry { grid-template-columns: minmax(0, 1fr); gap: 6px; padding: 12px 4px; }
-  .he-der { justify-items: start; grid-auto-flow: column; justify-content: space-between; align-items: baseline; }
+  .he-grade { justify-items: start; min-width: 0; }
+  .he-grade.is-sin { justify-self: start; }
+  .hs-grade-box { justify-items: start; }
+  .hs-grade { justify-items: start; }
   .hist-entry .hist-go { display: none; }
   .hist-row { display: flex; flex-wrap: wrap; gap: 4px 12px; }
   .hist-modo { flex: 1 1 100%; order: -1; }
   .hist-pts { margin-left: auto; }
   .hist-go { display: none; }
   .hs-tools { align-items: stretch; }
+  .hq-stats { grid-template-columns: minmax(0, 1fr); }
+  .qhist-n { gap: 2px 12px; }
   .hs-acts .cta, .hs-acts .ghost { flex: 1; justify-content: center; }
   .opt { min-height: 66px; gap: 14px; padding: 15px 16px; }
   .opt-k { width: 38px; height: 38px; font-size: 18px; }

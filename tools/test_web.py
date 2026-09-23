@@ -1761,6 +1761,21 @@ eq(b1.store.stats.sesiones[0].attempts, d.attempts, 'con el mismo detalle, pregu
   eq([r.modo, r.preguntas, r.ok, r.bad, r.blank, r.puntos], ['Compartición de archivos', 15, 10, 5, 0, 8.75],
      'modo, preguntas, ✓ ✗ ○ y puntos');
   eq(A.num(r.nota10), '5,83', 'nota sobre 10: 8,75 / 15 → 5,83');
+  // La nota es la puntuación académica, no el porcentaje de aciertos.
+  eq(r.nota10, A.nota10(8.75, 15), 'la nota es la de academic.js, la misma del resultado final');
+  ok(Math.abs(r.nota10 - (10 / 15) * 10) > 0.5, 'y no el porcentaje de aciertos (10 de 15 serían 6,67)');
+  const original = A.nota10;
+  let llamadas = 0;
+  A.nota10 = (p, t) => { llamadas++; return original(p, t); };
+  H.resumen({ ts: 1, modo: 'X', total: 15, puntos: 8.75, attempts: [at('Q1', 'correct', 'DNS')] });
+  A.nota10 = original;
+  eq(llamadas, 1, 'la calcula Academic.nota10, no una copia de la fórmula');
+  const sinPuntos = H.resumen({ ts: 1, modo: 'X', respondidas: 2, correctas: 1, falladas: 1, blancos: 0,
+    total: 2, attempts: [at('Q1', 'correct', 'DNS', { scoreAfter: 1 }), at('Q2', 'wrong', 'DNS', { scoreAfter: 0.5 })] });
+  eq([sinPuntos.puntos, A.num(sinPuntos.nota10)], [0.5, '2,50'],
+     'sin «puntos» guardados, el acumulado tras la última pregunta');
+  eq(H.resumen({ ts: 1, modo: 'X', total: 10, puntos: -3, attempts: [at('Q1', 'wrong', 'DNS')] }).nota10, 0,
+     'con puntos negativos la nota es 0, no negativa');
   eq([r.duracionMs, Math.round(r.segPregunta * 10) / 10, r.xp, r.mejorRacha], [312000, 16.8, 100, 4],
      'duración, s/pregunta, XP y mejor racha');
   const v = H.resumen({ ts: 1789999000, modo: 'Sprint de 50', respondidas: 50, correctas: 30, falladas: 15,
@@ -1768,6 +1783,109 @@ eq(b1.store.stats.sesiones[0].attempts, d.attempts, 'con el mismo detalle, pregu
   eq([v.detalle, v.preguntas, v.puntos, v.nota10, v.xp, v.mejorRacha], [false, 50, null, null, null, null],
      'una vieja no recibe puntos ni XP inventados');
   eq(v.duracionMs, 800000, 'pero sí enseña lo que guardaba');
+}
+
+// --- 11 · desde un tema, la nota es la de SUS preguntas -------------------
+{
+  const tercio = A.delta('wrong', 'single', 4);            // −1/3, tal cual lo guarda academic.js
+  const cuarto = A.delta('wrong', 'single', 5);            // −1/4
+  const mixta = { uid: 'mx', ts: 1790002000, modo: 'DNS + Correo electrónico', respondidas: 8,
+    correctas: 3, falladas: 4, blancos: 1, total: 8, attempts: [
+      at('Q1', 'correct', 'DNS', { scoreDelta: 1 }),
+      at('Q2', 'wrong', 'Correo electrónico', { scoreDelta: cuarto }),
+      at('Q3', 'wrong', 'DNS', { scoreDelta: tercio }),
+      at('Q4', 'correct', 'Correo electrónico', { scoreDelta: 1 }),
+      at('Q5', 'wrong', 'DNS', { scoreDelta: tercio }),
+      at('Q6', 'blank', 'DNS', { scoreDelta: 0 }),
+      at('Q7', 'wrong', 'DNS', { scoreDelta: tercio }),
+      at('Q8', 'correct', 'DNS', { scoreDelta: 1 }) ] };
+  mixta.puntos = mixta.attempts.reduce((p, a) => A.snap(p + a.scoreDelta), 0);
+  const dns = H.notaDeTema(mixta, 'DNS');
+  eq([dns.preguntas, dns.puntos], [6, 1],
+     'DNS: sus 6 preguntas y la suma de sus scoreDelta (1 − ⅓ − ⅓ + 0 − ⅓ + 1 = 1)');
+  eq(A.num(dns.nota10), '1,67', 'nota del tema: 1 / 6 → 1,67');
+  const correo = H.notaDeTema(mixta, 'Correo electrónico');
+  eq([correo.preguntas, correo.puntos, A.num(correo.nota10)], [2, 0.75, '3,75'],
+     'Correo: −¼ + 1 = 0,75 sobre 2 → 3,75');
+  const ronda = H.resumen(mixta);
+  eq([ronda.puntos, ronda.preguntas, A.num(ronda.nota10)], [1.75, 8, '2,19'],
+     'y la ronda completa, la suya: 1,75 / 8 → 2,19');
+  ok(dns.nota10 !== ronda.nota10 && correo.nota10 !== ronda.nota10, 'la nota del tema no es la global');
+  eq(A.snap(dns.puntos + correo.puntos), mixta.puntos, 'los puntos de los temas suman los de la ronda');
+  eq(H.cuenta(H.intentos(mixta, { tema: 'DNS' })), { todas: 6, falladas: 3, acertadas: 2, blanco: 1 },
+     'y su ✓ ✗ ○ es también solo el del tema');
+  const original = A.nota10;
+  let llamadas = 0;
+  A.nota10 = (p, t) => { llamadas++; return original(p, t); };
+  H.notaDeTema(mixta, 'DNS');
+  A.nota10 = original;
+  eq(llamadas, 1, 'la calcula Academic.nota10, igual que la global');
+  const exacta = { uid: 'ex', ts: 1, attempts: [at('Q1', 'correct', 'X', { scoreDelta: 1 }),
+    at('Q2', 'wrong', 'X', { scoreDelta: tercio }), at('Q3', 'wrong', 'X', { scoreDelta: tercio }),
+    at('Q4', 'wrong', 'X', { scoreDelta: tercio })] };
+  eq(H.notaDeTema(exacta, 'X').puntos, 0, 'sobre la rejilla de academic.js: 1 − ⅓ − ⅓ − ⅓ = 0 exacto');
+  eq(H.notaDeTema({ uid: 'n', ts: 1, attempts: [at('Q1', 'wrong', 'X', { scoreDelta: -0.5 })] }, 'X').nota10, 0,
+     'negativa, 0 como la global');
+  eq(H.notaDeTema(mixta, 'Servidor web'), null, 'un tema sin preguntas en la ronda no tiene nota');
+  eq(H.notaDeTema(vieja, 'DNS'), null, 'ni una ronda vieja: no se inventa');
+  eq([dns.provisional, correo.provisional], [false, false], 'ronda completa: la nota del tema es definitiva');
+
+  // Ronda incompleta (Esc en la 3 de 8): PROVISIONAL, solo sobre las realizadas.
+  const incompleta = { uid: 'inc', ts: 1790003000, modo: 'DNS', respondidas: 3, correctas: 1, falladas: 2,
+    blancos: 0, total: 8, puntos: 0.5, attempts: [
+      at('Q1', 'wrong', 'DNS', { scoreDelta: -0.25 }), at('Q2', 'wrong', 'DNS', { scoreDelta: -0.25 }),
+      at('Q3', 'correct', 'DNS', { scoreDelta: 1 })] };
+  const prov = H.notaDeTema(incompleta, 'DNS');
+  eq([prov.provisional, prov.preguntas, prov.puntos, A.num(prov.nota10)], [true, 3, 0.5, '1,67'],
+     'incompleta: NOTA PROVISIONAL 1,67 sobre las 3 preguntas realizadas');
+  ok(prov.provisional, 'aunque sea de un solo tema: por la etiqueta no se reconstruyen las que faltaban');
+  eq(A.num(H.resumen(incompleta).nota10), '0,63', 'la de la ronda completa sigue sobre las 8 planificadas');
+  const mezclaInc = { uid: 'mi', ts: 1790004000, modo: 'DNS + Correo electrónico', total: 10, puntos: 1.5,
+    attempts: [at('Q1', 'correct', 'DNS', { scoreDelta: 1 }), at('Q2', 'wrong', 'Correo electrónico', { scoreDelta: -0.25 }),
+      at('Q3', 'wrong', 'DNS', { scoreDelta: -0.25 }), at('Q4', 'correct', 'Correo electrónico', { scoreDelta: 1 }),
+      at('Q5', 'blank', 'DNS', { scoreDelta: 0 })] };
+  const pd = H.notaDeTema(mezclaInc, 'DNS'), pc = H.notaDeTema(mezclaInc, 'Correo electrónico');
+  eq([pd.provisional, pd.preguntas, pd.puntos, pc.provisional, pc.preguntas, pc.puntos],
+     [true, 3, 0.75, true, 2, 0.75], 'mezcla incompleta: cada tema, provisional y sobre lo suyo realizado');
+  eq([H.incompleta(mixta), H.incompleta(incompleta), H.incompleta(vieja),
+      H.incompleta({ uid: 'x', ts: 1, attempts: [at('Q1', 'correct', 'DNS')] })], [false, true, false, false],
+     'incompleta: solo si tenía más preguntas de las contestadas');
+}
+
+// --- 12 · HISTORIAL DE ESTA PREGUNTA: los contadores de siempre -----------
+{
+  const p = { veces_vista: 8, aciertos: 3, fallos: 4, blancos: 1, parciales: 0 };
+  const h = H.historico(p, null);
+  eq([h.intentos, h.aciertos, h.fallos, h.blancos, h.parciales, h.respondidas], [8, 3, 4, 1, 0, 7],
+     'intentos = aciertos + fallos + blancos + parciales; respondidas, sin los blancos');
+  eq(Math.round(h.acierto * 100), 43, 'acierto histórico = aciertos ÷ respondidas: 3/7 → 43%, el blanco no cuenta');
+  const tras = H.historico(p, 'wrong');
+  eq([tras.intentos, tras.fallos, tras.respondidas], [9, 5, 8], 'justo tras responder ya cuenta el intento actual');
+  eq([H.historico(p, 'blank').intentos, H.historico(p, 'blank').respondidas], [9, 7],
+     'un blanco suma intento, no respondida');
+  eq(H.historico(p, 'correct').aciertos, 4, 'un acierto, a los aciertos');
+  const medias = H.historico({ aciertos: 1, fallos: 0, blancos: 0, parciales: 2 }, null);
+  eq([medias.parciales, medias.intentos, medias.respondidas, Math.round(medias.acierto * 100)], [2, 3, 3, 33],
+     'a medias: intento y respondida, pero no acierto');
+  eq(H.historico(null, null), { aciertos: 0, fallos: 0, blancos: 0, parciales: 0, intentos: 0, respondidas: 0,
+     acierto: null }, 'sin intentos, sin porcentaje');
+  eq(H.historico(null, 'correct').acierto, 1, 'la primera vez, con la respuesta de ahora');
+  eq(H.historico({ blancos: 2 }, null).acierto, null, 'solo blancos: sin porcentaje, no un 0%');
+  // El mismo acierto que el panel (dash.js) para esa pregunta.
+  const D = require(path.join(web, 'dash.js'));
+  D.configurar({ store: { prog: () => p, marcada: () => false } });
+  eq(D.resumen([{ id: 'Q' }]).acierto, h.acierto, 'el mismo porcentaje que el panel');
+  // Contar el intento actual antes de registrarlo da lo mismo que después.
+  LS = almacen();
+  ({ store } = carga());
+  await store.init({ base: './', ns: 'asorc.v2' });
+  const id = q1.id;
+  for (const res of ['correct', 'wrong', 'blank', 'wrong', 'partial']) {
+    const antes = H.historico(store.prog(id), res);
+    store.registrar({ id, result: res, answer: '', answerMs: 1000, reviewMs: 0, marked: false });
+    eq(H.historico(store.prog(id), null), antes, `${res}: al registrarlo, los contadores quedan igual que se enseñaron`);
+  }
+  eq(H.historico(store.prog(id), null).intentos, store.prog(id).veces_vista, 'y los intentos son las veces vista');
 }
 
 console.log(JSON.stringify({ n: errs.length, errs: errs.slice(0, 10) }));
@@ -1799,6 +1917,51 @@ def test_historial():
           and "VER TODO EL HISTORIAL" in html)
     check("sin otra fuente de datos: ST.stats.sesiones",
           "global(ctx.store.stats.sesiones)" in hist)
+    # La nota, protagonista y de academic.js: NOTA x / 10 y PUNTOS x / N en la
+    # lista y en grande en la cabecera; las viejas, sin nota inventada.
+    check("la nota sale de academic.js, sin una copia de la fórmula",
+          "Academic.nota10(" in hist and not re.search(r"/\s*\w+\s*\)\s*\*\s*10\b", hist))
+    check("NOTA / 10 y PUNTOS / N en cada ronda nueva",
+          all(t in hist for t in ("'NOTA'", "'/ 10'", "'PUNTOS'")))
+    check("y en grande en la cabecera del detalle", 'id="hs-grade"' in html)
+    check("las rondas viejas, sin nota inventada", "'sin nota académica'" in hist)
+    # Desde un tema: primero la nota de SUS preguntas y, discreta, la de la
+    # ronda completa.
+    m = re.search(r"function pintaSesion\(\)\s*\{(.*?)\n  \}", hist, re.S)
+    check("desde un tema, la nota del tema primero y «Ronda completa» debajo",
+          bool(m) and "notaDeTema(s, tema)" in m.group(1) and "Ronda completa: " in m.group(1)
+          and m.group(1).index("notaDeTema(s, tema)") < m.group(1).index("Ronda completa: "))
+    # Ronda incompleta: la del tema es PROVISIONAL, dice sobre cuántas
+    # preguntas realizadas va y no lleva el color de aprobado/suspenso.
+    mn = re.search(r"function nota\(r, pre\)\s*\{(.*?)\n  \}", hist, re.S)
+    mf = re.search(r"function fila\(s, tema\)\s*\{(.*?)\n  \}", hist, re.S)
+    check("ronda incompleta: NOTA PROVISIONAL · N preguntas realizadas, sin color de aprobado",
+          bool(mn) and bool(mf) and "'NOTA PROVISIONAL'" in mn.group(1) and "realizadas(r.preguntas)" in mn.group(1)
+          and "else box.dataset.aprobado" in mn.group(1)
+          and "'NOTA PROVISIONAL'" in mf.group(1) and "realizadas(t.preguntas)" in mf.group(1))
+    # HISTORIAL DE ESTA PREGUNTA, de los contadores de siempre, en el test y
+    # en el historial, sin fuente nueva.
+    tpl = html[html.find('data-el="learn"'):html.find('data-el="nudge"')]
+    check("la tarjeta tiene su bloque de historial de la pregunta, tras la explicación",
+          'data-el="q-hist"' in tpl and tpl.find('data-el="insight-src"') < tpl.find('data-el="q-hist"')
+          < tpl.find('data-el="micro-note"'))
+    ce = re.search(r"const CARD_EL = new Set\(\[(.*?)\]\);", app, re.S)
+    check("y se busca dentro de la tarjeta activa", bool(ce) and "'q-hist'" in ce.group(1))
+    mp = re.search(r"function pintaHistorico\(\)\s*\{(.*?)\n\}", app, re.S)
+    check("en el test: ST.prog más el intento actual, que aún no está registrado",
+          bool(mp) and "Historial.historico(ST.prog(" in mp.group(1) and "S.q.done ? null : S.q.result" in mp.group(1))
+    for fn in ("renderLearn", "gradeOpen"):
+        mf = re.search(r"function " + fn + r"\([^)]*\)\s*\{(.*?)\n\}", app, re.S)
+        check(f"{fn} lo pinta", bool(mf) and "pintaHistorico()" in mf.group(1)
+              and (fn != "gradeOpen" or mf.group(1).index("pintaHistorico()") < mf.group(1).index("advance()")))
+    check("en el historial: EN ESTA RONDA frente a HISTORIAL DE ESTA PREGUNTA",
+          "'EN ESTA RONDA'" in hist and "'HISTORIAL DE ESTA PREGUNTA'" in hist
+          and "historico(ctx.store.prog(q.id), null)" in hist)
+    me = re.search(r"function explicacion\([^)]*\)\s*\{(.*?)\n  \}", hist, re.S)
+    check("y lo enseña cualquier pregunta al desplegarla",
+          bool(me) and "estadisticas(q, a)" in me.group(1))
+    check("sin fuente nueva: nada de localStorage ni tablas en historial.js",
+          "localStorage" not in hist and ".from(" not in hist)
     m = re.search(r"async function finishRun\(\)\s*\{(.*?)\n\}", app, re.S)
     check("al cerrar la ronda se guarda su detalle", bool(m) and "Historial.detalle(" in m.group(1)
           and "cerrarRonda(registro)" in m.group(1))
@@ -1825,7 +1988,8 @@ def test_historial():
             check("ejecución node", False, out.stderr.strip()[:400])
             return
         res = json.loads(out.stdout.strip().splitlines()[-1])
-        check("intentos justos, viejas sin inventar, filtros, tema, repasar/repetir y nube",
+        check("intentos justos, viejas sin inventar, filtros, tema, repasar/repetir, nube, "
+              "nota por tema e historial de cada pregunta",
               res["n"] == 0, " | ".join(res["errs"]))
     finally:
         os.unlink(script)

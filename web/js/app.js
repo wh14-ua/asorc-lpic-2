@@ -30,7 +30,7 @@ const CARD_EL = new Set([
   'insight', 'nutshell', 'burst', 'burst-now', 'burst-past', 'burst-dots',
   'burst-toggle', 'burst-prev', 'burst-next', 'burst-speed', 'insight-more',
   'analogy', 'otras', 'memo',
-  'full-expl', 'full-expl-body', 'insight-src', 'micro-note', 'selfgrade', 'learn-cta',
+  'full-expl', 'full-expl-body', 'insight-src', 'q-hist', 'micro-note', 'selfgrade', 'learn-cta',
   'btn-next', 'btn-mark', 'nudge',
 ]);
 let card = null;                    // tarjeta de la pregunta activa
@@ -951,6 +951,18 @@ function pintaSlip() {
   el.hidden = false;
 }
 
+/* HISTORIAL DE ESTA PREGUNTA, recién corregida: los contadores de siempre
+ * (ST.prog, los mismos del panel) con este intento ya dentro. Aún no está en
+ * ellos —se registra al pasar, en registraActual—, así que se suma aquí; si
+ * la tarjeta ya se registró, ya viene contado. */
+function pintaHistorico() {
+  const box = $('q-hist');
+  if (!box || !S.q || !root.Historial) return;
+  const h = root.Historial.historico(ST.prog(S.q.view.q.id), S.q.done ? null : S.q.result);
+  box.replaceChildren(root.Historial.bloqueHistorico(h));
+  box.hidden = false;
+}
+
 /* La explicación se cuenta como la contaría alguien de viva voz: la idea en
  * llano, el modelo mental si ayuda, por qué no valían las demás y la frase que
  * hay que llevarse. El texto del libro no se toca y queda entero bajo «Ver
@@ -1094,6 +1106,8 @@ function renderLearn() {
   $('insight-src').textContent =
     `${v.q.chapter} · pág. ${v.q.page} · opción ${v.correctOrig.join(', ')} en el libro`;
 
+  pintaHistorico();
+
   const mb = $('btn-mark');
   mb.classList.toggle('is-on', S.q.marked);
   mb.textContent = S.q.marked ? '★ MARCADA' : '★ REPASAR DESPUÉS';
@@ -1160,6 +1174,7 @@ function gradeOpen(grade) {
   S.q.gainedXp = scored.xp;
   anotaNota();
   alRepaso(grade);
+  pintaHistorico();          // se queda en la tarjeta, ya con esta respuesta
   if (grade === 'correct') FX.Sound.correct();
   else if (grade !== 'blank') FX.Sound.wrong();
   updateHud(scored.xp);

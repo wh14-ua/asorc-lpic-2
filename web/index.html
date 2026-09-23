@@ -215,11 +215,15 @@
   </div>
   <div class="hs-wrap">
     <header class="hs-head">
-      <p class="hs-when" id="hs-when"></p>
-      <h2 class="hs-title" id="hs-title"></h2>
-      <p class="hs-extra" id="hs-extra"></p>
-      <p class="hs-tema" id="hs-tema" hidden></p>
-      <p class="hs-sum" id="hs-sum"></p>
+      <div class="hs-head-txt">
+        <p class="hs-when" id="hs-when"></p>
+        <h2 class="hs-title" id="hs-title"></h2>
+        <p class="hs-extra" id="hs-extra"></p>
+        <p class="hs-tema" id="hs-tema" hidden></p>
+        <p class="hs-sum" id="hs-sum"></p>
+      </div>
+      <!-- La nota, grande: NOTA x / 10 y PUNTOS x / N (academic.js) -->
+      <div class="hs-grade-box" id="hs-grade"></div>
     </header>
     <p class="hs-old" id="hs-old" hidden>Esta sesión es anterior al historial detallado de preguntas.</p>
     <div class="hs-tools" id="hs-tools">
@@ -380,6 +384,9 @@
           </details>
           <p class="insight-src" data-el="insight-src"></p>
         </div>
+
+        <!-- HISTORIAL DE ESTA PREGUNTA: todos tus intentos, con este dentro -->
+        <div class="q-hist" data-el="q-hist" hidden></div>
 
         <!-- discreto: la pregunta ya está en el repaso rápido -->
         <p class="micro-note" data-el="micro-note" hidden></p>
