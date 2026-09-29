@@ -703,6 +703,28 @@
   const fillOf = (q, lang) =>
     lang === 'en' ? q.correct_answer : (q.correct_answer_es || q.correct_answer);
 
+  /* --------------------------------------------------------- elegibilidad
+   * Qué preguntas pueden entrar en una ronda: la ÚNICA regla, la usen las
+   * rondas rápidas, los temas o los tests de recuperación.
+   *   spec = { topics: [...], asorc: bool, filter: 'unseen' | 'failed' | 'marked' | null }
+   *   o    = { includeOpen, prog(id), marcada(id) }
+   * Las abiertas quedan fuera salvo que se pidan (se autocalifican y rompen el
+   * ritmo); el formato ASORC deja solo las que admiten 3 opciones con una
+   * correcta, así que fuera las de varias respuestas y las abiertas. */
+  function pool(bank, spec, o) {
+    const s = spec || {}, opt = o || {};
+    const prog = (id) => (opt.prog ? opt.prog(id) : null);
+    return (bank || []).filter((q) => {
+      if (q.type === 'open' && !opt.includeOpen) return false;
+      if (s.topics && s.topics.length && !s.topics.includes(q.topic)) return false;
+      if (s.asorc && !(q.asorc && q.asorc.eligible)) return false;
+      if (s.filter === 'unseen') { const p = prog(q.id); return !p || (p.veces_vista | 0) === 0; }
+      if (s.filter === 'failed') { const p = prog(q.id); return !!p && ((p.fallos | 0) + (p.parciales | 0)) > 0; }
+      if (s.filter === 'marked') return !!(opt.marcada && opt.marcada(q.id));
+      return true;
+    });
+  }
+
   /* --------------------------------------------------------- corrección */
   // Compara el conjunto marcado con el correcto (misma regla que la terminal).
   function grade(pickedLetters, correctLetters) {
@@ -717,7 +739,7 @@
     LETTERS, esc, codify, isTechnical, shuffled,
     highlightTechnicalText, buildVocab,
     remapExplanation, keySentence, splitExplanation, sentences,
-    buildView, stemOf, explOf, modelOf, fillOf, grade,
+    buildView, stemOf, explOf, modelOf, fillOf, grade, pool,
     nutshell, chunks, chunkDuration, needsBurst, stripVerdict, trimDangling,
     capClause, isTerm, stripInlineRefs, isVerdictish, withoutSentence, conceptText,
   };

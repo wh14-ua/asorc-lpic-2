@@ -94,6 +94,35 @@
     <button type="button" id="mix-clear" class="ghost ghost-sm">QUITAR</button>
   </div>
 
+  <!-- Tests de recuperación: X preguntas elegidas por tu historial real de
+       respuestas (riesgo.js decide cuáles y por qué; recupera.js pinta esto). -->
+  <section class="rec-home" id="rec-home" aria-labelledby="rec-home-h">
+    <div class="rec-head">
+      <h2 class="rec-h" id="rec-home-h">TESTS DE RECUPERACIÓN</h2>
+      <p class="rec-sum" id="rec-sum"></p>
+    </div>
+    <div class="rec-body">
+      <div class="rec-row">
+        <div class="rec-sizes" id="rec-sizes" role="group" aria-label="Número de preguntas"></div>
+        <label class="rec-otro" id="rec-otro-box" hidden>
+          <span class="vh">Número de preguntas</span>
+          <input type="number" id="rec-otro" min="1" max="380" step="1" inputmode="numeric">
+        </label>
+      </div>
+      <div class="rec-row">
+        <label class="rec-lbl" for="rec-modo">Criterio</label>
+        <select id="rec-modo" class="rec-select"></select>
+        <div class="seg rec-fmt" id="rec-fmt" role="group" aria-label="Formato del test">
+          <button type="button" class="seg-btn is-on" data-fmt="normal">Normal</button>
+          <button type="button" class="seg-btn" data-fmt="asorc">ASORC</button>
+        </div>
+      </div>
+      <p class="rec-desc" id="rec-desc"></p>
+      <p class="rec-avail" id="rec-avail" aria-live="polite"></p>
+      <button type="button" id="rec-go" class="cta cta-sm">EMPEZAR TEST</button>
+    </div>
+  </section>
+
   <section class="home-block">
     <h2>Rondas rápidas</h2>
     <p class="home-sub" id="home-sub">Cargando…</p>
@@ -220,6 +249,7 @@
         <h2 class="hs-title" id="hs-title"></h2>
         <p class="hs-extra" id="hs-extra"></p>
         <p class="hs-tema" id="hs-tema" hidden></p>
+        <p class="hs-crit" id="hs-crit" hidden></p>
         <p class="hs-sum" id="hs-sum"></p>
       </div>
       <!-- La nota, grande: NOTA x / 10 y PUNTOS x / N (academic.js) -->
@@ -428,6 +458,13 @@
     <p class="nt-why" id="dn-why"></p>
   </section>
 
+  <!-- Solo en los tests de recuperación: qué riesgo atacaba y cómo ha ido. -->
+  <section class="done-risk" id="done-risk" aria-labelledby="done-risk-h" hidden>
+    <h2 class="done-risk-h" id="done-risk-h">RIESGO ATACADO</h2>
+    <p class="done-risk-sum" id="done-risk-sum"></p>
+    <p class="done-risk-tags" id="done-risk-tags"></p>
+  </section>
+
   <div class="done-chips">
     <span class="dchip"><span class="dchip-ico">⚡</span><b id="done-xp">0</b> XP</span>
     <span class="dchip"><span class="dchip-ico">🔥</span>mejor combo <b id="done-combo">0</b></span>
@@ -475,6 +512,8 @@
 <script src="./js/burst.js"></script>
 <script src="./js/repaso.js"></script>
 <script src="./js/historial.js"></script>
+<script src="./js/riesgo.js"></script>
+<script src="./js/recupera.js"></script>
 <script src="./js/app.js"></script>
 </body>
 </html>

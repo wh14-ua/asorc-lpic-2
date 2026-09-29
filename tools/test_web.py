@@ -1090,6 +1090,11 @@ ok(1 - 1 / 3 - 1 / 3 - 1 / 3 !== 0, 'la aritmética de coma flotante sola no bas
 // --- 4 · sobre el banco real: k sale de las opciones mostradas ------------
 {
   const r = rng(7);
+  // buildView baraja con Math.random: con semilla, la prueba es reproducible.
+  // Sin ella, dónde cae la correcta cambiaba en cada ejecución y la media se
+  // salía de ±0,01 por puro azar en torno a 1 de cada 100 veces.
+  const azar = Math.random;
+  Math.random = rng(11);
   const st = A.newState();
   let n = 0, malK = 0;
   for (const q of bank) {
@@ -1108,6 +1113,7 @@ ok(1 - 1 / 3 - 1 / 3 - 1 / 3 !== 0, 'la aritmética de coma flotante sola no bas
       }
     }
   }
+  Math.random = azar;
   eq(malK, 0, 'la k de cada pregunta es la de las opciones que se ven (3 en ASORC)');
   ok(Math.abs(st.points / n) < 0.01, `banco real al azar: media ${(st.points / n).toFixed(4)}`);
   const asorcV = L.buildView(bank.find((q) => q.asorc && q.asorc.eligible && q.original_options.length === 5), true);
@@ -1995,6 +2001,497 @@ def test_historial():
         os.unlink(script)
 
 
+RECUPERA_TEST = r"""
+const fs = require('fs');
+const path = require('path');
+const web = process.argv[2];
+const bank = JSON.parse(fs.readFileSync(process.argv[3], 'utf8')).questions;
+const errs = [];
+const eq = (a, b, m) => { if (JSON.stringify(a) !== JSON.stringify(b)) errs.push(`${m}: ${JSON.stringify(a)} != ${JSON.stringify(b)}`); };
+const ok = (c, m) => { if (!c) errs.push(m); };
+
+const almacen = () => { const m = new Map(); return {
+  getItem: (k) => (m.has(k) ? m.get(k) : null), setItem: (k, v) => m.set(k, String(v)),
+  removeItem: (k) => m.delete(k) }; };
+let LS = almacen();
+Object.defineProperty(global, 'localStorage', { configurable: true, get() { return LS; } });
+global.window = global;
+const carga = () => {
+  for (const f of ['micro.js', 'store.js', 'cloud.js']) delete require.cache[require.resolve(path.join(web, f))];
+  require(path.join(web, 'micro.js'));
+  const S = require(path.join(web, 'store.js'));
+  return { store: S.Store, S, cloud: require(path.join(web, 'cloud.js')) };
+};
+const L = require(path.join(web, 'logic.js'));
+const R = require(path.join(web, 'riesgo.js'));
+const A = require(path.join(web, 'academic.js'));
+const G = require(path.join(web, 'game.js'));
+const H = require(path.join(web, 'historial.js'));
+const Rec = require(path.join(web, 'recupera.js'));
+
+const DIA = R.DIA, HORA = DIA / 24;
+const NOW = new Date(2026, 8, 29, 18, 0, 0).getTime();        // 29 sep, 18:00 hora local
+const RES = { '✓': 'correct', '✗': 'wrong', '○': 'blank', '◐': 'partial' };
+const Q = (id, topic, type) => ({ id, topic: topic || 'T', type: type || 'multiple_choice',
+  asorc: { eligible: (type || 'multiple_choice') === 'multiple_choice' } });
+// El historial de una pregunta: «✓✓✗» que acaba hace finHace días, un intento cada pasoH horas.
+function hist(id, marcas, finHace, pasoH) {
+  const rs = [...marcas].map((m) => RES[m]);
+  const paso = (pasoH == null ? 12 : pasoH) * HORA;
+  return rs.map((r, i) => ({ event_id: `${id}#${i}`, question_id: id, result: r,
+    at: NOW - (finHace || 0) * DIA - (rs.length - 1 - i) * paso }));
+}
+// Los contadores de siempre, sacados de los mismos intentos.
+function contadores(intentos) {
+  const p = {};
+  intentos.forEach((e) => {
+    const f = p[e.question_id] || (p[e.question_id] = { veces_vista: 0, aciertos: 0, fallos: 0, blancos: 0, parciales: 0 });
+    f.veces_vista++;
+    f[{ correct: 'aciertos', wrong: 'fallos', blank: 'blancos', partial: 'parciales' }[e.result]]++;
+  });
+  return p;
+}
+// { id: '✓✗…' } o { id: [marcas, finHace, pasoH] }
+function escenario(banco, historias) {
+  let intentos = [];
+  Object.entries(historias).forEach(([id, h]) => {
+    const [marcas, fin, paso] = Array.isArray(h) ? h : [h, 0, 12];
+    intentos = intentos.concat(hist(id, marcas, fin, paso));
+  });
+  const est = R.estadisticas({ bank: banco, intentos, progreso: contadores(intentos), stats: {}, now: NOW });
+  return { est, intentos, candidatas: banco.map((q) => q.id) };
+}
+const sel = (e, modo, n, extra) => R.selecciona(modo, Object.assign({ est: e.est, candidatas: e.candidatas, n }, extra || {}));
+const TODOS = R.MODOS.map((m) => m.key);
+const riesgo = (e, id) => e.est.porId.get(id).riesgo;
+
+(async () => {
+// --- 0 · los criterios: los 13, el mix inteligente primero ------------------
+eq(TODOS, ['mix', 'equilibrado', 'peor', 'mas', 'reincidentes', 'recientes', 'olvidadas', 'nunca',
+  'inestables', 'temas', 'casi', 'hoy', 'ultima'], 'los trece criterios, en orden de utilidad');
+eq(Math.round(Object.values(R.PESOS).reduce((a, b) => a + b, 0) * 1000) / 1000, 1, 'los pesos del riesgo suman 1');
+ok(Object.values(R.PESOS).every((p) => p <= 0.25), 'y ninguna señal manda sola (ninguna pasa del 25 %)');
+ok(R.MODOS.every((m) => m.desc && m.como && !/\b(bayes\w*|wilson|score|prior|beta|varianza|desviaci\w+)\b/i.test(m.desc + m.como)),
+   'cada criterio se explica en llano, sin términos estadísticos');
+
+// --- 1 · más falladas: por número de fallos, sin mirar el porcentaje --------
+{
+  const banco = ['A', 'B', 'C', 'D', 'E'].map((id) => Q(id));
+  const e = escenario(banco, { A: '✗✓'.repeat(14) + '✓', B: '✗'.repeat(8), C: '✗✗✗✗✗✓', D: '✗' + '✓'.repeat(9), E: '✓✓✓' });
+  eq(sel(e, 'mas', 10).ids, ['A', 'B', 'C', 'D'], 'más falladas: 14, 8, 5 y 1 fallos, aunque A acierte más de la mitad');
+  ok(e.est.porId.get('A').acierto > e.est.porId.get('B').acierto, 'A va primera sin ser la de peor porcentaje');
+  ok(/^Más falladas: 14 fallos de 29/.test(sel(e, 'mas', 1).motivos.A.text), 'y lo explica: ' + sel(e, 'mas', 1).motivos.A.text);
+}
+
+// --- 2 · peor porcentaje: 1 fallo de 1 no es automáticamente la peor --------
+{
+  const banco = ['P1', 'P2', 'P3', 'P4'].map((id) => Q(id));
+  const e = escenario(banco, { P1: '✓' + '✗'.repeat(7), P2: '✗', P3: '✓'.repeat(5) + '✗'.repeat(15), P4: '✓✓✓' });
+  eq(sel(e, 'peor', 10).ids, ['P1', 'P3', 'P2'], 'peor porcentaje: 1 de 8 y 5 de 20 por delante de 0 de 1');
+  const tasa = (id) => e.est.porId.get(id).tasa;
+  ok(tasa('P2') < 1 && tasa('P2') < tasa('P1') && tasa('P2') < tasa('P3'),
+     `el 0 de 1 no cuenta como un 100 %: se acerca a tu media (${tasa('P2').toFixed(2)} frente a ${tasa('P1').toFixed(2)} y ${tasa('P3').toFixed(2)})`);
+  ok(!sel(e, 'peor', 10).ids.includes('P4'), 'las que nunca fallas no entran');
+  const e2 = escenario([Q('N0'), Q('N1'), Q('N2')], { N1: '✗', N2: '○○○' });
+  const x0 = e2.est.porId.get('N0'), x2 = e2.est.porId.get('N2');
+  eq([x0.intentos, x0.acierto, x0.fallos], [0, null, 0], 'sin intentos: sin acierto ni fallos');
+  ok(TODOS.every((m) => !sel(e2, m, 10).ids.includes('N0')), 'y no entra en ningún criterio');
+  eq([x2.intentos, x2.acierto, x2.blank], [3, null, 3], 'todo en blanco: 3 intentos y sin porcentaje de acierto');
+  ok(sel(e2, 'mas', 10).ids.includes('N2') && /solo en blanco/.test(sel(e2, 'peor', 10).motivos.N2.text),
+     'pero cuenta como debilidad, y se dice');
+}
+
+// --- 3 · lo reciente pesa más que lo muy antiguo ----------------------------
+{
+  const banco = ['R1', 'R2', 'R3', 'VIEJA', 'LUEGO_BIEN'].map((id) => Q(id));
+  const e = escenario(banco, { R1: ['✗', 1], R2: ['✗', 2], R3: ['✗', 10], VIEJA: ['✗', 40], LUEGO_BIEN: ['✗✓', 1] });
+  eq(sel(e, 'recientes', 10).ids, ['R1', 'R2', 'LUEGO_BIEN', 'R3'],
+     'falladas recientemente: ayer, anteayer, la que luego acertaste y la de hace 10 días');
+  ok(!sel(e, 'recientes', 10).ids.includes('VIEJA'), 'un fallo de hace 40 días no es reciente');
+  ok(riesgo(e, 'R1') > riesgo(e, 'R3') && riesgo(e, 'R3') > riesgo(e, 'VIEJA'), 'y en el mix, el peso de un fallo baja con el tiempo');
+  ok(/fallada ayer/.test(sel(e, 'recientes', 1).motivos.R1.text), 'con fecha en llano: ' + sel(e, 'recientes', 1).motivos.R1.text);
+}
+
+// --- 4 · la que empeora preocupa más que la que mejora -----------------------
+{
+  const banco = ['MEJORA', 'EMPEORA', 'M3', 'E3'].map((id) => Q(id));
+  const e = escenario(banco, { MEJORA: '✗✗✗✗✓✓✓✓✓', EMPEORA: '✓✓✓✓✗✗✗✗✗', M3: '✗✗✗✓✓✓', E3: '✓✓✓✗✗✗' });
+  ok(riesgo(e, 'EMPEORA') > riesgo(e, 'MEJORA') + 0.2,
+     `✓✓✓✓✗✗✗✗✗ (${riesgo(e, 'EMPEORA').toFixed(2)}) mucho más que ✗✗✗✗✓✓✓✓✓ (${riesgo(e, 'MEJORA').toFixed(2)})`);
+  eq([e.est.porId.get('M3').acierto, e.est.porId.get('E3').acierto], [0.5, 0.5], 'con el mismo 50 % histórico…');
+  ok(riesgo(e, 'E3') > riesgo(e, 'M3') + 0.15, `…✓✓✓✗✗✗ (${riesgo(e, 'E3').toFixed(2)}) > ✗✗✗✓✓✓ (${riesgo(e, 'M3').toFixed(2)})`);
+  eq(sel(e, 'mix', 2).ids.slice().sort(), ['E3', 'EMPEORA'], 'y el mix inteligente elige las dos que empeoran');
+}
+
+// --- 5 · olvidadas: acertada antes, fallada después ---------------------------
+{
+  const banco = ['O1', 'O2', 'O3', 'N1', 'N2', 'N3'].map((id) => Q(id));
+  const e = escenario(banco, { O1: '✓✓✓✗', O2: '✓✓✗✗', O3: '✗✓✗', N1: '✗✗✗', N2: '✓✓✓', N3: '✓✗✓' });
+  const s = sel(e, 'olvidadas', 10);
+  eq(s.ids.slice().sort(), ['O1', 'O2', 'O3'], 'olvidadas: ✓✓✓✗, ✓✓✗✗ y ✗✓✗');
+  ok(s.ids.indexOf('O1') < s.ids.indexOf('O3'), '✓✓✓✗ antes que ✗✓✗: parecía más aprendida');
+  ok(!s.ids.includes('N3') && !s.ids.includes('N1'), 'ni la que volviste a acertar (✓✗✓) ni la que nunca acertaste');
+  ok(/^Olvidada: 3 aciertos antes/.test(s.motivos.O1.text), 'y lo explica: ' + s.motivos.O1.text);
+}
+
+// --- 6 · inestables: alternan acierto y fallo ---------------------------------
+{
+  const banco = ['I1', 'I2', 'X1', 'X2', 'X3'].map((id) => Q(id));
+  const e = escenario(banco, { I1: '✓✗✓✗✓✗', I2: '✗✓✗✓', X1: '✗✗✗✓✓✓', X2: '✓✓✓✓', X3: '✗✓' });
+  eq(sel(e, 'inestables', 10).ids.slice().sort(), ['I1', 'I2'], 'inestables: ✓✗✓✗✓✗ y ✗✓✗✓; aprender de golpe (✗✗✗✓✓✓) no lo es');
+  eq(e.est.porId.get('I1').cambios, 5, 'cuenta los cambios entre acierto y fallo');
+}
+
+// --- nunca dominadas, casi dominadas, reincidentes, a medias -----------------
+{
+  const banco = ['NV1', 'NV2', 'NV3', 'NV4', 'C1', 'C2', 'C3'].map((id) => Q(id));
+  const e = escenario(banco, { NV1: '✗✗✗✗', NV2: '✗✗✓✗', NV3: '✗○✗✗', NV4: '✗✗', C1: '✓✓✗✓', C2: '✓✗✓✓', C3: '✓✓✓✗' });
+  const nunca = sel(e, 'nunca', 10).ids, casi = sel(e, 'casi', 10).ids;
+  eq(nunca.slice().sort(), ['NV1', 'NV2', 'NV3'], 'nunca dominadas: ✗✗✗✗, ✗✗✓✗ y ✗○✗✗ (con 2 intentos aún no se sabe)');
+  eq(casi.slice().sort(), ['C1', 'C2'], 'casi dominadas: ✓✓✗✓ y ✓✗✓✓ (✓✓✓✗ es olvidada)');
+  ok(nunca.every((id) => !casi.includes(id)), 'nunca y casi dominadas no se mezclan');
+  const u = escenario(['U1', 'U2', 'U3', 'U4'].map((id) => Q(id)),
+    { U1: '✗✓', U2: '✗✗✓', U3: '✗✗✗✓✓✓✓', U4: '✗✗✗✗✗✓✓✓✓✓✓✓' });
+  eq(sel(u, 'reincidentes', 10).ids, ['U4', 'U3', 'U2'], 'reincidentes: 5+, luego 3+, luego 2+; un fallo suelto no entra');
+  const m = escenario(['M1', 'B1', 'W1'].map((id) => Q(id)), { M1: '◐◐', B1: '○○', W1: '✗✗' });
+  ok(riesgo(m, 'M1') < riesgo(m, 'B1') && riesgo(m, 'B1') < riesgo(m, 'W1'),
+     `a medias (${riesgo(m, 'M1').toFixed(2)}) < en blanco (${riesgo(m, 'B1').toFixed(2)}) < fallada (${riesgo(m, 'W1').toFixed(2)})`);
+}
+
+// --- temas débiles: de los temas flojos, repartido ----------------------------
+{
+  const banco = [], hs = {};
+  const pon = (t, k, marcas) => { for (let i = 0; i < k; i++) { banco.push(Q(`${t}-${i}`, t)); hs[`${t}-${i}`] = marcas; } };
+  pon('Flojo', 10, '✗✗✓'); pon('Medio', 10, '✗✓✓'); pon('Fuerte', 10, '✓✓✓✗✓✓✓✓');
+  const e = escenario(banco, hs);
+  const s = sel(e, 'temas', 12);
+  const n = (t) => s.ids.filter((id) => id.startsWith(t + '-')).length;
+  ok(n('Fuerte') === 0, 'temas débiles: nada del tema fuerte');
+  ok(n('Flojo') >= n('Medio') && n('Medio') > 0, `más del más flojo, sin quedarse con todo: ${n('Flojo')} + ${n('Medio')}`);
+  ok(/^Tema débil: tema Flojo 33%/.test(s.motivos[s.ids[0]].text), 'y dice de qué tema: ' + s.motivos[s.ids[0]].text);
+}
+
+// --- 7 · nunca dos veces la misma pregunta en un test --------------------------
+{
+  const banco = Array.from({ length: 12 }, (_, i) => Q('D' + i, 'T' + (i % 3)));
+  const hs = {};
+  banco.forEach((q, i) => { hs[q.id] = ['✗✓✗✗✓✗'.slice(0, 2 + (i % 5)), i % 4]; });
+  const e = escenario(banco, hs);
+  const dup = R.estadisticas({ bank: banco, intentos: e.intentos.concat(e.intentos),
+    progreso: contadores(e.intentos), stats: {}, now: NOW });
+  eq([...dup.porId.values()].map((x) => x.intentos), [...e.est.porId.values()].map((x) => x.intentos),
+     'un intento repetido por la sincronización no cuenta dos veces');
+  TODOS.filter((m) => m !== 'ultima').forEach((m) => {
+    const s = R.selecciona(m, { est: dup, candidatas: e.candidatas.concat(e.candidatas), n: 50 });
+    eq(new Set(s.ids).size, s.ids.length, `${m}: ninguna pregunta dos veces en el mismo test`);
+  });
+}
+
+// --- 8 · el filtro de abiertas (y el formato ASORC) se respeta -----------------
+{
+  const abiertas = bank.filter((q) => q.type === 'open').slice(0, 8);
+  const cerradas = bank.filter((q) => q.type !== 'open').slice(0, 8);
+  let intentos = [];
+  abiertas.forEach((q) => { intentos = intentos.concat(hist(q.id, '✗✗✗✗✗', 0.5)); });   // las abiertas, las peores
+  cerradas.forEach((q) => { intentos = intentos.concat(hist(q.id, '✓✗', 1)); });
+  const prog = contadores(intentos);
+  const est = R.estadisticas({ bank, intentos, progreso: prog, stats: {}, now: NOW });
+  const opts = (inc) => ({ includeOpen: inc, prog: (id) => prog[id] || null, marcada: () => false });
+  const fuera = L.pool(bank, { topics: [], asorc: false, filter: null }, opts(false)).map((q) => q.id);
+  const dentro = L.pool(bank, { topics: [], asorc: false, filter: null }, opts(true)).map((q) => q.id);
+  const abierta = new Set(bank.filter((q) => q.type === 'open').map((q) => q.id));
+  TODOS.filter((m) => m !== 'ultima').forEach((m) => {
+    ok(R.selecciona(m, { est, candidatas: fuera, n: 50 }).ids.every((id) => !abierta.has(id)),
+       `${m}: con las abiertas fuera no sale ninguna`);
+  });
+  ok(R.selecciona('mas', { est, candidatas: dentro, n: 50 }).ids.some((id) => abierta.has(id)), 'con «Incluir», sí');
+  const asorc = L.pool(bank, { asorc: true }, opts(true));
+  ok(asorc.length > 0 && asorc.every((q) => q.asorc && q.asorc.eligible && q.type === 'multiple_choice'),
+     'formato ASORC: solo las de 3 opciones con una correcta (ni varias respuestas ni abiertas)');
+  eq(L.pool(bank, { filter: 'failed' }, opts(false)).map((q) => q.id).sort(), cerradas.map((q) => q.id).sort(),
+     'Logic.pool es la misma regla que «Solo falladas»');
+  eq(L.pool(bank, { topics: [bank[0].topic] }, opts(false)).every((q) => q.topic === bank[0].topic), true,
+     'y la de los temas');
+}
+
+// --- 9 y 10 · el número pedido, y sin relleno si no hay bastantes -------------
+{
+  const banco = Array.from({ length: 60 }, (_, i) => Q('F' + i, 'T' + (i % 6)));
+  const hs = {};
+  banco.forEach((q, i) => { hs[q.id] = ['✗'.repeat(1 + (i % 4)) + (i % 2 ? '✓' : ''), i % 5]; });
+  const e = escenario(banco, hs);
+  ['mix', 'equilibrado', 'mas', 'peor', 'recientes'].forEach((m) => [10, 20, 30, 50].forEach((n) => {
+    eq(sel(e, m, n).ids.length, n, `${m}: se piden ${n} y hay de sobra, salen ${n}`);
+  }));
+  const pocas = escenario(Array.from({ length: 50 }, (_, i) => Q('G' + i)),
+    Object.fromEntries(Array.from({ length: 50 }, (_, i) => ['G' + i, i < 3 ? '✓✓✗' : '✗✗✗'])));
+  const s = sel(pocas, 'olvidadas', 20);
+  eq([s.ids.length, s.disponibles, s.pedidas], [3, 3, 20], 'se piden 20 olvidadas y hay 3: el test tiene 3 y lo dice');
+  ok(s.ids.every((id) => pocas.est.porId.get(id).olvidada), 'sin rellenar con otras que no cumplen');
+  const banco2 = ['H1', 'H2', 'H3', 'H4'].map((id) => Q(id));
+  const hoy0030 = new Date(2026, 8, 29, 0, 30).getTime(), ayer2330 = new Date(2026, 8, 28, 23, 30).getTime();
+  const ints = [
+    { event_id: 'h1', question_id: 'H1', result: 'wrong', at: hoy0030 },
+    { event_id: 'h2', question_id: 'H2', result: 'wrong', at: ayer2330 },
+    { event_id: 'h3', question_id: 'H3', result: 'correct', at: hoy0030 },
+    { event_id: 'h4', question_id: 'H4', result: 'partial', at: NOW - HORA },
+  ];
+  const est = R.estadisticas({ bank: banco2, intentos: ints, progreso: contadores(ints), stats: {}, now: NOW });
+  const h = R.selecciona('hoy', { est, candidatas: banco2.map((q) => q.id), n: 20 });
+  eq([h.ids.slice().sort(), h.disponibles], [['H1', 'H4'], 2],
+     'errores de hoy, por el día de este reloj (00:30 de hoy sí, 23:30 de ayer no): hay 2 y el test tiene 2');
+}
+
+// --- 11 · el equilibrado no se concentra en un tema ---------------------------
+{
+  const banco = [], hs = {};
+  for (let i = 0; i < 14; i++) { banco.push(Q('DNS' + i, 'DNS')); hs['DNS' + i] = ['✗✗✗✗', 0]; }
+  for (let i = 0; i < 24; i++) { banco.push(Q('OT' + i, 'Otro' + (i % 6))); hs['OT' + i] = ['✗✗✗', 1]; }
+  const e = escenario(banco, hs);
+  const de = (ids) => ids.filter((id) => id.startsWith('DNS')).length;
+  const mix = sel(e, 'mix', 20), eqb = sel(e, 'equilibrado', 20);
+  eq(de(mix.ids), 14, 'el mix inteligente va a por las de más riesgo: las 14 de DNS');
+  eq(eqb.ids.length, 20, 'el equilibrado también tiene 20');
+  ok(de(eqb.ids) <= R.topePorTema(20), `pero como mucho ${R.topePorTema(20)} de DNS: ${de(eqb.ids)}`);
+  ok(eqb.ids.includes(mix.ids[0]), 'sin perder la de más riesgo');
+  const solo = escenario(banco.slice(0, 14), Object.fromEntries(Object.entries(hs).filter(([k]) => k.startsWith('DNS'))));
+  eq(sel(solo, 'equilibrado', 10).ids.length, 10, 'si todo es del mismo tema, el límite se relaja');
+}
+
+// --- 12 · un test inteligente, de punta a punta, y en el historial ------------
+{
+  LS = almacen();
+  let { store } = carga();
+  await store.init({ base: './', ns: 'asorc.v2' });
+  const cerradas = bank.filter((q) => q.type === 'multiple_choice').slice(0, 30);
+  const abiertas = bank.filter((q) => q.type === 'open').slice(0, 5);
+  [...cerradas, ...abiertas].forEach((q, i) => {
+    ['wrong', i % 3 ? 'correct' : 'wrong'].forEach((res) =>
+      store.registrar({ id: q.id, result: res, answer: '', answerMs: 1000, reviewMs: 0, marked: false }));
+  });
+  let lanzada = null;
+  Rec.configurar({ store, bank,
+    pool: (spec) => L.pool(bank, spec, { includeOpen: false, prog: (id) => store.prog(id), marcada: (id) => store.marcada(id) }),
+    temas: () => [], abiertas: () => false, arranca: (spec, ids) => { lanzada = { spec, ids }; } });
+  ok(Rec.empieza({ modo: 'mix', n: 20, asorc: false }), 'se lanza un test de recuperación');
+  const primera = lanzada;
+  eq([primera.ids.length, new Set(primera.ids).size], [20, 20], '20 preguntas, sin repetidas');
+  eq(primera.spec.label, 'Mix inteligente · 20 preguntas', 'la ronda se llama «Mix inteligente · 20 preguntas»');
+  ok(primera.ids.every((id) => !abiertas.some((q) => q.id === id)), 'con las abiertas fuera, como en las preferencias');
+  eq([primera.spec.kind, primera.spec.asorc, primera.spec.smart.modo], ['smart', false, 'mix'], 'y el spec guarda cómo se eligió');
+  // Se contesta y se cierra como cualquier otra ronda.
+  const run = G.newRun({ total: 20, modeLabel: primera.spec.label, asorc: false });
+  run.academic = A.newState();
+  primera.ids.forEach((id, i) => {
+    const res = i % 2 ? 'correct' : 'wrong';
+    G.score(run, res, 1000, 'T', id);
+    A.record(run.academic, { id, result: res, kind: 'single', k: 4, picked: [], ms: 1000 });
+  });
+  const temaDe = (id) => (bank.find((q) => q.id === id) || {}).topic || '';
+  const extra = R.registro(primera.spec.smart, primera.ids);
+  eq(Object.keys(extra).sort(), ['planned_question_ids', 'selection_metadata', 'selection_mode'],
+     'se guardan selection_mode, planned_question_ids y selection_metadata');
+  const registro = Object.assign(G.sessionRecord(run), H.detalle(run, temaDe, 20), extra);
+  eq([registro.puntos, registro.attempts.length, registro.correctas, registro.falladas],
+     [run.academic.points, 20, 10, 10], 'sin tocar la nota, el detalle ni el recuento de siempre');
+  eq(registro.planned_question_ids, primera.ids, 'con las preguntas en el orden en que salieron');
+  eq(Object.keys(registro.selection_metadata.reasons).sort(), primera.ids.slice().sort(), 'y un motivo por pregunta');
+  const at = R.atacado(primera.spec.smart, run.academic.log);
+  eq([at.total, at.contestadas, at.ok], [20, 20, 10], 'riesgo atacado: 20 de riesgo, 20 contestadas, 10 acertadas');
+  ok(at.tipos.length > 0 && at.tipos.every((t) => t.n > 0 && t.ok <= t.n), 'y cuántas de cada tipo');
+  await store.cerrarRonda(registro);
+  ({ store } = carga());
+  await store.init({ base: './', ns: 'asorc.v2' });
+  const g = H.global(store.stats.sesiones);
+  eq(g[0].modo, 'Mix inteligente · 20 preguntas', 'en el historial sale como «Mix inteligente · 20 preguntas», no como «Todas»');
+  eq(H.resumen(g[0]).preguntas, 20, 'con sus 20 preguntas');
+  const hs = H.seleccionDe(g[0]);
+  eq([hs.modo, hs.ids.length, Object.keys(hs.motivos).length], ['mix', 20, 20], 'y cómo se eligió, tras recargar');
+  ok(/^Prioridad (alta|media|baja): /.test(H.motivoDe(g[0], primera.ids[0])), 'por qué entró: ' + H.motivoDe(g[0], primera.ids[0]));
+  eq(H.seleccionDe({ selection_mode: 'mix', selection_metadata: { reasons: { X: 5, Y: { text: 3 }, Z: { text: 'ok' } } } }).motivos,
+     { Z: 'ok' }, 'lo que llega roto de la nube se ignora');
+  eq(H.seleccionDe({ uid: 'x', ts: 1, modo: 'Sprint de 20', attempts: [] }), null, 'y una ronda normal no tiene selección');
+  // OTRO TEST: el mismo criterio, elegido otra vez con el historial de ahora
+  Rec.configurar({ store, bank,
+    pool: (spec) => L.pool(bank, spec, { includeOpen: false, prog: (id) => store.prog(id), marcada: (id) => store.marcada(id) }),
+    temas: () => [], abiertas: () => false, arranca: (spec, ids) => { lanzada = { spec, ids }; } });
+  lanzada = null;
+  ok(Rec.repite(primera.spec.smart) && lanzada && lanzada.spec.smart.modo === 'mix' && lanzada.ids.length === 20,
+     'OTRO TEST repite el criterio y el tamaño');
+  lanzada = null;
+  ok(Rec.empieza({ modo: 'reincidentes', n: 20, asorc: true }) && lanzada, 'reincidentes en formato ASORC');
+  ok(!!lanzada && lanzada.spec.asorc && lanzada.ids.every((id) => { const q = bank.find((x) => x.id === id); return q.asorc && q.asorc.eligible; }),
+     'solo con preguntas que admiten ASORC');
+  eq(lanzada && lanzada.spec.label, `Reincidentes · ${lanzada && lanzada.ids.length} preguntas · ASORC`, 'y lo dice su nombre');
+  lanzada = null;
+  eq([Rec.empieza({ modo: 'olvidadas', n: 20, asorc: false }), lanzada], [false, null],
+     'un criterio sin preguntas no lanza nada (ni rellena con otras)');
+}
+
+// --- 13 · repetir los errores de la última ronda --------------------------------
+{
+  const banco = ['Y1', 'Y2', 'Y3', 'Y4', 'X1', 'X2'].map((id) => Q(id));
+  const e = escenario(banco, { Y1: '✗✗', Y2: '✓', Y3: '○', Y4: '◐', X1: '✗', X2: '✗' });
+  const at = (id, result) => ({ question_id: id, result, answer: '', scoreDelta: 0, scoreAfter: 0, answerMs: 1000, topic: 'T' });
+  const sesiones = [
+    { uid: 'vieja', ts: 1790000100, modo: 'Correo', attempts: [at('X1', 'wrong'), at('X2', 'wrong')] },
+    { uid: 'nueva', ts: 1790000900, modo: 'DNS', asorc: true, total: 7, attempts: [at('Y1', 'wrong'), at('Y2', 'correct'),
+      at('Y3', 'blank'), at('Y4', 'partial'), at('Y1', 'wrong'), at('BORRADA', 'wrong'), null] },
+    { ts: 1790000500, modo: 'Sprint de 20', respondidas: 20 },
+  ];
+  const enBanco = (id) => banco.some((q) => q.id === id);
+  const s = sel(e, 'ultima', 20, { sesiones, enBanco });
+  eq(s.ids.slice().sort(), ['Y1', 'Y3', 'Y4'], 'errores de la última ronda: fallada, en blanco y a medias; ni acertadas ni de otras rondas');
+  eq([s.disponibles, s.ronda.modo, s.ronda.asorc], [3, 'DNS', true], 'una vez cada una, y sabe de qué ronda y en qué formato');
+  eq(sel(e, 'ultima', 2, { sesiones, enBanco }).ids.length, 2, 'si se piden menos, las de más riesgo');
+  eq(sel(e, 'ultima', 20, { sesiones: [] }).ids, [], 'sin rondas, nada que repetir');
+  let lanzada = null;
+  const tienda = { intentos: e.intentos, progress: { preguntas: contadores(e.intentos) },
+                   stats: { preguntas: {}, sesiones }, prefs: {}, guardarLocal() {} };
+  Rec.configurar({ store: tienda, bank: banco, pool: (spec) => L.pool(banco, spec, { includeOpen: false }),
+    temas: () => ['Otro tema'], abiertas: () => false, arranca: (spec, ids) => { lanzada = { spec, ids }; } });
+  ok(Rec.empieza({ modo: 'ultima', n: 20, asorc: false }), 'se lanza con un botón');
+  eq([lanzada.ids.slice().sort(), lanzada.spec.asorc, lanzada.spec.label],
+     [['Y1', 'Y3', 'Y4'], true, 'Errores de la última ronda · 3 preguntas'],
+     'con sus errores, en el formato de aquella ronda, aunque ahora tengas otros filtros');
+}
+
+// --- 14 · sin conexión: el diario vive en localStorage ------------------------
+{
+  LS = almacen();
+  let { store } = carga();
+  await store.init({ base: './', ns: 'asorc.v2' });
+  const [q1, q2] = bank.filter((q) => q.type === 'multiple_choice');
+  store.registrar({ id: q1.id, result: 'correct', answer: 'A', answerMs: 1000, reviewMs: 0, marked: false });
+  store.registrar({ id: q1.id, result: 'wrong', answer: 'B', answerMs: 1000, reviewMs: 0, marked: false });
+  store.registrar({ id: q2.id, result: 'blank', answer: '', answerMs: 1000, reviewMs: 0, marked: false });
+  eq(store.intentos.map((e) => e.result), ['correct', 'wrong', 'blank'], 'sin red, cada respuesta entra en el diario');
+  ok(store.intentos.every((e, i) => i === 0 || e.at > store.intentos[i - 1].at), 'nunca dos con la misma hora: el orden es fiable');
+  const cola = store.outbox.lista().filter((e) => e.tipo === 'intento');
+  eq(cola.map((e) => e.payload.event_id), store.intentos.map((e) => e.event_id), 'con el mismo event_id que va a la nube');
+  eq(cola.map((e) => Date.parse(e.payload.answered_at)), store.intentos.map((e) => e.at), 'y la misma hora');
+  ({ store } = carga());
+  await store.init({ base: './', ns: 'asorc.v2' });
+  eq(store.intentos.length, 3, 'tras recargar sigue ahí');
+  const est = R.estadisticas({ bank, intentos: store.intentos, progreso: store.progress.preguntas,
+                               stats: store.stats.preguntas, now: Date.now() });
+  const x1 = est.porId.get(q1.id);
+  eq([x1.intentos, x1.seq, x1.olvidada], [2, ['correct', 'wrong'], true], 'y las estadísticas salen de ahí, en orden: ✓ ✗ = olvidada');
+  store.importar(null, null, null, store.intentos.map((e) => Object.assign({}, e)).concat([
+    { event_id: 'otro-dispositivo', question_id: q2.id, result: 'wrong', at: Date.now() - 1000 },
+    { event_id: `local:${q2.id}:wrong:1`, question_id: q2.id, result: 'wrong', at: null },
+    { event_id: 'roto', question_id: 7, result: 'wrong' }, null,
+  ]));
+  eq(store.intentos.length, 5, 'fundir lo que llega de la nube no duplica nada (y lo roto se ignora)');
+  eq(store.intentos.filter((e) => e.at == null).map((e) => e.event_id), [`local:${q2.id}:wrong:1`], 'el histórico «local:» va sin hora');
+  const soloCont = R.estadisticas({ bank, intentos: [], progreso: { [q1.id]: { veces_vista: 4, aciertos: 0, fallos: 4, blancos: 0, parciales: 0 } },
+                                    stats: {}, now: Date.now() });
+  eq([soloCont.porId.get(q1.id).intentos, soloCont.porId.get(q1.id).fallos, soloCont.porId.get(q1.id).sinFecha], [4, 4, 4],
+     'solo con contadores (terminal, datos de antes) también hay estadísticas');
+  ok(R.selecciona('mas', { est: soloCont, candidatas: [q1.id], n: 10 }).ids.includes(q1.id), 'y los criterios funcionan');
+  const exp = store.exportar();
+  LS = almacen();
+  ({ store } = carga());
+  await store.init({ base: './', ns: 'asorc.v2' });
+  store.importar(exp.progress, exp.stats, exp.cards, exp.intentos);
+  eq(store.intentos.length, 5, 'exportar e importar se lleva el diario');
+  // Lo que baja de asorc_attempts llega al diario con su answered_at.
+  LS = almacen();
+  const n = carga();
+  await n.store.init({ base: './', ns: 'asorc.v2' });
+  n.store.registrar({ id: q1.id, result: 'wrong', answer: '', answerMs: 1, reviewMs: 0, marked: false });
+  const mio = n.store.intentos[0];
+  const fila = (event_id, result, answered_at) => ({ event_id, profile_id: 'default', question_id: q1.id, result,
+    answer: '', answer_ms: 1, review_ms: 0, marked: false, answered_at, created_at: answered_at });
+  const filas = [fila(mio.event_id, 'wrong', new Date(mio.at).toISOString()),
+    fila('e2', 'correct', '2026-09-20T10:00:00.000Z'), fila(`local:${q1.id}:wrong:1`, 'wrong', '2026-09-27T22:00:27.000Z')];
+  const sb = { from(t) { const q = { select() { return q; }, eq() { return q; }, order() { return q; },
+    async range() { return { data: t === 'asorc_attempts' ? filas : [], error: null, status: 200 }; },
+    async maybeSingle() { return { data: null, error: null }; }, async upsert() { return { error: null }; } }; return q; } };
+  n.cloud.store = n.store; n.cloud.sb = sb; n.cloud.estado = 'sincronizado'; n.cloud.sinTarjetas = null;
+  const t = await n.cloud.traer();
+  eq(t.intentos.map((e) => [e.event_id, e.at]), [[mio.event_id, mio.at], ['e2', Date.parse('2026-09-20T10:00:00.000Z')],
+     [`local:${q1.id}:wrong:1`, null]], 'traer() conserva cada intento con su answered_at (y el «local:» sin hora)');
+  const r = await n.cloud.sincronizar(n.store);
+  ok(r.ok, 'sincroniza: ' + JSON.stringify(r));
+  eq(n.store.intentos.map((e) => e.event_id).sort(), [mio.event_id, 'e2', `local:${q1.id}:wrong:1`].sort(),
+     'y el diario queda con los tres, sin duplicar el de este navegador');
+}
+
+console.log(JSON.stringify({ n: errs.length, errs: errs.slice(0, 12) }));
+})().catch((e) => { console.log(JSON.stringify({ n: 1, errs: [String(e && e.stack || e)] })); });
+"""
+
+
+def test_recupera():
+    print("\n[15] Tests de recuperación: elegidos por tu historial real, sin tabla nueva")
+    js = os.path.join(PROJ, "web", "js")
+    html = open(os.path.join(PROJ, "web", "index.html"), encoding="utf-8").read()
+    leer = lambda f: open(os.path.join(js, f), encoding="utf-8").read()
+    app, logic, store, cloud = leer("app.js"), leer("logic.js"), leer("store.js"), leer("cloud.js")
+    riesgo, recupera = leer("riesgo.js"), leer("recupera.js")
+    sql = open(os.path.join(PROJ, "supabase", "schema.sql"), encoding="utf-8").read()
+    readme = open(os.path.join(PROJ, "README.md"), encoding="utf-8").read()
+
+    for s in ("js/riesgo.js", "js/recupera.js"):
+        check(f"index.html carga {s}", s in html)
+    check("logic.js, riesgo.js y recupera.js antes que app.js",
+          html.index("js/logic.js") < html.index("js/riesgo.js") < html.index("js/recupera.js") < html.index("js/app.js"))
+    for ident in ("rec-home", "rec-sizes", "rec-otro", "rec-modo", "rec-fmt", "rec-desc", "rec-avail", "rec-go",
+                  "done-risk", "done-risk-sum", "done-risk-tags", "hs-crit"):
+        check(f"index.html tiene #{ident}", f'id="{ident}"' in html)
+    pos = [html.find("<h2>Temas</h2>"), html.find('id="rec-home"'), html.find("<h2>Rondas rápidas</h2>")]
+    check("TESTS DE RECUPERACIÓN va junto a las rondas rápidas", -1 not in pos and pos == sorted(pos), str(pos))
+    check("tamaños 10 · 20 · 30 · 50 · personalizado",
+          "const TAMANOS = [10, 20, 30, 50]" in recupera and "'Personalizado'" in recupera)
+    # Una sola regla de elegibilidad para todas las rondas.
+    check("la elegibilidad vive en Logic.pool", "function pool(bank, spec, o)" in logic and "L.pool(S.bank, spec" in app)
+    m = re.search(r"function eligible\(mode, topic\)\s*\{(.*?)\n\}", app, re.S)
+    check("las rondas rápidas no la duplican", bool(m) and "poolDeSpec(" in m.group(1) and "open" not in m.group(1))
+    check("ni queda otro filtro de abiertas en app.js",
+          "q.type === 'open' && !S.includeOpen" not in app and "q.type !== 'open' || S.includeOpen" not in app)
+    # El diario de intentos: local primero y relleno desde la nube, sin consultas por pregunta.
+    check("el diario de intentos se guarda en localStorage",
+          "leer('intentos', [])" in store and "escribir('intentos'" in store)
+    check("con el mismo event_id y la misma hora que viajan a la nube",
+          "event_id: u.uid, question_id: u.id, result: u.result, at: cuando" in store
+          and "answered_at: new Date(cuando).toISOString()" in store)
+    check("la nube lo rellena al bajar, sin una consulta por pregunta",
+          "this._alDiario(" in cloud and "remoto.intentos" in cloud and "eq('question_id'" not in cloud)
+    check("riesgo.js es puro: ni red ni almacenamiento",
+          all(x not in riesgo for x in ("localStorage", ".from(", "fetch(", "document")))
+    check("y no toca la nota académica: ni usa Academic ni cambia la puntuación",
+          "Academic." not in riesgo and "root.Academic" not in riesgo and "scoreDelta" not in riesgo)
+    mf = re.search(r"async function finishRun\(\)\s*\{(.*?)\n\}", app, re.S)
+    check("al cerrar un test inteligente se guarda cómo se eligió",
+          bool(mf) and "Riesgo.registro(" in mf.group(1)
+          and mf.group(1).index("Riesgo.registro(") < mf.group(1).index("cerrarRonda(registro)"))
+    check("y el resultado enseña el riesgo atacado", bool(mf) and "pintaRiesgo(r, smart)" in mf.group(1))
+    check("OTRO SPRINT / OTRO TEST rehace la ronda desde su spec",
+          "$('btn-again').addEventListener('click', otraIgual)" in app and "lastMode" not in app
+          and "pick: (x) => x" not in app)
+    check("sin tabla, columna ni migración: todo en el payload JSONB",
+          sql.count("create table if not exists") == 5 and "selection" not in sql)
+    check("el README lo explica", "## Tests de recuperación" in readme and "riesgo.js" in readme)
+
+    if not shutil.which("node"):
+        check("node disponible", False)
+        return
+    with tempfile.NamedTemporaryFile("w", suffix=".js", delete=False) as f:
+        f.write(RECUPERA_TEST)
+        script = f.name
+    try:
+        out = subprocess.run(["node", script, js, QJSON], capture_output=True, text=True, timeout=180)
+        if out.returncode != 0:
+            check("ejecución node", False, out.stderr.strip()[:400])
+            return
+        res = json.loads(out.stdout.strip().splitlines()[-1])
+        check("criterios, riesgo, sin duplicados ni relleno, filtros, equilibrio, historial, "
+              "última ronda y sin conexión", res["n"] == 0, " | ".join(res["errs"]))
+    finally:
+        os.unlink(script)
+
+
 def test_feed():
     """El feed reutiliza la lógica de siempre, pero los elementos de una
     pregunta ya no llevan id: hay muchas tarjetas vivas a la vez. Aquí se
@@ -2071,6 +2568,7 @@ def main():
     test_nota()
     test_micro()
     test_historial()
+    test_recupera()
     test_highlight()
     test_panel()
     test_publicacion()

@@ -1105,6 +1105,44 @@ code.hl-code {
 .rq-topic:hover { border-color: var(--teal); }
 .rq-topic i { font-style: normal; font-family: var(--mono); font-size: 13px; color: var(--teal); }
 
+/* =========================== TESTS DE RECUPERACIÓN ===========================
+   X preguntas elegidas por tu historial de fallos. Es una ronda, así que va en
+   terracota como las demás (el teal es del repaso rápido). Compacta: tamaño,
+   criterio y un botón. */
+.rec-home {
+  margin-top: 40px; padding: 16px 20px 18px;
+  background: var(--surf); border: 1px solid var(--line); border-left: 4px solid var(--v);
+  border-radius: var(--r-md); box-shadow: var(--shadow);
+}
+.rec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 4px 16px; flex-wrap: wrap; }
+.rec-h {
+  margin: 0; font-family: var(--ui); font-size: 14px; font-weight: 800;
+  letter-spacing: .12em; color: var(--v-text);
+}
+.rec-sum { margin: 0; font-size: 15px; color: var(--dim); }
+.rec-home[data-vacio="si"] .rec-body { display: none; }
+.rec-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-top: 12px; }
+.rec-sizes { display: flex; gap: 7px; flex-wrap: wrap; }
+.rec-otro input {
+  width: 5.5em; padding: 6px 12px; border-radius: 999px; font: inherit; font-size: 14px;
+  background: var(--surf-2); border: 1px solid var(--line); color: var(--ink);
+}
+.rec-lbl { font-size: 14px; font-weight: 700; color: var(--dim); }
+.rec-select {
+  flex: 1 1 260px; min-width: 0; max-width: 440px; cursor: pointer;
+  padding: 9px 12px; border-radius: var(--r-sm); font: inherit; font-size: 15px;
+  background: var(--surf-2); border: 1px solid var(--line); color: var(--ink);
+}
+.rec-select:hover { border-color: var(--v); }
+.rec-fmt .seg-btn { padding: 6px 14px; font-size: 14px; }
+.rec-fmt .seg-btn:disabled { cursor: not-allowed; }
+.rec-fmt[aria-disabled="true"] { opacity: .45; }
+.rec-desc { margin: 12px 0 0; font-size: 15px; color: var(--ink); max-width: 72ch; }
+.rec-avail { margin: 4px 0 0; font-size: 14px; color: var(--dim); max-width: 72ch; }
+.rec-avail[data-corto="si"] { color: var(--warn); }
+#rec-go { margin-top: 14px; }
+#rec-go:disabled { opacity: .45; cursor: not-allowed; filter: none; transform: none; }
+
 /* En la ronda: una línea discreta al final de la explicación. */
 .micro-note { margin: 0; font-size: 14px; font-weight: 600; color: var(--teal); }
 
@@ -1302,6 +1340,7 @@ code.hl-code {
   display: inline-block; margin: 8px 0 0; padding: 4px 12px; border-radius: 999px;
   font-size: 13px; font-weight: 700; color: var(--teal); border: 1px solid var(--teal);
 }
+.hs-crit { margin: 8px 0 0; font-size: 14px; color: var(--dim); max-width: 64ch; }
 .hs-sum { margin: 14px 0 0; display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px 24px; color: var(--dim); }
 .hs-sum .hs-m b { font-size: 22px; }
 .hs-sec { font-size: 15px; }
@@ -1330,6 +1369,9 @@ code.hl-code {
 .hq-top { display: flex; align-items: center; justify-content: space-between; gap: 6px 12px; flex-wrap: wrap; margin-bottom: 8px; }
 .hq-meta { font-size: 12.5px; font-weight: 600; letter-spacing: .02em; color: var(--dim); }
 .hq-q { margin: 0 0 10px; font-family: var(--display); font-size: 17px; font-weight: 600; line-height: 1.35; }
+/* Por qué la eligió un test de recuperación: una línea, discreta. */
+.hq-why { margin: -4px 0 10px; font-size: 13px; color: var(--dim); }
+.hq-why b { font-weight: 700; color: var(--v-text); }
 .hq .recap { margin: 0 0 6px; }
 .hq[data-r="wrong"] .recap-line[data-k="mine"] b,
 .hq[data-r="partial"] .recap-line[data-k="mine"] b { color: var(--bad); }
@@ -1451,6 +1493,24 @@ code.hl-code {
 .nt-10 b { font-size: 24px; }
 .nt-of { font-family: var(--mono); font-size: 17px; color: var(--dim); min-width: 3.2em; }
 .nt-why { margin: 14px 0 0; font-size: 13.5px; line-height: 1.5; color: var(--dim); }
+
+/* Riesgo atacado: solo tras un test de recuperación, discreto bajo la nota. */
+.done-risk {
+  margin-top: 14px; padding: 14px clamp(18px, 3vw, 26px);
+  max-width: 560px;
+  background: var(--surf); border: 1px solid var(--line); border-left: 4px solid var(--v);
+  border-radius: var(--r-md);
+}
+.done-risk-h {
+  margin: 0; font-family: var(--ui); font-size: 13px; font-weight: 800;
+  letter-spacing: .12em; color: var(--v-text);
+}
+.done-risk-sum { margin: 6px 0 0; font-size: 15.5px; color: var(--ink); }
+.done-risk-tags { margin: 8px 0 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.risk-tag {
+  padding: 3px 11px; border-radius: 999px; font-size: 13.5px;
+  background: var(--surf-2); border: 1px solid var(--line); color: var(--ink);
+}
 
 .done-chips { display: flex; gap: clamp(14px, 3vw, 30px); flex-wrap: wrap; margin-top: 22px; }
 .dchip { display: inline-flex; align-items: center; gap: 9px; color: var(--dim); font-size: 16px; }

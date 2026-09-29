@@ -14,7 +14,7 @@
 
 (function (root, doc) {
 
-  let ctx = null;          // { bank, store, start, pool, resume, discard, historialTema }
+  let ctx = null;          // { bank, store, start, pool, resume, discard, historialTema, alElegir }
   const $ = (id) => doc.getElementById(id);
   const el = (tag, cls, txt) => {
     const e = doc.createElement(tag);
@@ -121,7 +121,7 @@
       sel.addEventListener('click', (ev) => {
         ev.stopPropagation();
         if (seleccion.has(t.nombre)) seleccion.delete(t.nombre); else seleccion.add(t.nombre);
-        pintaTemas(); pintaMezcla();
+        pintaTemas(); pintaMezcla(); avisaEleccion();
       });
 
       const linea = el('p', 'tcard-line');
@@ -195,6 +195,9 @@
     return p;
   }
 
+  // Quien dependa de los temas elegidos (los tests de recuperación) se repinta.
+  const avisaEleccion = () => { if (ctx && ctx.alElegir) ctx.alElegir(); };
+
   function pintaMezcla() {
     const bar = $('mix-bar');
     if (!seleccion.size) { bar.hidden = true; return; }
@@ -221,7 +224,9 @@
       const lista = [...seleccion];
       ctx.start({ kind: 'mix', label: lista.join(' + '), topics: lista, filter: 'all', size: tamano });
     });
-    $('mix-clear').addEventListener('click', () => { seleccion.clear(); pintaTemas(); pintaMezcla(); });
+    $('mix-clear').addEventListener('click', () => {
+      seleccion.clear(); pintaTemas(); pintaMezcla(); avisaEleccion();
+    });
     return API;
   }
 

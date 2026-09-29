@@ -160,6 +160,29 @@
     return Object.assign(c, { intentos, respondidas, acierto: respondidas ? c.aciertos / respondidas : null });
   }
 
+  /* Cómo eligió sus preguntas un test de recuperación (riesgo.js), si lo fue:
+   * el criterio, cuántas pidió, cuántas había y por qué entró cada una. Va en
+   * el mismo payload (selection_mode, planned_question_ids,
+   * selection_metadata), y como la nube la puede escribir cualquiera, solo
+   * se toma lo que tiene la forma esperada. Las demás rondas: null. */
+  function seleccionDe(s) {
+    if (!s || typeof s.selection_mode !== 'string') return null;
+    const m = s.selection_metadata && typeof s.selection_metadata === 'object' ? s.selection_metadata : {};
+    const motivos = {};
+    Object.entries(m.reasons && typeof m.reasons === 'object' ? m.reasons : {}).forEach(([id, r]) => {
+      if (r && typeof r.text === 'string') motivos[id] = r.text;
+    });
+    return {
+      modo: s.selection_mode,
+      etiqueta: typeof m.label === 'string' ? m.label : s.selection_mode,
+      pedidas: Number(m.requested) || 0,
+      disponibles: Number(m.available) || 0,
+      ids: Array.isArray(s.planned_question_ids) ? s.planned_question_ids.filter((x) => typeof x === 'string') : [],
+      motivos,
+    };
+  }
+  const motivoDe = (s, id) => { const sel = seleccionDe(s); return (sel && sel.motivos[id]) || null; };
+
   const unicas = (ids) => [...new Set(ids)];
   // REPASAR ESTAS FALLADAS: solo las falladas (a medias cuenta como fallada).
   const paraRepasar = (lista) => unicas(filtra(lista, 'falladas').map((a) => a.question_id));
@@ -395,6 +418,14 @@
     $('hs-title').textContent = s.modo || 'Ronda';
     $('hs-tema').hidden = !tema;
     $('hs-tema').textContent = tema ? `Solo las preguntas de «${tema}»` : '';
+    // Un test de recuperación dice con qué criterio se eligió.
+    const sel = seleccionDe(s);
+    const crit = sel && root.Riesgo && root.Riesgo.modo(sel.modo);
+    $('hs-crit').hidden = !sel;
+    $('hs-crit').textContent = sel
+      ? `Test de recuperación · ${sel.etiqueta}: ${sel.ids.length || sel.pedidas} de ${sel.disponibles} ` +
+        `disponibles.${crit ? ' ' + crit.como : ''}`
+      : '';
 
     const sum = $('hs-sum');
     sum.innerHTML = '';
@@ -503,7 +534,15 @@
       }
     }
     const toggle = el('span', 'hq-toggle', 'explicación');
-    cab.append(top, enun, recap, toggle);
+    cab.append(top, enun);
+    // Si la eligió un test de recuperación, por qué: una línea discreta.
+    const why = motivoDe(vista.s, a.question_id);
+    if (why) {
+      const p = el('p', 'hq-why');
+      p.append(el('b', null, 'Por qué entró'), ` · ${why}`);
+      cab.appendChild(p);
+    }
+    cab.append(recap, toggle);
 
     const mas = el('div', 'hq-more');
     const abierta = vista.abiertas.has(a.question_id);
@@ -669,7 +708,8 @@
   const API = {
     // puro
     clave, tieneDetalle, detalle, ordenadas, global, resumen, INICIALES, deTema, intentos, filtra,
-    cuenta, paraRepasar, paraRepetir, incompleta, notaDeTema, historico, FILTROS: Object.keys(FILTROS),
+    cuenta, paraRepasar, paraRepetir, incompleta, notaDeTema, historico, seleccionDe, motivoDe,
+    FILTROS: Object.keys(FILTROS),
     // pantalla
     init, pintaInicio, pintaTema, abre, tecla, bloqueHistorico,
   };

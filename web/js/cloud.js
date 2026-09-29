@@ -363,6 +363,9 @@
       });
       stats.sesiones = sesiones.map((r) => r.payload).filter(Boolean);
       const pendiente = pend && pend.data ? pend.data.payload : null;
+      // Los intentos, además de sumarse, se quedan en el diario con su hora:
+      // los tests de recuperación necesitan el orden y el cuándo (riesgo.js).
+      const diario = intentos.map((r) => this._alDiario(r, r.answered_at || r.created_at));
 
       // El repaso rápido: sus eventos, tal cual, para rehacer el mazo.
       let tarjetas = null;
@@ -377,7 +380,17 @@
           this.sinTarjetas = this.SIN_TARJETAS;
         }
       }
-      return { progress, stats, pendiente, tarjetas };
+      return { progress, stats, pendiente, tarjetas, intentos: diario };
+    },
+
+    /* Una fila de asorc_attempts tal como la guarda el diario. Las «local:…»
+     * son histórico de antes de la cola subido de golpe: su answered_at es la
+     * hora de subida, no la de responder, así que van sin hora. */
+    _alDiario(r, cuando) {
+      const local = String(r.event_id || '').startsWith('local:');
+      const at = local || !cuando ? NaN : new Date(cuando).getTime();
+      return { event_id: r.event_id, question_id: r.question_id, result: r.result,
+               at: Number.isFinite(at) ? at : null };
     },
 
     /* ------------------------------------------------- histórico de fuera
@@ -451,14 +464,19 @@
         const filas = this._diferencia(store, remoto);
         if (filas.length) {
           await this._subirIntentos(filas);
-          filas.forEach((f) => this._acumula(remoto.progress, remoto.stats, f));
+          filas.forEach((f) => {
+            this._acumula(remoto.progress, remoto.stats, f);
+            remoto.intentos.push(this._alDiario(f, null));
+          });
         }
 
         // 4 · fusionar: a estas alturas lo remoto contiene a lo local. El mazo
         //     de repaso se rehace con los eventos de la nube y se funde sin
-        //     perder nada (gana la tarjeta que sabe más).
+        //     perder nada (gana la tarjeta que sabe más). El diario de
+        //     intentos se une por event_id: lo de aquí ya estaba, no se duplica.
         store.importar(remoto.progress, remoto.stats,
-                       remoto.tarjetas && root.Micro ? root.Micro.reconstruye(remoto.tarjetas) : null);
+                       remoto.tarjetas && root.Micro ? root.Micro.reconstruye(remoto.tarjetas) : null,
+                       remoto.intentos);
         // La ronda a medias: si aquí no hay ninguna, se adopta la de la nube.
         if (!store.session && remoto.pendiente && !o.sinPendiente) {
           store.session = remoto.pendiente;

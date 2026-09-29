@@ -9,7 +9,9 @@
  *
  * El esquema de «progreso» es el MISMO que usa la aplicación de terminal, para
  * que los dos sigan leyéndose. Lo que la terminal no conoce (tiempos, marcas,
- * sesiones) vive aparte, en «stats». El mazo de repaso rápido, en «cards».
+ * sesiones) vive aparte, en «stats». El mazo de repaso rápido, en «cards». Y
+ * cada intento con su hora, en «intentos»: el orden y el cuándo que los
+ * contadores no guardan (los tests de recuperación, riesgo.js).
  *
  * PRIMERO LO LOCAL. Responder una pregunta escribe en localStorage y sigue. La
  * nube nunca está en el camino: lo que hay que mandarle se apunta en una cola
@@ -102,6 +104,30 @@
     return out;
   }
 
+  /* El diario de intentos: cada respuesta con su hora, la misma fila que
+   * asorc_attempts pero con lo justo ({ event_id, question_id, result, at }).
+   * Son hechos con identificador propio, así que se unen sin duplicar: el
+   * mismo intento puede estar aquí y llegar de la nube. Los que no tienen
+   * hora (at = null: el histórico «local:…» de antes de la cola) van delante.
+   * Si pasa del tope se pierden los más viejos, pero no sus cuentas: esas
+   * siguen en los contadores de progress. */
+  const TOPE_INTENTOS = 15000;
+  const RESULTADOS = ['correct', 'wrong', 'blank', 'partial'];
+  function fusionaIntentos(a, b) {
+    const m = new Map();
+    [...(Array.isArray(a) ? a : []), ...(Array.isArray(b) ? b : [])].forEach((e) => {
+      if (!e || e.event_id == null || typeof e.question_id !== 'string' || !RESULTADOS.includes(e.result)) return;
+      const k = String(e.event_id), at = Number(e.at);
+      const x = { event_id: k, question_id: e.question_id, result: e.result,
+                  at: Number.isFinite(at) && at > 0 ? at : null };
+      const ya = m.get(k);
+      if (!ya || (ya.at == null && x.at != null)) m.set(k, x);   // gana el que sabe su hora
+    });
+    const out = [...m.values()].sort((x, y) => ((x.at || 0) - (y.at || 0)) ||
+      (x.event_id < y.event_id ? -1 : x.event_id > y.event_id ? 1 : 0));
+    return out.length > TOPE_INTENTOS ? out.slice(out.length - TOPE_INTENTOS) : out;
+  }
+
   /* ------------------------------------------------- A · navegador (siempre) */
   function BrowserStore(ns) {
     const k = (x) => ns + '.' + x;
@@ -124,6 +150,7 @@
           session: leer('session', null),
           prefs: leer('prefs', {}),
           cards: leer('cards', {}),
+          intentos: leer('intentos', []),
         };
       },
       async guardar(estado) {
@@ -133,9 +160,11 @@
         escribir('cards', estado.cards || {});
         if (estado.session) escribir('session', estado.session);
         else { try { localStorage.removeItem(k('session')); } catch (e) {} }
+        // El último: es el más grande y, si no cupiera, lo demás ya está escrito.
+        escribir('intentos', estado.intentos || []);
       },
       async borrarTodo() {
-        ['progress', 'stats', 'session', 'prefs', 'cards', 'syncQueue', 'seed'].forEach((x) => {
+        ['progress', 'stats', 'session', 'prefs', 'cards', 'intentos', 'syncQueue', 'seed'].forEach((x) => {
           try { localStorage.removeItem(k(x)); } catch (e) {}
         });
       },
@@ -248,6 +277,7 @@
     session: null,
     prefs: {},
     cards: {},              // mazo de repaso rápido, por question_id (micro.js)
+    intentos: [],           // diario: cada intento con su hora (riesgo.js)
     local: null,            // LocalServerStore si lo hay
     browser: null,
     outbox: null,           // cola hacia la nube, la vacía cloud.js
@@ -264,6 +294,7 @@
       this.progress = b.progress; this.stats = b.stats;
       this.session = b.session; this.prefs = b.prefs || {};
       this.cards = b.cards && typeof b.cards === 'object' ? b.cards : {};
+      this.intentos = fusionaIntentos(b.intentos, []);
 
       const srv = LocalServerStore(base);
       if (await srv.disponible()) {
@@ -296,6 +327,9 @@
     // Una respuesta. Se aplica ya en memoria y en localStorage para que nada
     // espere a la red, y se encola para el servidor local y para la nube.
     registrar(u) {
+      // Reloj de los intentos: nunca dos con el mismo milisegundo, para que su
+      // orden en el diario no dependa de desempatar por un id aleatorio.
+      const cuando = this._ultimoAt = Math.max(Date.now(), (this._ultimoAt || 0) + 1);
       const p = Object.assign(filaProg(), this.progress.preguntas[u.id] || {});
       p.veces_vista = (p.veces_vista | 0) + 1;
       if (u.result === 'correct') p.aciertos++;
@@ -313,7 +347,7 @@
       s.ms_ultimo = u.answerMs | 0;
       if (u.answerMs > 0 && (!s.ms_mejor || u.answerMs < s.ms_mejor)) s.ms_mejor = u.answerMs | 0;
       s.ultimo_resultado = u.result || '';
-      s.ultima_vez = Math.floor(Date.now() / 1000);
+      s.ultima_vez = Math.floor(cuando / 1000);
       if (u.marked != null && !!u.marked !== !!s.marcada) {
         s.marcada = !!u.marked;
         s.marcada_ts = Date.now();
@@ -322,6 +356,12 @@
 
       // Identificador propio del intento: mandarlo dos veces no duplica.
       u.uid = u.uid || uid();
+      // Al diario con el mismo identificador y la misma hora que viajan a la
+      // nube: cuando vuelva de allí, es el mismo intento y no se duplica.
+      if (RESULTADOS.includes(u.result)) {
+        this.intentos.push({ event_id: u.uid, question_id: u.id, result: u.result, at: cuando });
+        if (this.intentos.length > TOPE_INTENTOS) this.intentos.splice(0, this.intentos.length - TOPE_INTENTOS);
+      }
       this.pendientes.updates.push(u);
       this.encolar('intento', {
         event_id: u.uid,
@@ -331,7 +371,7 @@
         answer_ms: u.answerMs | 0,
         review_ms: u.reviewMs | 0,
         marked: !!u.marked,
-        answered_at: new Date().toISOString(),
+        answered_at: new Date(cuando).toISOString(),
       });
       this.guardarLocal();
     },
@@ -424,7 +464,7 @@
 
     /* ------------------------------------------------------- importación */
     // §27: nunca sobrescribir lo más completo con lo más pobre.
-    importar(progress, stats, cards) {
+    importar(progress, stats, cards, intentos) {
       const antes = Object.keys(this.progress.preguntas).length;
       this.progress = fusionaProgreso(this.progress, progress || VACIO_PROG());
       this.stats = fusionaStats(this.stats, stats || VACIO_STATS());
@@ -432,12 +472,15 @@
       if (cards && typeof cards === 'object' && root.Micro) {
         this.cards = root.Micro.fusiona(this.cards, cards);
       }
+      // Y el diario, uniendo por event_id: lo repetido no cuenta dos veces.
+      if (Array.isArray(intentos)) this.intentos = fusionaIntentos(this.intentos, intentos);
       this.guardarLocal();
       return { antes, ahora: Object.keys(this.progress.preguntas).length };
     },
 
     exportar() {
-      return { progress: this.progress, stats: this.stats, prefs: this.prefs, cards: this.cards };
+      return { progress: this.progress, stats: this.stats, prefs: this.prefs, cards: this.cards,
+               intentos: this.intentos };
     },
 
   };
@@ -452,8 +495,8 @@
 
   root.Store = Store;
   root.StoreInternals = {
-    VACIO_PROG, VACIO_STATS, filaProg, filaStats,
-    fusionaProgreso, fusionaStats, BrowserStore, LocalServerStore, Outbox, uid,
+    VACIO_PROG, VACIO_STATS, filaProg, filaStats, TOPE_INTENTOS,
+    fusionaProgreso, fusionaStats, fusionaIntentos, BrowserStore, LocalServerStore, Outbox, uid,
   };
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = { Store, ...root.StoreInternals };

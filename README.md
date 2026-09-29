@@ -45,6 +45,8 @@ navegador
    ├── micro.js   repaso rápido: el mazo y cuándo vuelve cada tarjeta  (lógica pura)
    ├── repaso.js  repaso rápido: sección del inicio y pantalla de tarjetas
    ├── historial.js  historial de tests: cada ronda, pregunta a pregunta
+   ├── riesgo.js  tests de recuperación: estadísticas por pregunta y riesgo  (lógica pura)
+   ├── recupera.js  tests de recuperación: la sección del inicio
    ├── fx.js      sonido y microinteracciones
    ├── burst.js   explicación por fragmentos
    └── app.js     presentación, feed y flujo
@@ -336,8 +338,11 @@ preferencia se recuerda.
 Pantalla de resultado con el marcador grande de aciertos, el bloque **NOTA** (puntos netos
 sobre el total y nota sobre 10, ver [La nota](#la-nota)), XP, mejor racha y segundos por
 pregunta, más la comparación con tu ronda anterior (`↑ 7 % precisión`, `↓ 3,1 s/pregunta`).
-Si has fallado, **REPASAR N FALLOS** lanza al momento una ronda solo con esas. El desglose por
-tema y la comparación con/sin música quedan plegados en «Ver detalle».
+Si has fallado, **REPASAR N FALLOS** lanza al momento una ronda solo con esas. **OTRO SPRINT**
+rehace la misma clase de ronda desde lo que se guardó de ella: vuelve a sortear el modo o el
+tema, repite las mismas preguntas si venía del historial o de repasar fallos y, tras un test de
+recuperación (**OTRO TEST**), vuelve a elegir con el mismo criterio y tu historial de ahora. El
+desglose por tema y la comparación con/sin música quedan plegados en «Ver detalle».
 
 ### Historial de tests
 
@@ -433,6 +438,123 @@ que no se reconstruyen por fechas ni se les inventa ninguna asociación. En el h
 tema solo salen las viejas que se lanzaron para ese tema (su etiqueta es el tema o lo incluye
 en una mezcla), porque eso sí lo dicen ellas mismas.
 
+### Tests de recuperación
+
+En el inicio, junto a las rondas rápidas, **TESTS DE RECUPERACIÓN** arma un test de X preguntas
+elegidas por tu historial real de respuestas. No repite falladas al azar: prioriza las que más
+riesgo tienes de fallar en el examen.
+
+```
+TESTS DE RECUPERACIÓN                                     según tus 1077 intentos
+[10] [20] [30] [50] [Personalizado]
+Criterio [ Mix inteligente (recomendado) · 230 ▾ ]              [Normal] [ASORC]
+Prioriza las preguntas que tienes más riesgo de fallar según tu historial.
+Hay 230 preguntas disponibles para este criterio; el test tendrá 20. (sin abiertas)
+[ EMPEZAR TEST · 20 ]
+```
+
+El selector dice cuántas preguntas hay para cada criterio, y la descripción cambia con él:
+
+| Criterio | Qué elige |
+|---|---|
+| **Mix inteligente** (recomendado) | las de más riesgo personal de fallo (ver abajo) |
+| **Mix equilibrado** | lo mismo, con un tope flexible por tema: como mucho X/4 de un tema (mínimo 2). Solo cuenta con preguntas de riesgo parecido al de la X-ésima y, si aun así faltan, el tope se relaja |
+| **Peor porcentaje** | tu % de fallo, ajustado según cuántas veces la has respondido: 1 fallo de 1 no pasa por delante de 7 de 8 |
+| **Más falladas** | número de fallos, aunque también la aciertes (a medias cuenta 0,5 y en blanco 0,75) |
+| **Reincidentes** | falladas 2 veces o más: primero 5+, luego 3+, luego 2+. Un fallo suelto no entra |
+| **Falladas recientemente** | fallos de los últimos 14 días; cada fallo pierde la mitad de peso cada 3 días y cada acierto posterior lo rebaja |
+| **Olvidadas** | acertadas antes y falladas en el último intento (✓✓✓✗, ✓✓✗✗); primero las que parecían más aprendidas |
+| **Nunca dominadas** | 3 intentos o más, un tercio de acierto como mucho y nunca dos aciertos seguidos |
+| **Inestables** | 4 intentos o más que cambian entre ✓ y ✗ en al menos la mitad de los pasos |
+| **Temas débiles** | de tus temas por debajo de tu media, repartidas en proporción a lo flojo de cada uno (reparto D'Hondt, así el peor aporta más sin quedarse con todo) y, dentro, por riesgo |
+| **Casi dominadas** | 3 intentos o más, al menos un 60 % de dominio y la última acertada; primero las cercanas al 80 % |
+| **Errores de hoy** | falladas, en blanco o a medias hoy, según el día del reloj de tu navegador |
+| **Errores de la última ronda** | las falladas, a medias y en blanco de tu última ronda terminada, en su mismo formato |
+
+**Sin repetir y sin rellenar.** Una pregunta nunca sale dos veces en el mismo test (en el
+siguiente, sí). Si pides 20 y el criterio tiene 17, el test tiene 17 y se dice: *Hay 17
+preguntas disponibles para este criterio: el test tendrá 17, sin rellenar con otras.* Las
+preguntas que nunca has respondido no entran en ningún criterio: para eso está «No vistas».
+
+**Tus filtros.** Las candidatas salen de la misma regla que el resto de rondas,
+`Logic.pool` (antes estaba repetida entre las rondas rápidas y los temas): abiertas
+**Fuera/Incluir**, formato **ASORC** (solo las de 3 opciones, −0,5 por fallo y con dejar en
+blanco) y los temas que tengas elegidos con **+** en el panel. «Errores de la última ronda» es
+la excepción: repite aquella ronda tal cual, en su formato.
+
+**Al terminar** es una ronda como las demás: nota, puntos, ✓ ✗ ○, XP, racha, tiempo, desglose
+por tema, historial y REPASAR N FALLOS. Bajo la nota, discreto, **RIESGO ATACADO**: cuántas de
+riesgo has acertado ahora y de qué tipo eran (reincidentes, falladas hace poco, olvidadas,
+nunca dominadas, de temas débiles…).
+
+#### El riesgo (Mix inteligente)
+
+Cada pregunta con historial tiene un riesgo entre 0 y 1: una media ponderada de señales
+normalizadas, así que ninguna manda sola.
+
+| Señal | Peso | Qué mide |
+|---|---|---|
+| historial | 22 % | tu % de fallo, suavizado hacia tu media (como si llevara 3 intentos más con tu media) y con lo viejo perdiendo la mitad de su peso cada 10 días |
+| tendencia | 24 % | los tres últimos intentos, el último pesando más (50 / 30 / 20 %) |
+| nº de fallos | 12 % | los fallos acumulados, en escala logarítmica y con el mismo decaimiento |
+| cuándo | 10 % | lo reciente del último fallo (mitad cada 3 días), rebajado por cada acierto posterior |
+| racha | 8 % | fallos seguidos con los que acaba |
+| olvido | 10 % | la acertabas y la has vuelto a fallar |
+| tema | 6 % | lo flojo de su tema respecto a tu media |
+| duda | 4 % | en blanco o a medias una y otra vez |
+| marcada | 4 % | la marcaste para repasar |
+
+Como señal de debilidad, cada resultado pesa distinto: **correcta 0 · a medias 0,5 · en blanco
+0,75 · incorrecta 1** (a medias es saber la mitad; en blanco, no saberla sin llegar a
+equivocarse). Esto solo **elige** preguntas: la nota académica sigue siendo la de `academic.js`
+y las de varias respuestas se corrigen como siempre.
+
+Los pesos se eligieron mirando el historial real (1077 intentos en 8 días, un 46 % de fallo
+medio): con ellos arriba salen ✗✗✗✓✓✗✗✗ fallada hoy y ✗✗✗✗✗✗; una pregunta con 1 fallo de 1
+queda por detrás de las que fallas una y otra vez; ✓✓✓✓✗✗✗✗✗ sale con mucho más riesgo que
+✗✗✗✗✓✓✓✓✓ aunque las dos rondan el 50 %; y un fallo de hace semanas que luego acertaste apenas
+cuenta.
+
+#### Por qué entró cada pregunta
+
+La ronda guarda cómo se eligió en el mismo `payload` JSONB de `asorc_sessions`, **sin tabla ni
+columna nueva**:
+
+```jsonc
+"selection_mode": "mix",
+"planned_question_ids": ["SYBEX-CH08-RQ02", "…"],          // en el orden en que salieron
+"selection_metadata": {
+  "version": 1, "label": "Mix inteligente", "requested": 20, "available": 230, "selected": 20,
+  "generated_at": "2026-09-29T18:00:00.000Z",
+  "filters": { "abiertas": false, "asorc": false, "temas": [] },
+  "reasons": {
+    "SYBEX-CH08-RQ02": { "rank": 3, "risk": 0.673, "tags": ["reincidente", "nunca", "tema"],
+      "text": "Prioridad alta: 6 fallos de 6 · fallada hace 3 días · 6 seguidas mal · tema DNS 43%" }
+  }
+}
+```
+
+En el historial la ronda se llama como su criterio —*Mix inteligente · 20 preguntas*, *Más
+falladas · 30 preguntas*, *Olvidadas · 10 preguntas*—, la cabecera dice cómo se eligió y cada
+pregunta lleva, en una línea discreta, **Por qué entró** (*Olvidada: 3 aciertos antes · fallada
+ayer · ✓✓✓✗*). Durante el test no se enseña, para no distraer.
+
+#### De dónde salen los datos
+
+De **todos** tus intentos, no de una lista de falladas. `riesgo.js` es la única fuente de
+estadísticas por pregunta: intentos, aciertos, fallos, blancos, a medias, acierto (el mismo del
+panel), acierto reciente, último intento, último fallo, racha actual y máxima, cambios ✓↔✗,
+tema y su acierto, marcada y riesgo.
+
+Lee el **diario de intentos** (`Store.intentos`, en `localStorage` bajo `asorc.v2.intentos`):
+cada respuesta con su `event_id` y su hora. Entra al responder —con el mismo `event_id` y la
+misma hora que viajan a `asorc_attempts`— y se completa con lo que baja la nube en la
+sincronización de siempre (`answered_at`), sin una consulta por pregunta. Se une por
+`event_id`, así que un intento que está aquí y llega de la nube cuenta una vez. Lo que solo
+está en los contadores (el `progress.json` de la terminal, lo de antes del diario) cuenta para
+los totales pero sin hora, como el histórico `local:…`, cuyo `answered_at` es la hora de
+subida. Sin conexión funciona igual con lo guardado aquí, y todo se calcula en memoria.
+
 ### Dejar en blanco
 
 Fallar resta en la nota (−0,5 en el simulacro **ASORC**, −1/(k−1) en general) y no contestar
@@ -479,6 +601,8 @@ partículas. Todo es navegable por teclado con foco visible.
 | `web/js/micro.js` | repaso rápido: el mazo como eventos, cuándo vuelve cada tarjeta, modos |
 | `web/js/repaso.js` | repaso rápido: sección del inicio, pantalla de tarjetas y teclado |
 | `web/js/historial.js` | historial de tests: lista de rondas, cada una pregunta a pregunta, repasar y repetir |
+| `web/js/riesgo.js` | tests de recuperación: estadísticas por pregunta, riesgo, los 13 criterios y por qué entra cada pregunta (lógica pura) |
+| `web/js/recupera.js` | tests de recuperación: la sección del inicio y el arranque del test |
 | `web/js/fx.js` | sonido y microinteracciones |
 | `web/js/burst.js` | reproductor de la explicación por fragmentos |
 | `web/js/app.js` | presentación, feed y flujo |
@@ -491,6 +615,7 @@ partículas. Todo es navegable por teclado con foco visible.
 | `progress.json` | **compartido con la app de terminal**, mismo esquema: lo que respondes en la web cuenta en «solo falladas» y «no vistas» del terminal, y al revés |
 | `web_stats.json` | solo de la web: tiempos por pregunta, marcadas y registro de sesiones |
 | `localStorage` · `cards` | el mazo de repaso rápido: por pregunta, su pista, respuesta y contraste, veces vista, sabía / dudé / no sabía, último repaso y cuándo vuelve |
+| `localStorage` · `intentos` | el diario de intentos: cada respuesta con su `event_id` y su hora, para los tests de recuperación |
 
 `questions.json` es la fuente de verdad y la web **nunca lo escribe**. Las métricas propias
 van aparte porque la app de terminal reescribe `progress.json` desde su propio modelo y
@@ -522,7 +647,8 @@ En el repositorio: **Settings → Pages → Source: GitHub Actions**. Funciona b
 lo comprueba.
 
 **Dónde se guarda el progreso en Pages:** en el `localStorage` del navegador, bajo las claves
-`asorc.v2.progress`, `asorc.v2.stats`, `asorc.v2.session`, `asorc.v2.prefs` y `asorc.v2.cards`. Offline
+`asorc.v2.progress`, `asorc.v2.stats`, `asorc.v2.session`, `asorc.v2.prefs`, `asorc.v2.cards` y
+`asorc.v2.intentos`. Offline
 funciona todo una vez cargada la página.
 
 ## Sincronizar entre dispositivos
@@ -890,6 +1016,20 @@ tema, mientras la de la ronda completa sigue sobre las planificadas. Y el histor
 de cada pregunta: intentos, respondidas sin blancos, el mismo porcentaje que el panel, que
 justo tras responder ya cuenta el intento actual y que, al registrarlo, los contadores quedan
 igual que se enseñaron.
+
+Y los tests de recuperación, sobre la lógica real: que «más falladas» ordena por número de
+fallos aunque el porcentaje diga otra cosa, que en «peor porcentaje» 1 fallo de 1 no pasa por
+delante de 1 acierto de 8 ni de 5 de 20, que un fallo de ayer pesa más que uno de hace 10 días
+y uno de hace 40 ni siquiera es reciente, que ✓✓✓✓✗✗✗✗✗ tiene más riesgo que ✗✗✗✗✓✓✓✓✓, que
+«olvidadas» detecta ✓→✗ e «inestables» la alternancia, que nunca y casi dominadas no se
+mezclan, que a medias pesa menos que en blanco y en blanco menos que un fallo, que ninguna
+pregunta sale dos veces (tampoco con intentos duplicados por la sincronización), que con las
+abiertas fuera no sale ninguna, que se respeta el número pedido y que si no hay bastantes no
+se rellena, que «errores de hoy» usa el día de tu reloj, que el equilibrado no se concentra en
+un tema, que un test inteligente sale en el historial con su nombre y sus motivos tras
+recargar, que «errores de la última ronda» repite solo esos errores y en su formato, y que el
+diario vive en `localStorage`, sobrevive a recargar, se funde con la nube sin duplicar y viaja
+al exportar.
 
 ```bash
 python3 tools/test_contrast.py

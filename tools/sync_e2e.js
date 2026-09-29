@@ -241,7 +241,7 @@ async function E(a) {
 /* =========================================================================
  *  F · segundo navegador limpio: recibe el progreso sin login
  * ========================================================================= */
-async function F() {
+async function F(a) {
   console.log('\nF · segundo navegador, limpio y sin login');
   const b = await arranca(nuevoNavegador('B'));
   eq(Object.keys(b.store.progress.preguntas).length, 0, 'empieza vacío');
@@ -250,6 +250,16 @@ async function F() {
   const vistas = Object.keys(b.store.progress.preguntas).length;
   ok(vistas >= 9, `recibe el progreso del otro navegador (${vistas} preguntas)`);
   eq(b.store.progress.preguntas['Q-A1'].aciertos, 1, 'con los contadores correctos');
+  // El diario de intentos (tests de recuperación): el orden y el cuándo.
+  const filas = await filasEnBase('asorc_attempts');
+  eq(b.store.intentos.length, filas.length, 'el diario de intentos recibe cada fila de asorc_attempts, una vez');
+  const suyo = a.store.intentos.find((e) => e.question_id === 'Q-A1');
+  const aqui = b.store.intentos.find((e) => e.event_id === suyo.event_id);
+  eq(aqui && aqui.at, suyo.at, 'con la hora a la que se respondió en el otro navegador (answered_at)');
+  ok(b.store.intentos.filter((e) => e.question_id === 'Q-E1').every((e) => e.at == null),
+     'el histórico importado («local:…») llega sin hora');
+  await b.cloud.sincronizar(b.store);
+  eq(b.store.intentos.length, filas.length, 'y sincronizar otra vez no lo duplica');
   return b;
 }
 
@@ -513,7 +523,7 @@ async function todo() {
     await C(a);
     await D(a);
     await E(a);
-    const b = await F();
+    const b = await F(a);
     await G(a, b);
     await H(a, b);
     await I(a);

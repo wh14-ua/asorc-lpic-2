@@ -73,7 +73,6 @@ const S = {
   lang: 'es',
   music: 'sin',
   includeOpen: false,
-  lastMode: null,
   run: null,
   q: null,
   burstOn: true,
@@ -127,27 +126,25 @@ async function loadAll() {
 const canBlank = () => !!S.q && S.q.view.q.type !== 'open'
   && (S.blankWhen === 'siempre' || !!(S.run && S.run.asorc));
 
-const prog = (id) => ST.prog(id);
 const wstat = (id) => ST.stat(id);
 
 /* ===================================================================
  *  Modos
  * =================================================================== */
+// El filtro de cada modo es uno de los de Logic.pool: la regla de qué
+// preguntas entran vive en un solo sitio (ver poolDeSpec).
 const MODES = [
   { key: 'sprint20', name: 'Sprint de 20', desc: 'la ronda corta', hero: true,
     pick: (qs) => L.shuffled(qs).slice(0, 20) },
   { key: 'sprint50', name: 'Sprint de 50', desc: 'la ronda larga',
     pick: (qs) => L.shuffled(qs).slice(0, 50) },
   { key: 'asorc', name: 'Solo ASORC', desc: '3 opciones, 1 correcta', asorc: true,
-    filter: (q) => q.asorc && q.asorc.eligible, pick: (qs) => L.shuffled(qs) },
-  { key: 'failed', name: 'Solo falladas', desc: 'las que se te resisten',
-    filter: (q) => { const p = prog(q.id); return !!p && ((p.fallos | 0) > 0 || (p.parciales | 0) > 0); },
     pick: (qs) => L.shuffled(qs) },
-  { key: 'unseen', name: 'No vistas', desc: 'terreno nuevo',
-    filter: (q) => { const p = prog(q.id); return !p || (p.veces_vista | 0) === 0; },
+  { key: 'failed', name: 'Solo falladas', desc: 'las que se te resisten', filter: 'failed',
     pick: (qs) => L.shuffled(qs) },
-  { key: 'marked', name: 'Marcadas', desc: 'las que dejaste para repasar',
-    filter: (q) => { const w = wstat(q.id); return !!w && w.marcada; },
+  { key: 'unseen', name: 'No vistas', desc: 'terreno nuevo', filter: 'unseen',
+    pick: (qs) => L.shuffled(qs) },
+  { key: 'marked', name: 'Marcadas', desc: 'las que dejaste para repasar', filter: 'marked',
     pick: (qs) => L.shuffled(qs) },
   { key: 'topic', name: 'Por tema', desc: 'elige el terreno', needsTopic: true,
     pick: (qs) => L.shuffled(qs) },
@@ -156,12 +153,7 @@ const MODES = [
 ];
 
 function eligible(mode, topic) {
-  return S.bank.filter((q) => {
-    if (q.type === 'open' && !S.includeOpen) return false;
-    if (mode.filter && !mode.filter(q)) return false;
-    if (mode.needsTopic && topic && q.topic !== topic) return false;
-    return true;
-  });
+  return poolDeSpec({ topics: topic ? [topic] : [], asorc: !!mode.asorc, filter: mode.filter || null });
 }
 
 /* ===================================================================
@@ -176,6 +168,7 @@ function renderHome() {
   if (root.Dash) root.Dash.pintar();
   if (root.Repaso) root.Repaso.pintaInicio();
   if (root.Historial) root.Historial.pintaInicio();
+  if (root.Recupera) root.Recupera.pintaInicio();
   const tr = S.bank.filter((q) => q.translated).length;
   $('home-sub').textContent =
     `${S.bank.length} preguntas · ${tr} en español · sin límite de tiempo`;
@@ -237,15 +230,14 @@ function aviso(txt) {
 
 // Un «spec» describe una ronda con lo justo para poder reconstruirla: de qué
 // temas, con qué filtro, de qué tamaño. Es lo que se guarda al salir.
+// Qué preguntas entran lo decide Logic.pool, para todas las rondas por igual:
+// las rápidas, las de un tema y los tests de recuperación.
 function poolDeSpec(spec) {
-  let qs = S.bank.filter((q) => q.type !== 'open' || S.includeOpen);
-  if (spec.topics && spec.topics.length) qs = qs.filter((q) => spec.topics.includes(q.topic));
-  if (spec.asorc) qs = qs.filter((q) => q.asorc && q.asorc.eligible);
-  if (spec.filter === 'unseen') qs = qs.filter((q) => !ST.vista(q.id));
-  else if (spec.filter === 'failed') {
-    qs = qs.filter((q) => { const p = ST.prog(q.id); return !!p && ((p.fallos | 0) + (p.parciales | 0)) > 0; });
-  } else if (spec.filter === 'marked') qs = qs.filter((q) => ST.marcada(q.id));
-  return qs;
+  return L.pool(S.bank, spec, {
+    includeOpen: S.includeOpen,
+    prog: (id) => ST.prog(id),
+    marcada: (id) => ST.marcada(id),
+  });
 }
 
 function startSpec(spec) {
@@ -268,6 +260,22 @@ function startRun(mode, topic, explicitQueue) {
   arranca(spec, ordenadas.map((q) => q.id), 0, null);
 }
 
+/* OTRO SPRINT / OTRO TEST: otra ronda como la que acaba de terminar, rehecha
+ * desde su spec (así vale también tras reanudar). Un modo o un tema vuelven a
+ * sortear; un test de recuperación se vuelve a elegir con tu historial de
+ * ahora; lo demás (repaso de fallos, rondas del historial) repite las mismas
+ * preguntas, barajadas salvo REPETIR TEST, que conserva el orden. */
+function otraIgual() {
+  const spec = S.spec;
+  if (!spec) return;
+  if (spec.kind === 'smart' && root.Recupera) return root.Recupera.repite(spec.smart);
+  const modo = spec.kind === 'mode' && MODES.find((m) => m.key === spec.modeKey);
+  if (modo) return startRun(modo, (spec.topics && spec.topics[0]) || null);
+  if (spec.kind === 'topic' || spec.kind === 'mix') return startSpec(spec);
+  const ids = S.queue.map((q) => q.id);
+  arranca(spec, spec.barajar === false ? ids : L.shuffled(ids), 0, null);
+}
+
 function arranca(spec, ids, desde, runGuardado) {
   $('home-error').hidden = true;
   FX.Sound.resume();
@@ -277,7 +285,6 @@ function arranca(spec, ids, desde, runGuardado) {
   if (!S.queue.length) return aviso('Esa ronda ya no tiene preguntas.');
   S.spec = spec;
   S.i = Math.min(Math.max(0, desde | 0), S.queue.length);
-  S.lastMode = { mode: { name: spec.label, asorc: spec.asorc, pick: (x) => x }, topic: null };
   S.run = runGuardado || G.newRun({
     total: S.queue.length, modeLabel: spec.label, music: S.music, asorc: !!spec.asorc,
   });
@@ -1281,6 +1288,10 @@ async function finishRun() {
   // cada pregunta (historial.js). Viaja en el mismo payload de asorc_sessions.
   const registro = G.sessionRecord(r);
   if (root.Historial) Object.assign(registro, root.Historial.detalle(r, temaDe, S.queue.length || r.total));
+  // Un test de recuperación guarda también cómo se eligió y por qué entró
+  // cada pregunta (riesgo.js), en el mismo payload: sin tabla ni columna nueva.
+  const smart = S.spec && S.spec.kind === 'smart' && S.spec.smart ? S.spec.smart : null;
+  if (smart && root.Riesgo) Object.assign(registro, root.Riesgo.registro(smart, S.queue.map((q) => q.id)));
   await ST.cerrarRonda(registro);
   flushNube();                    // la ronda cerrada también viaja sola
 
@@ -1299,6 +1310,8 @@ async function finishRun() {
   $('done-sec').textContent = sec ? sec.toFixed(1).replace('.', ',') : '0';
   FX.countUp($('done-xp'), 0, r.xp, 800);
   pintaNotaFinal(r);
+  pintaRiesgo(r, smart);
+  $('btn-again').textContent = smart ? 'OTRO TEST' : 'OTRO SPRINT';
 
   // Comparación con la sesión anterior de la misma etiqueta
   const dl = $('done-deltas');
@@ -1394,6 +1407,30 @@ function pintaNotaFinal(r) {
   $('dn-why').textContent = deDondeSale(t, r.answered - t.answered);
 }
 
+/* RIESGO ATACADO, solo en los tests de recuperación: qué tipo de riesgo
+ * llevaba el test (reincidentes, olvidadas…) y cuántas has acertado ahora.
+ * Discreto, bajo la nota: la nota y los puntos son los de siempre. */
+function pintaRiesgo(r, smart) {
+  const box = $('done-risk');
+  if (!smart || !root.Riesgo) { box.hidden = true; return; }
+  const R = root.Riesgo;
+  const a = R.atacado(smart, (r.academic || A.newState()).log);
+  const sinHacer = a.total - a.contestadas;
+  $('done-risk-sum').textContent = `${smart.nombre}: has acertado ${a.ok} de ${a.total} ` +
+    `pregunta${a.total === 1 ? '' : 's'} de riesgo` + (sinHacer > 0 ? ` · ${sinHacer} sin contestar` : '') + '.';
+  const tags = $('done-risk-tags');
+  tags.replaceChildren();
+  a.tipos.slice(0, 5).forEach((t) => {
+    const s = document.createElement('span');
+    s.className = 'risk-tag';
+    s.textContent = `${t.n} ${R.nombreEtiqueta(t.tag, t.n)}`;
+    s.title = `${t.ok} de ${t.n} acertada${t.n === 1 ? '' : 's'} ahora`;
+    tags.appendChild(s);
+  });
+  tags.hidden = !a.tipos.length;
+  box.hidden = false;
+}
+
 // De dónde salen los puntos, en pocas líneas.
 function deDondeSale(t, previas) {
   const out = [];
@@ -1420,7 +1457,8 @@ const temaDe = (id) => { const q = S.porId.get(id); return q ? q.topic : ''; };
  * su orden (REPETIR TEST), o solo sus falladas, barajadas. Las opciones se
  * vuelven a barajar siempre, y el formato (ASORC o no) es el de entonces. */
 function rondaDelHistorial(ids, asorc, etiqueta, barajar) {
-  arranca({ kind: 'historial', label: etiqueta, topics: [], filter: null, size: null, asorc: !!asorc },
+  arranca({ kind: 'historial', label: etiqueta, topics: [], filter: null, size: null, asorc: !!asorc,
+            barajar: !!barajar },
           barajar ? L.shuffled(ids) : ids.slice(), 0, null);
 }
 
@@ -1632,19 +1670,20 @@ function nota(txt) {
 }
 
 async function importarArchivos(files) {
-  let prog = null, stats = null, cards = null, leidos = 0;
+  let prog = null, stats = null, cards = null, intentos = null, leidos = 0;
   for (const f of files) {
     try {
       const d = JSON.parse(await f.text());
       if (d.preguntas && d.schema_version) { prog = d; leidos++; }
       else if (d.preguntas && d.sesiones) { stats = d; leidos++; }
       else if (d.progress || d.stats) {
-        prog = d.progress || prog; stats = d.stats || stats; cards = d.cards || cards; leidos++;
+        prog = d.progress || prog; stats = d.stats || stats; cards = d.cards || cards;
+        intentos = d.intentos || intentos; leidos++;
       }
     } catch (e) { /* archivo que no es nuestro */ }
   }
   if (!leidos) return nota('Ese archivo no parece un progress.json ni un web_stats.json.');
-  const r = ST.importar(prog, stats, cards);
+  const r = ST.importar(prog, stats, cards, intentos);
   renderHome();
   nota(`Importado: ${r.antes} → ${r.ahora} preguntas con progreso. No se ha perdido nada de lo que ya había.`);
 }
@@ -1686,9 +1725,7 @@ function wire() {
   addEventListener('resize', () => { hudHeight(); padFeed(); });
   hudHeight();
   $('btn-home').addEventListener('click', () => { renderHome(); showScreen('home'); refrescaNube(); });
-  $('btn-again').addEventListener('click', () => {
-    if (S.lastMode) startRun(S.lastMode.mode, S.lastMode.topic);
-  });
+  $('btn-again').addEventListener('click', otraIgual);
   $('btn-sound').addEventListener('click', () => {
     FX.Sound.resume();
     setSound(FX.Sound.toggle());
@@ -1747,6 +1784,8 @@ function wire() {
         resume: reanudar,
         discard: () => ST.descartarSesion(),
         historialTema: (tema, box) => root.Historial && root.Historial.pintaTema(box, tema),
+        // Los temas elegidos con + también acotan los tests de recuperación.
+        alElegir: () => root.Recupera && root.Recupera.pintaInicio(),
       });
     }
     if (root.Repaso) {
@@ -1769,6 +1808,15 @@ function wire() {
         repasar: (ids, asorc, modo) => rondaDelHistorial(ids, asorc, `Falladas de «${modo}»`, true),
         repetir: (ids, asorc, modo) =>
           rondaDelHistorial(ids, asorc, 'Repetir: ' + String(modo).replace(/^Repetir: /, ''), false),
+      });
+    }
+    if (root.Recupera) {
+      root.Recupera.init({
+        store: ST, bank: S.bank,
+        pool: poolDeSpec,
+        temas: () => (root.Dash ? root.Dash.seleccion : []),
+        abiertas: () => S.includeOpen,
+        arranca: (spec, ids) => arranca(spec, ids, 0, null),
       });
     }
     // El panel sale con lo que hay en este navegador y sale YA. La nube se
