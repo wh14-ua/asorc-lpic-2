@@ -22,6 +22,29 @@ DATOS = ["questions.json", "explanations_simple.json", "microcards.json"]
 EXCLUIR = {"server.py", "config.example.js", "__pycache__"}
 
 
+def huella(path):
+    return hashlib.md5(open(path, "rb").read()).hexdigest()[:10]
+
+
+def versiona(dest):
+    """Añade ?v=<huella> a los scripts y hojas de estilo propios de index.html.
+    Un archivo que no cambia conserva su URL (y su caché); uno que cambia
+    estrena URL, así que un HTML nuevo nunca se mezcla con un JS viejo."""
+    idx = os.path.join(dest, "index.html")
+    html = open(idx, encoding="utf-8").read()
+
+    def con_huella(m):
+        attr, ruta = m.group(1), m.group(2)
+        f = os.path.join(dest, ruta[2:])
+        if not os.path.exists(f):
+            sys.exit(f"index.html pide {ruta} y no está en el sitio")
+        return f'{attr}="{ruta}?v={huella(f)}"'
+
+    html, n = re.subn(r'\b(src|href)="(\./[^"?#]+\.(?:js|css))"', con_huella, html)
+    open(idx, "w", encoding="utf-8").write(html)
+    return n
+
+
 def main():
     dest = sys.argv[1] if len(sys.argv) > 1 else os.path.join(PROJ, "_site")
     if os.path.exists(dest):
@@ -74,6 +97,13 @@ def main():
                 m = re.search(pat, txt)
                 if m:
                     sys.exit(f"ABORTADO: {f} contiene algo que parece un secreto: {m.group(0)[:24]}…")
+
+    # Cada script y la hoja de estilos van con la huella de su contenido
+    # (?v=…). Pages lo sirve todo con max-age=600 y, al recargar, el navegador
+    # solo revalida el HTML: sin esto, tras un despliegue un index.html nuevo
+    # arrancaba durante diez minutos con el app.js viejo de la caché.
+    n = versiona(dest)
+    print(f"  {n} scripts y hojas de estilo con huella (?v=)")
 
     # GitHub Pages no debe pasar esto por Jekyll.
     open(os.path.join(dest, ".nojekyll"), "w").close()

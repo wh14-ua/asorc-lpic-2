@@ -421,11 +421,14 @@
     // Un test de recuperación dice con qué criterio se eligió.
     const sel = seleccionDe(s);
     const crit = sel && root.Riesgo && root.Riesgo.modo(sel.modo);
-    $('hs-crit').hidden = !sel;
-    $('hs-crit').textContent = sel
-      ? `Test de recuperación · ${sel.etiqueta}: ${sel.ids.length || sel.pedidas} de ${sel.disponibles} ` +
-        `disponibles.${crit ? ' ' + crit.como : ''}`
-      : '';
+    const linea = $('hs-crit');       // falta si el index.html es uno viejo de la caché
+    if (linea) {
+      linea.hidden = !sel;
+      linea.textContent = sel
+        ? `Test de recuperación · ${sel.etiqueta}: ${sel.ids.length || sel.pedidas} de ${sel.disponibles} ` +
+          `disponibles.${crit ? ' ' + crit.como : ''}`
+        : '';
+    }
 
     const sum = $('hs-sum');
     sum.innerHTML = '';

@@ -1412,6 +1412,7 @@ function pintaNotaFinal(r) {
  * Discreto, bajo la nota: la nota y los puntos son los de siempre. */
 function pintaRiesgo(r, smart) {
   const box = $('done-risk');
+  if (!box) return;                  // index.html de antes, aún en la caché
   if (!smart || !root.Riesgo) { box.hidden = true; return; }
   const R = root.Riesgo;
   const a = R.atacado(smart, (r.academic || A.newState()).log);
@@ -1650,6 +1651,17 @@ function flushNube() {
   CL.flush().then(pintaNube, pintaNube);
 }
 
+/* El diario de intentos (tests de recuperación) llega con la primera
+ * sincronización. Hasta entonces esa sección dice «Cargando historial…» en
+ * vez de «aún no hay historial», y al terminar se repinta, vaya bien o mal:
+ * sin nube, con lo que haya en este navegador. */
+let historialEnCamino = false;
+function historialListo() {
+  if (!historialEnCamino) return;
+  historialEnCamino = false;
+  if (root.Recupera) root.Recupera.pintaInicio();
+}
+
 // Al volver al panel se sube lo que falte y se mira si otro dispositivo ha
 // avanzado. Sin insistir: como mucho una vez cada quince segundos.
 let ultimoTraer = 0;
@@ -1816,11 +1828,13 @@ function wire() {
         pool: poolDeSpec,
         temas: () => (root.Dash ? root.Dash.seleccion : []),
         abiertas: () => S.includeOpen,
+        cargando: () => historialEnCamino,
         arranca: (spec, ids) => arranca(spec, ids, 0, null),
       });
     }
     // El panel sale con lo que hay en este navegador y sale YA. La nube se
     // resuelve por detrás; si trae algo nuevo, se repinta entonces.
+    historialEnCamino = !!(CL && CL.configurada());
     renderHome();
     if (CL) {
       CL.alCambiar = () => pintaNube();
@@ -1830,8 +1844,12 @@ function wire() {
         pintaNube();
         if (!CL.viva()) return null;
         ultimoTraer = Date.now();
-        return CL.sincronizar(ST).then((r) => { if (r.ok) renderHome(); pintaNube(); });
-      }).catch(() => pintaNube());
+        return CL.sincronizar(ST).then((r) => {
+          historialEnCamino = false;
+          if (r.ok) renderHome(); else if (root.Recupera) root.Recupera.pintaInicio();
+          pintaNube();
+        });
+      }).catch(() => pintaNube()).then(historialListo);
     }
   } catch (e) {
     const box = $('home-error');

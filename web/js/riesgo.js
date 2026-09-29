@@ -106,6 +106,7 @@
     const sinFecha = { correct: 0, wrong: 0, blank: 0, partial: 0 };
     eventos.forEach((e) => { if (fechado(e)) fechados.push(e); else sinFecha[e.result]++; });
     fechados.sort(porHora);
+    const conHora = fechados.length;      // los del diario con su hora de verdad
 
     // Totales: el diario o los contadores, lo que diga más (nunca se pierde
     // nada). Lo que solo está en los contadores no tiene hora.
@@ -181,7 +182,7 @@
       acierto: respondidas ? total.correct / respondidas : null,
       dominio: n ? 1 - fallosPond / n : null,
       aciertoReciente: ultimos.length ? ultimos.filter((r) => !fallo(r)).length / ultimos.length : null,
-      seq, sinFecha: RESULTADOS.reduce((a, r) => a + sinFecha[r], 0), sinFechaAciertos: sinFecha.correct,
+      seq, conHora, sinFecha: RESULTADOS.reduce((a, r) => a + sinFecha[r], 0), sinFechaAciertos: sinFecha.correct,
       ultimo: seq.length ? seq[seq.length - 1] : (p && p.ultimo_resultado in PESO ? p.ultimo_resultado : null),
       ultimaVez: fechados.length ? fechados[fechados.length - 1].at : 0,
       ultimoFallo, aciertosTras, racha, rachaPond, maxRacha, cambios, dosSeguidas,
@@ -237,8 +238,8 @@
     });
 
     // Tu media de fallo: el punto de partida de las preguntas con pocos intentos.
-    let F = 0, N = 0;
-    porIdMap.forEach((x) => { F += x.fallosPond; N += x.intentos; });
+    let F = 0, N = 0, conHora = 0;
+    porIdMap.forEach((x) => { F += x.fallosPond; N += x.intentos; conHora += x.conHora; });
     const media = N ? clamp(F / N, 0.15, 0.6) : 0.35;
 
     // Temas: el acierto es el del panel (aciertos ÷ respondidas); la
@@ -258,8 +259,14 @@
     });
 
     porIdMap.forEach((x) => senales(x, media, temas.get(x.tema), now));
-    return { porId: porIdMap, temas, media, intentos: N, now };
+    return { porId: porIdMap, temas, media, intentos: N, conHora, now };
   }
+
+  /* ¿Falta la hora de buena parte del historial? Pasa mientras el diario no
+   * ha llegado de la nube o con contadores sin fecha (terminal, datos de
+   * antes). Los criterios que necesitan fechas lo dicen; los demás funcionan
+   * con los contadores. */
+  const faltanHoras = (est) => est.intentos > 0 && est.conHora < 0.9 * est.intentos;
 
   /* ---------------------------------------------------- criterios */
   const nuncaDominada = (x) => x.intentos >= 3 && x.dominio <= 1 / 3 && !x.dosSeguidas;
@@ -320,16 +327,16 @@
     { key: 'reincidentes', nombre: 'Reincidentes', grupo: 'Por tipo de error',
       desc: 'Las que has fallado 2 veces o más: primero las de 5+, luego 3+ y luego 2+.',
       como: 'Solo preguntas falladas al menos dos veces; un fallo suelto no entra.' },
-    { key: 'recientes', nombre: 'Falladas recientemente', grupo: 'Por tipo de error',
+    { key: 'recientes', horas: true, nombre: 'Falladas recientemente', grupo: 'Por tipo de error',
       desc: 'Tus fallos de las dos últimas semanas: cuanto más reciente, antes. Si luego la acertaste, pesa menos.',
       como: 'Ordenadas por lo reciente de sus fallos; el peso de cada fallo baja con los días.' },
-    { key: 'olvidadas', nombre: 'Olvidadas', grupo: 'Por tipo de error',
+    { key: 'olvidadas', horas: true, nombre: 'Olvidadas', grupo: 'Por tipo de error',
       desc: 'Las que acertabas y has vuelto a fallar (✓ ✓ ✗): parecían aprendidas.',
       como: 'Acertadas antes y falladas en tu último intento.' },
     { key: 'nunca', nombre: 'Nunca dominadas', grupo: 'Por tipo de error',
       desc: 'Tres intentos o más y casi nunca la aciertas (✗ ✗ ✓ ✗).',
       como: 'Tres intentos o más, un tercio de acierto como mucho y nunca dos aciertos seguidos.' },
-    { key: 'inestables', nombre: 'Inestables', grupo: 'Por tipo de error',
+    { key: 'inestables', horas: true, nombre: 'Inestables', grupo: 'Por tipo de error',
       desc: 'Aciertas y fallas alternando (✓ ✗ ✓ ✗): el concepto aún no está asentado.',
       como: 'Cuatro intentos o más que cambian a menudo entre acierto y fallo.' },
     { key: 'temas', nombre: 'Temas débiles', grupo: 'Por tipo de error',
@@ -338,7 +345,7 @@
     { key: 'casi', nombre: 'Casi dominadas', grupo: 'Por tipo de error',
       desc: 'Aciertas la mayoría pero aún se te escapa alguna (✓ ✓ ✗ ✓): para dejarlas sólidas.',
       como: 'Tres intentos o más, al menos un 60 % de dominio y la última acertada.' },
-    { key: 'hoy', nombre: 'Errores de hoy', grupo: 'Rápidos',
+    { key: 'hoy', horas: true, nombre: 'Errores de hoy', grupo: 'Rápidos',
       desc: 'Solo las que has fallado, dejado en blanco o hecho a medias hoy.',
       como: 'Preguntas falladas hoy.' },
     { key: 'ultima', nombre: 'Errores de la última ronda', grupo: 'Rápidos',
@@ -624,7 +631,7 @@
 
   const API = {
     DIA, PESO, PESOS, PRIOR, VIDA_HIST, VIDA_FALLO, VENTANA_RECIENTES, MODOS, ETIQUETAS,
-    estadisticas, selecciona, modo, registro, atacado, etiquetas, nombreEtiqueta, topePorTema,
+    estadisticas, selecciona, modo, registro, atacado, etiquetas, nombreEtiqueta, topePorTema, faltanHoras,
     ultimaRonda, mismoDia, haceCuanto, recuento, texto,
   };
 

@@ -555,6 +555,14 @@ está en los contadores (el `progress.json` de la terminal, lo de antes del diar
 los totales pero sin hora, como el histórico `local:…`, cuyo `answered_at` es la hora de
 subida. Sin conexión funciona igual con lo guardado aquí, y todo se calcula en memoria.
 
+**Mientras llega.** El diario se completa con la primera sincronización, así que la sección
+nunca espera a él para pintarse: los tamaños, los criterios y el formato salen siempre. Con
+historial en este navegador, los criterios ya cuentan con él (*según tus 1400 intentos ·
+cargando el resto de tu historial…*); en un navegador nuevo dice **Cargando historial…** y el
+botón espera. Al terminar la sincronización —vaya bien o mal— se repinta sola. Los criterios que
+necesitan la fecha de cada intento (recientes, olvidadas, inestables, de hoy) lo dicen si aún
+falta, pero no bloquean los demás, que funcionan con los contadores.
+
 ### Dejar en blanco
 
 Fallar resta en la nota (−0,5 en el simulacro **ASORC**, −1/(k−1) en general) y no contestar
@@ -631,6 +639,15 @@ El sitio se monta copiando `web/` a la raíz más `questions.json`, `explanation
 `microcards.json`, que es donde el frontend los busca. `server.py` no se publica (es el puente local); `config.js`
 sí, porque solo lleva valores públicos. El build **aborta** si falta algún archivo que el
 navegador necesita, si queda una ruta absoluta o si detecta algo con pinta de secreto.
+
+**Cada despliegue carga entero.** Pages sirve todo con `Cache-Control: max-age=600` y, al
+recargar, el navegador solo revalida el HTML: los scripts de menos de diez minutos salen de su
+caché sin preguntar. Así, tras un despliegue, un `index.html` nuevo podía arrancar con el
+`app.js` viejo (pasó con los tests de recuperación: la sección salía sin inicializar). Por eso el
+build añade a cada script y hoja de estilos propios la huella de su contenido
+(`./js/app.js?v=0c6955df4f`): un archivo que cambia estrena URL y se pide siempre, y uno que no
+cambia conserva la suya y su caché. El `index.html` de `web/` no lleva huellas: en local,
+`server.py` lo sirve todo con `no-store`.
 
 ```bash
 python3 tools/test_site.py           # prueba el artefacto servido bajo /asorc-lpic-2/
@@ -1030,6 +1047,14 @@ un tema, que un test inteligente sale en el historial con su nombre y sus motivo
 recargar, que «errores de la última ronda» repite solo esos errores y en su formato, y que el
 diario vive en `localStorage`, sobrevive a recargar, se funde con la nube sin duplicar y viaja
 al exportar.
+
+Y el arranque de la sección, con un DOM mínimo sacado de `index.html`: con contadores y el
+diario vacío en el primer render salen los tamaños y los 13 criterios, dice que falta historial
+por llegar y lo que sale de los contadores ya funciona; al llegar los intentos de la nube el
+diario los tiene todos y los criterios con fechas se actualizan; en un navegador nuevo dice
+«Cargando historial…» y no «aún no hay historial»; si el cálculo falla, los controles siguen ahí;
+y con un `index.html` viejo de la caché nada revienta. `test_site.py` comprueba además que cada
+script y hoja de estilos publicados llevan la huella de su contenido.
 
 ```bash
 python3 tools/test_contrast.py

@@ -5,6 +5,11 @@
  * y los temas que tengas elegidos con +). Aquí solo se pinta, se recuerda lo
  * elegido y se lanza la ronda, que después es una ronda como cualquier otra:
  * nota, XP, racha, historial y repasar fallos.
+ *
+ * La sección nunca se queda a medias: los controles se pintan antes de
+ * calcular nada. Mientras llega el historial de la nube dice «Cargando
+ * historial…» y app.js la vuelve a pintar al terminar la sincronización;
+ * sin diario, lo que se puede calcular con los contadores funciona igual.
  */
 'use strict';
 
@@ -13,7 +18,7 @@
   const R = root.Riesgo;
   const $ = (id) => doc.getElementById(id);
   const TAMANOS = [10, 20, 30, 50];
-  let ctx = null;     // { store, bank, pool(spec), temas(), abiertas(), arranca(spec, ids) }
+  let ctx = null;     // { store, bank, pool(spec), temas(), abiertas(), cargando(), arranca(spec, ids) }
   let porId = new Map();
 
   /* ------------------------------------------------------------ ajustes
@@ -123,8 +128,9 @@
     $('rec-otro').max = String(ctx.bank.length);
   }
 
-  // El selector, con cuántas preguntas hay para cada criterio.
-  function pintaCriterios(o, c) {
+  // El selector, con cuántas preguntas hay para cada criterio. Sin cálculo
+  // (el historial aún no ha llegado), los criterios salen igual, sin número.
+  function pintaCriterios(o, cuentas) {
     const sel = $('rec-modo');
     sel.replaceChildren();
     const grupos = new Map();
@@ -135,8 +141,8 @@
         grupos.set(m.grupo, g);
         sel.appendChild(g);
       }
-      const n = elige(m.key, 0, c).disponibles;
-      const op = el('option', null, `${m.nombre}${m.recomendado ? ' (recomendado)' : ''} · ${n}`);
+      const n = cuentas ? cuentas.get(m.key) : null;
+      const op = el('option', null, `${m.nombre}${m.recomendado ? ' (recomendado)' : ''}` + (n == null ? '' : ` · ${n}`));
       op.value = m.key;
       op.selected = m.key === o.modo;
       grupos.get(m.grupo).appendChild(op);
@@ -175,25 +181,8 @@
     return `Hay ${s.disponibles} preguntas disponibles para este criterio; el test tendrá ${o.n}. (${filtros(o, c)})`;
   }
 
-  function pintaInicio() {
-    if (!ctx || !doc) return;
-    const o = elegido();
-    const c = calcula(o);
-    const hay = c.est.intentos > 0;
-    $('rec-home').dataset.vacio = hay ? 'no' : 'si';
-    $('rec-sum').textContent = hay
-      ? `según tus ${c.est.intentos} intentos`
-      : 'Aún no hay historial: en cuanto respondas preguntas, aquí salen las que más se te resisten.';
-    if (!hay) return;
-
-    pintaTamanos(o);
-    pintaCriterios(o, c);
-    const m = R.modo(o.modo);
-    const s = elige(o.modo, o.n, c);
-    $('rec-desc').textContent = m.desc + (o.modo === 'equilibrado'
-      ? ` Como mucho ${R.topePorTema(o.n)} de un mismo tema, salvo que no haya más.` : '');
-    $('rec-avail').textContent = disponibilidad(o, s, c);
-
+  // El formato (Normal / ASORC) no depende del historial.
+  function pintaFormato(o) {
     const fmt = $('rec-fmt');
     fmt.setAttribute('aria-disabled', o.modo === 'ultima' ? 'true' : 'false');
     [...fmt.children].forEach((b) => {
@@ -202,8 +191,60 @@
       b.setAttribute('aria-pressed', on ? 'true' : 'false');
       b.disabled = o.modo === 'ultima';
     });
+  }
 
-    const go = $('rec-go');
+  // Los criterios que necesitan la hora de cada intento lo dicen si falta.
+  function avisoHoras(m, c, cargando) {
+    if (!m.horas || !R.faltanHoras(c.est)) return '';
+    return cargando
+      ? ' Este criterio necesita la fecha de cada intento: se completa en cuanto termine de cargar tu historial.'
+      : ' Parte de tu historial no tiene fecha (es de antes del diario o de la app de terminal): aquí solo cuentan los intentos con fecha.';
+  }
+
+  function pintaInicio() {
+    if (!ctx || !doc || !$('rec-home')) return;
+    const o = elegido();
+    const cargando = !!(ctx.cargando && ctx.cargando());
+    // Los controles, siempre y antes de calcular nada: aunque el historial
+    // aún no haya llegado o el cálculo falle, la sección no se queda vacía.
+    pintaTamanos(o);
+    pintaFormato(o);
+    let c = null, cuentas = null, s = null, error = null;
+    try {
+      c = calcula(o);
+      cuentas = new Map(R.MODOS.map((m) => [m.key, elige(m.key, 0, c).disponibles]));
+      s = elige(o.modo, o.n, c);
+    } catch (e) {
+      error = e;
+      cuentas = null;
+      if (root.console) root.console.error('[tests de recuperación]', e);
+    }
+    const hay = !error && c.est.intentos > 0;
+    $('rec-home').dataset.vacio = hay || cargando || error ? 'no' : 'si';
+    pintaCriterios(o, hay ? cuentas : null);
+    const m = R.modo(o.modo);
+    $('rec-desc').textContent = m.desc + (o.modo === 'equilibrado'
+      ? ` Como mucho ${R.topePorTema(o.n)} de un mismo tema, salvo que no haya más.` : '');
+
+    const go = $('rec-go'), avail = $('rec-avail');
+    avail.dataset.corto = 'no';
+    if (error) {
+      $('rec-sum').textContent = 'no se pudo leer tu historial';
+      avail.textContent = `No se pudieron calcular los criterios (${error.message}). Recarga la página.`;
+      go.disabled = true;
+      go.textContent = 'NO DISPONIBLE';
+      return;
+    }
+    if (!hay) {
+      $('rec-sum').textContent = cargando ? 'Cargando historial…'
+        : 'Aún no hay historial: en cuanto respondas preguntas, aquí salen las que más se te resisten.';
+      avail.textContent = cargando ? 'Cargando historial… en cuanto llegue, cada criterio dice cuántas preguntas tiene.' : '';
+      go.disabled = true;
+      go.textContent = cargando ? 'CARGANDO HISTORIAL…' : 'EMPEZAR TEST';
+      return;
+    }
+    $('rec-sum').textContent = `según tus ${c.est.intentos} intentos` + (cargando ? ' · cargando el resto de tu historial…' : '');
+    avail.textContent = disponibilidad(o, s, c) + avisoHoras(m, c, cargando);
     go.disabled = !s.ids.length;
     go.textContent = s.ids.length ? `EMPEZAR TEST · ${s.ids.length}` : 'SIN PREGUNTAS PARA ESTE CRITERIO';
   }
@@ -217,6 +258,8 @@
 
   function init(contexto) {
     configurar(contexto);
+    // Un index.html viejo en la caché del navegador no trae la sección: nada que cablear.
+    if (!$('rec-home')) return API;
     $('rec-modo').addEventListener('change', (e) => guarda({ modo: e.target.value }));
     $('rec-fmt').addEventListener('click', (e) => {
       const b = e.target.closest('[data-fmt]');

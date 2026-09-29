@@ -2492,6 +2492,271 @@ def test_recupera():
         os.unlink(script)
 
 
+ARRANQUE_TEST = r"""
+const fs = require('fs');
+const path = require('path');
+const web = process.argv[2];
+const bank = JSON.parse(fs.readFileSync(process.argv[3], 'utf8')).questions;
+const html = fs.readFileSync(process.argv[4], 'utf8');
+const errs = [];
+const eq = (a, b, m) => { if (JSON.stringify(a) !== JSON.stringify(b)) errs.push(`${m}: ${JSON.stringify(a)} != ${JSON.stringify(b)}`); };
+const ok = (c, m) => { if (!c) errs.push(m); };
+
+/* Un DOM mínimo: justo lo que usa recupera.js, con los id de la sección tal
+ * cual están en index.html (si uno falta en el HTML, aquí también falta). */
+class El {
+  constructor(tag, doc) {
+    Object.assign(this, { tagName: String(tag).toUpperCase(), doc, children: [], dataset: {}, attrs: {}, _texto: '',
+      hidden: false, disabled: false, value: '', max: '', type: '', label: '', selected: false, oyentes: {} });
+    this._clases = new Set();
+  }
+  get textContent() { return this.children.length ? this.children.map((c) => (typeof c === 'string' ? c : c.textContent)).join('') : this._texto; }
+  set textContent(v) { this.children = []; this._texto = String(v); }
+  get className() { return [...this._clases].join(' '); }
+  set className(v) { this._clases = new Set(String(v).split(/\s+/).filter(Boolean)); }
+  get classList() { const s = this._clases; return { toggle: (c, on) => { if (on === undefined ? !s.has(c) : on) s.add(c); else s.delete(c); }, contains: (c) => s.has(c) }; }
+  setAttribute(k, v) { this.attrs[k] = String(v); }
+  getAttribute(k) { return k in this.attrs ? this.attrs[k] : null; }
+  addEventListener(t, f) { (this.oyentes[t] = this.oyentes[t] || []).push(f); }
+  appendChild(c) { this.children.push(c); return c; }
+  append(...cs) { this.children.push(...cs); }
+  replaceChildren(...cs) { this.children = cs; this._texto = ''; }
+  focus() { this.doc.activeElement = this; }
+  todos(tag) {
+    const out = [];
+    const baja = (e) => e.children.forEach((c) => { if (typeof c === 'string') return; if (c.tagName === tag) out.push(c); baja(c); });
+    baja(this);
+    return out;
+  }
+}
+function documento(conSeccion) {
+  const doc = { activeElement: null, porId: new Map() };
+  doc.createElement = (t) => new El(t, doc);
+  doc.getElementById = (id) => doc.porId.get(id) || null;
+  if (!conSeccion) return doc;
+  const i = html.indexOf('<section class="rec-home"');
+  const sec = html.slice(i, html.indexOf('</section>', i));
+  for (const m of sec.matchAll(/<(\w+)[^>]*\sid="([^"]+)"/g)) doc.porId.set(m[2], new El(m[1], doc));
+  for (const m of sec.matchAll(/data-fmt="(\w+)"/g)) {
+    const b = new El('button', doc);
+    b.dataset.fmt = m[1];
+    doc.porId.get('rec-fmt').appendChild(b);
+  }
+  return doc;
+}
+
+const almacen = () => { const m = new Map(); return {
+  getItem: (k) => (m.has(k) ? m.get(k) : null), setItem: (k, v) => m.set(k, String(v)),
+  removeItem: (k) => m.delete(k) }; };
+let LS = almacen();
+Object.defineProperty(global, 'localStorage', { configurable: true, get() { return LS; } });
+global.window = global;
+global.document = documento(true);
+const L = require(path.join(web, 'logic.js'));
+const R = require(path.join(web, 'riesgo.js'));
+const Rec = require(path.join(web, 'recupera.js'));
+const carga = () => {
+  for (const f of ['micro.js', 'store.js', 'cloud.js']) delete require.cache[require.resolve(path.join(web, f))];
+  require(path.join(web, 'micro.js'));
+  return { store: require(path.join(web, 'store.js')).Store, cloud: require(path.join(web, 'cloud.js')) };
+};
+
+// Lo que hay en asorc_attempts: 40 preguntas, cada intento con su hora.
+const DIA = 24 * 3600 * 1000, AHORA = Date.now();
+const PATRONES = ['✓✗✓✗', '✗✗✗', '✓✓✓', '✗✓✓'];     // inestable, reincidente, dominada, casi
+const filas = [];
+bank.filter((q) => q.type === 'multiple_choice').slice(0, 40).forEach((q, i) => {
+  const marcas = [...PATRONES[Math.floor(i / 10)]];
+  const fin = Math.floor(i / 10) === 1 ? 2 * DIA : 0;
+  marcas.forEach((m, k) => {
+    const at = new Date(AHORA - 1000 - fin - (marcas.length - 1 - k) * DIA).toISOString();
+    filas.push({ event_id: `${q.id}#${k}`, profile_id: 'default', question_id: q.id, result: m === '✓' ? 'correct' : 'wrong',
+      answer: '', answer_ms: 1000, review_ms: 0, marked: false, answered_at: at, created_at: at });
+  });
+});
+// Y lo que la versión anterior dejaba en localStorage: contadores, sin diario.
+const progress = { schema_version: 1, app: 'test-ASORC', preguntas: {}, configuracion: { idioma: 'es' } };
+const stats = { preguntas: {}, sesiones: [] };
+filas.forEach((f) => {
+  const p = progress.preguntas[f.question_id] || (progress.preguntas[f.question_id] =
+    { veces_vista: 0, aciertos: 0, fallos: 0, blancos: 0, parciales: 0, ultima_respuesta: '', ultimo_resultado: '' });
+  p.veces_vista++; p[f.result === 'correct' ? 'aciertos' : 'fallos']++; p.ultimo_resultado = f.result;
+  const s = stats.preguntas[f.question_id] || (stats.preguntas[f.question_id] =
+    { respuestas: 0, ultimo_resultado: '', ultima_vez: 0, marcada: false, marcada_ts: 0 });
+  s.respuestas++; s.ultimo_resultado = f.result; s.ultima_vez = Math.floor(Date.parse(f.answered_at) / 1000);
+});
+const nube = { from(t) { const q = { select() { return q; }, eq() { return q; }, order() { return q; },
+  async range() { return { data: t === 'asorc_attempts' ? filas : [], error: null, status: 200 }; },
+  async maybeSingle() { return { data: null, error: null }; }, async upsert() { return { error: null }; } }; return q; } };
+
+const $ = (id) => document.getElementById(id);
+function vista() {
+  const ops = $('rec-modo').todos('OPTION');
+  const n = (o) => { const m = o.textContent.match(/ · (\d+)$/); return m ? Number(m[1]) : null; };
+  return {
+    vacio: $('rec-home').dataset.vacio, tamanos: $('rec-sizes').children.map((b) => b.textContent),
+    criterios: ops.length, cuenta: Object.fromEntries(ops.map((o) => [o.value, n(o)])),
+    sum: $('rec-sum').textContent, desc: $('rec-desc').textContent, avail: $('rec-avail').textContent,
+    boton: $('rec-go').textContent, activo: !$('rec-go').disabled,
+  };
+}
+let cargando = true;
+const contexto = (store) => ({ store, bank, temas: () => [], abiertas: () => false, cargando: () => cargando,
+  pool: (spec) => L.pool(bank, spec, { includeOpen: false, prog: (id) => store.prog(id), marcada: (id) => store.marcada(id) }),
+  arranca: () => {} });
+const TAMANOS = ['10', '20', '30', '50', 'Personalizado'];
+
+(async () => {
+// --- A · tu caso: contadores con historial, diario vacío, nube en camino ------
+{
+  LS = almacen();
+  LS.setItem('asorc.v2.progress', JSON.stringify(progress));
+  LS.setItem('asorc.v2.stats', JSON.stringify(stats));
+  const { store, cloud } = carga();
+  await store.init({ base: './', ns: 'asorc.v2' });
+  eq([store.intentos.length, Object.keys(store.progress.preguntas).length], [0, 40],
+     'arranque: 40 preguntas con historial en los contadores y el diario, vacío');
+  cargando = true;
+  Rec.init(contexto(store));
+  Rec.pintaInicio();                                   // el primer render, antes de la nube
+  let v = vista();
+  eq([v.vacio, v.tamanos, v.criterios], ['no', TAMANOS, 13], 'primer render: tamaños y los 13 criterios a la vista');
+  ok(v.desc.length > 20 && v.avail.length > 20, 'con su descripción y cuántas preguntas hay');
+  ok(/^según tus 130 intentos · cargando/.test(v.sum), 'dice cuánto historial hay y que falta por llegar: ' + v.sum);
+  ok(v.activo && /^EMPEZAR TEST · \d+$/.test(v.boton), 'y se puede empezar con lo que ya hay: ' + v.boton);
+  ok(['mix', 'mas', 'peor', 'reincidentes'].every((k) => v.cuenta[k] > 0),
+     'lo que sale de los contadores ya funciona: ' + JSON.stringify(v.cuenta));
+  eq(v.cuenta.inestables, 0, 'sin fechas todavía no se puede saber cuáles alternan');
+  store.prefs.recupera = { modo: 'inestables', n: 20 };
+  Rec.pintaInicio();
+  ok(/necesita la fecha de cada intento/.test(vista().avail), 'y ese criterio lo dice, sin romper nada: ' + vista().avail);
+  store.prefs.recupera = { modo: 'mix', n: 20 };
+
+  // Llega la nube: el diario se rellena y app.js repinta al terminar.
+  cloud.store = store; cloud.sb = nube; cloud.estado = 'sincronizado'; cloud.sinTarjetas = null;
+  const r = await cloud.sincronizar(store);
+  ok(r.ok, 'sincroniza: ' + JSON.stringify(r));
+  eq(store.intentos.length, filas.length, 'al sincronizar, el diario tiene todos los intentos de asorc_attempts');
+  cargando = false;
+  Rec.pintaInicio();
+  v = vista();
+  eq([v.vacio, v.tamanos, v.criterios], ['no', TAMANOS, 13], 'tras sincronizar sigue todo a la vista');
+  eq(v.cuenta.inestables, 10, 'y los criterios que necesitan fechas se actualizan (inestables: 0 → 10)');
+  ok(!/cargando/.test(v.sum) && /^según tus 130 intentos$/.test(v.sum), 'ya sin «cargando»: ' + v.sum);
+  store.prefs.recupera = { modo: 'inestables', n: 20 };
+  Rec.pintaInicio();
+  ok(!/fecha/.test(vista().avail) && /^EMPEZAR TEST · 10$/.test(vista().boton), 'y el aviso de fechas desaparece: ' + vista().avail);
+}
+
+// --- B · navegador nuevo: nada en local y la nube en camino --------------------
+{
+  LS = almacen();
+  const { store, cloud } = carga();
+  await store.init({ base: './', ns: 'asorc.v2' });
+  cargando = true;
+  Rec.init(contexto(store));
+  Rec.pintaInicio();
+  let v = vista();
+  eq([v.vacio, v.tamanos, v.criterios], ['no', TAMANOS, 13],
+     'sin nada en local, los controles salen igual (el select nunca vacío)');
+  eq([v.sum, v.boton, v.activo], ['Cargando historial…', 'CARGANDO HISTORIAL…', false],
+     'y dice «Cargando historial…», no «aún no hay historial»');
+  ok(Object.values(v.cuenta).every((n) => n == null), 'sin números inventados mientras carga');
+  cloud.store = store; cloud.sb = nube; cloud.estado = 'sincronizado'; cloud.sinTarjetas = null;
+  await cloud.sincronizar(store);
+  cargando = false;
+  Rec.pintaInicio();
+  v = vista();
+  ok(v.activo && v.cuenta.mix > 0 && v.cuenta.inestables === 10, 'al llegar la nube, criterios y cantidades: ' + JSON.stringify(v.cuenta));
+}
+
+// --- C · de verdad sin historial, y sin nube ------------------------------------
+{
+  LS = almacen();
+  const { store } = carga();
+  await store.init({ base: './', ns: 'asorc.v2' });
+  cargando = false;
+  Rec.init(contexto(store));
+  Rec.pintaInicio();
+  eq([vista().vacio, vista().activo], ['si', false], 'sin historial ni nube: la sección se recoge');
+  ok(/^Aún no hay historial/.test(vista().sum), 'y lo dice');
+}
+
+// --- D · si el cálculo falla, los controles siguen ahí --------------------------
+{
+  LS = almacen();
+  const { store } = carga();
+  await store.init({ base: './', ns: 'asorc.v2' });
+  store.progress = null;                               // un estado imposible
+  const errorOriginal = console.error;
+  console.error = () => {};
+  let lanzo = null;
+  try { Rec.init(contexto(store)); Rec.pintaInicio(); } catch (e) { lanzo = e; }
+  console.error = errorOriginal;
+  ok(!lanzo, 'un fallo al calcular no rompe el inicio: ' + (lanzo && lanzo.message));
+  const v = vista();
+  eq([v.tamanos, v.criterios, v.activo, v.boton], [TAMANOS, 13, false, 'NO DISPONIBLE'], 'controles a la vista y el botón, apagado');
+  ok(/No se pudieron calcular/.test(v.avail), 'y se dice qué pasa: ' + v.avail);
+}
+
+// --- E · el index.html viejo de la caché no trae la sección: nada revienta -------
+{
+  global.document = documento(false);
+  for (const f of ['recupera.js']) delete require.cache[require.resolve(path.join(web, f))];
+  const RecViejo = require(path.join(web, 'recupera.js'));
+  LS = almacen();
+  const { store } = carga();
+  await store.init({ base: './', ns: 'asorc.v2' });
+  let lanzo = null;
+  try { RecViejo.init(contexto(store)); RecViejo.pintaInicio(); } catch (e) { lanzo = e; }
+  ok(!lanzo, 'con un index.html sin la sección, init y pintaInicio no lanzan: ' + (lanzo && lanzo.message));
+}
+
+console.log(JSON.stringify({ n: errs.length, errs: errs.slice(0, 12) }));
+})().catch((e) => { console.log(JSON.stringify({ n: 1, errs: [String(e && e.stack || e)] })); });
+"""
+
+
+def test_recupera_arranque():
+    print("\n[16] Tests de recuperación en el arranque: sin diario, cargando y tras sincronizar")
+    js = os.path.join(PROJ, "web", "js")
+    index = os.path.join(PROJ, "web", "index.html")
+    app = open(os.path.join(js, "app.js"), encoding="utf-8").read()
+
+    m = re.search(r"\(async function main\(\)\s*\{(.*?)\n\}\)\(\);", app, re.S)
+    cuerpo = m.group(1) if m else ""
+    check("el historial se da por «en camino» antes del primer render",
+          re.search(r"historialEnCamino = !!\(CL && CL\.configurada\(\)\);\s*\n\s*renderHome\(\);\s*\n\s*if \(CL\) \{",
+                    cuerpo) is not None)
+    check("la sección lo sabe", "cargando: () => historialEnCamino" in cuerpo)
+    ms = re.search(r"return CL\.sincronizar\(ST\)\.then\(\(r\) => \{(.*?)\}\);", cuerpo, re.S)
+    check("al terminar la primera sincronización se repinta, vaya bien o mal",
+          bool(ms) and "historialEnCamino = false;" in ms.group(1) and "renderHome()" in ms.group(1)
+          and "Recupera.pintaInicio()" in ms.group(1)
+          and ms.group(1).index("historialEnCamino = false;") < ms.group(1).index("renderHome()"))
+    check("y también si la nube ni arranca", ".then(historialListo)" in cuerpo)
+    check("un index.html viejo de la caché no rompe el resultado ni el historial",
+          "if (!box) return;" in app
+          and "if (linea)" in open(os.path.join(js, "historial.js"), encoding="utf-8").read())
+
+    if not shutil.which("node"):
+        check("node disponible", False)
+        return
+    with tempfile.NamedTemporaryFile("w", suffix=".js", delete=False) as f:
+        f.write(ARRANQUE_TEST)
+        script = f.name
+    try:
+        out = subprocess.run(["node", script, js, QJSON, index], capture_output=True, text=True, timeout=180)
+        if out.returncode != 0:
+            check("ejecución node", False, out.stderr.strip()[:400])
+            return
+        res = json.loads(out.stdout.strip().splitlines()[-1])
+        check("primer render sin diario, «Cargando historial…», criterios con contadores, "
+              "diario de la nube, repintado y nada roto", res["n"] == 0, " | ".join(res["errs"]))
+    finally:
+        os.unlink(script)
+
+
 def test_feed():
     """El feed reutiliza la lógica de siempre, pero los elementos de una
     pregunta ya no llevan id: hay muchas tarjetas vivas a la vez. Aquí se
@@ -2569,6 +2834,7 @@ def main():
     test_micro()
     test_historial()
     test_recupera()
+    test_recupera_arranque()
     test_highlight()
     test_panel()
     test_publicacion()

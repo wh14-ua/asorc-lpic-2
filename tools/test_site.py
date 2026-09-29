@@ -12,6 +12,7 @@ import re
 import sys
 import json
 import shutil
+import hashlib
 import socket
 import tempfile
 import subprocess
@@ -92,6 +93,21 @@ def main():
             if c != 200:
                 rotos.append(f"{r} → {c}")
         check(f"los {len(refs)} recursos de index.html cargan", not rotos, "; ".join(rotos))
+
+        # Pages sirve todo con max-age=600 y, al recargar, el navegador solo
+        # revalida el HTML: sin huella, un index.html nuevo arrancaba con el
+        # app.js viejo de la caché. Cada script y hoja de estilos propios
+        # llevan ?v= con la huella de SU contenido.
+        propios = re.findall(r'(?:src|href)="\./([^"?#]+\.(?:js|css))(?:\?v=([0-9a-f]+))?"', html)
+        sin = [p for p, v in propios if not v]
+        check(f"los {len(propios)} scripts y hojas de estilo propios llevan ?v=", len(propios) >= 16 and not sin,
+              ", ".join(sin))
+        huella = lambda p: hashlib.md5(open(os.path.join(dest, p), "rb").read()).hexdigest()[:10]
+        malas = [p for p, v in propios if v and v != huella(p)]
+        check("y la huella es la de su contenido: un archivo que cambia estrena URL", not malas, ", ".join(malas))
+        fuente = open(os.path.join(PROJ, "web", "index.html"), encoding="utf-8").read()
+        check("el index.html de web/ queda limpio (en local, server.py sirve con no-store)",
+              "?v=" not in fuente)
 
         cod, q = pide("questions.json")
         check("questions.json se sirve", cod == 200, str(cod))
